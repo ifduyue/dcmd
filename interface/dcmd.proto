@@ -1,0 +1,352 @@
+package dcmd;
+option java_package = "com.cwinux.dcmd";
+
+enum DcmdState {
+  SUCCESS = 0;
+  FAILED = 1;
+}
+
+message KeyValue {
+  required  string   key = 1;
+  required  bytes    value= 2;
+}
+
+message SubTaskInfo {
+  required  string   app_name=1;
+  required  string   task_type=2;
+  required  string   task_id=3;
+  required  string   subtask_id=4;
+  required  string   cmd_id=5;
+}
+
+message OprInfo {
+  required string    name=1;
+  required  string    start_time=2;
+  required  int32    running_second=3;
+}
+
+enum AgentState {
+  AGENT_UN_CONNECTED=0;
+  AGENT_UN_AUTH=1;
+  AGENT_UN_REPORTED=2;
+  AGENT_CONNECTED=3;
+}
+
+enum TaskState {
+   TASK_INIT = 0;
+   TASK_DOING = 1;
+   TASK_PAUSED = 2;
+   TASK_FAILED = 3;
+   TASK_FREEZED = 4;
+   TASK_FINISHED = 5;
+   TASK_FINISHED_WITH_FAILED = 6;
+}
+
+enum AppPoolState {
+   APP_POOL_INIT = 0;
+   APP_POOL_DOING = 1;
+   APP_POOL_PAUSED = 2;
+   APP_POOL_FAILED = 3;
+   APP_POOL_FINISHED = 5;
+   APP_POOL_FINISHED_WITH_FAILED = 6;
+}
+
+enum SubTaskState{
+   SUBTASK_INIT = 0;
+   SUBTASK_DOING = 1;
+   SUBTASK_FINISHED = 2;
+   SUBTASK_FAILED = 3;
+   SUBTASK_CANCELED = 4;
+}
+
+message AgentInfo {
+  required string     ip=1;
+  required AgentState state=2;
+  optional string     version=3;
+  optional string     connected_ip=4;
+  optional string     repored_ip=5;
+}
+
+message AgentReport {
+  required string      version = 1;
+  repeated string      agent_ips = 2;
+}
+
+message AgentReportReply {
+  required DcmdState   state = 1; 
+  optional string      err = 2; 
+  optional int32       heatbeat=3;
+  optional int32       package_size=4;
+}
+
+message AgentMasterNoticeReply {
+  repeated string  cmd = 1;
+}
+
+message AgentTaskCmd {
+required  string   cmd=1;
+required  string   task_type=2;
+optional  string   task_id=3;
+optional  string   subtask_id=4;
+optional  string   ip=5;
+optional  string   app_name=6;
+optional  string   app_pool=7;
+optional  string   app_ver=8;
+optional  string   app_repo=9;
+optional  string   app_path=10;
+optional  string   app_user=11;
+optional  string   app_env_file=12;
+optional  string   app_env_ver=13;
+optional  bool     output_process=14;
+optional  bytes    script=15;
+repeated  KeyValue task_arg=16;
+}
+
+message AgentTaskCmdReply {
+  required  string  cmd = 1;
+}
+
+message AgentSubTaskProcess {
+  required  string  task_id = 1; 
+  required  string  subtask_id = 2;
+  required  string  process=3;
+}
+
+message AgentTaskResult {
+  required  string  cmd = 1;
+  required  string  task_id = 2;
+  required  string  subtask_id = 3;
+  required  bool    success = 4;
+  optional  string  err= 5;
+  optional  string  process=6;
+}
+
+message AgentTaskResultReply {
+  required  string  cmd = 1;
+}
+
+message AgentOprCmd {
+  required  string  opr_id = 1; 
+  required  string  name = 2;
+  required  string  run_user = 3;
+  required  int32   timeout= 4;
+  required  bytes   script = 5;
+  repeated  KeyValue args= 6;
+}
+
+message AgentOprCmdReply {
+  required  DcmdState  state = 1;
+  required  bytes  result = 2;
+  required  string  err= 3; 
+  optional  string  ip=4;
+}
+
+message AgentTaskOutput {
+  required  string  subtask_id = 1;
+  required  int32   offset= 2;
+  optional  string  ip=3;
+}
+
+message AgentTaskOutputReply {
+  required  DcmdState   state = 1;
+  required  bytes       result= 2;
+  required  int32       offset=3;
+  optional  string      err=4;
+}
+
+message AgentRunningTask {
+  optional  string  ip=1;
+  optional  string  app_name=2;
+}
+
+message AgentRunningTaskReply {
+  required  DcmdState   state=1;
+  repeated  SubTaskInfo result=2;
+  optional  string      err=3;
+}
+
+message AgentRunningOpr {
+  optional  string  ip=1; 
+}
+
+message AgentRunningOprReply {
+  required  DcmdState state=1; 
+  repeated  OprInfo  result=2; 
+  optional  string  err=3;
+}
+
+message InvalidMsg {
+  required  int32  msg_type=1;
+}
+
+message UiTaskOutput {
+  required  string  subtask_id=1;
+  required  string  ip = 2; 
+  required  int32   offset=3; 
+  required  string  user=4;
+  required  string  passwd=5;
+}
+
+message UiTaskOutputReply {
+  required  DcmdState   state = 1;
+  required  bytes       result= 2;
+  required  int32       offset=3;
+  optional  string      err=4;
+}
+
+message UiAgentRunningTask {
+  optional  string  ip=1;
+  optional  string  app_name=2;
+  required  string  user=3;
+  required  string  passwd=4;
+}
+
+message UiAgentRunningTaskReply {
+  required  DcmdState   state=1;
+  repeated  SubTaskInfo result=2;
+  optional  string      err=3;
+}
+
+message UiAgentRunningOpr {
+  optional  string  ip=1;
+  required  string  user=2;
+  required  string  passwd=3;
+}
+
+message UiAgentRunningOprReply {
+  required  DcmdState state=1;
+  repeated  OprInfo  result=2;
+  optional  string  err=3;
+}
+
+message UiExecOprCmd {
+  optional  string  opr_id=1;
+  required  string  user=2;
+  required  string  passwd=3;
+}
+
+message UiExecOprCmdReply{
+  required  DcmdState        state=1;
+  repeated  AgentOprCmdReply result=2;
+  optional  string           err=3;
+}
+
+message UiAgentInfo {
+  repeated  string  ips=1;
+  required  bool    version=2;
+  required  string  user=3;
+  required  string  passwd=4;
+}
+
+message UiAgentInfoReply{
+  required  DcmdState  state=1;
+  repeated  AgentInfo  agentinfo=2;
+  optional  string     err=3;
+}
+
+message UiInvalidAgentInfo {
+  required  string  user=1;
+  required  string  passwd=2;
+}
+
+message UiInvalidAgentInfoReply{
+  required  DcmdState  state=1;
+  required  AgentInfo  agentinfo=2;
+  optional  string     err=3;
+}
+
+message UiTaskScriptInfo {
+  required  string  task_type=1;
+  required  string  user=2;
+  required  string  passwd=3;
+}
+
+message UiTaskScriptInfoReply{
+  required  DcmdState state=1;
+  optional  string    script=2;
+  optional  string    err=3;
+  optional  string    md5=4;
+}
+
+message UiOprScriptInfo {
+  required  string  opr_file=1;
+  required  string  user=2;
+  required  string  passwd=3;
+}
+
+message UiOprScriptInfoReply{
+  required  DcmdState state=1;
+  optional  string    script=2;
+  optional  string    err=3;
+  optional  string    md5=4;
+}
+
+message UiAgentTaskProcess {
+  repeated  string  subtask_id =1;
+  required  string  user=2;
+  required  string  passwd=3;
+}
+
+message UiAgentTaskProcessReply{
+  required  DcmdState state=1;
+  repeated  string  process=2;
+  optional  string  err=3;
+}
+
+enum  CmdType {
+   START_TASK = 1;
+   PAUSE_TASK = 2;
+   FINISH_TASK = 3;
+   CANCEL_SUBTASK=4;
+   CANCEL_APP_SUBTASK=5;
+   REDO_TASK = 6;
+   REDO_APP_POOL = 7;
+   REDO_SUBTASK = 8;
+   REDO_FAILED_SUBTASK=9;
+   REDO_FAILED_APP_POOL_SUBTASK=10;
+   IGNORE_SUBTASK=11;
+   FREEZE_TASK=12;
+   UNFREEZE_TASK=13;
+   UPDATE_TASK=14;
+}
+message UiTaskCmd {
+  required  string  task_id =1;
+  optional  string  subtask_id=2;
+  optional  string  ip=3;
+  optional  string  app_pool=4;
+  required  CmdType cmd_type = 5;
+  required  string  user=6;
+  required  string  passwd=7;
+}
+
+message UiTaskCmdReply{
+  required  DcmdState state=1;
+  optional  string    cmd_id=2;
+  optional  string    err=3;
+}
+
+message UiTaskWatch {
+  required  string  task_id =1;
+  optional  string  app_pool=2;
+  optional  string  subtask_id=3;
+  required  string  user=4;
+  required  string  passwd=5;
+}
+
+message UiTaskWatchReply{
+  required  DcmdState   watch_state=1;
+  optional  string      err=2;  
+  optional  TaskState   task_state=3;
+  optional  AppPoolState app_pool_state=4;
+  optional  SubTaskState subtask_state=5;
+  optional  int32       success_subtask=6;
+  optional  int32       failed_subtask=7;
+  optional  int32       doing_subtask=8;
+  optional  int32       cancel_subtask=9;
+  optional  int32       undo_subtask=10;
+}
+
+
+
+
+
