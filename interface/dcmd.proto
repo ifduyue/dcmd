@@ -1,4 +1,4 @@
-package dcmd;
+package dcmd_api;
 option java_package = "com.cwinux.dcmd";
 
 enum DcmdState {
