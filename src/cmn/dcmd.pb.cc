@@ -13,7 +13,7 @@
 #include <google/protobuf/wire_format.h>
 // @@protoc_insertion_point(includes)
 
-namespace dcmd {
+namespace dcmd_api {
 
 namespace {
 
@@ -1129,129 +1129,132 @@ void protobuf_AddDesc_dcmd_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\ndcmd.proto\022\004dcmd\"&\n\010KeyValue\022\013\n\003key\030\001 "
-    "\002(\t\022\r\n\005value\030\002 \002(\014\"g\n\013SubTaskInfo\022\020\n\010app"
-    "_name\030\001 \002(\t\022\021\n\ttask_type\030\002 \002(\t\022\017\n\007task_i"
-    "d\030\003 \002(\t\022\022\n\nsubtask_id\030\004 \002(\t\022\016\n\006cmd_id\030\005 "
-    "\002(\t\"C\n\007OprInfo\022\014\n\004name\030\001 \002(\t\022\022\n\nstart_ti"
-    "me\030\002 \002(\t\022\026\n\016running_second\030\003 \002(\005\"s\n\tAgen"
-    "tInfo\022\n\n\002ip\030\001 \002(\t\022\037\n\005state\030\002 \002(\0162\020.dcmd."
-    "AgentState\022\017\n\007version\030\003 \001(\t\022\024\n\014connected"
-    "_ip\030\004 \001(\t\022\022\n\nrepored_ip\030\005 \001(\t\"1\n\013AgentRe"
-    "port\022\017\n\007version\030\001 \002(\t\022\021\n\tagent_ips\030\002 \003(\t"
-    "\"g\n\020AgentReportReply\022\036\n\005state\030\001 \002(\0162\017.dc"
-    "md.DcmdState\022\013\n\003err\030\002 \001(\t\022\020\n\010heatbeat\030\003 "
-    "\001(\005\022\024\n\014package_size\030\004 \001(\005\"%\n\026AgentMaster"
-    "NoticeReply\022\013\n\003cmd\030\001 \003(\t\"\277\002\n\014AgentTaskCm"
-    "d\022\013\n\003cmd\030\001 \002(\t\022\021\n\ttask_type\030\002 \002(\t\022\017\n\007tas"
-    "k_id\030\003 \001(\t\022\022\n\nsubtask_id\030\004 \001(\t\022\n\n\002ip\030\005 \001"
-    "(\t\022\020\n\010app_name\030\006 \001(\t\022\020\n\010app_pool\030\007 \001(\t\022\017"
-    "\n\007app_ver\030\010 \001(\t\022\020\n\010app_repo\030\t \001(\t\022\020\n\010app"
-    "_path\030\n \001(\t\022\020\n\010app_user\030\013 \001(\t\022\024\n\014app_env"
-    "_file\030\014 \001(\t\022\023\n\013app_env_ver\030\r \001(\t\022\026\n\016outp"
-    "ut_process\030\016 \001(\010\022\016\n\006script\030\017 \001(\014\022 \n\010task"
-    "_arg\030\020 \003(\0132\016.dcmd.KeyValue\" \n\021AgentTaskC"
-    "mdReply\022\013\n\003cmd\030\001 \002(\t\"K\n\023AgentSubTaskProc"
-    "ess\022\017\n\007task_id\030\001 \002(\t\022\022\n\nsubtask_id\030\002 \002(\t"
-    "\022\017\n\007process\030\003 \002(\t\"r\n\017AgentTaskResult\022\013\n\003"
-    "cmd\030\001 \002(\t\022\017\n\007task_id\030\002 \002(\t\022\022\n\nsubtask_id"
-    "\030\003 \002(\t\022\017\n\007success\030\004 \002(\010\022\013\n\003err\030\005 \001(\t\022\017\n\007"
-    "process\030\006 \001(\t\"#\n\024AgentTaskResultReply\022\013\n"
-    "\003cmd\030\001 \002(\t\"|\n\013AgentOprCmd\022\016\n\006opr_id\030\001 \002("
-    "\t\022\014\n\004name\030\002 \002(\t\022\020\n\010run_user\030\003 \002(\t\022\017\n\007tim"
-    "eout\030\004 \002(\005\022\016\n\006script\030\005 \002(\014\022\034\n\004args\030\006 \003(\013"
-    "2\016.dcmd.KeyValue\"[\n\020AgentOprCmdReply\022\036\n\005"
-    "state\030\001 \002(\0162\017.dcmd.DcmdState\022\016\n\006result\030\002"
-    " \002(\014\022\013\n\003err\030\003 \002(\t\022\n\n\002ip\030\004 \001(\t\"A\n\017AgentTa"
-    "skOutput\022\022\n\nsubtask_id\030\001 \002(\t\022\016\n\006offset\030\002"
-    " \002(\005\022\n\n\002ip\030\003 \001(\t\"c\n\024AgentTaskOutputReply"
-    "\022\036\n\005state\030\001 \002(\0162\017.dcmd.DcmdState\022\016\n\006resu"
-    "lt\030\002 \002(\014\022\016\n\006offset\030\003 \002(\005\022\013\n\003err\030\004 \001(\t\"0\n"
-    "\020AgentRunningTask\022\n\n\002ip\030\001 \001(\t\022\020\n\010app_nam"
-    "e\030\002 \001(\t\"g\n\025AgentRunningTaskReply\022\036\n\005stat"
-    "e\030\001 \002(\0162\017.dcmd.DcmdState\022!\n\006result\030\002 \003(\013"
-    "2\021.dcmd.SubTaskInfo\022\013\n\003err\030\003 \001(\t\"\035\n\017Agen"
-    "tRunningOpr\022\n\n\002ip\030\001 \001(\t\"b\n\024AgentRunningO"
-    "prReply\022\036\n\005state\030\001 \002(\0162\017.dcmd.DcmdState\022"
-    "\035\n\006result\030\002 \003(\0132\r.dcmd.OprInfo\022\013\n\003err\030\003 "
-    "\001(\t\"\036\n\nInvalidMsg\022\020\n\010msg_type\030\001 \002(\005\"\\\n\014U"
-    "iTaskOutput\022\022\n\nsubtask_id\030\001 \002(\t\022\n\n\002ip\030\002 "
-    "\002(\t\022\016\n\006offset\030\003 \002(\005\022\014\n\004user\030\004 \002(\t\022\016\n\006pas"
-    "swd\030\005 \002(\t\"`\n\021UiTaskOutputReply\022\036\n\005state\030"
-    "\001 \002(\0162\017.dcmd.DcmdState\022\016\n\006result\030\002 \002(\014\022\016"
-    "\n\006offset\030\003 \002(\005\022\013\n\003err\030\004 \001(\t\"P\n\022UiAgentRu"
-    "nningTask\022\n\n\002ip\030\001 \001(\t\022\020\n\010app_name\030\002 \001(\t\022"
-    "\014\n\004user\030\003 \002(\t\022\016\n\006passwd\030\004 \002(\t\"i\n\027UiAgent"
-    "RunningTaskReply\022\036\n\005state\030\001 \002(\0162\017.dcmd.D"
-    "cmdState\022!\n\006result\030\002 \003(\0132\021.dcmd.SubTaskI"
-    "nfo\022\013\n\003err\030\003 \001(\t\"=\n\021UiAgentRunningOpr\022\n\n"
-    "\002ip\030\001 \001(\t\022\014\n\004user\030\002 \002(\t\022\016\n\006passwd\030\003 \002(\t\""
-    "d\n\026UiAgentRunningOprReply\022\036\n\005state\030\001 \002(\016"
-    "2\017.dcmd.DcmdState\022\035\n\006result\030\002 \003(\0132\r.dcmd"
-    ".OprInfo\022\013\n\003err\030\003 \001(\t\"<\n\014UiExecOprCmd\022\016\n"
-    "\006opr_id\030\001 \001(\t\022\014\n\004user\030\002 \002(\t\022\016\n\006passwd\030\003 "
-    "\002(\t\"h\n\021UiExecOprCmdReply\022\036\n\005state\030\001 \002(\0162"
-    "\017.dcmd.DcmdState\022&\n\006result\030\002 \003(\0132\026.dcmd."
-    "AgentOprCmdReply\022\013\n\003err\030\003 \001(\t\"I\n\013UiAgent"
-    "Info\022\013\n\003ips\030\001 \003(\t\022\017\n\007version\030\002 \002(\010\022\014\n\004us"
-    "er\030\003 \002(\t\022\016\n\006passwd\030\004 \002(\t\"c\n\020UiAgentInfoR"
-    "eply\022\036\n\005state\030\001 \002(\0162\017.dcmd.DcmdState\022\"\n\t"
-    "agentinfo\030\002 \003(\0132\017.dcmd.AgentInfo\022\013\n\003err\030"
-    "\003 \001(\t\"2\n\022UiInvalidAgentInfo\022\014\n\004user\030\001 \002("
-    "\t\022\016\n\006passwd\030\002 \002(\t\"j\n\027UiInvalidAgentInfoR"
-    "eply\022\036\n\005state\030\001 \002(\0162\017.dcmd.DcmdState\022\"\n\t"
-    "agentinfo\030\002 \002(\0132\017.dcmd.AgentInfo\022\013\n\003err\030"
-    "\003 \001(\t\"C\n\020UiTaskScriptInfo\022\021\n\ttask_type\030\001"
-    " \002(\t\022\014\n\004user\030\002 \002(\t\022\016\n\006passwd\030\003 \002(\t\"a\n\025Ui"
-    "TaskScriptInfoReply\022\036\n\005state\030\001 \002(\0162\017.dcm"
-    "d.DcmdState\022\016\n\006script\030\002 \001(\t\022\013\n\003err\030\003 \001(\t"
-    "\022\013\n\003md5\030\004 \001(\t\"A\n\017UiOprScriptInfo\022\020\n\010opr_"
-    "file\030\001 \002(\t\022\014\n\004user\030\002 \002(\t\022\016\n\006passwd\030\003 \002(\t"
-    "\"`\n\024UiOprScriptInfoReply\022\036\n\005state\030\001 \002(\0162"
-    "\017.dcmd.DcmdState\022\016\n\006script\030\002 \001(\t\022\013\n\003err\030"
-    "\003 \001(\t\022\013\n\003md5\030\004 \001(\t\"F\n\022UiAgentTaskProcess"
-    "\022\022\n\nsubtask_id\030\001 \003(\t\022\014\n\004user\030\002 \002(\t\022\016\n\006pa"
-    "sswd\030\003 \002(\t\"W\n\027UiAgentTaskProcessReply\022\036\n"
-    "\005state\030\001 \002(\0162\017.dcmd.DcmdState\022\017\n\007process"
-    "\030\002 \003(\t\022\013\n\003err\030\003 \001(\t\"\215\001\n\tUiTaskCmd\022\017\n\007tas"
-    "k_id\030\001 \002(\t\022\022\n\nsubtask_id\030\002 \001(\t\022\n\n\002ip\030\003 \001"
-    "(\t\022\020\n\010app_pool\030\004 \001(\t\022\037\n\010cmd_type\030\005 \002(\0162\r"
-    ".dcmd.CmdType\022\014\n\004user\030\006 \002(\t\022\016\n\006passwd\030\007 "
-    "\002(\t\"M\n\016UiTaskCmdReply\022\036\n\005state\030\001 \002(\0162\017.d"
-    "cmd.DcmdState\022\016\n\006cmd_id\030\002 \001(\t\022\013\n\003err\030\003 \001"
-    "(\t\"b\n\013UiTaskWatch\022\017\n\007task_id\030\001 \002(\t\022\020\n\010ap"
-    "p_pool\030\002 \001(\t\022\022\n\nsubtask_id\030\003 \001(\t\022\014\n\004user"
-    "\030\004 \002(\t\022\016\n\006passwd\030\005 \002(\t\"\267\002\n\020UiTaskWatchRe"
-    "ply\022$\n\013watch_state\030\001 \002(\0162\017.dcmd.DcmdStat"
-    "e\022\013\n\003err\030\002 \001(\t\022#\n\ntask_state\030\003 \001(\0162\017.dcm"
-    "d.TaskState\022*\n\016app_pool_state\030\004 \001(\0162\022.dc"
-    "md.AppPoolState\022)\n\rsubtask_state\030\005 \001(\0162\022"
-    ".dcmd.SubTaskState\022\027\n\017success_subtask\030\006 "
-    "\001(\005\022\026\n\016failed_subtask\030\007 \001(\005\022\025\n\rdoing_sub"
-    "task\030\010 \001(\005\022\026\n\016cancel_subtask\030\t \001(\005\022\024\n\014un"
-    "do_subtask\030\n \001(\005*$\n\tDcmdState\022\013\n\007SUCCESS"
-    "\020\000\022\n\n\006FAILED\020\001*c\n\nAgentState\022\026\n\022AGENT_UN"
-    "_CONNECTED\020\000\022\021\n\rAGENT_UN_AUTH\020\001\022\025\n\021AGENT"
-    "_UN_REPORTED\020\002\022\023\n\017AGENT_CONNECTED\020\003*\220\001\n\t"
-    "TaskState\022\r\n\tTASK_INIT\020\000\022\016\n\nTASK_DOING\020\001"
-    "\022\017\n\013TASK_PAUSED\020\002\022\017\n\013TASK_FAILED\020\003\022\020\n\014TA"
-    "SK_FREEZED\020\004\022\021\n\rTASK_FINISHED\020\005\022\035\n\031TASK_"
-    "FINISHED_WITH_FAILED\020\006*\231\001\n\014AppPoolState\022"
-    "\021\n\rAPP_POOL_INIT\020\000\022\022\n\016APP_POOL_DOING\020\001\022\023"
-    "\n\017APP_POOL_PAUSED\020\002\022\023\n\017APP_POOL_FAILED\020\003"
-    "\022\025\n\021APP_POOL_FINISHED\020\005\022!\n\035APP_POOL_FINI"
-    "SHED_WITH_FAILED\020\006*s\n\014SubTaskState\022\020\n\014SU"
-    "BTASK_INIT\020\000\022\021\n\rSUBTASK_DOING\020\001\022\024\n\020SUBTA"
-    "SK_FINISHED\020\002\022\022\n\016SUBTASK_FAILED\020\003\022\024\n\020SUB"
-    "TASK_CANCELED\020\004*\236\002\n\007CmdType\022\016\n\nSTART_TAS"
-    "K\020\001\022\016\n\nPAUSE_TASK\020\002\022\017\n\013FINISH_TASK\020\003\022\022\n\016"
-    "CANCEL_SUBTASK\020\004\022\026\n\022CANCEL_APP_SUBTASK\020\005"
-    "\022\r\n\tREDO_TASK\020\006\022\021\n\rREDO_APP_POOL\020\007\022\020\n\014RE"
-    "DO_SUBTASK\020\010\022\027\n\023REDO_FAILED_SUBTASK\020\t\022 \n"
-    "\034REDO_FAILED_APP_POOL_SUBTASK\020\n\022\022\n\016IGNOR"
-    "E_SUBTASK\020\013\022\017\n\013FREEZE_TASK\020\014\022\021\n\rUNFREEZE"
-    "_TASK\020\r\022\017\n\013UPDATE_TASK\020\016B\021\n\017com.cwinux.d"
-    "cmd", 4883);
+    "\n\ndcmd.proto\022\010dcmd_api\"&\n\010KeyValue\022\013\n\003ke"
+    "y\030\001 \002(\t\022\r\n\005value\030\002 \002(\014\"g\n\013SubTaskInfo\022\020\n"
+    "\010app_name\030\001 \002(\t\022\021\n\ttask_type\030\002 \002(\t\022\017\n\007ta"
+    "sk_id\030\003 \002(\t\022\022\n\nsubtask_id\030\004 \002(\t\022\016\n\006cmd_i"
+    "d\030\005 \002(\t\"C\n\007OprInfo\022\014\n\004name\030\001 \002(\t\022\022\n\nstar"
+    "t_time\030\002 \002(\t\022\026\n\016running_second\030\003 \002(\005\"w\n\t"
+    "AgentInfo\022\n\n\002ip\030\001 \002(\t\022#\n\005state\030\002 \002(\0162\024.d"
+    "cmd_api.AgentState\022\017\n\007version\030\003 \001(\t\022\024\n\014c"
+    "onnected_ip\030\004 \001(\t\022\022\n\nrepored_ip\030\005 \001(\t\"1\n"
+    "\013AgentReport\022\017\n\007version\030\001 \002(\t\022\021\n\tagent_i"
+    "ps\030\002 \003(\t\"k\n\020AgentReportReply\022\"\n\005state\030\001 "
+    "\002(\0162\023.dcmd_api.DcmdState\022\013\n\003err\030\002 \001(\t\022\020\n"
+    "\010heatbeat\030\003 \001(\005\022\024\n\014package_size\030\004 \001(\005\"%\n"
+    "\026AgentMasterNoticeReply\022\013\n\003cmd\030\001 \003(\t\"\303\002\n"
+    "\014AgentTaskCmd\022\013\n\003cmd\030\001 \002(\t\022\021\n\ttask_type\030"
+    "\002 \002(\t\022\017\n\007task_id\030\003 \001(\t\022\022\n\nsubtask_id\030\004 \001"
+    "(\t\022\n\n\002ip\030\005 \001(\t\022\020\n\010app_name\030\006 \001(\t\022\020\n\010app_"
+    "pool\030\007 \001(\t\022\017\n\007app_ver\030\010 \001(\t\022\020\n\010app_repo\030"
+    "\t \001(\t\022\020\n\010app_path\030\n \001(\t\022\020\n\010app_user\030\013 \001("
+    "\t\022\024\n\014app_env_file\030\014 \001(\t\022\023\n\013app_env_ver\030\r"
+    " \001(\t\022\026\n\016output_process\030\016 \001(\010\022\016\n\006script\030\017"
+    " \001(\014\022$\n\010task_arg\030\020 \003(\0132\022.dcmd_api.KeyVal"
+    "ue\" \n\021AgentTaskCmdReply\022\013\n\003cmd\030\001 \002(\t\"K\n\023"
+    "AgentSubTaskProcess\022\017\n\007task_id\030\001 \002(\t\022\022\n\n"
+    "subtask_id\030\002 \002(\t\022\017\n\007process\030\003 \002(\t\"r\n\017Age"
+    "ntTaskResult\022\013\n\003cmd\030\001 \002(\t\022\017\n\007task_id\030\002 \002"
+    "(\t\022\022\n\nsubtask_id\030\003 \002(\t\022\017\n\007success\030\004 \002(\010\022"
+    "\013\n\003err\030\005 \001(\t\022\017\n\007process\030\006 \001(\t\"#\n\024AgentTa"
+    "skResultReply\022\013\n\003cmd\030\001 \002(\t\"\200\001\n\013AgentOprC"
+    "md\022\016\n\006opr_id\030\001 \002(\t\022\014\n\004name\030\002 \002(\t\022\020\n\010run_"
+    "user\030\003 \002(\t\022\017\n\007timeout\030\004 \002(\005\022\016\n\006script\030\005 "
+    "\002(\014\022 \n\004args\030\006 \003(\0132\022.dcmd_api.KeyValue\"_\n"
+    "\020AgentOprCmdReply\022\"\n\005state\030\001 \002(\0162\023.dcmd_"
+    "api.DcmdState\022\016\n\006result\030\002 \002(\014\022\013\n\003err\030\003 \002"
+    "(\t\022\n\n\002ip\030\004 \001(\t\"A\n\017AgentTaskOutput\022\022\n\nsub"
+    "task_id\030\001 \002(\t\022\016\n\006offset\030\002 \002(\005\022\n\n\002ip\030\003 \001("
+    "\t\"g\n\024AgentTaskOutputReply\022\"\n\005state\030\001 \002(\016"
+    "2\023.dcmd_api.DcmdState\022\016\n\006result\030\002 \002(\014\022\016\n"
+    "\006offset\030\003 \002(\005\022\013\n\003err\030\004 \001(\t\"0\n\020AgentRunni"
+    "ngTask\022\n\n\002ip\030\001 \001(\t\022\020\n\010app_name\030\002 \001(\t\"o\n\025"
+    "AgentRunningTaskReply\022\"\n\005state\030\001 \002(\0162\023.d"
+    "cmd_api.DcmdState\022%\n\006result\030\002 \003(\0132\025.dcmd"
+    "_api.SubTaskInfo\022\013\n\003err\030\003 \001(\t\"\035\n\017AgentRu"
+    "nningOpr\022\n\n\002ip\030\001 \001(\t\"j\n\024AgentRunningOprR"
+    "eply\022\"\n\005state\030\001 \002(\0162\023.dcmd_api.DcmdState"
+    "\022!\n\006result\030\002 \003(\0132\021.dcmd_api.OprInfo\022\013\n\003e"
+    "rr\030\003 \001(\t\"\036\n\nInvalidMsg\022\020\n\010msg_type\030\001 \002(\005"
+    "\"\\\n\014UiTaskOutput\022\022\n\nsubtask_id\030\001 \002(\t\022\n\n\002"
+    "ip\030\002 \002(\t\022\016\n\006offset\030\003 \002(\005\022\014\n\004user\030\004 \002(\t\022\016"
+    "\n\006passwd\030\005 \002(\t\"d\n\021UiTaskOutputReply\022\"\n\005s"
+    "tate\030\001 \002(\0162\023.dcmd_api.DcmdState\022\016\n\006resul"
+    "t\030\002 \002(\014\022\016\n\006offset\030\003 \002(\005\022\013\n\003err\030\004 \001(\t\"P\n\022"
+    "UiAgentRunningTask\022\n\n\002ip\030\001 \001(\t\022\020\n\010app_na"
+    "me\030\002 \001(\t\022\014\n\004user\030\003 \002(\t\022\016\n\006passwd\030\004 \002(\t\"q"
+    "\n\027UiAgentRunningTaskReply\022\"\n\005state\030\001 \002(\016"
+    "2\023.dcmd_api.DcmdState\022%\n\006result\030\002 \003(\0132\025."
+    "dcmd_api.SubTaskInfo\022\013\n\003err\030\003 \001(\t\"=\n\021UiA"
+    "gentRunningOpr\022\n\n\002ip\030\001 \001(\t\022\014\n\004user\030\002 \002(\t"
+    "\022\016\n\006passwd\030\003 \002(\t\"l\n\026UiAgentRunningOprRep"
+    "ly\022\"\n\005state\030\001 \002(\0162\023.dcmd_api.DcmdState\022!"
+    "\n\006result\030\002 \003(\0132\021.dcmd_api.OprInfo\022\013\n\003err"
+    "\030\003 \001(\t\"<\n\014UiExecOprCmd\022\016\n\006opr_id\030\001 \001(\t\022\014"
+    "\n\004user\030\002 \002(\t\022\016\n\006passwd\030\003 \002(\t\"p\n\021UiExecOp"
+    "rCmdReply\022\"\n\005state\030\001 \002(\0162\023.dcmd_api.Dcmd"
+    "State\022*\n\006result\030\002 \003(\0132\032.dcmd_api.AgentOp"
+    "rCmdReply\022\013\n\003err\030\003 \001(\t\"I\n\013UiAgentInfo\022\013\n"
+    "\003ips\030\001 \003(\t\022\017\n\007version\030\002 \002(\010\022\014\n\004user\030\003 \002("
+    "\t\022\016\n\006passwd\030\004 \002(\t\"k\n\020UiAgentInfoReply\022\"\n"
+    "\005state\030\001 \002(\0162\023.dcmd_api.DcmdState\022&\n\tage"
+    "ntinfo\030\002 \003(\0132\023.dcmd_api.AgentInfo\022\013\n\003err"
+    "\030\003 \001(\t\"2\n\022UiInvalidAgentInfo\022\014\n\004user\030\001 \002"
+    "(\t\022\016\n\006passwd\030\002 \002(\t\"r\n\027UiInvalidAgentInfo"
+    "Reply\022\"\n\005state\030\001 \002(\0162\023.dcmd_api.DcmdStat"
+    "e\022&\n\tagentinfo\030\002 \002(\0132\023.dcmd_api.AgentInf"
+    "o\022\013\n\003err\030\003 \001(\t\"C\n\020UiTaskScriptInfo\022\021\n\tta"
+    "sk_type\030\001 \002(\t\022\014\n\004user\030\002 \002(\t\022\016\n\006passwd\030\003 "
+    "\002(\t\"e\n\025UiTaskScriptInfoReply\022\"\n\005state\030\001 "
+    "\002(\0162\023.dcmd_api.DcmdState\022\016\n\006script\030\002 \001(\t"
+    "\022\013\n\003err\030\003 \001(\t\022\013\n\003md5\030\004 \001(\t\"A\n\017UiOprScrip"
+    "tInfo\022\020\n\010opr_file\030\001 \002(\t\022\014\n\004user\030\002 \002(\t\022\016\n"
+    "\006passwd\030\003 \002(\t\"d\n\024UiOprScriptInfoReply\022\"\n"
+    "\005state\030\001 \002(\0162\023.dcmd_api.DcmdState\022\016\n\006scr"
+    "ipt\030\002 \001(\t\022\013\n\003err\030\003 \001(\t\022\013\n\003md5\030\004 \001(\t\"F\n\022U"
+    "iAgentTaskProcess\022\022\n\nsubtask_id\030\001 \003(\t\022\014\n"
+    "\004user\030\002 \002(\t\022\016\n\006passwd\030\003 \002(\t\"[\n\027UiAgentTa"
+    "skProcessReply\022\"\n\005state\030\001 \002(\0162\023.dcmd_api"
+    ".DcmdState\022\017\n\007process\030\002 \003(\t\022\013\n\003err\030\003 \001(\t"
+    "\"\221\001\n\tUiTaskCmd\022\017\n\007task_id\030\001 \002(\t\022\022\n\nsubta"
+    "sk_id\030\002 \001(\t\022\n\n\002ip\030\003 \001(\t\022\020\n\010app_pool\030\004 \001("
+    "\t\022#\n\010cmd_type\030\005 \002(\0162\021.dcmd_api.CmdType\022\014"
+    "\n\004user\030\006 \002(\t\022\016\n\006passwd\030\007 \002(\t\"Q\n\016UiTaskCm"
+    "dReply\022\"\n\005state\030\001 \002(\0162\023.dcmd_api.DcmdSta"
+    "te\022\016\n\006cmd_id\030\002 \001(\t\022\013\n\003err\030\003 \001(\t\"b\n\013UiTas"
+    "kWatch\022\017\n\007task_id\030\001 \002(\t\022\020\n\010app_pool\030\002 \001("
+    "\t\022\022\n\nsubtask_id\030\003 \001(\t\022\014\n\004user\030\004 \002(\t\022\016\n\006p"
+    "asswd\030\005 \002(\t\"\307\002\n\020UiTaskWatchReply\022(\n\013watc"
+    "h_state\030\001 \002(\0162\023.dcmd_api.DcmdState\022\013\n\003er"
+    "r\030\002 \001(\t\022\'\n\ntask_state\030\003 \001(\0162\023.dcmd_api.T"
+    "askState\022.\n\016app_pool_state\030\004 \001(\0162\026.dcmd_"
+    "api.AppPoolState\022-\n\rsubtask_state\030\005 \001(\0162"
+    "\026.dcmd_api.SubTaskState\022\027\n\017success_subta"
+    "sk\030\006 \001(\005\022\026\n\016failed_subtask\030\007 \001(\005\022\025\n\rdoin"
+    "g_subtask\030\010 \001(\005\022\026\n\016cancel_subtask\030\t \001(\005\022"
+    "\024\n\014undo_subtask\030\n \001(\005*$\n\tDcmdState\022\013\n\007SU"
+    "CCESS\020\000\022\n\n\006FAILED\020\001*c\n\nAgentState\022\026\n\022AGE"
+    "NT_UN_CONNECTED\020\000\022\021\n\rAGENT_UN_AUTH\020\001\022\025\n\021"
+    "AGENT_UN_REPORTED\020\002\022\023\n\017AGENT_CONNECTED\020\003"
+    "*\220\001\n\tTaskState\022\r\n\tTASK_INIT\020\000\022\016\n\nTASK_DO"
+    "ING\020\001\022\017\n\013TASK_PAUSED\020\002\022\017\n\013TASK_FAILED\020\003\022"
+    "\020\n\014TASK_FREEZED\020\004\022\021\n\rTASK_FINISHED\020\005\022\035\n\031"
+    "TASK_FINISHED_WITH_FAILED\020\006*\231\001\n\014AppPoolS"
+    "tate\022\021\n\rAPP_POOL_INIT\020\000\022\022\n\016APP_POOL_DOIN"
+    "G\020\001\022\023\n\017APP_POOL_PAUSED\020\002\022\023\n\017APP_POOL_FAI"
+    "LED\020\003\022\025\n\021APP_POOL_FINISHED\020\005\022!\n\035APP_POOL"
+    "_FINISHED_WITH_FAILED\020\006*s\n\014SubTaskState\022"
+    "\020\n\014SUBTASK_INIT\020\000\022\021\n\rSUBTASK_DOING\020\001\022\024\n\020"
+    "SUBTASK_FINISHED\020\002\022\022\n\016SUBTASK_FAILED\020\003\022\024"
+    "\n\020SUBTASK_CANCELED\020\004*\236\002\n\007CmdType\022\016\n\nSTAR"
+    "T_TASK\020\001\022\016\n\nPAUSE_TASK\020\002\022\017\n\013FINISH_TASK\020"
+    "\003\022\022\n\016CANCEL_SUBTASK\020\004\022\026\n\022CANCEL_APP_SUBT"
+    "ASK\020\005\022\r\n\tREDO_TASK\020\006\022\021\n\rREDO_APP_POOL\020\007\022"
+    "\020\n\014REDO_SUBTASK\020\010\022\027\n\023REDO_FAILED_SUBTASK"
+    "\020\t\022 \n\034REDO_FAILED_APP_POOL_SUBTASK\020\n\022\022\n\016"
+    "IGNORE_SUBTASK\020\013\022\017\n\013FREEZE_TASK\020\014\022\021\n\rUNF"
+    "REEZE_TASK\020\r\022\017\n\013UPDATE_TASK\020\016B\021\n\017com.cwi"
+    "nux.dcmd", 5008);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "dcmd.proto", &protobuf_RegisterTypes);
   KeyValue::default_instance_ = new KeyValue();
@@ -2634,7 +2637,7 @@ bool AgentInfo::MergePartialFromCodedStream(
         break;
       }
       
-      // required .dcmd.AgentState state = 2;
+      // required .dcmd_api.AgentState state = 2;
       case 2: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
@@ -2643,8 +2646,8 @@ bool AgentInfo::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          if (dcmd::AgentState_IsValid(value)) {
-            set_state(static_cast< dcmd::AgentState >(value));
+          if (dcmd_api::AgentState_IsValid(value)) {
+            set_state(static_cast< dcmd_api::AgentState >(value));
           } else {
             mutable_unknown_fields()->AddVarint(2, value);
           }
@@ -2733,7 +2736,7 @@ void AgentInfo::SerializeWithCachedSizes(
       1, this->ip(), output);
   }
   
-  // required .dcmd.AgentState state = 2;
+  // required .dcmd_api.AgentState state = 2;
   if (has_state()) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       2, this->state(), output);
@@ -2784,7 +2787,7 @@ void AgentInfo::SerializeWithCachedSizes(
         1, this->ip(), target);
   }
   
-  // required .dcmd.AgentState state = 2;
+  // required .dcmd_api.AgentState state = 2;
   if (has_state()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       2, this->state(), target);
@@ -2838,7 +2841,7 @@ int AgentInfo::ByteSize() const {
           this->ip());
     }
     
-    // required .dcmd.AgentState state = 2;
+    // required .dcmd_api.AgentState state = 2;
     if (has_state()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::EnumSize(this->state());
@@ -3308,7 +3311,7 @@ bool AgentReportReply::MergePartialFromCodedStream(
   ::google::protobuf::uint32 tag;
   while ((tag = input->ReadTag()) != 0) {
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required .dcmd.DcmdState state = 1;
+      // required .dcmd_api.DcmdState state = 1;
       case 1: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
@@ -3316,8 +3319,8 @@ bool AgentReportReply::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          if (dcmd::DcmdState_IsValid(value)) {
-            set_state(static_cast< dcmd::DcmdState >(value));
+          if (dcmd_api::DcmdState_IsValid(value)) {
+            set_state(static_cast< dcmd_api::DcmdState >(value));
           } else {
             mutable_unknown_fields()->AddVarint(1, value);
           }
@@ -3395,7 +3398,7 @@ bool AgentReportReply::MergePartialFromCodedStream(
 
 void AgentReportReply::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // required .dcmd.DcmdState state = 1;
+  // required .dcmd_api.DcmdState state = 1;
   if (has_state()) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       1, this->state(), output);
@@ -3428,7 +3431,7 @@ void AgentReportReply::SerializeWithCachedSizes(
 
 ::google::protobuf::uint8* AgentReportReply::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // required .dcmd.DcmdState state = 1;
+  // required .dcmd_api.DcmdState state = 1;
   if (has_state()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       1, this->state(), target);
@@ -3465,7 +3468,7 @@ int AgentReportReply::ByteSize() const {
   int total_size = 0;
   
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    // required .dcmd.DcmdState state = 1;
+    // required .dcmd_api.DcmdState state = 1;
     if (has_state()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::EnumSize(this->state());
@@ -4246,7 +4249,7 @@ bool AgentTaskCmd::MergePartialFromCodedStream(
         break;
       }
       
-      // repeated .dcmd.KeyValue task_arg = 16;
+      // repeated .dcmd_api.KeyValue task_arg = 16;
       case 16: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
@@ -4407,7 +4410,7 @@ void AgentTaskCmd::SerializeWithCachedSizes(
       15, this->script(), output);
   }
   
-  // repeated .dcmd.KeyValue task_arg = 16;
+  // repeated .dcmd_api.KeyValue task_arg = 16;
   for (int i = 0; i < this->task_arg_size(); i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       16, this->task_arg(i), output);
@@ -4563,7 +4566,7 @@ void AgentTaskCmd::SerializeWithCachedSizes(
         15, this->script(), target);
   }
   
-  // repeated .dcmd.KeyValue task_arg = 16;
+  // repeated .dcmd_api.KeyValue task_arg = 16;
   for (int i = 0; i < this->task_arg_size(); i++) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
@@ -4687,7 +4690,7 @@ int AgentTaskCmd::ByteSize() const {
     }
     
   }
-  // repeated .dcmd.KeyValue task_arg = 16;
+  // repeated .dcmd_api.KeyValue task_arg = 16;
   total_size += 2 * this->task_arg_size();
   for (int i = 0; i < this->task_arg_size(); i++) {
     total_size +=
@@ -6298,7 +6301,7 @@ bool AgentOprCmd::MergePartialFromCodedStream(
         break;
       }
       
-      // repeated .dcmd.KeyValue args = 6;
+      // repeated .dcmd_api.KeyValue args = 6;
       case 6: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
@@ -6369,7 +6372,7 @@ void AgentOprCmd::SerializeWithCachedSizes(
       5, this->script(), output);
   }
   
-  // repeated .dcmd.KeyValue args = 6;
+  // repeated .dcmd_api.KeyValue args = 6;
   for (int i = 0; i < this->args_size(); i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       6, this->args(i), output);
@@ -6425,7 +6428,7 @@ void AgentOprCmd::SerializeWithCachedSizes(
         5, this->script(), target);
   }
   
-  // repeated .dcmd.KeyValue args = 6;
+  // repeated .dcmd_api.KeyValue args = 6;
   for (int i = 0; i < this->args_size(); i++) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
@@ -6479,7 +6482,7 @@ int AgentOprCmd::ByteSize() const {
     }
     
   }
-  // repeated .dcmd.KeyValue args = 6;
+  // repeated .dcmd_api.KeyValue args = 6;
   total_size += 1 * this->args_size();
   for (int i = 0; i < this->args_size(); i++) {
     total_size +=
@@ -6676,7 +6679,7 @@ bool AgentOprCmdReply::MergePartialFromCodedStream(
   ::google::protobuf::uint32 tag;
   while ((tag = input->ReadTag()) != 0) {
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required .dcmd.DcmdState state = 1;
+      // required .dcmd_api.DcmdState state = 1;
       case 1: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
@@ -6684,8 +6687,8 @@ bool AgentOprCmdReply::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          if (dcmd::DcmdState_IsValid(value)) {
-            set_state(static_cast< dcmd::DcmdState >(value));
+          if (dcmd_api::DcmdState_IsValid(value)) {
+            set_state(static_cast< dcmd_api::DcmdState >(value));
           } else {
             mutable_unknown_fields()->AddVarint(1, value);
           }
@@ -6762,7 +6765,7 @@ bool AgentOprCmdReply::MergePartialFromCodedStream(
 
 void AgentOprCmdReply::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // required .dcmd.DcmdState state = 1;
+  // required .dcmd_api.DcmdState state = 1;
   if (has_state()) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       1, this->state(), output);
@@ -6800,7 +6803,7 @@ void AgentOprCmdReply::SerializeWithCachedSizes(
 
 ::google::protobuf::uint8* AgentOprCmdReply::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // required .dcmd.DcmdState state = 1;
+  // required .dcmd_api.DcmdState state = 1;
   if (has_state()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       1, this->state(), target);
@@ -6844,7 +6847,7 @@ int AgentOprCmdReply::ByteSize() const {
   int total_size = 0;
   
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    // required .dcmd.DcmdState state = 1;
+    // required .dcmd_api.DcmdState state = 1;
     if (has_state()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::EnumSize(this->state());
@@ -7367,7 +7370,7 @@ bool AgentTaskOutputReply::MergePartialFromCodedStream(
   ::google::protobuf::uint32 tag;
   while ((tag = input->ReadTag()) != 0) {
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required .dcmd.DcmdState state = 1;
+      // required .dcmd_api.DcmdState state = 1;
       case 1: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
@@ -7375,8 +7378,8 @@ bool AgentTaskOutputReply::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          if (dcmd::DcmdState_IsValid(value)) {
-            set_state(static_cast< dcmd::DcmdState >(value));
+          if (dcmd_api::DcmdState_IsValid(value)) {
+            set_state(static_cast< dcmd_api::DcmdState >(value));
           } else {
             mutable_unknown_fields()->AddVarint(1, value);
           }
@@ -7452,7 +7455,7 @@ bool AgentTaskOutputReply::MergePartialFromCodedStream(
 
 void AgentTaskOutputReply::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // required .dcmd.DcmdState state = 1;
+  // required .dcmd_api.DcmdState state = 1;
   if (has_state()) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       1, this->state(), output);
@@ -7486,7 +7489,7 @@ void AgentTaskOutputReply::SerializeWithCachedSizes(
 
 ::google::protobuf::uint8* AgentTaskOutputReply::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // required .dcmd.DcmdState state = 1;
+  // required .dcmd_api.DcmdState state = 1;
   if (has_state()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       1, this->state(), target);
@@ -7525,7 +7528,7 @@ int AgentTaskOutputReply::ByteSize() const {
   int total_size = 0;
   
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    // required .dcmd.DcmdState state = 1;
+    // required .dcmd_api.DcmdState state = 1;
     if (has_state()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::EnumSize(this->state());
@@ -7996,7 +7999,7 @@ bool AgentRunningTaskReply::MergePartialFromCodedStream(
   ::google::protobuf::uint32 tag;
   while ((tag = input->ReadTag()) != 0) {
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required .dcmd.DcmdState state = 1;
+      // required .dcmd_api.DcmdState state = 1;
       case 1: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
@@ -8004,8 +8007,8 @@ bool AgentRunningTaskReply::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          if (dcmd::DcmdState_IsValid(value)) {
-            set_state(static_cast< dcmd::DcmdState >(value));
+          if (dcmd_api::DcmdState_IsValid(value)) {
+            set_state(static_cast< dcmd_api::DcmdState >(value));
           } else {
             mutable_unknown_fields()->AddVarint(1, value);
           }
@@ -8016,7 +8019,7 @@ bool AgentRunningTaskReply::MergePartialFromCodedStream(
         break;
       }
       
-      // repeated .dcmd.SubTaskInfo result = 2;
+      // repeated .dcmd_api.SubTaskInfo result = 2;
       case 2: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
@@ -8066,13 +8069,13 @@ bool AgentRunningTaskReply::MergePartialFromCodedStream(
 
 void AgentRunningTaskReply::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // required .dcmd.DcmdState state = 1;
+  // required .dcmd_api.DcmdState state = 1;
   if (has_state()) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       1, this->state(), output);
   }
   
-  // repeated .dcmd.SubTaskInfo result = 2;
+  // repeated .dcmd_api.SubTaskInfo result = 2;
   for (int i = 0; i < this->result_size(); i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       2, this->result(i), output);
@@ -8095,13 +8098,13 @@ void AgentRunningTaskReply::SerializeWithCachedSizes(
 
 ::google::protobuf::uint8* AgentRunningTaskReply::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // required .dcmd.DcmdState state = 1;
+  // required .dcmd_api.DcmdState state = 1;
   if (has_state()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       1, this->state(), target);
   }
   
-  // repeated .dcmd.SubTaskInfo result = 2;
+  // repeated .dcmd_api.SubTaskInfo result = 2;
   for (int i = 0; i < this->result_size(); i++) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
@@ -8129,7 +8132,7 @@ int AgentRunningTaskReply::ByteSize() const {
   int total_size = 0;
   
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    // required .dcmd.DcmdState state = 1;
+    // required .dcmd_api.DcmdState state = 1;
     if (has_state()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::EnumSize(this->state());
@@ -8143,7 +8146,7 @@ int AgentRunningTaskReply::ByteSize() const {
     }
     
   }
-  // repeated .dcmd.SubTaskInfo result = 2;
+  // repeated .dcmd_api.SubTaskInfo result = 2;
   total_size += 1 * this->result_size();
   for (int i = 0; i < this->result_size(); i++) {
     total_size +=
@@ -8534,7 +8537,7 @@ bool AgentRunningOprReply::MergePartialFromCodedStream(
   ::google::protobuf::uint32 tag;
   while ((tag = input->ReadTag()) != 0) {
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required .dcmd.DcmdState state = 1;
+      // required .dcmd_api.DcmdState state = 1;
       case 1: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
@@ -8542,8 +8545,8 @@ bool AgentRunningOprReply::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          if (dcmd::DcmdState_IsValid(value)) {
-            set_state(static_cast< dcmd::DcmdState >(value));
+          if (dcmd_api::DcmdState_IsValid(value)) {
+            set_state(static_cast< dcmd_api::DcmdState >(value));
           } else {
             mutable_unknown_fields()->AddVarint(1, value);
           }
@@ -8554,7 +8557,7 @@ bool AgentRunningOprReply::MergePartialFromCodedStream(
         break;
       }
       
-      // repeated .dcmd.OprInfo result = 2;
+      // repeated .dcmd_api.OprInfo result = 2;
       case 2: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
@@ -8604,13 +8607,13 @@ bool AgentRunningOprReply::MergePartialFromCodedStream(
 
 void AgentRunningOprReply::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // required .dcmd.DcmdState state = 1;
+  // required .dcmd_api.DcmdState state = 1;
   if (has_state()) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       1, this->state(), output);
   }
   
-  // repeated .dcmd.OprInfo result = 2;
+  // repeated .dcmd_api.OprInfo result = 2;
   for (int i = 0; i < this->result_size(); i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       2, this->result(i), output);
@@ -8633,13 +8636,13 @@ void AgentRunningOprReply::SerializeWithCachedSizes(
 
 ::google::protobuf::uint8* AgentRunningOprReply::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // required .dcmd.DcmdState state = 1;
+  // required .dcmd_api.DcmdState state = 1;
   if (has_state()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       1, this->state(), target);
   }
   
-  // repeated .dcmd.OprInfo result = 2;
+  // repeated .dcmd_api.OprInfo result = 2;
   for (int i = 0; i < this->result_size(); i++) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
@@ -8667,7 +8670,7 @@ int AgentRunningOprReply::ByteSize() const {
   int total_size = 0;
   
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    // required .dcmd.DcmdState state = 1;
+    // required .dcmd_api.DcmdState state = 1;
     if (has_state()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::EnumSize(this->state());
@@ -8681,7 +8684,7 @@ int AgentRunningOprReply::ByteSize() const {
     }
     
   }
-  // repeated .dcmd.OprInfo result = 2;
+  // repeated .dcmd_api.OprInfo result = 2;
   total_size += 1 * this->result_size();
   for (int i = 0; i < this->result_size(); i++) {
     total_size +=
@@ -9503,7 +9506,7 @@ bool UiTaskOutputReply::MergePartialFromCodedStream(
   ::google::protobuf::uint32 tag;
   while ((tag = input->ReadTag()) != 0) {
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required .dcmd.DcmdState state = 1;
+      // required .dcmd_api.DcmdState state = 1;
       case 1: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
@@ -9511,8 +9514,8 @@ bool UiTaskOutputReply::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          if (dcmd::DcmdState_IsValid(value)) {
-            set_state(static_cast< dcmd::DcmdState >(value));
+          if (dcmd_api::DcmdState_IsValid(value)) {
+            set_state(static_cast< dcmd_api::DcmdState >(value));
           } else {
             mutable_unknown_fields()->AddVarint(1, value);
           }
@@ -9588,7 +9591,7 @@ bool UiTaskOutputReply::MergePartialFromCodedStream(
 
 void UiTaskOutputReply::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // required .dcmd.DcmdState state = 1;
+  // required .dcmd_api.DcmdState state = 1;
   if (has_state()) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       1, this->state(), output);
@@ -9622,7 +9625,7 @@ void UiTaskOutputReply::SerializeWithCachedSizes(
 
 ::google::protobuf::uint8* UiTaskOutputReply::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // required .dcmd.DcmdState state = 1;
+  // required .dcmd_api.DcmdState state = 1;
   if (has_state()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       1, this->state(), target);
@@ -9661,7 +9664,7 @@ int UiTaskOutputReply::ByteSize() const {
   int total_size = 0;
   
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    // required .dcmd.DcmdState state = 1;
+    // required .dcmd_api.DcmdState state = 1;
     if (has_state()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::EnumSize(this->state());
@@ -10247,7 +10250,7 @@ bool UiAgentRunningTaskReply::MergePartialFromCodedStream(
   ::google::protobuf::uint32 tag;
   while ((tag = input->ReadTag()) != 0) {
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required .dcmd.DcmdState state = 1;
+      // required .dcmd_api.DcmdState state = 1;
       case 1: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
@@ -10255,8 +10258,8 @@ bool UiAgentRunningTaskReply::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          if (dcmd::DcmdState_IsValid(value)) {
-            set_state(static_cast< dcmd::DcmdState >(value));
+          if (dcmd_api::DcmdState_IsValid(value)) {
+            set_state(static_cast< dcmd_api::DcmdState >(value));
           } else {
             mutable_unknown_fields()->AddVarint(1, value);
           }
@@ -10267,7 +10270,7 @@ bool UiAgentRunningTaskReply::MergePartialFromCodedStream(
         break;
       }
       
-      // repeated .dcmd.SubTaskInfo result = 2;
+      // repeated .dcmd_api.SubTaskInfo result = 2;
       case 2: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
@@ -10317,13 +10320,13 @@ bool UiAgentRunningTaskReply::MergePartialFromCodedStream(
 
 void UiAgentRunningTaskReply::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // required .dcmd.DcmdState state = 1;
+  // required .dcmd_api.DcmdState state = 1;
   if (has_state()) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       1, this->state(), output);
   }
   
-  // repeated .dcmd.SubTaskInfo result = 2;
+  // repeated .dcmd_api.SubTaskInfo result = 2;
   for (int i = 0; i < this->result_size(); i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       2, this->result(i), output);
@@ -10346,13 +10349,13 @@ void UiAgentRunningTaskReply::SerializeWithCachedSizes(
 
 ::google::protobuf::uint8* UiAgentRunningTaskReply::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // required .dcmd.DcmdState state = 1;
+  // required .dcmd_api.DcmdState state = 1;
   if (has_state()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       1, this->state(), target);
   }
   
-  // repeated .dcmd.SubTaskInfo result = 2;
+  // repeated .dcmd_api.SubTaskInfo result = 2;
   for (int i = 0; i < this->result_size(); i++) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
@@ -10380,7 +10383,7 @@ int UiAgentRunningTaskReply::ByteSize() const {
   int total_size = 0;
   
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    // required .dcmd.DcmdState state = 1;
+    // required .dcmd_api.DcmdState state = 1;
     if (has_state()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::EnumSize(this->state());
@@ -10394,7 +10397,7 @@ int UiAgentRunningTaskReply::ByteSize() const {
     }
     
   }
-  // repeated .dcmd.SubTaskInfo result = 2;
+  // repeated .dcmd_api.SubTaskInfo result = 2;
   total_size += 1 * this->result_size();
   for (int i = 0; i < this->result_size(); i++) {
     total_size +=
@@ -10900,7 +10903,7 @@ bool UiAgentRunningOprReply::MergePartialFromCodedStream(
   ::google::protobuf::uint32 tag;
   while ((tag = input->ReadTag()) != 0) {
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required .dcmd.DcmdState state = 1;
+      // required .dcmd_api.DcmdState state = 1;
       case 1: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
@@ -10908,8 +10911,8 @@ bool UiAgentRunningOprReply::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          if (dcmd::DcmdState_IsValid(value)) {
-            set_state(static_cast< dcmd::DcmdState >(value));
+          if (dcmd_api::DcmdState_IsValid(value)) {
+            set_state(static_cast< dcmd_api::DcmdState >(value));
           } else {
             mutable_unknown_fields()->AddVarint(1, value);
           }
@@ -10920,7 +10923,7 @@ bool UiAgentRunningOprReply::MergePartialFromCodedStream(
         break;
       }
       
-      // repeated .dcmd.OprInfo result = 2;
+      // repeated .dcmd_api.OprInfo result = 2;
       case 2: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
@@ -10970,13 +10973,13 @@ bool UiAgentRunningOprReply::MergePartialFromCodedStream(
 
 void UiAgentRunningOprReply::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // required .dcmd.DcmdState state = 1;
+  // required .dcmd_api.DcmdState state = 1;
   if (has_state()) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       1, this->state(), output);
   }
   
-  // repeated .dcmd.OprInfo result = 2;
+  // repeated .dcmd_api.OprInfo result = 2;
   for (int i = 0; i < this->result_size(); i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       2, this->result(i), output);
@@ -10999,13 +11002,13 @@ void UiAgentRunningOprReply::SerializeWithCachedSizes(
 
 ::google::protobuf::uint8* UiAgentRunningOprReply::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // required .dcmd.DcmdState state = 1;
+  // required .dcmd_api.DcmdState state = 1;
   if (has_state()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       1, this->state(), target);
   }
   
-  // repeated .dcmd.OprInfo result = 2;
+  // repeated .dcmd_api.OprInfo result = 2;
   for (int i = 0; i < this->result_size(); i++) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
@@ -11033,7 +11036,7 @@ int UiAgentRunningOprReply::ByteSize() const {
   int total_size = 0;
   
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    // required .dcmd.DcmdState state = 1;
+    // required .dcmd_api.DcmdState state = 1;
     if (has_state()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::EnumSize(this->state());
@@ -11047,7 +11050,7 @@ int UiAgentRunningOprReply::ByteSize() const {
     }
     
   }
-  // repeated .dcmd.OprInfo result = 2;
+  // repeated .dcmd_api.OprInfo result = 2;
   total_size += 1 * this->result_size();
   for (int i = 0; i < this->result_size(); i++) {
     total_size +=
@@ -11553,7 +11556,7 @@ bool UiExecOprCmdReply::MergePartialFromCodedStream(
   ::google::protobuf::uint32 tag;
   while ((tag = input->ReadTag()) != 0) {
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required .dcmd.DcmdState state = 1;
+      // required .dcmd_api.DcmdState state = 1;
       case 1: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
@@ -11561,8 +11564,8 @@ bool UiExecOprCmdReply::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          if (dcmd::DcmdState_IsValid(value)) {
-            set_state(static_cast< dcmd::DcmdState >(value));
+          if (dcmd_api::DcmdState_IsValid(value)) {
+            set_state(static_cast< dcmd_api::DcmdState >(value));
           } else {
             mutable_unknown_fields()->AddVarint(1, value);
           }
@@ -11573,7 +11576,7 @@ bool UiExecOprCmdReply::MergePartialFromCodedStream(
         break;
       }
       
-      // repeated .dcmd.AgentOprCmdReply result = 2;
+      // repeated .dcmd_api.AgentOprCmdReply result = 2;
       case 2: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
@@ -11623,13 +11626,13 @@ bool UiExecOprCmdReply::MergePartialFromCodedStream(
 
 void UiExecOprCmdReply::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // required .dcmd.DcmdState state = 1;
+  // required .dcmd_api.DcmdState state = 1;
   if (has_state()) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       1, this->state(), output);
   }
   
-  // repeated .dcmd.AgentOprCmdReply result = 2;
+  // repeated .dcmd_api.AgentOprCmdReply result = 2;
   for (int i = 0; i < this->result_size(); i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       2, this->result(i), output);
@@ -11652,13 +11655,13 @@ void UiExecOprCmdReply::SerializeWithCachedSizes(
 
 ::google::protobuf::uint8* UiExecOprCmdReply::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // required .dcmd.DcmdState state = 1;
+  // required .dcmd_api.DcmdState state = 1;
   if (has_state()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       1, this->state(), target);
   }
   
-  // repeated .dcmd.AgentOprCmdReply result = 2;
+  // repeated .dcmd_api.AgentOprCmdReply result = 2;
   for (int i = 0; i < this->result_size(); i++) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
@@ -11686,7 +11689,7 @@ int UiExecOprCmdReply::ByteSize() const {
   int total_size = 0;
   
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    // required .dcmd.DcmdState state = 1;
+    // required .dcmd_api.DcmdState state = 1;
     if (has_state()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::EnumSize(this->state());
@@ -11700,7 +11703,7 @@ int UiExecOprCmdReply::ByteSize() const {
     }
     
   }
-  // repeated .dcmd.AgentOprCmdReply result = 2;
+  // repeated .dcmd_api.AgentOprCmdReply result = 2;
   total_size += 1 * this->result_size();
   for (int i = 0; i < this->result_size(); i++) {
     total_size +=
@@ -12235,7 +12238,7 @@ bool UiAgentInfoReply::MergePartialFromCodedStream(
   ::google::protobuf::uint32 tag;
   while ((tag = input->ReadTag()) != 0) {
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required .dcmd.DcmdState state = 1;
+      // required .dcmd_api.DcmdState state = 1;
       case 1: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
@@ -12243,8 +12246,8 @@ bool UiAgentInfoReply::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          if (dcmd::DcmdState_IsValid(value)) {
-            set_state(static_cast< dcmd::DcmdState >(value));
+          if (dcmd_api::DcmdState_IsValid(value)) {
+            set_state(static_cast< dcmd_api::DcmdState >(value));
           } else {
             mutable_unknown_fields()->AddVarint(1, value);
           }
@@ -12255,7 +12258,7 @@ bool UiAgentInfoReply::MergePartialFromCodedStream(
         break;
       }
       
-      // repeated .dcmd.AgentInfo agentinfo = 2;
+      // repeated .dcmd_api.AgentInfo agentinfo = 2;
       case 2: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
@@ -12305,13 +12308,13 @@ bool UiAgentInfoReply::MergePartialFromCodedStream(
 
 void UiAgentInfoReply::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // required .dcmd.DcmdState state = 1;
+  // required .dcmd_api.DcmdState state = 1;
   if (has_state()) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       1, this->state(), output);
   }
   
-  // repeated .dcmd.AgentInfo agentinfo = 2;
+  // repeated .dcmd_api.AgentInfo agentinfo = 2;
   for (int i = 0; i < this->agentinfo_size(); i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       2, this->agentinfo(i), output);
@@ -12334,13 +12337,13 @@ void UiAgentInfoReply::SerializeWithCachedSizes(
 
 ::google::protobuf::uint8* UiAgentInfoReply::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // required .dcmd.DcmdState state = 1;
+  // required .dcmd_api.DcmdState state = 1;
   if (has_state()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       1, this->state(), target);
   }
   
-  // repeated .dcmd.AgentInfo agentinfo = 2;
+  // repeated .dcmd_api.AgentInfo agentinfo = 2;
   for (int i = 0; i < this->agentinfo_size(); i++) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
@@ -12368,7 +12371,7 @@ int UiAgentInfoReply::ByteSize() const {
   int total_size = 0;
   
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    // required .dcmd.DcmdState state = 1;
+    // required .dcmd_api.DcmdState state = 1;
     if (has_state()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::EnumSize(this->state());
@@ -12382,7 +12385,7 @@ int UiAgentInfoReply::ByteSize() const {
     }
     
   }
-  // repeated .dcmd.AgentInfo agentinfo = 2;
+  // repeated .dcmd_api.AgentInfo agentinfo = 2;
   total_size += 1 * this->agentinfo_size();
   for (int i = 0; i < this->agentinfo_size(); i++) {
     total_size +=
@@ -12764,7 +12767,7 @@ UiInvalidAgentInfoReply::UiInvalidAgentInfoReply()
 }
 
 void UiInvalidAgentInfoReply::InitAsDefaultInstance() {
-  agentinfo_ = const_cast< ::dcmd::AgentInfo*>(&::dcmd::AgentInfo::default_instance());
+  agentinfo_ = const_cast< ::dcmd_api::AgentInfo*>(&::dcmd_api::AgentInfo::default_instance());
 }
 
 UiInvalidAgentInfoReply::UiInvalidAgentInfoReply(const UiInvalidAgentInfoReply& from)
@@ -12818,7 +12821,7 @@ void UiInvalidAgentInfoReply::Clear() {
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     state_ = 0;
     if (has_agentinfo()) {
-      if (agentinfo_ != NULL) agentinfo_->::dcmd::AgentInfo::Clear();
+      if (agentinfo_ != NULL) agentinfo_->::dcmd_api::AgentInfo::Clear();
     }
     if (has_err()) {
       if (err_ != &::google::protobuf::internal::kEmptyString) {
@@ -12836,7 +12839,7 @@ bool UiInvalidAgentInfoReply::MergePartialFromCodedStream(
   ::google::protobuf::uint32 tag;
   while ((tag = input->ReadTag()) != 0) {
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required .dcmd.DcmdState state = 1;
+      // required .dcmd_api.DcmdState state = 1;
       case 1: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
@@ -12844,8 +12847,8 @@ bool UiInvalidAgentInfoReply::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          if (dcmd::DcmdState_IsValid(value)) {
-            set_state(static_cast< dcmd::DcmdState >(value));
+          if (dcmd_api::DcmdState_IsValid(value)) {
+            set_state(static_cast< dcmd_api::DcmdState >(value));
           } else {
             mutable_unknown_fields()->AddVarint(1, value);
           }
@@ -12856,7 +12859,7 @@ bool UiInvalidAgentInfoReply::MergePartialFromCodedStream(
         break;
       }
       
-      // required .dcmd.AgentInfo agentinfo = 2;
+      // required .dcmd_api.AgentInfo agentinfo = 2;
       case 2: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
@@ -12905,13 +12908,13 @@ bool UiInvalidAgentInfoReply::MergePartialFromCodedStream(
 
 void UiInvalidAgentInfoReply::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // required .dcmd.DcmdState state = 1;
+  // required .dcmd_api.DcmdState state = 1;
   if (has_state()) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       1, this->state(), output);
   }
   
-  // required .dcmd.AgentInfo agentinfo = 2;
+  // required .dcmd_api.AgentInfo agentinfo = 2;
   if (has_agentinfo()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       2, this->agentinfo(), output);
@@ -12934,13 +12937,13 @@ void UiInvalidAgentInfoReply::SerializeWithCachedSizes(
 
 ::google::protobuf::uint8* UiInvalidAgentInfoReply::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // required .dcmd.DcmdState state = 1;
+  // required .dcmd_api.DcmdState state = 1;
   if (has_state()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       1, this->state(), target);
   }
   
-  // required .dcmd.AgentInfo agentinfo = 2;
+  // required .dcmd_api.AgentInfo agentinfo = 2;
   if (has_agentinfo()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
@@ -12968,13 +12971,13 @@ int UiInvalidAgentInfoReply::ByteSize() const {
   int total_size = 0;
   
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    // required .dcmd.DcmdState state = 1;
+    // required .dcmd_api.DcmdState state = 1;
     if (has_state()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::EnumSize(this->state());
     }
     
-    // required .dcmd.AgentInfo agentinfo = 2;
+    // required .dcmd_api.AgentInfo agentinfo = 2;
     if (has_agentinfo()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
@@ -13019,7 +13022,7 @@ void UiInvalidAgentInfoReply::MergeFrom(const UiInvalidAgentInfoReply& from) {
       set_state(from.state());
     }
     if (from.has_agentinfo()) {
-      mutable_agentinfo()->::dcmd::AgentInfo::MergeFrom(from.agentinfo());
+      mutable_agentinfo()->::dcmd_api::AgentInfo::MergeFrom(from.agentinfo());
     }
     if (from.has_err()) {
       set_err(from.err());
@@ -13507,7 +13510,7 @@ bool UiTaskScriptInfoReply::MergePartialFromCodedStream(
   ::google::protobuf::uint32 tag;
   while ((tag = input->ReadTag()) != 0) {
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required .dcmd.DcmdState state = 1;
+      // required .dcmd_api.DcmdState state = 1;
       case 1: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
@@ -13515,8 +13518,8 @@ bool UiTaskScriptInfoReply::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          if (dcmd::DcmdState_IsValid(value)) {
-            set_state(static_cast< dcmd::DcmdState >(value));
+          if (dcmd_api::DcmdState_IsValid(value)) {
+            set_state(static_cast< dcmd_api::DcmdState >(value));
           } else {
             mutable_unknown_fields()->AddVarint(1, value);
           }
@@ -13596,7 +13599,7 @@ bool UiTaskScriptInfoReply::MergePartialFromCodedStream(
 
 void UiTaskScriptInfoReply::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // required .dcmd.DcmdState state = 1;
+  // required .dcmd_api.DcmdState state = 1;
   if (has_state()) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       1, this->state(), output);
@@ -13637,7 +13640,7 @@ void UiTaskScriptInfoReply::SerializeWithCachedSizes(
 
 ::google::protobuf::uint8* UiTaskScriptInfoReply::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // required .dcmd.DcmdState state = 1;
+  // required .dcmd_api.DcmdState state = 1;
   if (has_state()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       1, this->state(), target);
@@ -13684,7 +13687,7 @@ int UiTaskScriptInfoReply::ByteSize() const {
   int total_size = 0;
   
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    // required .dcmd.DcmdState state = 1;
+    // required .dcmd_api.DcmdState state = 1;
     if (has_state()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::EnumSize(this->state());
@@ -14231,7 +14234,7 @@ bool UiOprScriptInfoReply::MergePartialFromCodedStream(
   ::google::protobuf::uint32 tag;
   while ((tag = input->ReadTag()) != 0) {
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required .dcmd.DcmdState state = 1;
+      // required .dcmd_api.DcmdState state = 1;
       case 1: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
@@ -14239,8 +14242,8 @@ bool UiOprScriptInfoReply::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          if (dcmd::DcmdState_IsValid(value)) {
-            set_state(static_cast< dcmd::DcmdState >(value));
+          if (dcmd_api::DcmdState_IsValid(value)) {
+            set_state(static_cast< dcmd_api::DcmdState >(value));
           } else {
             mutable_unknown_fields()->AddVarint(1, value);
           }
@@ -14320,7 +14323,7 @@ bool UiOprScriptInfoReply::MergePartialFromCodedStream(
 
 void UiOprScriptInfoReply::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // required .dcmd.DcmdState state = 1;
+  // required .dcmd_api.DcmdState state = 1;
   if (has_state()) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       1, this->state(), output);
@@ -14361,7 +14364,7 @@ void UiOprScriptInfoReply::SerializeWithCachedSizes(
 
 ::google::protobuf::uint8* UiOprScriptInfoReply::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // required .dcmd.DcmdState state = 1;
+  // required .dcmd_api.DcmdState state = 1;
   if (has_state()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       1, this->state(), target);
@@ -14408,7 +14411,7 @@ int UiOprScriptInfoReply::ByteSize() const {
   int total_size = 0;
   
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    // required .dcmd.DcmdState state = 1;
+    // required .dcmd_api.DcmdState state = 1;
     if (has_state()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::EnumSize(this->state());
@@ -14928,7 +14931,7 @@ bool UiAgentTaskProcessReply::MergePartialFromCodedStream(
   ::google::protobuf::uint32 tag;
   while ((tag = input->ReadTag()) != 0) {
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required .dcmd.DcmdState state = 1;
+      // required .dcmd_api.DcmdState state = 1;
       case 1: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
@@ -14936,8 +14939,8 @@ bool UiAgentTaskProcessReply::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          if (dcmd::DcmdState_IsValid(value)) {
-            set_state(static_cast< dcmd::DcmdState >(value));
+          if (dcmd_api::DcmdState_IsValid(value)) {
+            set_state(static_cast< dcmd_api::DcmdState >(value));
           } else {
             mutable_unknown_fields()->AddVarint(1, value);
           }
@@ -15001,7 +15004,7 @@ bool UiAgentTaskProcessReply::MergePartialFromCodedStream(
 
 void UiAgentTaskProcessReply::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // required .dcmd.DcmdState state = 1;
+  // required .dcmd_api.DcmdState state = 1;
   if (has_state()) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       1, this->state(), output);
@@ -15033,7 +15036,7 @@ void UiAgentTaskProcessReply::SerializeWithCachedSizes(
 
 ::google::protobuf::uint8* UiAgentTaskProcessReply::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // required .dcmd.DcmdState state = 1;
+  // required .dcmd_api.DcmdState state = 1;
   if (has_state()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       1, this->state(), target);
@@ -15069,7 +15072,7 @@ int UiAgentTaskProcessReply::ByteSize() const {
   int total_size = 0;
   
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    // required .dcmd.DcmdState state = 1;
+    // required .dcmd_api.DcmdState state = 1;
     if (has_state()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::EnumSize(this->state());
@@ -15361,7 +15364,7 @@ bool UiTaskCmd::MergePartialFromCodedStream(
         break;
       }
       
-      // required .dcmd.CmdType cmd_type = 5;
+      // required .dcmd_api.CmdType cmd_type = 5;
       case 5: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
@@ -15370,8 +15373,8 @@ bool UiTaskCmd::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          if (dcmd::CmdType_IsValid(value)) {
-            set_cmd_type(static_cast< dcmd::CmdType >(value));
+          if (dcmd_api::CmdType_IsValid(value)) {
+            set_cmd_type(static_cast< dcmd_api::CmdType >(value));
           } else {
             mutable_unknown_fields()->AddVarint(5, value);
           }
@@ -15470,7 +15473,7 @@ void UiTaskCmd::SerializeWithCachedSizes(
       4, this->app_pool(), output);
   }
   
-  // required .dcmd.CmdType cmd_type = 5;
+  // required .dcmd_api.CmdType cmd_type = 5;
   if (has_cmd_type()) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       5, this->cmd_type(), output);
@@ -15542,7 +15545,7 @@ void UiTaskCmd::SerializeWithCachedSizes(
         4, this->app_pool(), target);
   }
   
-  // required .dcmd.CmdType cmd_type = 5;
+  // required .dcmd_api.CmdType cmd_type = 5;
   if (has_cmd_type()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       5, this->cmd_type(), target);
@@ -15607,7 +15610,7 @@ int UiTaskCmd::ByteSize() const {
           this->app_pool());
     }
     
-    // required .dcmd.CmdType cmd_type = 5;
+    // required .dcmd_api.CmdType cmd_type = 5;
     if (has_cmd_type()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::EnumSize(this->cmd_type());
@@ -15810,7 +15813,7 @@ bool UiTaskCmdReply::MergePartialFromCodedStream(
   ::google::protobuf::uint32 tag;
   while ((tag = input->ReadTag()) != 0) {
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required .dcmd.DcmdState state = 1;
+      // required .dcmd_api.DcmdState state = 1;
       case 1: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
@@ -15818,8 +15821,8 @@ bool UiTaskCmdReply::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          if (dcmd::DcmdState_IsValid(value)) {
-            set_state(static_cast< dcmd::DcmdState >(value));
+          if (dcmd_api::DcmdState_IsValid(value)) {
+            set_state(static_cast< dcmd_api::DcmdState >(value));
           } else {
             mutable_unknown_fields()->AddVarint(1, value);
           }
@@ -15882,7 +15885,7 @@ bool UiTaskCmdReply::MergePartialFromCodedStream(
 
 void UiTaskCmdReply::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // required .dcmd.DcmdState state = 1;
+  // required .dcmd_api.DcmdState state = 1;
   if (has_state()) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       1, this->state(), output);
@@ -15914,7 +15917,7 @@ void UiTaskCmdReply::SerializeWithCachedSizes(
 
 ::google::protobuf::uint8* UiTaskCmdReply::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // required .dcmd.DcmdState state = 1;
+  // required .dcmd_api.DcmdState state = 1;
   if (has_state()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       1, this->state(), target);
@@ -15951,7 +15954,7 @@ int UiTaskCmdReply::ByteSize() const {
   int total_size = 0;
   
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    // required .dcmd.DcmdState state = 1;
+    // required .dcmd_api.DcmdState state = 1;
     if (has_state()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::EnumSize(this->state());
@@ -16607,7 +16610,7 @@ bool UiTaskWatchReply::MergePartialFromCodedStream(
   ::google::protobuf::uint32 tag;
   while ((tag = input->ReadTag()) != 0) {
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required .dcmd.DcmdState watch_state = 1;
+      // required .dcmd_api.DcmdState watch_state = 1;
       case 1: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
@@ -16615,8 +16618,8 @@ bool UiTaskWatchReply::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          if (dcmd::DcmdState_IsValid(value)) {
-            set_watch_state(static_cast< dcmd::DcmdState >(value));
+          if (dcmd_api::DcmdState_IsValid(value)) {
+            set_watch_state(static_cast< dcmd_api::DcmdState >(value));
           } else {
             mutable_unknown_fields()->AddVarint(1, value);
           }
@@ -16644,7 +16647,7 @@ bool UiTaskWatchReply::MergePartialFromCodedStream(
         break;
       }
       
-      // optional .dcmd.TaskState task_state = 3;
+      // optional .dcmd_api.TaskState task_state = 3;
       case 3: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
@@ -16653,8 +16656,8 @@ bool UiTaskWatchReply::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          if (dcmd::TaskState_IsValid(value)) {
-            set_task_state(static_cast< dcmd::TaskState >(value));
+          if (dcmd_api::TaskState_IsValid(value)) {
+            set_task_state(static_cast< dcmd_api::TaskState >(value));
           } else {
             mutable_unknown_fields()->AddVarint(3, value);
           }
@@ -16665,7 +16668,7 @@ bool UiTaskWatchReply::MergePartialFromCodedStream(
         break;
       }
       
-      // optional .dcmd.AppPoolState app_pool_state = 4;
+      // optional .dcmd_api.AppPoolState app_pool_state = 4;
       case 4: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
@@ -16674,8 +16677,8 @@ bool UiTaskWatchReply::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          if (dcmd::AppPoolState_IsValid(value)) {
-            set_app_pool_state(static_cast< dcmd::AppPoolState >(value));
+          if (dcmd_api::AppPoolState_IsValid(value)) {
+            set_app_pool_state(static_cast< dcmd_api::AppPoolState >(value));
           } else {
             mutable_unknown_fields()->AddVarint(4, value);
           }
@@ -16686,7 +16689,7 @@ bool UiTaskWatchReply::MergePartialFromCodedStream(
         break;
       }
       
-      // optional .dcmd.SubTaskState subtask_state = 5;
+      // optional .dcmd_api.SubTaskState subtask_state = 5;
       case 5: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
@@ -16695,8 +16698,8 @@ bool UiTaskWatchReply::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          if (dcmd::SubTaskState_IsValid(value)) {
-            set_subtask_state(static_cast< dcmd::SubTaskState >(value));
+          if (dcmd_api::SubTaskState_IsValid(value)) {
+            set_subtask_state(static_cast< dcmd_api::SubTaskState >(value));
           } else {
             mutable_unknown_fields()->AddVarint(5, value);
           }
@@ -16805,7 +16808,7 @@ bool UiTaskWatchReply::MergePartialFromCodedStream(
 
 void UiTaskWatchReply::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // required .dcmd.DcmdState watch_state = 1;
+  // required .dcmd_api.DcmdState watch_state = 1;
   if (has_watch_state()) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       1, this->watch_state(), output);
@@ -16820,19 +16823,19 @@ void UiTaskWatchReply::SerializeWithCachedSizes(
       2, this->err(), output);
   }
   
-  // optional .dcmd.TaskState task_state = 3;
+  // optional .dcmd_api.TaskState task_state = 3;
   if (has_task_state()) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       3, this->task_state(), output);
   }
   
-  // optional .dcmd.AppPoolState app_pool_state = 4;
+  // optional .dcmd_api.AppPoolState app_pool_state = 4;
   if (has_app_pool_state()) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       4, this->app_pool_state(), output);
   }
   
-  // optional .dcmd.SubTaskState subtask_state = 5;
+  // optional .dcmd_api.SubTaskState subtask_state = 5;
   if (has_subtask_state()) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       5, this->subtask_state(), output);
@@ -16871,7 +16874,7 @@ void UiTaskWatchReply::SerializeWithCachedSizes(
 
 ::google::protobuf::uint8* UiTaskWatchReply::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // required .dcmd.DcmdState watch_state = 1;
+  // required .dcmd_api.DcmdState watch_state = 1;
   if (has_watch_state()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       1, this->watch_state(), target);
@@ -16887,19 +16890,19 @@ void UiTaskWatchReply::SerializeWithCachedSizes(
         2, this->err(), target);
   }
   
-  // optional .dcmd.TaskState task_state = 3;
+  // optional .dcmd_api.TaskState task_state = 3;
   if (has_task_state()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       3, this->task_state(), target);
   }
   
-  // optional .dcmd.AppPoolState app_pool_state = 4;
+  // optional .dcmd_api.AppPoolState app_pool_state = 4;
   if (has_app_pool_state()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       4, this->app_pool_state(), target);
   }
   
-  // optional .dcmd.SubTaskState subtask_state = 5;
+  // optional .dcmd_api.SubTaskState subtask_state = 5;
   if (has_subtask_state()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       5, this->subtask_state(), target);
@@ -16941,7 +16944,7 @@ int UiTaskWatchReply::ByteSize() const {
   int total_size = 0;
   
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    // required .dcmd.DcmdState watch_state = 1;
+    // required .dcmd_api.DcmdState watch_state = 1;
     if (has_watch_state()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::EnumSize(this->watch_state());
@@ -16954,19 +16957,19 @@ int UiTaskWatchReply::ByteSize() const {
           this->err());
     }
     
-    // optional .dcmd.TaskState task_state = 3;
+    // optional .dcmd_api.TaskState task_state = 3;
     if (has_task_state()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::EnumSize(this->task_state());
     }
     
-    // optional .dcmd.AppPoolState app_pool_state = 4;
+    // optional .dcmd_api.AppPoolState app_pool_state = 4;
     if (has_app_pool_state()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::EnumSize(this->app_pool_state());
     }
     
-    // optional .dcmd.SubTaskState subtask_state = 5;
+    // optional .dcmd_api.SubTaskState subtask_state = 5;
     if (has_subtask_state()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::EnumSize(this->subtask_state());
@@ -17119,6 +17122,6 @@ void UiTaskWatchReply::Swap(UiTaskWatchReply* other) {
 
 // @@protoc_insertion_point(namespace_scope)
 
-}  // namespace dcmd
+}  // namespace dcmd_api
 
 // @@protoc_insertion_point(global_scope)

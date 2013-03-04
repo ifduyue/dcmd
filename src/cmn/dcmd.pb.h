@@ -25,7 +25,7 @@
 #include <google/protobuf/generated_message_reflection.h>
 // @@protoc_insertion_point(includes)
 
-namespace dcmd {
+namespace dcmd_api {
 
 // Internal implementation detail -- do not call these.
 void  protobuf_AddDesc_dcmd_2eproto();
@@ -294,7 +294,7 @@ class KeyValue : public ::google::protobuf::Message {
   inline ::std::string* mutable_value();
   inline ::std::string* release_value();
   
-  // @@protoc_insertion_point(class_scope:dcmd.KeyValue)
+  // @@protoc_insertion_point(class_scope:dcmd_api.KeyValue)
  private:
   inline void set_has_key();
   inline void clear_has_key();
@@ -427,7 +427,7 @@ class SubTaskInfo : public ::google::protobuf::Message {
   inline ::std::string* mutable_cmd_id();
   inline ::std::string* release_cmd_id();
   
-  // @@protoc_insertion_point(class_scope:dcmd.SubTaskInfo)
+  // @@protoc_insertion_point(class_scope:dcmd_api.SubTaskInfo)
  private:
   inline void set_has_app_name();
   inline void clear_has_app_name();
@@ -543,7 +543,7 @@ class OprInfo : public ::google::protobuf::Message {
   inline ::google::protobuf::int32 running_second() const;
   inline void set_running_second(::google::protobuf::int32 value);
   
-  // @@protoc_insertion_point(class_scope:dcmd.OprInfo)
+  // @@protoc_insertion_point(class_scope:dcmd_api.OprInfo)
  private:
   inline void set_has_name();
   inline void clear_has_name();
@@ -635,12 +635,12 @@ class AgentInfo : public ::google::protobuf::Message {
   inline ::std::string* mutable_ip();
   inline ::std::string* release_ip();
   
-  // required .dcmd.AgentState state = 2;
+  // required .dcmd_api.AgentState state = 2;
   inline bool has_state() const;
   inline void clear_state();
   static const int kStateFieldNumber = 2;
-  inline dcmd::AgentState state() const;
-  inline void set_state(dcmd::AgentState value);
+  inline dcmd_api::AgentState state() const;
+  inline void set_state(dcmd_api::AgentState value);
   
   // optional string version = 3;
   inline bool has_version() const;
@@ -675,7 +675,7 @@ class AgentInfo : public ::google::protobuf::Message {
   inline ::std::string* mutable_repored_ip();
   inline ::std::string* release_repored_ip();
   
-  // @@protoc_insertion_point(class_scope:dcmd.AgentInfo)
+  // @@protoc_insertion_point(class_scope:dcmd_api.AgentInfo)
  private:
   inline void set_has_ip();
   inline void clear_has_ip();
@@ -789,7 +789,7 @@ class AgentReport : public ::google::protobuf::Message {
   inline const ::google::protobuf::RepeatedPtrField< ::std::string>& agent_ips() const;
   inline ::google::protobuf::RepeatedPtrField< ::std::string>* mutable_agent_ips();
   
-  // @@protoc_insertion_point(class_scope:dcmd.AgentReport)
+  // @@protoc_insertion_point(class_scope:dcmd_api.AgentReport)
  private:
   inline void set_has_version();
   inline void clear_has_version();
@@ -865,12 +865,12 @@ class AgentReportReply : public ::google::protobuf::Message {
   
   // accessors -------------------------------------------------------
   
-  // required .dcmd.DcmdState state = 1;
+  // required .dcmd_api.DcmdState state = 1;
   inline bool has_state() const;
   inline void clear_state();
   static const int kStateFieldNumber = 1;
-  inline dcmd::DcmdState state() const;
-  inline void set_state(dcmd::DcmdState value);
+  inline dcmd_api::DcmdState state() const;
+  inline void set_state(dcmd_api::DcmdState value);
   
   // optional string err = 2;
   inline bool has_err() const;
@@ -897,7 +897,7 @@ class AgentReportReply : public ::google::protobuf::Message {
   inline ::google::protobuf::int32 package_size() const;
   inline void set_package_size(::google::protobuf::int32 value);
   
-  // @@protoc_insertion_point(class_scope:dcmd.AgentReportReply)
+  // @@protoc_insertion_point(class_scope:dcmd_api.AgentReportReply)
  private:
   inline void set_has_state();
   inline void clear_has_state();
@@ -997,7 +997,7 @@ class AgentMasterNoticeReply : public ::google::protobuf::Message {
   inline const ::google::protobuf::RepeatedPtrField< ::std::string>& cmd() const;
   inline ::google::protobuf::RepeatedPtrField< ::std::string>* mutable_cmd();
   
-  // @@protoc_insertion_point(class_scope:dcmd.AgentMasterNoticeReply)
+  // @@protoc_insertion_point(class_scope:dcmd_api.AgentMasterNoticeReply)
  private:
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
@@ -1231,19 +1231,19 @@ class AgentTaskCmd : public ::google::protobuf::Message {
   inline ::std::string* mutable_script();
   inline ::std::string* release_script();
   
-  // repeated .dcmd.KeyValue task_arg = 16;
+  // repeated .dcmd_api.KeyValue task_arg = 16;
   inline int task_arg_size() const;
   inline void clear_task_arg();
   static const int kTaskArgFieldNumber = 16;
-  inline const ::dcmd::KeyValue& task_arg(int index) const;
-  inline ::dcmd::KeyValue* mutable_task_arg(int index);
-  inline ::dcmd::KeyValue* add_task_arg();
-  inline const ::google::protobuf::RepeatedPtrField< ::dcmd::KeyValue >&
+  inline const ::dcmd_api::KeyValue& task_arg(int index) const;
+  inline ::dcmd_api::KeyValue* mutable_task_arg(int index);
+  inline ::dcmd_api::KeyValue* add_task_arg();
+  inline const ::google::protobuf::RepeatedPtrField< ::dcmd_api::KeyValue >&
       task_arg() const;
-  inline ::google::protobuf::RepeatedPtrField< ::dcmd::KeyValue >*
+  inline ::google::protobuf::RepeatedPtrField< ::dcmd_api::KeyValue >*
       mutable_task_arg();
   
-  // @@protoc_insertion_point(class_scope:dcmd.AgentTaskCmd)
+  // @@protoc_insertion_point(class_scope:dcmd_api.AgentTaskCmd)
  private:
   inline void set_has_cmd();
   inline void clear_has_cmd();
@@ -1292,7 +1292,7 @@ class AgentTaskCmd : public ::google::protobuf::Message {
   ::std::string* app_env_file_;
   ::std::string* app_env_ver_;
   ::std::string* script_;
-  ::google::protobuf::RepeatedPtrField< ::dcmd::KeyValue > task_arg_;
+  ::google::protobuf::RepeatedPtrField< ::dcmd_api::KeyValue > task_arg_;
   bool output_process_;
   
   mutable int _cached_size_;
@@ -1372,7 +1372,7 @@ class AgentTaskCmdReply : public ::google::protobuf::Message {
   inline ::std::string* mutable_cmd();
   inline ::std::string* release_cmd();
   
-  // @@protoc_insertion_point(class_scope:dcmd.AgentTaskCmdReply)
+  // @@protoc_insertion_point(class_scope:dcmd_api.AgentTaskCmdReply)
  private:
   inline void set_has_cmd();
   inline void clear_has_cmd();
@@ -1480,7 +1480,7 @@ class AgentSubTaskProcess : public ::google::protobuf::Message {
   inline ::std::string* mutable_process();
   inline ::std::string* release_process();
   
-  // @@protoc_insertion_point(class_scope:dcmd.AgentSubTaskProcess)
+  // @@protoc_insertion_point(class_scope:dcmd_api.AgentSubTaskProcess)
  private:
   inline void set_has_task_id();
   inline void clear_has_task_id();
@@ -1623,7 +1623,7 @@ class AgentTaskResult : public ::google::protobuf::Message {
   inline ::std::string* mutable_process();
   inline ::std::string* release_process();
   
-  // @@protoc_insertion_point(class_scope:dcmd.AgentTaskResult)
+  // @@protoc_insertion_point(class_scope:dcmd_api.AgentTaskResult)
  private:
   inline void set_has_cmd();
   inline void clear_has_cmd();
@@ -1724,7 +1724,7 @@ class AgentTaskResultReply : public ::google::protobuf::Message {
   inline ::std::string* mutable_cmd();
   inline ::std::string* release_cmd();
   
-  // @@protoc_insertion_point(class_scope:dcmd.AgentTaskResultReply)
+  // @@protoc_insertion_point(class_scope:dcmd_api.AgentTaskResultReply)
  private:
   inline void set_has_cmd();
   inline void clear_has_cmd();
@@ -1850,19 +1850,19 @@ class AgentOprCmd : public ::google::protobuf::Message {
   inline ::std::string* mutable_script();
   inline ::std::string* release_script();
   
-  // repeated .dcmd.KeyValue args = 6;
+  // repeated .dcmd_api.KeyValue args = 6;
   inline int args_size() const;
   inline void clear_args();
   static const int kArgsFieldNumber = 6;
-  inline const ::dcmd::KeyValue& args(int index) const;
-  inline ::dcmd::KeyValue* mutable_args(int index);
-  inline ::dcmd::KeyValue* add_args();
-  inline const ::google::protobuf::RepeatedPtrField< ::dcmd::KeyValue >&
+  inline const ::dcmd_api::KeyValue& args(int index) const;
+  inline ::dcmd_api::KeyValue* mutable_args(int index);
+  inline ::dcmd_api::KeyValue* add_args();
+  inline const ::google::protobuf::RepeatedPtrField< ::dcmd_api::KeyValue >&
       args() const;
-  inline ::google::protobuf::RepeatedPtrField< ::dcmd::KeyValue >*
+  inline ::google::protobuf::RepeatedPtrField< ::dcmd_api::KeyValue >*
       mutable_args();
   
-  // @@protoc_insertion_point(class_scope:dcmd.AgentOprCmd)
+  // @@protoc_insertion_point(class_scope:dcmd_api.AgentOprCmd)
  private:
   inline void set_has_opr_id();
   inline void clear_has_opr_id();
@@ -1881,7 +1881,7 @@ class AgentOprCmd : public ::google::protobuf::Message {
   ::std::string* name_;
   ::std::string* run_user_;
   ::std::string* script_;
-  ::google::protobuf::RepeatedPtrField< ::dcmd::KeyValue > args_;
+  ::google::protobuf::RepeatedPtrField< ::dcmd_api::KeyValue > args_;
   ::google::protobuf::int32 timeout_;
   
   mutable int _cached_size_;
@@ -1950,12 +1950,12 @@ class AgentOprCmdReply : public ::google::protobuf::Message {
   
   // accessors -------------------------------------------------------
   
-  // required .dcmd.DcmdState state = 1;
+  // required .dcmd_api.DcmdState state = 1;
   inline bool has_state() const;
   inline void clear_state();
   static const int kStateFieldNumber = 1;
-  inline dcmd::DcmdState state() const;
-  inline void set_state(dcmd::DcmdState value);
+  inline dcmd_api::DcmdState state() const;
+  inline void set_state(dcmd_api::DcmdState value);
   
   // required bytes result = 2;
   inline bool has_result() const;
@@ -1990,7 +1990,7 @@ class AgentOprCmdReply : public ::google::protobuf::Message {
   inline ::std::string* mutable_ip();
   inline ::std::string* release_ip();
   
-  // @@protoc_insertion_point(class_scope:dcmd.AgentOprCmdReply)
+  // @@protoc_insertion_point(class_scope:dcmd_api.AgentOprCmdReply)
  private:
   inline void set_has_state();
   inline void clear_has_state();
@@ -2103,7 +2103,7 @@ class AgentTaskOutput : public ::google::protobuf::Message {
   inline ::std::string* mutable_ip();
   inline ::std::string* release_ip();
   
-  // @@protoc_insertion_point(class_scope:dcmd.AgentTaskOutput)
+  // @@protoc_insertion_point(class_scope:dcmd_api.AgentTaskOutput)
  private:
   inline void set_has_subtask_id();
   inline void clear_has_subtask_id();
@@ -2184,12 +2184,12 @@ class AgentTaskOutputReply : public ::google::protobuf::Message {
   
   // accessors -------------------------------------------------------
   
-  // required .dcmd.DcmdState state = 1;
+  // required .dcmd_api.DcmdState state = 1;
   inline bool has_state() const;
   inline void clear_state();
   static const int kStateFieldNumber = 1;
-  inline dcmd::DcmdState state() const;
-  inline void set_state(dcmd::DcmdState value);
+  inline dcmd_api::DcmdState state() const;
+  inline void set_state(dcmd_api::DcmdState value);
   
   // required bytes result = 2;
   inline bool has_result() const;
@@ -2220,7 +2220,7 @@ class AgentTaskOutputReply : public ::google::protobuf::Message {
   inline ::std::string* mutable_err();
   inline ::std::string* release_err();
   
-  // @@protoc_insertion_point(class_scope:dcmd.AgentTaskOutputReply)
+  // @@protoc_insertion_point(class_scope:dcmd_api.AgentTaskOutputReply)
  private:
   inline void set_has_state();
   inline void clear_has_state();
@@ -2326,7 +2326,7 @@ class AgentRunningTask : public ::google::protobuf::Message {
   inline ::std::string* mutable_app_name();
   inline ::std::string* release_app_name();
   
-  // @@protoc_insertion_point(class_scope:dcmd.AgentRunningTask)
+  // @@protoc_insertion_point(class_scope:dcmd_api.AgentRunningTask)
  private:
   inline void set_has_ip();
   inline void clear_has_ip();
@@ -2404,23 +2404,23 @@ class AgentRunningTaskReply : public ::google::protobuf::Message {
   
   // accessors -------------------------------------------------------
   
-  // required .dcmd.DcmdState state = 1;
+  // required .dcmd_api.DcmdState state = 1;
   inline bool has_state() const;
   inline void clear_state();
   static const int kStateFieldNumber = 1;
-  inline dcmd::DcmdState state() const;
-  inline void set_state(dcmd::DcmdState value);
+  inline dcmd_api::DcmdState state() const;
+  inline void set_state(dcmd_api::DcmdState value);
   
-  // repeated .dcmd.SubTaskInfo result = 2;
+  // repeated .dcmd_api.SubTaskInfo result = 2;
   inline int result_size() const;
   inline void clear_result();
   static const int kResultFieldNumber = 2;
-  inline const ::dcmd::SubTaskInfo& result(int index) const;
-  inline ::dcmd::SubTaskInfo* mutable_result(int index);
-  inline ::dcmd::SubTaskInfo* add_result();
-  inline const ::google::protobuf::RepeatedPtrField< ::dcmd::SubTaskInfo >&
+  inline const ::dcmd_api::SubTaskInfo& result(int index) const;
+  inline ::dcmd_api::SubTaskInfo* mutable_result(int index);
+  inline ::dcmd_api::SubTaskInfo* add_result();
+  inline const ::google::protobuf::RepeatedPtrField< ::dcmd_api::SubTaskInfo >&
       result() const;
-  inline ::google::protobuf::RepeatedPtrField< ::dcmd::SubTaskInfo >*
+  inline ::google::protobuf::RepeatedPtrField< ::dcmd_api::SubTaskInfo >*
       mutable_result();
   
   // optional string err = 3;
@@ -2434,7 +2434,7 @@ class AgentRunningTaskReply : public ::google::protobuf::Message {
   inline ::std::string* mutable_err();
   inline ::std::string* release_err();
   
-  // @@protoc_insertion_point(class_scope:dcmd.AgentRunningTaskReply)
+  // @@protoc_insertion_point(class_scope:dcmd_api.AgentRunningTaskReply)
  private:
   inline void set_has_state();
   inline void clear_has_state();
@@ -2443,7 +2443,7 @@ class AgentRunningTaskReply : public ::google::protobuf::Message {
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
-  ::google::protobuf::RepeatedPtrField< ::dcmd::SubTaskInfo > result_;
+  ::google::protobuf::RepeatedPtrField< ::dcmd_api::SubTaskInfo > result_;
   ::std::string* err_;
   int state_;
   
@@ -2524,7 +2524,7 @@ class AgentRunningOpr : public ::google::protobuf::Message {
   inline ::std::string* mutable_ip();
   inline ::std::string* release_ip();
   
-  // @@protoc_insertion_point(class_scope:dcmd.AgentRunningOpr)
+  // @@protoc_insertion_point(class_scope:dcmd_api.AgentRunningOpr)
  private:
   inline void set_has_ip();
   inline void clear_has_ip();
@@ -2599,23 +2599,23 @@ class AgentRunningOprReply : public ::google::protobuf::Message {
   
   // accessors -------------------------------------------------------
   
-  // required .dcmd.DcmdState state = 1;
+  // required .dcmd_api.DcmdState state = 1;
   inline bool has_state() const;
   inline void clear_state();
   static const int kStateFieldNumber = 1;
-  inline dcmd::DcmdState state() const;
-  inline void set_state(dcmd::DcmdState value);
+  inline dcmd_api::DcmdState state() const;
+  inline void set_state(dcmd_api::DcmdState value);
   
-  // repeated .dcmd.OprInfo result = 2;
+  // repeated .dcmd_api.OprInfo result = 2;
   inline int result_size() const;
   inline void clear_result();
   static const int kResultFieldNumber = 2;
-  inline const ::dcmd::OprInfo& result(int index) const;
-  inline ::dcmd::OprInfo* mutable_result(int index);
-  inline ::dcmd::OprInfo* add_result();
-  inline const ::google::protobuf::RepeatedPtrField< ::dcmd::OprInfo >&
+  inline const ::dcmd_api::OprInfo& result(int index) const;
+  inline ::dcmd_api::OprInfo* mutable_result(int index);
+  inline ::dcmd_api::OprInfo* add_result();
+  inline const ::google::protobuf::RepeatedPtrField< ::dcmd_api::OprInfo >&
       result() const;
-  inline ::google::protobuf::RepeatedPtrField< ::dcmd::OprInfo >*
+  inline ::google::protobuf::RepeatedPtrField< ::dcmd_api::OprInfo >*
       mutable_result();
   
   // optional string err = 3;
@@ -2629,7 +2629,7 @@ class AgentRunningOprReply : public ::google::protobuf::Message {
   inline ::std::string* mutable_err();
   inline ::std::string* release_err();
   
-  // @@protoc_insertion_point(class_scope:dcmd.AgentRunningOprReply)
+  // @@protoc_insertion_point(class_scope:dcmd_api.AgentRunningOprReply)
  private:
   inline void set_has_state();
   inline void clear_has_state();
@@ -2638,7 +2638,7 @@ class AgentRunningOprReply : public ::google::protobuf::Message {
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
-  ::google::protobuf::RepeatedPtrField< ::dcmd::OprInfo > result_;
+  ::google::protobuf::RepeatedPtrField< ::dcmd_api::OprInfo > result_;
   ::std::string* err_;
   int state_;
   
@@ -2715,7 +2715,7 @@ class InvalidMsg : public ::google::protobuf::Message {
   inline ::google::protobuf::int32 msg_type() const;
   inline void set_msg_type(::google::protobuf::int32 value);
   
-  // @@protoc_insertion_point(class_scope:dcmd.InvalidMsg)
+  // @@protoc_insertion_point(class_scope:dcmd_api.InvalidMsg)
  private:
   inline void set_has_msg_type();
   inline void clear_has_msg_type();
@@ -2841,7 +2841,7 @@ class UiTaskOutput : public ::google::protobuf::Message {
   inline ::std::string* mutable_passwd();
   inline ::std::string* release_passwd();
   
-  // @@protoc_insertion_point(class_scope:dcmd.UiTaskOutput)
+  // @@protoc_insertion_point(class_scope:dcmd_api.UiTaskOutput)
  private:
   inline void set_has_subtask_id();
   inline void clear_has_subtask_id();
@@ -2928,12 +2928,12 @@ class UiTaskOutputReply : public ::google::protobuf::Message {
   
   // accessors -------------------------------------------------------
   
-  // required .dcmd.DcmdState state = 1;
+  // required .dcmd_api.DcmdState state = 1;
   inline bool has_state() const;
   inline void clear_state();
   static const int kStateFieldNumber = 1;
-  inline dcmd::DcmdState state() const;
-  inline void set_state(dcmd::DcmdState value);
+  inline dcmd_api::DcmdState state() const;
+  inline void set_state(dcmd_api::DcmdState value);
   
   // required bytes result = 2;
   inline bool has_result() const;
@@ -2964,7 +2964,7 @@ class UiTaskOutputReply : public ::google::protobuf::Message {
   inline ::std::string* mutable_err();
   inline ::std::string* release_err();
   
-  // @@protoc_insertion_point(class_scope:dcmd.UiTaskOutputReply)
+  // @@protoc_insertion_point(class_scope:dcmd_api.UiTaskOutputReply)
  private:
   inline void set_has_state();
   inline void clear_has_state();
@@ -3092,7 +3092,7 @@ class UiAgentRunningTask : public ::google::protobuf::Message {
   inline ::std::string* mutable_passwd();
   inline ::std::string* release_passwd();
   
-  // @@protoc_insertion_point(class_scope:dcmd.UiAgentRunningTask)
+  // @@protoc_insertion_point(class_scope:dcmd_api.UiAgentRunningTask)
  private:
   inline void set_has_ip();
   inline void clear_has_ip();
@@ -3176,23 +3176,23 @@ class UiAgentRunningTaskReply : public ::google::protobuf::Message {
   
   // accessors -------------------------------------------------------
   
-  // required .dcmd.DcmdState state = 1;
+  // required .dcmd_api.DcmdState state = 1;
   inline bool has_state() const;
   inline void clear_state();
   static const int kStateFieldNumber = 1;
-  inline dcmd::DcmdState state() const;
-  inline void set_state(dcmd::DcmdState value);
+  inline dcmd_api::DcmdState state() const;
+  inline void set_state(dcmd_api::DcmdState value);
   
-  // repeated .dcmd.SubTaskInfo result = 2;
+  // repeated .dcmd_api.SubTaskInfo result = 2;
   inline int result_size() const;
   inline void clear_result();
   static const int kResultFieldNumber = 2;
-  inline const ::dcmd::SubTaskInfo& result(int index) const;
-  inline ::dcmd::SubTaskInfo* mutable_result(int index);
-  inline ::dcmd::SubTaskInfo* add_result();
-  inline const ::google::protobuf::RepeatedPtrField< ::dcmd::SubTaskInfo >&
+  inline const ::dcmd_api::SubTaskInfo& result(int index) const;
+  inline ::dcmd_api::SubTaskInfo* mutable_result(int index);
+  inline ::dcmd_api::SubTaskInfo* add_result();
+  inline const ::google::protobuf::RepeatedPtrField< ::dcmd_api::SubTaskInfo >&
       result() const;
-  inline ::google::protobuf::RepeatedPtrField< ::dcmd::SubTaskInfo >*
+  inline ::google::protobuf::RepeatedPtrField< ::dcmd_api::SubTaskInfo >*
       mutable_result();
   
   // optional string err = 3;
@@ -3206,7 +3206,7 @@ class UiAgentRunningTaskReply : public ::google::protobuf::Message {
   inline ::std::string* mutable_err();
   inline ::std::string* release_err();
   
-  // @@protoc_insertion_point(class_scope:dcmd.UiAgentRunningTaskReply)
+  // @@protoc_insertion_point(class_scope:dcmd_api.UiAgentRunningTaskReply)
  private:
   inline void set_has_state();
   inline void clear_has_state();
@@ -3215,7 +3215,7 @@ class UiAgentRunningTaskReply : public ::google::protobuf::Message {
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
-  ::google::protobuf::RepeatedPtrField< ::dcmd::SubTaskInfo > result_;
+  ::google::protobuf::RepeatedPtrField< ::dcmd_api::SubTaskInfo > result_;
   ::std::string* err_;
   int state_;
   
@@ -3318,7 +3318,7 @@ class UiAgentRunningOpr : public ::google::protobuf::Message {
   inline ::std::string* mutable_passwd();
   inline ::std::string* release_passwd();
   
-  // @@protoc_insertion_point(class_scope:dcmd.UiAgentRunningOpr)
+  // @@protoc_insertion_point(class_scope:dcmd_api.UiAgentRunningOpr)
  private:
   inline void set_has_ip();
   inline void clear_has_ip();
@@ -3399,23 +3399,23 @@ class UiAgentRunningOprReply : public ::google::protobuf::Message {
   
   // accessors -------------------------------------------------------
   
-  // required .dcmd.DcmdState state = 1;
+  // required .dcmd_api.DcmdState state = 1;
   inline bool has_state() const;
   inline void clear_state();
   static const int kStateFieldNumber = 1;
-  inline dcmd::DcmdState state() const;
-  inline void set_state(dcmd::DcmdState value);
+  inline dcmd_api::DcmdState state() const;
+  inline void set_state(dcmd_api::DcmdState value);
   
-  // repeated .dcmd.OprInfo result = 2;
+  // repeated .dcmd_api.OprInfo result = 2;
   inline int result_size() const;
   inline void clear_result();
   static const int kResultFieldNumber = 2;
-  inline const ::dcmd::OprInfo& result(int index) const;
-  inline ::dcmd::OprInfo* mutable_result(int index);
-  inline ::dcmd::OprInfo* add_result();
-  inline const ::google::protobuf::RepeatedPtrField< ::dcmd::OprInfo >&
+  inline const ::dcmd_api::OprInfo& result(int index) const;
+  inline ::dcmd_api::OprInfo* mutable_result(int index);
+  inline ::dcmd_api::OprInfo* add_result();
+  inline const ::google::protobuf::RepeatedPtrField< ::dcmd_api::OprInfo >&
       result() const;
-  inline ::google::protobuf::RepeatedPtrField< ::dcmd::OprInfo >*
+  inline ::google::protobuf::RepeatedPtrField< ::dcmd_api::OprInfo >*
       mutable_result();
   
   // optional string err = 3;
@@ -3429,7 +3429,7 @@ class UiAgentRunningOprReply : public ::google::protobuf::Message {
   inline ::std::string* mutable_err();
   inline ::std::string* release_err();
   
-  // @@protoc_insertion_point(class_scope:dcmd.UiAgentRunningOprReply)
+  // @@protoc_insertion_point(class_scope:dcmd_api.UiAgentRunningOprReply)
  private:
   inline void set_has_state();
   inline void clear_has_state();
@@ -3438,7 +3438,7 @@ class UiAgentRunningOprReply : public ::google::protobuf::Message {
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
-  ::google::protobuf::RepeatedPtrField< ::dcmd::OprInfo > result_;
+  ::google::protobuf::RepeatedPtrField< ::dcmd_api::OprInfo > result_;
   ::std::string* err_;
   int state_;
   
@@ -3541,7 +3541,7 @@ class UiExecOprCmd : public ::google::protobuf::Message {
   inline ::std::string* mutable_passwd();
   inline ::std::string* release_passwd();
   
-  // @@protoc_insertion_point(class_scope:dcmd.UiExecOprCmd)
+  // @@protoc_insertion_point(class_scope:dcmd_api.UiExecOprCmd)
  private:
   inline void set_has_opr_id();
   inline void clear_has_opr_id();
@@ -3622,23 +3622,23 @@ class UiExecOprCmdReply : public ::google::protobuf::Message {
   
   // accessors -------------------------------------------------------
   
-  // required .dcmd.DcmdState state = 1;
+  // required .dcmd_api.DcmdState state = 1;
   inline bool has_state() const;
   inline void clear_state();
   static const int kStateFieldNumber = 1;
-  inline dcmd::DcmdState state() const;
-  inline void set_state(dcmd::DcmdState value);
+  inline dcmd_api::DcmdState state() const;
+  inline void set_state(dcmd_api::DcmdState value);
   
-  // repeated .dcmd.AgentOprCmdReply result = 2;
+  // repeated .dcmd_api.AgentOprCmdReply result = 2;
   inline int result_size() const;
   inline void clear_result();
   static const int kResultFieldNumber = 2;
-  inline const ::dcmd::AgentOprCmdReply& result(int index) const;
-  inline ::dcmd::AgentOprCmdReply* mutable_result(int index);
-  inline ::dcmd::AgentOprCmdReply* add_result();
-  inline const ::google::protobuf::RepeatedPtrField< ::dcmd::AgentOprCmdReply >&
+  inline const ::dcmd_api::AgentOprCmdReply& result(int index) const;
+  inline ::dcmd_api::AgentOprCmdReply* mutable_result(int index);
+  inline ::dcmd_api::AgentOprCmdReply* add_result();
+  inline const ::google::protobuf::RepeatedPtrField< ::dcmd_api::AgentOprCmdReply >&
       result() const;
-  inline ::google::protobuf::RepeatedPtrField< ::dcmd::AgentOprCmdReply >*
+  inline ::google::protobuf::RepeatedPtrField< ::dcmd_api::AgentOprCmdReply >*
       mutable_result();
   
   // optional string err = 3;
@@ -3652,7 +3652,7 @@ class UiExecOprCmdReply : public ::google::protobuf::Message {
   inline ::std::string* mutable_err();
   inline ::std::string* release_err();
   
-  // @@protoc_insertion_point(class_scope:dcmd.UiExecOprCmdReply)
+  // @@protoc_insertion_point(class_scope:dcmd_api.UiExecOprCmdReply)
  private:
   inline void set_has_state();
   inline void clear_has_state();
@@ -3661,7 +3661,7 @@ class UiExecOprCmdReply : public ::google::protobuf::Message {
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
-  ::google::protobuf::RepeatedPtrField< ::dcmd::AgentOprCmdReply > result_;
+  ::google::protobuf::RepeatedPtrField< ::dcmd_api::AgentOprCmdReply > result_;
   ::std::string* err_;
   int state_;
   
@@ -3776,7 +3776,7 @@ class UiAgentInfo : public ::google::protobuf::Message {
   inline ::std::string* mutable_passwd();
   inline ::std::string* release_passwd();
   
-  // @@protoc_insertion_point(class_scope:dcmd.UiAgentInfo)
+  // @@protoc_insertion_point(class_scope:dcmd_api.UiAgentInfo)
  private:
   inline void set_has_version();
   inline void clear_has_version();
@@ -3858,23 +3858,23 @@ class UiAgentInfoReply : public ::google::protobuf::Message {
   
   // accessors -------------------------------------------------------
   
-  // required .dcmd.DcmdState state = 1;
+  // required .dcmd_api.DcmdState state = 1;
   inline bool has_state() const;
   inline void clear_state();
   static const int kStateFieldNumber = 1;
-  inline dcmd::DcmdState state() const;
-  inline void set_state(dcmd::DcmdState value);
+  inline dcmd_api::DcmdState state() const;
+  inline void set_state(dcmd_api::DcmdState value);
   
-  // repeated .dcmd.AgentInfo agentinfo = 2;
+  // repeated .dcmd_api.AgentInfo agentinfo = 2;
   inline int agentinfo_size() const;
   inline void clear_agentinfo();
   static const int kAgentinfoFieldNumber = 2;
-  inline const ::dcmd::AgentInfo& agentinfo(int index) const;
-  inline ::dcmd::AgentInfo* mutable_agentinfo(int index);
-  inline ::dcmd::AgentInfo* add_agentinfo();
-  inline const ::google::protobuf::RepeatedPtrField< ::dcmd::AgentInfo >&
+  inline const ::dcmd_api::AgentInfo& agentinfo(int index) const;
+  inline ::dcmd_api::AgentInfo* mutable_agentinfo(int index);
+  inline ::dcmd_api::AgentInfo* add_agentinfo();
+  inline const ::google::protobuf::RepeatedPtrField< ::dcmd_api::AgentInfo >&
       agentinfo() const;
-  inline ::google::protobuf::RepeatedPtrField< ::dcmd::AgentInfo >*
+  inline ::google::protobuf::RepeatedPtrField< ::dcmd_api::AgentInfo >*
       mutable_agentinfo();
   
   // optional string err = 3;
@@ -3888,7 +3888,7 @@ class UiAgentInfoReply : public ::google::protobuf::Message {
   inline ::std::string* mutable_err();
   inline ::std::string* release_err();
   
-  // @@protoc_insertion_point(class_scope:dcmd.UiAgentInfoReply)
+  // @@protoc_insertion_point(class_scope:dcmd_api.UiAgentInfoReply)
  private:
   inline void set_has_state();
   inline void clear_has_state();
@@ -3897,7 +3897,7 @@ class UiAgentInfoReply : public ::google::protobuf::Message {
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
-  ::google::protobuf::RepeatedPtrField< ::dcmd::AgentInfo > agentinfo_;
+  ::google::protobuf::RepeatedPtrField< ::dcmd_api::AgentInfo > agentinfo_;
   ::std::string* err_;
   int state_;
   
@@ -3989,7 +3989,7 @@ class UiInvalidAgentInfo : public ::google::protobuf::Message {
   inline ::std::string* mutable_passwd();
   inline ::std::string* release_passwd();
   
-  // @@protoc_insertion_point(class_scope:dcmd.UiInvalidAgentInfo)
+  // @@protoc_insertion_point(class_scope:dcmd_api.UiInvalidAgentInfo)
  private:
   inline void set_has_user();
   inline void clear_has_user();
@@ -4067,20 +4067,20 @@ class UiInvalidAgentInfoReply : public ::google::protobuf::Message {
   
   // accessors -------------------------------------------------------
   
-  // required .dcmd.DcmdState state = 1;
+  // required .dcmd_api.DcmdState state = 1;
   inline bool has_state() const;
   inline void clear_state();
   static const int kStateFieldNumber = 1;
-  inline dcmd::DcmdState state() const;
-  inline void set_state(dcmd::DcmdState value);
+  inline dcmd_api::DcmdState state() const;
+  inline void set_state(dcmd_api::DcmdState value);
   
-  // required .dcmd.AgentInfo agentinfo = 2;
+  // required .dcmd_api.AgentInfo agentinfo = 2;
   inline bool has_agentinfo() const;
   inline void clear_agentinfo();
   static const int kAgentinfoFieldNumber = 2;
-  inline const ::dcmd::AgentInfo& agentinfo() const;
-  inline ::dcmd::AgentInfo* mutable_agentinfo();
-  inline ::dcmd::AgentInfo* release_agentinfo();
+  inline const ::dcmd_api::AgentInfo& agentinfo() const;
+  inline ::dcmd_api::AgentInfo* mutable_agentinfo();
+  inline ::dcmd_api::AgentInfo* release_agentinfo();
   
   // optional string err = 3;
   inline bool has_err() const;
@@ -4093,7 +4093,7 @@ class UiInvalidAgentInfoReply : public ::google::protobuf::Message {
   inline ::std::string* mutable_err();
   inline ::std::string* release_err();
   
-  // @@protoc_insertion_point(class_scope:dcmd.UiInvalidAgentInfoReply)
+  // @@protoc_insertion_point(class_scope:dcmd_api.UiInvalidAgentInfoReply)
  private:
   inline void set_has_state();
   inline void clear_has_state();
@@ -4104,7 +4104,7 @@ class UiInvalidAgentInfoReply : public ::google::protobuf::Message {
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
-  ::dcmd::AgentInfo* agentinfo_;
+  ::dcmd_api::AgentInfo* agentinfo_;
   ::std::string* err_;
   int state_;
   
@@ -4207,7 +4207,7 @@ class UiTaskScriptInfo : public ::google::protobuf::Message {
   inline ::std::string* mutable_passwd();
   inline ::std::string* release_passwd();
   
-  // @@protoc_insertion_point(class_scope:dcmd.UiTaskScriptInfo)
+  // @@protoc_insertion_point(class_scope:dcmd_api.UiTaskScriptInfo)
  private:
   inline void set_has_task_type();
   inline void clear_has_task_type();
@@ -4288,12 +4288,12 @@ class UiTaskScriptInfoReply : public ::google::protobuf::Message {
   
   // accessors -------------------------------------------------------
   
-  // required .dcmd.DcmdState state = 1;
+  // required .dcmd_api.DcmdState state = 1;
   inline bool has_state() const;
   inline void clear_state();
   static const int kStateFieldNumber = 1;
-  inline dcmd::DcmdState state() const;
-  inline void set_state(dcmd::DcmdState value);
+  inline dcmd_api::DcmdState state() const;
+  inline void set_state(dcmd_api::DcmdState value);
   
   // optional string script = 2;
   inline bool has_script() const;
@@ -4328,7 +4328,7 @@ class UiTaskScriptInfoReply : public ::google::protobuf::Message {
   inline ::std::string* mutable_md5();
   inline ::std::string* release_md5();
   
-  // @@protoc_insertion_point(class_scope:dcmd.UiTaskScriptInfoReply)
+  // @@protoc_insertion_point(class_scope:dcmd_api.UiTaskScriptInfoReply)
  private:
   inline void set_has_state();
   inline void clear_has_state();
@@ -4445,7 +4445,7 @@ class UiOprScriptInfo : public ::google::protobuf::Message {
   inline ::std::string* mutable_passwd();
   inline ::std::string* release_passwd();
   
-  // @@protoc_insertion_point(class_scope:dcmd.UiOprScriptInfo)
+  // @@protoc_insertion_point(class_scope:dcmd_api.UiOprScriptInfo)
  private:
   inline void set_has_opr_file();
   inline void clear_has_opr_file();
@@ -4526,12 +4526,12 @@ class UiOprScriptInfoReply : public ::google::protobuf::Message {
   
   // accessors -------------------------------------------------------
   
-  // required .dcmd.DcmdState state = 1;
+  // required .dcmd_api.DcmdState state = 1;
   inline bool has_state() const;
   inline void clear_state();
   static const int kStateFieldNumber = 1;
-  inline dcmd::DcmdState state() const;
-  inline void set_state(dcmd::DcmdState value);
+  inline dcmd_api::DcmdState state() const;
+  inline void set_state(dcmd_api::DcmdState value);
   
   // optional string script = 2;
   inline bool has_script() const;
@@ -4566,7 +4566,7 @@ class UiOprScriptInfoReply : public ::google::protobuf::Message {
   inline ::std::string* mutable_md5();
   inline ::std::string* release_md5();
   
-  // @@protoc_insertion_point(class_scope:dcmd.UiOprScriptInfoReply)
+  // @@protoc_insertion_point(class_scope:dcmd_api.UiOprScriptInfoReply)
  private:
   inline void set_has_state();
   inline void clear_has_state();
@@ -4688,7 +4688,7 @@ class UiAgentTaskProcess : public ::google::protobuf::Message {
   inline ::std::string* mutable_passwd();
   inline ::std::string* release_passwd();
   
-  // @@protoc_insertion_point(class_scope:dcmd.UiAgentTaskProcess)
+  // @@protoc_insertion_point(class_scope:dcmd_api.UiAgentTaskProcess)
  private:
   inline void set_has_user();
   inline void clear_has_user();
@@ -4767,12 +4767,12 @@ class UiAgentTaskProcessReply : public ::google::protobuf::Message {
   
   // accessors -------------------------------------------------------
   
-  // required .dcmd.DcmdState state = 1;
+  // required .dcmd_api.DcmdState state = 1;
   inline bool has_state() const;
   inline void clear_state();
   static const int kStateFieldNumber = 1;
-  inline dcmd::DcmdState state() const;
-  inline void set_state(dcmd::DcmdState value);
+  inline dcmd_api::DcmdState state() const;
+  inline void set_state(dcmd_api::DcmdState value);
   
   // repeated string process = 2;
   inline int process_size() const;
@@ -4801,7 +4801,7 @@ class UiAgentTaskProcessReply : public ::google::protobuf::Message {
   inline ::std::string* mutable_err();
   inline ::std::string* release_err();
   
-  // @@protoc_insertion_point(class_scope:dcmd.UiAgentTaskProcessReply)
+  // @@protoc_insertion_point(class_scope:dcmd_api.UiAgentTaskProcessReply)
  private:
   inline void set_has_state();
   inline void clear_has_state();
@@ -4924,12 +4924,12 @@ class UiTaskCmd : public ::google::protobuf::Message {
   inline ::std::string* mutable_app_pool();
   inline ::std::string* release_app_pool();
   
-  // required .dcmd.CmdType cmd_type = 5;
+  // required .dcmd_api.CmdType cmd_type = 5;
   inline bool has_cmd_type() const;
   inline void clear_cmd_type();
   static const int kCmdTypeFieldNumber = 5;
-  inline dcmd::CmdType cmd_type() const;
-  inline void set_cmd_type(dcmd::CmdType value);
+  inline dcmd_api::CmdType cmd_type() const;
+  inline void set_cmd_type(dcmd_api::CmdType value);
   
   // required string user = 6;
   inline bool has_user() const;
@@ -4953,7 +4953,7 @@ class UiTaskCmd : public ::google::protobuf::Message {
   inline ::std::string* mutable_passwd();
   inline ::std::string* release_passwd();
   
-  // @@protoc_insertion_point(class_scope:dcmd.UiTaskCmd)
+  // @@protoc_insertion_point(class_scope:dcmd_api.UiTaskCmd)
  private:
   inline void set_has_task_id();
   inline void clear_has_task_id();
@@ -5046,12 +5046,12 @@ class UiTaskCmdReply : public ::google::protobuf::Message {
   
   // accessors -------------------------------------------------------
   
-  // required .dcmd.DcmdState state = 1;
+  // required .dcmd_api.DcmdState state = 1;
   inline bool has_state() const;
   inline void clear_state();
   static const int kStateFieldNumber = 1;
-  inline dcmd::DcmdState state() const;
-  inline void set_state(dcmd::DcmdState value);
+  inline dcmd_api::DcmdState state() const;
+  inline void set_state(dcmd_api::DcmdState value);
   
   // optional string cmd_id = 2;
   inline bool has_cmd_id() const;
@@ -5075,7 +5075,7 @@ class UiTaskCmdReply : public ::google::protobuf::Message {
   inline ::std::string* mutable_err();
   inline ::std::string* release_err();
   
-  // @@protoc_insertion_point(class_scope:dcmd.UiTaskCmdReply)
+  // @@protoc_insertion_point(class_scope:dcmd_api.UiTaskCmdReply)
  private:
   inline void set_has_state();
   inline void clear_has_state();
@@ -5211,7 +5211,7 @@ class UiTaskWatch : public ::google::protobuf::Message {
   inline ::std::string* mutable_passwd();
   inline ::std::string* release_passwd();
   
-  // @@protoc_insertion_point(class_scope:dcmd.UiTaskWatch)
+  // @@protoc_insertion_point(class_scope:dcmd_api.UiTaskWatch)
  private:
   inline void set_has_task_id();
   inline void clear_has_task_id();
@@ -5298,12 +5298,12 @@ class UiTaskWatchReply : public ::google::protobuf::Message {
   
   // accessors -------------------------------------------------------
   
-  // required .dcmd.DcmdState watch_state = 1;
+  // required .dcmd_api.DcmdState watch_state = 1;
   inline bool has_watch_state() const;
   inline void clear_watch_state();
   static const int kWatchStateFieldNumber = 1;
-  inline dcmd::DcmdState watch_state() const;
-  inline void set_watch_state(dcmd::DcmdState value);
+  inline dcmd_api::DcmdState watch_state() const;
+  inline void set_watch_state(dcmd_api::DcmdState value);
   
   // optional string err = 2;
   inline bool has_err() const;
@@ -5316,26 +5316,26 @@ class UiTaskWatchReply : public ::google::protobuf::Message {
   inline ::std::string* mutable_err();
   inline ::std::string* release_err();
   
-  // optional .dcmd.TaskState task_state = 3;
+  // optional .dcmd_api.TaskState task_state = 3;
   inline bool has_task_state() const;
   inline void clear_task_state();
   static const int kTaskStateFieldNumber = 3;
-  inline dcmd::TaskState task_state() const;
-  inline void set_task_state(dcmd::TaskState value);
+  inline dcmd_api::TaskState task_state() const;
+  inline void set_task_state(dcmd_api::TaskState value);
   
-  // optional .dcmd.AppPoolState app_pool_state = 4;
+  // optional .dcmd_api.AppPoolState app_pool_state = 4;
   inline bool has_app_pool_state() const;
   inline void clear_app_pool_state();
   static const int kAppPoolStateFieldNumber = 4;
-  inline dcmd::AppPoolState app_pool_state() const;
-  inline void set_app_pool_state(dcmd::AppPoolState value);
+  inline dcmd_api::AppPoolState app_pool_state() const;
+  inline void set_app_pool_state(dcmd_api::AppPoolState value);
   
-  // optional .dcmd.SubTaskState subtask_state = 5;
+  // optional .dcmd_api.SubTaskState subtask_state = 5;
   inline bool has_subtask_state() const;
   inline void clear_subtask_state();
   static const int kSubtaskStateFieldNumber = 5;
-  inline dcmd::SubTaskState subtask_state() const;
-  inline void set_subtask_state(dcmd::SubTaskState value);
+  inline dcmd_api::SubTaskState subtask_state() const;
+  inline void set_subtask_state(dcmd_api::SubTaskState value);
   
   // optional int32 success_subtask = 6;
   inline bool has_success_subtask() const;
@@ -5372,7 +5372,7 @@ class UiTaskWatchReply : public ::google::protobuf::Message {
   inline ::google::protobuf::int32 undo_subtask() const;
   inline void set_undo_subtask(::google::protobuf::int32 value);
   
-  // @@protoc_insertion_point(class_scope:dcmd.UiTaskWatchReply)
+  // @@protoc_insertion_point(class_scope:dcmd_api.UiTaskWatchReply)
  private:
   inline void set_has_watch_state();
   inline void clear_has_watch_state();
@@ -6039,7 +6039,7 @@ inline ::std::string* AgentInfo::release_ip() {
   }
 }
 
-// required .dcmd.AgentState state = 2;
+// required .dcmd_api.AgentState state = 2;
 inline bool AgentInfo::has_state() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
@@ -6053,11 +6053,11 @@ inline void AgentInfo::clear_state() {
   state_ = 0;
   clear_has_state();
 }
-inline dcmd::AgentState AgentInfo::state() const {
-  return static_cast< dcmd::AgentState >(state_);
+inline dcmd_api::AgentState AgentInfo::state() const {
+  return static_cast< dcmd_api::AgentState >(state_);
 }
-inline void AgentInfo::set_state(dcmd::AgentState value) {
-  GOOGLE_DCHECK(dcmd::AgentState_IsValid(value));
+inline void AgentInfo::set_state(dcmd_api::AgentState value) {
+  GOOGLE_DCHECK(dcmd_api::AgentState_IsValid(value));
   set_has_state();
   state_ = value;
 }
@@ -6346,7 +6346,7 @@ AgentReport::mutable_agent_ips() {
 
 // AgentReportReply
 
-// required .dcmd.DcmdState state = 1;
+// required .dcmd_api.DcmdState state = 1;
 inline bool AgentReportReply::has_state() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
@@ -6360,11 +6360,11 @@ inline void AgentReportReply::clear_state() {
   state_ = 0;
   clear_has_state();
 }
-inline dcmd::DcmdState AgentReportReply::state() const {
-  return static_cast< dcmd::DcmdState >(state_);
+inline dcmd_api::DcmdState AgentReportReply::state() const {
+  return static_cast< dcmd_api::DcmdState >(state_);
 }
-inline void AgentReportReply::set_state(dcmd::DcmdState value) {
-  GOOGLE_DCHECK(dcmd::DcmdState_IsValid(value));
+inline void AgentReportReply::set_state(dcmd_api::DcmdState value) {
+  GOOGLE_DCHECK(dcmd_api::DcmdState_IsValid(value));
   set_has_state();
   state_ = value;
 }
@@ -7357,27 +7357,27 @@ inline ::std::string* AgentTaskCmd::release_script() {
   }
 }
 
-// repeated .dcmd.KeyValue task_arg = 16;
+// repeated .dcmd_api.KeyValue task_arg = 16;
 inline int AgentTaskCmd::task_arg_size() const {
   return task_arg_.size();
 }
 inline void AgentTaskCmd::clear_task_arg() {
   task_arg_.Clear();
 }
-inline const ::dcmd::KeyValue& AgentTaskCmd::task_arg(int index) const {
+inline const ::dcmd_api::KeyValue& AgentTaskCmd::task_arg(int index) const {
   return task_arg_.Get(index);
 }
-inline ::dcmd::KeyValue* AgentTaskCmd::mutable_task_arg(int index) {
+inline ::dcmd_api::KeyValue* AgentTaskCmd::mutable_task_arg(int index) {
   return task_arg_.Mutable(index);
 }
-inline ::dcmd::KeyValue* AgentTaskCmd::add_task_arg() {
+inline ::dcmd_api::KeyValue* AgentTaskCmd::add_task_arg() {
   return task_arg_.Add();
 }
-inline const ::google::protobuf::RepeatedPtrField< ::dcmd::KeyValue >&
+inline const ::google::protobuf::RepeatedPtrField< ::dcmd_api::KeyValue >&
 AgentTaskCmd::task_arg() const {
   return task_arg_;
 }
-inline ::google::protobuf::RepeatedPtrField< ::dcmd::KeyValue >*
+inline ::google::protobuf::RepeatedPtrField< ::dcmd_api::KeyValue >*
 AgentTaskCmd::mutable_task_arg() {
   return &task_arg_;
 }
@@ -8258,27 +8258,27 @@ inline ::std::string* AgentOprCmd::release_script() {
   }
 }
 
-// repeated .dcmd.KeyValue args = 6;
+// repeated .dcmd_api.KeyValue args = 6;
 inline int AgentOprCmd::args_size() const {
   return args_.size();
 }
 inline void AgentOprCmd::clear_args() {
   args_.Clear();
 }
-inline const ::dcmd::KeyValue& AgentOprCmd::args(int index) const {
+inline const ::dcmd_api::KeyValue& AgentOprCmd::args(int index) const {
   return args_.Get(index);
 }
-inline ::dcmd::KeyValue* AgentOprCmd::mutable_args(int index) {
+inline ::dcmd_api::KeyValue* AgentOprCmd::mutable_args(int index) {
   return args_.Mutable(index);
 }
-inline ::dcmd::KeyValue* AgentOprCmd::add_args() {
+inline ::dcmd_api::KeyValue* AgentOprCmd::add_args() {
   return args_.Add();
 }
-inline const ::google::protobuf::RepeatedPtrField< ::dcmd::KeyValue >&
+inline const ::google::protobuf::RepeatedPtrField< ::dcmd_api::KeyValue >&
 AgentOprCmd::args() const {
   return args_;
 }
-inline ::google::protobuf::RepeatedPtrField< ::dcmd::KeyValue >*
+inline ::google::protobuf::RepeatedPtrField< ::dcmd_api::KeyValue >*
 AgentOprCmd::mutable_args() {
   return &args_;
 }
@@ -8287,7 +8287,7 @@ AgentOprCmd::mutable_args() {
 
 // AgentOprCmdReply
 
-// required .dcmd.DcmdState state = 1;
+// required .dcmd_api.DcmdState state = 1;
 inline bool AgentOprCmdReply::has_state() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
@@ -8301,11 +8301,11 @@ inline void AgentOprCmdReply::clear_state() {
   state_ = 0;
   clear_has_state();
 }
-inline dcmd::DcmdState AgentOprCmdReply::state() const {
-  return static_cast< dcmd::DcmdState >(state_);
+inline dcmd_api::DcmdState AgentOprCmdReply::state() const {
+  return static_cast< dcmd_api::DcmdState >(state_);
 }
-inline void AgentOprCmdReply::set_state(dcmd::DcmdState value) {
-  GOOGLE_DCHECK(dcmd::DcmdState_IsValid(value));
+inline void AgentOprCmdReply::set_state(dcmd_api::DcmdState value) {
+  GOOGLE_DCHECK(dcmd_api::DcmdState_IsValid(value));
   set_has_state();
   state_ = value;
 }
@@ -8630,7 +8630,7 @@ inline ::std::string* AgentTaskOutput::release_ip() {
 
 // AgentTaskOutputReply
 
-// required .dcmd.DcmdState state = 1;
+// required .dcmd_api.DcmdState state = 1;
 inline bool AgentTaskOutputReply::has_state() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
@@ -8644,11 +8644,11 @@ inline void AgentTaskOutputReply::clear_state() {
   state_ = 0;
   clear_has_state();
 }
-inline dcmd::DcmdState AgentTaskOutputReply::state() const {
-  return static_cast< dcmd::DcmdState >(state_);
+inline dcmd_api::DcmdState AgentTaskOutputReply::state() const {
+  return static_cast< dcmd_api::DcmdState >(state_);
 }
-inline void AgentTaskOutputReply::set_state(dcmd::DcmdState value) {
-  GOOGLE_DCHECK(dcmd::DcmdState_IsValid(value));
+inline void AgentTaskOutputReply::set_state(dcmd_api::DcmdState value) {
+  GOOGLE_DCHECK(dcmd_api::DcmdState_IsValid(value));
   set_has_state();
   state_ = value;
 }
@@ -8915,7 +8915,7 @@ inline ::std::string* AgentRunningTask::release_app_name() {
 
 // AgentRunningTaskReply
 
-// required .dcmd.DcmdState state = 1;
+// required .dcmd_api.DcmdState state = 1;
 inline bool AgentRunningTaskReply::has_state() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
@@ -8929,36 +8929,36 @@ inline void AgentRunningTaskReply::clear_state() {
   state_ = 0;
   clear_has_state();
 }
-inline dcmd::DcmdState AgentRunningTaskReply::state() const {
-  return static_cast< dcmd::DcmdState >(state_);
+inline dcmd_api::DcmdState AgentRunningTaskReply::state() const {
+  return static_cast< dcmd_api::DcmdState >(state_);
 }
-inline void AgentRunningTaskReply::set_state(dcmd::DcmdState value) {
-  GOOGLE_DCHECK(dcmd::DcmdState_IsValid(value));
+inline void AgentRunningTaskReply::set_state(dcmd_api::DcmdState value) {
+  GOOGLE_DCHECK(dcmd_api::DcmdState_IsValid(value));
   set_has_state();
   state_ = value;
 }
 
-// repeated .dcmd.SubTaskInfo result = 2;
+// repeated .dcmd_api.SubTaskInfo result = 2;
 inline int AgentRunningTaskReply::result_size() const {
   return result_.size();
 }
 inline void AgentRunningTaskReply::clear_result() {
   result_.Clear();
 }
-inline const ::dcmd::SubTaskInfo& AgentRunningTaskReply::result(int index) const {
+inline const ::dcmd_api::SubTaskInfo& AgentRunningTaskReply::result(int index) const {
   return result_.Get(index);
 }
-inline ::dcmd::SubTaskInfo* AgentRunningTaskReply::mutable_result(int index) {
+inline ::dcmd_api::SubTaskInfo* AgentRunningTaskReply::mutable_result(int index) {
   return result_.Mutable(index);
 }
-inline ::dcmd::SubTaskInfo* AgentRunningTaskReply::add_result() {
+inline ::dcmd_api::SubTaskInfo* AgentRunningTaskReply::add_result() {
   return result_.Add();
 }
-inline const ::google::protobuf::RepeatedPtrField< ::dcmd::SubTaskInfo >&
+inline const ::google::protobuf::RepeatedPtrField< ::dcmd_api::SubTaskInfo >&
 AgentRunningTaskReply::result() const {
   return result_;
 }
-inline ::google::protobuf::RepeatedPtrField< ::dcmd::SubTaskInfo >*
+inline ::google::protobuf::RepeatedPtrField< ::dcmd_api::SubTaskInfo >*
 AgentRunningTaskReply::mutable_result() {
   return &result_;
 }
@@ -9087,7 +9087,7 @@ inline ::std::string* AgentRunningOpr::release_ip() {
 
 // AgentRunningOprReply
 
-// required .dcmd.DcmdState state = 1;
+// required .dcmd_api.DcmdState state = 1;
 inline bool AgentRunningOprReply::has_state() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
@@ -9101,36 +9101,36 @@ inline void AgentRunningOprReply::clear_state() {
   state_ = 0;
   clear_has_state();
 }
-inline dcmd::DcmdState AgentRunningOprReply::state() const {
-  return static_cast< dcmd::DcmdState >(state_);
+inline dcmd_api::DcmdState AgentRunningOprReply::state() const {
+  return static_cast< dcmd_api::DcmdState >(state_);
 }
-inline void AgentRunningOprReply::set_state(dcmd::DcmdState value) {
-  GOOGLE_DCHECK(dcmd::DcmdState_IsValid(value));
+inline void AgentRunningOprReply::set_state(dcmd_api::DcmdState value) {
+  GOOGLE_DCHECK(dcmd_api::DcmdState_IsValid(value));
   set_has_state();
   state_ = value;
 }
 
-// repeated .dcmd.OprInfo result = 2;
+// repeated .dcmd_api.OprInfo result = 2;
 inline int AgentRunningOprReply::result_size() const {
   return result_.size();
 }
 inline void AgentRunningOprReply::clear_result() {
   result_.Clear();
 }
-inline const ::dcmd::OprInfo& AgentRunningOprReply::result(int index) const {
+inline const ::dcmd_api::OprInfo& AgentRunningOprReply::result(int index) const {
   return result_.Get(index);
 }
-inline ::dcmd::OprInfo* AgentRunningOprReply::mutable_result(int index) {
+inline ::dcmd_api::OprInfo* AgentRunningOprReply::mutable_result(int index) {
   return result_.Mutable(index);
 }
-inline ::dcmd::OprInfo* AgentRunningOprReply::add_result() {
+inline ::dcmd_api::OprInfo* AgentRunningOprReply::add_result() {
   return result_.Add();
 }
-inline const ::google::protobuf::RepeatedPtrField< ::dcmd::OprInfo >&
+inline const ::google::protobuf::RepeatedPtrField< ::dcmd_api::OprInfo >&
 AgentRunningOprReply::result() const {
   return result_;
 }
-inline ::google::protobuf::RepeatedPtrField< ::dcmd::OprInfo >*
+inline ::google::protobuf::RepeatedPtrField< ::dcmd_api::OprInfo >*
 AgentRunningOprReply::mutable_result() {
   return &result_;
 }
@@ -9481,7 +9481,7 @@ inline ::std::string* UiTaskOutput::release_passwd() {
 
 // UiTaskOutputReply
 
-// required .dcmd.DcmdState state = 1;
+// required .dcmd_api.DcmdState state = 1;
 inline bool UiTaskOutputReply::has_state() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
@@ -9495,11 +9495,11 @@ inline void UiTaskOutputReply::clear_state() {
   state_ = 0;
   clear_has_state();
 }
-inline dcmd::DcmdState UiTaskOutputReply::state() const {
-  return static_cast< dcmd::DcmdState >(state_);
+inline dcmd_api::DcmdState UiTaskOutputReply::state() const {
+  return static_cast< dcmd_api::DcmdState >(state_);
 }
-inline void UiTaskOutputReply::set_state(dcmd::DcmdState value) {
-  GOOGLE_DCHECK(dcmd::DcmdState_IsValid(value));
+inline void UiTaskOutputReply::set_state(dcmd_api::DcmdState value) {
+  GOOGLE_DCHECK(dcmd_api::DcmdState_IsValid(value));
   set_has_state();
   state_ = value;
 }
@@ -9882,7 +9882,7 @@ inline ::std::string* UiAgentRunningTask::release_passwd() {
 
 // UiAgentRunningTaskReply
 
-// required .dcmd.DcmdState state = 1;
+// required .dcmd_api.DcmdState state = 1;
 inline bool UiAgentRunningTaskReply::has_state() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
@@ -9896,36 +9896,36 @@ inline void UiAgentRunningTaskReply::clear_state() {
   state_ = 0;
   clear_has_state();
 }
-inline dcmd::DcmdState UiAgentRunningTaskReply::state() const {
-  return static_cast< dcmd::DcmdState >(state_);
+inline dcmd_api::DcmdState UiAgentRunningTaskReply::state() const {
+  return static_cast< dcmd_api::DcmdState >(state_);
 }
-inline void UiAgentRunningTaskReply::set_state(dcmd::DcmdState value) {
-  GOOGLE_DCHECK(dcmd::DcmdState_IsValid(value));
+inline void UiAgentRunningTaskReply::set_state(dcmd_api::DcmdState value) {
+  GOOGLE_DCHECK(dcmd_api::DcmdState_IsValid(value));
   set_has_state();
   state_ = value;
 }
 
-// repeated .dcmd.SubTaskInfo result = 2;
+// repeated .dcmd_api.SubTaskInfo result = 2;
 inline int UiAgentRunningTaskReply::result_size() const {
   return result_.size();
 }
 inline void UiAgentRunningTaskReply::clear_result() {
   result_.Clear();
 }
-inline const ::dcmd::SubTaskInfo& UiAgentRunningTaskReply::result(int index) const {
+inline const ::dcmd_api::SubTaskInfo& UiAgentRunningTaskReply::result(int index) const {
   return result_.Get(index);
 }
-inline ::dcmd::SubTaskInfo* UiAgentRunningTaskReply::mutable_result(int index) {
+inline ::dcmd_api::SubTaskInfo* UiAgentRunningTaskReply::mutable_result(int index) {
   return result_.Mutable(index);
 }
-inline ::dcmd::SubTaskInfo* UiAgentRunningTaskReply::add_result() {
+inline ::dcmd_api::SubTaskInfo* UiAgentRunningTaskReply::add_result() {
   return result_.Add();
 }
-inline const ::google::protobuf::RepeatedPtrField< ::dcmd::SubTaskInfo >&
+inline const ::google::protobuf::RepeatedPtrField< ::dcmd_api::SubTaskInfo >&
 UiAgentRunningTaskReply::result() const {
   return result_;
 }
-inline ::google::protobuf::RepeatedPtrField< ::dcmd::SubTaskInfo >*
+inline ::google::protobuf::RepeatedPtrField< ::dcmd_api::SubTaskInfo >*
 UiAgentRunningTaskReply::mutable_result() {
   return &result_;
 }
@@ -10170,7 +10170,7 @@ inline ::std::string* UiAgentRunningOpr::release_passwd() {
 
 // UiAgentRunningOprReply
 
-// required .dcmd.DcmdState state = 1;
+// required .dcmd_api.DcmdState state = 1;
 inline bool UiAgentRunningOprReply::has_state() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
@@ -10184,36 +10184,36 @@ inline void UiAgentRunningOprReply::clear_state() {
   state_ = 0;
   clear_has_state();
 }
-inline dcmd::DcmdState UiAgentRunningOprReply::state() const {
-  return static_cast< dcmd::DcmdState >(state_);
+inline dcmd_api::DcmdState UiAgentRunningOprReply::state() const {
+  return static_cast< dcmd_api::DcmdState >(state_);
 }
-inline void UiAgentRunningOprReply::set_state(dcmd::DcmdState value) {
-  GOOGLE_DCHECK(dcmd::DcmdState_IsValid(value));
+inline void UiAgentRunningOprReply::set_state(dcmd_api::DcmdState value) {
+  GOOGLE_DCHECK(dcmd_api::DcmdState_IsValid(value));
   set_has_state();
   state_ = value;
 }
 
-// repeated .dcmd.OprInfo result = 2;
+// repeated .dcmd_api.OprInfo result = 2;
 inline int UiAgentRunningOprReply::result_size() const {
   return result_.size();
 }
 inline void UiAgentRunningOprReply::clear_result() {
   result_.Clear();
 }
-inline const ::dcmd::OprInfo& UiAgentRunningOprReply::result(int index) const {
+inline const ::dcmd_api::OprInfo& UiAgentRunningOprReply::result(int index) const {
   return result_.Get(index);
 }
-inline ::dcmd::OprInfo* UiAgentRunningOprReply::mutable_result(int index) {
+inline ::dcmd_api::OprInfo* UiAgentRunningOprReply::mutable_result(int index) {
   return result_.Mutable(index);
 }
-inline ::dcmd::OprInfo* UiAgentRunningOprReply::add_result() {
+inline ::dcmd_api::OprInfo* UiAgentRunningOprReply::add_result() {
   return result_.Add();
 }
-inline const ::google::protobuf::RepeatedPtrField< ::dcmd::OprInfo >&
+inline const ::google::protobuf::RepeatedPtrField< ::dcmd_api::OprInfo >&
 UiAgentRunningOprReply::result() const {
   return result_;
 }
-inline ::google::protobuf::RepeatedPtrField< ::dcmd::OprInfo >*
+inline ::google::protobuf::RepeatedPtrField< ::dcmd_api::OprInfo >*
 UiAgentRunningOprReply::mutable_result() {
   return &result_;
 }
@@ -10458,7 +10458,7 @@ inline ::std::string* UiExecOprCmd::release_passwd() {
 
 // UiExecOprCmdReply
 
-// required .dcmd.DcmdState state = 1;
+// required .dcmd_api.DcmdState state = 1;
 inline bool UiExecOprCmdReply::has_state() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
@@ -10472,36 +10472,36 @@ inline void UiExecOprCmdReply::clear_state() {
   state_ = 0;
   clear_has_state();
 }
-inline dcmd::DcmdState UiExecOprCmdReply::state() const {
-  return static_cast< dcmd::DcmdState >(state_);
+inline dcmd_api::DcmdState UiExecOprCmdReply::state() const {
+  return static_cast< dcmd_api::DcmdState >(state_);
 }
-inline void UiExecOprCmdReply::set_state(dcmd::DcmdState value) {
-  GOOGLE_DCHECK(dcmd::DcmdState_IsValid(value));
+inline void UiExecOprCmdReply::set_state(dcmd_api::DcmdState value) {
+  GOOGLE_DCHECK(dcmd_api::DcmdState_IsValid(value));
   set_has_state();
   state_ = value;
 }
 
-// repeated .dcmd.AgentOprCmdReply result = 2;
+// repeated .dcmd_api.AgentOprCmdReply result = 2;
 inline int UiExecOprCmdReply::result_size() const {
   return result_.size();
 }
 inline void UiExecOprCmdReply::clear_result() {
   result_.Clear();
 }
-inline const ::dcmd::AgentOprCmdReply& UiExecOprCmdReply::result(int index) const {
+inline const ::dcmd_api::AgentOprCmdReply& UiExecOprCmdReply::result(int index) const {
   return result_.Get(index);
 }
-inline ::dcmd::AgentOprCmdReply* UiExecOprCmdReply::mutable_result(int index) {
+inline ::dcmd_api::AgentOprCmdReply* UiExecOprCmdReply::mutable_result(int index) {
   return result_.Mutable(index);
 }
-inline ::dcmd::AgentOprCmdReply* UiExecOprCmdReply::add_result() {
+inline ::dcmd_api::AgentOprCmdReply* UiExecOprCmdReply::add_result() {
   return result_.Add();
 }
-inline const ::google::protobuf::RepeatedPtrField< ::dcmd::AgentOprCmdReply >&
+inline const ::google::protobuf::RepeatedPtrField< ::dcmd_api::AgentOprCmdReply >&
 UiExecOprCmdReply::result() const {
   return result_;
 }
-inline ::google::protobuf::RepeatedPtrField< ::dcmd::AgentOprCmdReply >*
+inline ::google::protobuf::RepeatedPtrField< ::dcmd_api::AgentOprCmdReply >*
 UiExecOprCmdReply::mutable_result() {
   return &result_;
 }
@@ -10754,7 +10754,7 @@ inline ::std::string* UiAgentInfo::release_passwd() {
 
 // UiAgentInfoReply
 
-// required .dcmd.DcmdState state = 1;
+// required .dcmd_api.DcmdState state = 1;
 inline bool UiAgentInfoReply::has_state() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
@@ -10768,36 +10768,36 @@ inline void UiAgentInfoReply::clear_state() {
   state_ = 0;
   clear_has_state();
 }
-inline dcmd::DcmdState UiAgentInfoReply::state() const {
-  return static_cast< dcmd::DcmdState >(state_);
+inline dcmd_api::DcmdState UiAgentInfoReply::state() const {
+  return static_cast< dcmd_api::DcmdState >(state_);
 }
-inline void UiAgentInfoReply::set_state(dcmd::DcmdState value) {
-  GOOGLE_DCHECK(dcmd::DcmdState_IsValid(value));
+inline void UiAgentInfoReply::set_state(dcmd_api::DcmdState value) {
+  GOOGLE_DCHECK(dcmd_api::DcmdState_IsValid(value));
   set_has_state();
   state_ = value;
 }
 
-// repeated .dcmd.AgentInfo agentinfo = 2;
+// repeated .dcmd_api.AgentInfo agentinfo = 2;
 inline int UiAgentInfoReply::agentinfo_size() const {
   return agentinfo_.size();
 }
 inline void UiAgentInfoReply::clear_agentinfo() {
   agentinfo_.Clear();
 }
-inline const ::dcmd::AgentInfo& UiAgentInfoReply::agentinfo(int index) const {
+inline const ::dcmd_api::AgentInfo& UiAgentInfoReply::agentinfo(int index) const {
   return agentinfo_.Get(index);
 }
-inline ::dcmd::AgentInfo* UiAgentInfoReply::mutable_agentinfo(int index) {
+inline ::dcmd_api::AgentInfo* UiAgentInfoReply::mutable_agentinfo(int index) {
   return agentinfo_.Mutable(index);
 }
-inline ::dcmd::AgentInfo* UiAgentInfoReply::add_agentinfo() {
+inline ::dcmd_api::AgentInfo* UiAgentInfoReply::add_agentinfo() {
   return agentinfo_.Add();
 }
-inline const ::google::protobuf::RepeatedPtrField< ::dcmd::AgentInfo >&
+inline const ::google::protobuf::RepeatedPtrField< ::dcmd_api::AgentInfo >&
 UiAgentInfoReply::agentinfo() const {
   return agentinfo_;
 }
-inline ::google::protobuf::RepeatedPtrField< ::dcmd::AgentInfo >*
+inline ::google::protobuf::RepeatedPtrField< ::dcmd_api::AgentInfo >*
 UiAgentInfoReply::mutable_agentinfo() {
   return &agentinfo_;
 }
@@ -10984,7 +10984,7 @@ inline ::std::string* UiInvalidAgentInfo::release_passwd() {
 
 // UiInvalidAgentInfoReply
 
-// required .dcmd.DcmdState state = 1;
+// required .dcmd_api.DcmdState state = 1;
 inline bool UiInvalidAgentInfoReply::has_state() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
@@ -10998,16 +10998,16 @@ inline void UiInvalidAgentInfoReply::clear_state() {
   state_ = 0;
   clear_has_state();
 }
-inline dcmd::DcmdState UiInvalidAgentInfoReply::state() const {
-  return static_cast< dcmd::DcmdState >(state_);
+inline dcmd_api::DcmdState UiInvalidAgentInfoReply::state() const {
+  return static_cast< dcmd_api::DcmdState >(state_);
 }
-inline void UiInvalidAgentInfoReply::set_state(dcmd::DcmdState value) {
-  GOOGLE_DCHECK(dcmd::DcmdState_IsValid(value));
+inline void UiInvalidAgentInfoReply::set_state(dcmd_api::DcmdState value) {
+  GOOGLE_DCHECK(dcmd_api::DcmdState_IsValid(value));
   set_has_state();
   state_ = value;
 }
 
-// required .dcmd.AgentInfo agentinfo = 2;
+// required .dcmd_api.AgentInfo agentinfo = 2;
 inline bool UiInvalidAgentInfoReply::has_agentinfo() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
@@ -11018,20 +11018,20 @@ inline void UiInvalidAgentInfoReply::clear_has_agentinfo() {
   _has_bits_[0] &= ~0x00000002u;
 }
 inline void UiInvalidAgentInfoReply::clear_agentinfo() {
-  if (agentinfo_ != NULL) agentinfo_->::dcmd::AgentInfo::Clear();
+  if (agentinfo_ != NULL) agentinfo_->::dcmd_api::AgentInfo::Clear();
   clear_has_agentinfo();
 }
-inline const ::dcmd::AgentInfo& UiInvalidAgentInfoReply::agentinfo() const {
+inline const ::dcmd_api::AgentInfo& UiInvalidAgentInfoReply::agentinfo() const {
   return agentinfo_ != NULL ? *agentinfo_ : *default_instance_->agentinfo_;
 }
-inline ::dcmd::AgentInfo* UiInvalidAgentInfoReply::mutable_agentinfo() {
+inline ::dcmd_api::AgentInfo* UiInvalidAgentInfoReply::mutable_agentinfo() {
   set_has_agentinfo();
-  if (agentinfo_ == NULL) agentinfo_ = new ::dcmd::AgentInfo;
+  if (agentinfo_ == NULL) agentinfo_ = new ::dcmd_api::AgentInfo;
   return agentinfo_;
 }
-inline ::dcmd::AgentInfo* UiInvalidAgentInfoReply::release_agentinfo() {
+inline ::dcmd_api::AgentInfo* UiInvalidAgentInfoReply::release_agentinfo() {
   clear_has_agentinfo();
-  ::dcmd::AgentInfo* temp = agentinfo_;
+  ::dcmd_api::AgentInfo* temp = agentinfo_;
   agentinfo_ = NULL;
   return temp;
 }
@@ -11276,7 +11276,7 @@ inline ::std::string* UiTaskScriptInfo::release_passwd() {
 
 // UiTaskScriptInfoReply
 
-// required .dcmd.DcmdState state = 1;
+// required .dcmd_api.DcmdState state = 1;
 inline bool UiTaskScriptInfoReply::has_state() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
@@ -11290,11 +11290,11 @@ inline void UiTaskScriptInfoReply::clear_state() {
   state_ = 0;
   clear_has_state();
 }
-inline dcmd::DcmdState UiTaskScriptInfoReply::state() const {
-  return static_cast< dcmd::DcmdState >(state_);
+inline dcmd_api::DcmdState UiTaskScriptInfoReply::state() const {
+  return static_cast< dcmd_api::DcmdState >(state_);
 }
-inline void UiTaskScriptInfoReply::set_state(dcmd::DcmdState value) {
-  GOOGLE_DCHECK(dcmd::DcmdState_IsValid(value));
+inline void UiTaskScriptInfoReply::set_state(dcmd_api::DcmdState value) {
+  GOOGLE_DCHECK(dcmd_api::DcmdState_IsValid(value));
   set_has_state();
   state_ = value;
 }
@@ -11655,7 +11655,7 @@ inline ::std::string* UiOprScriptInfo::release_passwd() {
 
 // UiOprScriptInfoReply
 
-// required .dcmd.DcmdState state = 1;
+// required .dcmd_api.DcmdState state = 1;
 inline bool UiOprScriptInfoReply::has_state() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
@@ -11669,11 +11669,11 @@ inline void UiOprScriptInfoReply::clear_state() {
   state_ = 0;
   clear_has_state();
 }
-inline dcmd::DcmdState UiOprScriptInfoReply::state() const {
-  return static_cast< dcmd::DcmdState >(state_);
+inline dcmd_api::DcmdState UiOprScriptInfoReply::state() const {
+  return static_cast< dcmd_api::DcmdState >(state_);
 }
-inline void UiOprScriptInfoReply::set_state(dcmd::DcmdState value) {
-  GOOGLE_DCHECK(dcmd::DcmdState_IsValid(value));
+inline void UiOprScriptInfoReply::set_state(dcmd_api::DcmdState value) {
+  GOOGLE_DCHECK(dcmd_api::DcmdState_IsValid(value));
   set_has_state();
   state_ = value;
 }
@@ -12020,7 +12020,7 @@ inline ::std::string* UiAgentTaskProcess::release_passwd() {
 
 // UiAgentTaskProcessReply
 
-// required .dcmd.DcmdState state = 1;
+// required .dcmd_api.DcmdState state = 1;
 inline bool UiAgentTaskProcessReply::has_state() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
@@ -12034,11 +12034,11 @@ inline void UiAgentTaskProcessReply::clear_state() {
   state_ = 0;
   clear_has_state();
 }
-inline dcmd::DcmdState UiAgentTaskProcessReply::state() const {
-  return static_cast< dcmd::DcmdState >(state_);
+inline dcmd_api::DcmdState UiAgentTaskProcessReply::state() const {
+  return static_cast< dcmd_api::DcmdState >(state_);
 }
-inline void UiAgentTaskProcessReply::set_state(dcmd::DcmdState value) {
-  GOOGLE_DCHECK(dcmd::DcmdState_IsValid(value));
+inline void UiAgentTaskProcessReply::set_state(dcmd_api::DcmdState value) {
+  GOOGLE_DCHECK(dcmd_api::DcmdState_IsValid(value));
   set_has_state();
   state_ = value;
 }
@@ -12381,7 +12381,7 @@ inline ::std::string* UiTaskCmd::release_app_pool() {
   }
 }
 
-// required .dcmd.CmdType cmd_type = 5;
+// required .dcmd_api.CmdType cmd_type = 5;
 inline bool UiTaskCmd::has_cmd_type() const {
   return (_has_bits_[0] & 0x00000010u) != 0;
 }
@@ -12395,11 +12395,11 @@ inline void UiTaskCmd::clear_cmd_type() {
   cmd_type_ = 1;
   clear_has_cmd_type();
 }
-inline dcmd::CmdType UiTaskCmd::cmd_type() const {
-  return static_cast< dcmd::CmdType >(cmd_type_);
+inline dcmd_api::CmdType UiTaskCmd::cmd_type() const {
+  return static_cast< dcmd_api::CmdType >(cmd_type_);
 }
-inline void UiTaskCmd::set_cmd_type(dcmd::CmdType value) {
-  GOOGLE_DCHECK(dcmd::CmdType_IsValid(value));
+inline void UiTaskCmd::set_cmd_type(dcmd_api::CmdType value) {
+  GOOGLE_DCHECK(dcmd_api::CmdType_IsValid(value));
   set_has_cmd_type();
   cmd_type_ = value;
 }
@@ -12524,7 +12524,7 @@ inline ::std::string* UiTaskCmd::release_passwd() {
 
 // UiTaskCmdReply
 
-// required .dcmd.DcmdState state = 1;
+// required .dcmd_api.DcmdState state = 1;
 inline bool UiTaskCmdReply::has_state() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
@@ -12538,11 +12538,11 @@ inline void UiTaskCmdReply::clear_state() {
   state_ = 0;
   clear_has_state();
 }
-inline dcmd::DcmdState UiTaskCmdReply::state() const {
-  return static_cast< dcmd::DcmdState >(state_);
+inline dcmd_api::DcmdState UiTaskCmdReply::state() const {
+  return static_cast< dcmd_api::DcmdState >(state_);
 }
-inline void UiTaskCmdReply::set_state(dcmd::DcmdState value) {
-  GOOGLE_DCHECK(dcmd::DcmdState_IsValid(value));
+inline void UiTaskCmdReply::set_state(dcmd_api::DcmdState value) {
+  GOOGLE_DCHECK(dcmd_api::DcmdState_IsValid(value));
   set_has_state();
   state_ = value;
 }
@@ -12961,7 +12961,7 @@ inline ::std::string* UiTaskWatch::release_passwd() {
 
 // UiTaskWatchReply
 
-// required .dcmd.DcmdState watch_state = 1;
+// required .dcmd_api.DcmdState watch_state = 1;
 inline bool UiTaskWatchReply::has_watch_state() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
@@ -12975,11 +12975,11 @@ inline void UiTaskWatchReply::clear_watch_state() {
   watch_state_ = 0;
   clear_has_watch_state();
 }
-inline dcmd::DcmdState UiTaskWatchReply::watch_state() const {
-  return static_cast< dcmd::DcmdState >(watch_state_);
+inline dcmd_api::DcmdState UiTaskWatchReply::watch_state() const {
+  return static_cast< dcmd_api::DcmdState >(watch_state_);
 }
-inline void UiTaskWatchReply::set_watch_state(dcmd::DcmdState value) {
-  GOOGLE_DCHECK(dcmd::DcmdState_IsValid(value));
+inline void UiTaskWatchReply::set_watch_state(dcmd_api::DcmdState value) {
+  GOOGLE_DCHECK(dcmd_api::DcmdState_IsValid(value));
   set_has_watch_state();
   watch_state_ = value;
 }
@@ -13042,7 +13042,7 @@ inline ::std::string* UiTaskWatchReply::release_err() {
   }
 }
 
-// optional .dcmd.TaskState task_state = 3;
+// optional .dcmd_api.TaskState task_state = 3;
 inline bool UiTaskWatchReply::has_task_state() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
@@ -13056,16 +13056,16 @@ inline void UiTaskWatchReply::clear_task_state() {
   task_state_ = 0;
   clear_has_task_state();
 }
-inline dcmd::TaskState UiTaskWatchReply::task_state() const {
-  return static_cast< dcmd::TaskState >(task_state_);
+inline dcmd_api::TaskState UiTaskWatchReply::task_state() const {
+  return static_cast< dcmd_api::TaskState >(task_state_);
 }
-inline void UiTaskWatchReply::set_task_state(dcmd::TaskState value) {
-  GOOGLE_DCHECK(dcmd::TaskState_IsValid(value));
+inline void UiTaskWatchReply::set_task_state(dcmd_api::TaskState value) {
+  GOOGLE_DCHECK(dcmd_api::TaskState_IsValid(value));
   set_has_task_state();
   task_state_ = value;
 }
 
-// optional .dcmd.AppPoolState app_pool_state = 4;
+// optional .dcmd_api.AppPoolState app_pool_state = 4;
 inline bool UiTaskWatchReply::has_app_pool_state() const {
   return (_has_bits_[0] & 0x00000008u) != 0;
 }
@@ -13079,16 +13079,16 @@ inline void UiTaskWatchReply::clear_app_pool_state() {
   app_pool_state_ = 0;
   clear_has_app_pool_state();
 }
-inline dcmd::AppPoolState UiTaskWatchReply::app_pool_state() const {
-  return static_cast< dcmd::AppPoolState >(app_pool_state_);
+inline dcmd_api::AppPoolState UiTaskWatchReply::app_pool_state() const {
+  return static_cast< dcmd_api::AppPoolState >(app_pool_state_);
 }
-inline void UiTaskWatchReply::set_app_pool_state(dcmd::AppPoolState value) {
-  GOOGLE_DCHECK(dcmd::AppPoolState_IsValid(value));
+inline void UiTaskWatchReply::set_app_pool_state(dcmd_api::AppPoolState value) {
+  GOOGLE_DCHECK(dcmd_api::AppPoolState_IsValid(value));
   set_has_app_pool_state();
   app_pool_state_ = value;
 }
 
-// optional .dcmd.SubTaskState subtask_state = 5;
+// optional .dcmd_api.SubTaskState subtask_state = 5;
 inline bool UiTaskWatchReply::has_subtask_state() const {
   return (_has_bits_[0] & 0x00000010u) != 0;
 }
@@ -13102,11 +13102,11 @@ inline void UiTaskWatchReply::clear_subtask_state() {
   subtask_state_ = 0;
   clear_has_subtask_state();
 }
-inline dcmd::SubTaskState UiTaskWatchReply::subtask_state() const {
-  return static_cast< dcmd::SubTaskState >(subtask_state_);
+inline dcmd_api::SubTaskState UiTaskWatchReply::subtask_state() const {
+  return static_cast< dcmd_api::SubTaskState >(subtask_state_);
 }
-inline void UiTaskWatchReply::set_subtask_state(dcmd::SubTaskState value) {
-  GOOGLE_DCHECK(dcmd::SubTaskState_IsValid(value));
+inline void UiTaskWatchReply::set_subtask_state(dcmd_api::SubTaskState value) {
+  GOOGLE_DCHECK(dcmd_api::SubTaskState_IsValid(value));
   set_has_subtask_state();
   subtask_state_ = value;
 }
@@ -13224,35 +13224,35 @@ inline void UiTaskWatchReply::set_undo_subtask(::google::protobuf::int32 value) 
 
 // @@protoc_insertion_point(namespace_scope)
 
-}  // namespace dcmd
+}  // namespace dcmd_api
 
 #ifndef SWIG
 namespace google {
 namespace protobuf {
 
 template <>
-inline const EnumDescriptor* GetEnumDescriptor< dcmd::DcmdState>() {
-  return dcmd::DcmdState_descriptor();
+inline const EnumDescriptor* GetEnumDescriptor< dcmd_api::DcmdState>() {
+  return dcmd_api::DcmdState_descriptor();
 }
 template <>
-inline const EnumDescriptor* GetEnumDescriptor< dcmd::AgentState>() {
-  return dcmd::AgentState_descriptor();
+inline const EnumDescriptor* GetEnumDescriptor< dcmd_api::AgentState>() {
+  return dcmd_api::AgentState_descriptor();
 }
 template <>
-inline const EnumDescriptor* GetEnumDescriptor< dcmd::TaskState>() {
-  return dcmd::TaskState_descriptor();
+inline const EnumDescriptor* GetEnumDescriptor< dcmd_api::TaskState>() {
+  return dcmd_api::TaskState_descriptor();
 }
 template <>
-inline const EnumDescriptor* GetEnumDescriptor< dcmd::AppPoolState>() {
-  return dcmd::AppPoolState_descriptor();
+inline const EnumDescriptor* GetEnumDescriptor< dcmd_api::AppPoolState>() {
+  return dcmd_api::AppPoolState_descriptor();
 }
 template <>
-inline const EnumDescriptor* GetEnumDescriptor< dcmd::SubTaskState>() {
-  return dcmd::SubTaskState_descriptor();
+inline const EnumDescriptor* GetEnumDescriptor< dcmd_api::SubTaskState>() {
+  return dcmd_api::SubTaskState_descriptor();
 }
 template <>
-inline const EnumDescriptor* GetEnumDescriptor< dcmd::CmdType>() {
-  return dcmd::CmdType_descriptor();
+inline const EnumDescriptor* GetEnumDescriptor< dcmd_api::CmdType>() {
+  return dcmd_api::CmdType_descriptor();
 }
 
 }  // namespace google
