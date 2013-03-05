@@ -20,20 +20,20 @@ bool DcmdTss::readFile(char const* filename, string& file_content,
   FILE* fd = fopen(filename, "rb");
   off_t file_size = CwxFile::getFileSize(filename);
   if (-1 == file_size){
-    CwxCommon::snprintf(m_szBuf2K, 2048, "Failure to get file size, file:%s,
+    CwxCommon::snprintf(m_szBuf2K, kDcmd2kBufLen, "Failure to get file size, file:%s,
       errno=%d", filename, errno);
       err_msg = m_szBuf2K;
     return false;
   }
   if (!fd){
-    CwxCommon::snprintf(m_szBuf2K, 2048, "Failure to open file:%s, errno=%d",
+    CwxCommon::snprintf(m_szBuf2K, kDcmd2kBufLen, "Failure to open file:%s, errno=%d",
       filename, errno);
     err_msg = m_szBuf2K;
     return false;
   }
   char* szBuf = getBuf(file_size);
   if (file_size != fread(szBuf, 1, file_size, fd)){
-    CwxCommon::snprintf(m_szBuf2K, 2048, "Failure to read file:%s, errno=%d",
+    CwxCommon::snprintf(m_szBuf2K, kDcmd2kBufLen, "Failure to read file:%s, errno=%d",
       filename, errno);
     err_msg = m_szBuf2K;
     return false;

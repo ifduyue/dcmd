@@ -77,6 +77,9 @@ const uint32_t kMinLogFileMSize = 1;
 // 最大的日志文件大小
 const uint32_t kMaxLogFileMSize = 100;
 
+// 2k的buf空间
+const uint32_t kDcmd2kBufLen = 2048;
+
 // 字符型的【;】分割符
 const char  kItemSplitChar = ';';
 // 字符串型的【;】分隔符
