@@ -11,7 +11,7 @@ int DcmdAgentConfig::Init(string const& conf_file){
   }
   //load agent:home
   if (!parser_.getAttr("agent", "home", value) || !value.length()){
-    snprintf(err_2k, 2047, "Must set [agent:home] for running path.");
+    snprintf(err_2k, kDcmd2kBufLen, "Must set [agent:home] for running path.");
     return -1;
   }
   dcmd_remove_spam(value);
@@ -19,7 +19,7 @@ int DcmdAgentConfig::Init(string const& conf_file){
 	if ('/' != value[value.length()-1]) conf_.work_home_ +="/";
   //load agent:center
   if (!parser_.getAttr("agent", "center", value) || !value.length()){
-    snprintf(err_2k, 2047, "Must set [agent:center]");
+    snprintf(err_2k, kDcmd2kBufLen, "Must set [agent:center]");
     return -1;
   }
   conf_.centers_.clear();
@@ -34,7 +34,7 @@ int DcmdAgentConfig::Init(string const& conf_file){
     CwxCommon::trim(strHost);
     if (strHost.length()){
       if (!dcmd_parse_host_port(strHost, host)){
-        snprintf(err_2k, 2047, "Invalid center format:%s, it should be [host:port,host:port] format.",
+        snprintf(err_2k, kDcmd2kBufLen, "Invalid center format:%s, it should be [host:port,host:port] format.",
           strHost.c_str());
         return -1;
       }
@@ -53,7 +53,7 @@ int DcmdAgentConfig::Init(string const& conf_file){
     iter++;
   }
   if (!conf_.centers_.size()){
-    snprintf(err_2k, 2047, "Must set [agent:center] in format  [host:port;host:port]");
+    snprintf(err_2k, kDcmd2kBufLen, "Must set [agent:center] in format  [host:port;host:port]");
     return -1;
   }
   //load agent:log_file_num

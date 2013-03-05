@@ -60,7 +60,7 @@ class DcmdAgentConfig{
   // 配置解析器
 	CwxIniParse		         parser_;
   // 错误信息
-  char                   err_2k[2048];
+  char                   err_2k[kDcmd2kBufLen];
 };
 
 } // dcmd
