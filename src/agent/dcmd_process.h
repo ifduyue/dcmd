@@ -24,24 +24,25 @@ class DcmdProcess {
   virtual ~DcmdProcess() {
     if (process_args_) delete [] process_args_;
     if (process_envs_) delete [] process_envs_;
+    if (IsRuning()) Kill(true);
   }
 
  public:
   // 执行定义的进程。err_2k不能为空，而且空间不能小于2K
-  virtual bool Run(list<string> const& process_arg,
+  bool Run(list<string> const& process_arg,
       list<string> const& process_env, char* err_2k);
   // kill掉进程，若is_kill_child=true，则一并kill掉所有的相关child
-  virtual void Kill(bool is_kill_child);
+  void Kill(bool is_kill_child);
   // 阻塞方式wait进程退出。对于正常、异常退出，都可以通过status()获取进程退出值
   //err_2k不能为空，而且空间不能小于2K
   //返回值：-1：wait失败；1进程正常退出；2：进程异常退出
-  virtual int Wait(char* err_2k);
+  int Wait(char* err_2k);
   // 非阻塞方式wait进程退出。对于正常、异常退出，都可以通过status()获取进程退出值
   //err_2k不能为空，而且空间不能小于2K
   //返回值：-1：wait失败；0：进程还在运行；1：进程正常退出；2：进程异常退出
-  virtual int TryWait(char* err_2k);
+  int TryWait(char* err_2k);
   //进程是否运行
-  virtual bool IsRuning() const;
+  bool IsRuning() const;
   ///进程的exit()代码
   inline int return_code() const {
     return WEXITSTATUS(status_);
