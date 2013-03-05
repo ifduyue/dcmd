@@ -9,7 +9,6 @@
 #include <list>
 
 #include "dcmd_macro.h"
-#include "dcmd_def.h"
 
 namespace dcmd {
 class DcmdProcess {
