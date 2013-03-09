@@ -30,7 +30,7 @@ class DcmdProcess {
  public:
   // 执行定义的进程。err_2k不能为空，而且空间不能小于2K
   bool Run(list<string> const& process_arg,
-      list<string> const& process_env, char* err_2k);
+    list<string> const& process_env, char* err_2k, char const* user);
   // kill掉进程，若is_kill_child=true，则一并kill掉所有的相关child
   void Kill(bool is_kill_child);
   // 阻塞方式wait进程退出。对于正常、异常退出，都可以通过status()获取进程退出值

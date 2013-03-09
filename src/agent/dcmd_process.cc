@@ -2,16 +2,28 @@
 
 #include <errno.h>
 #include <stdio.h>
+#include <CwxCommon.h>
 
 // 此类的使用方式是针对一个exe创建一个process的实例，然后指定不同的参数
 // 环境变量运行。
 // 可以通过Wait等待进程的结束，也可以通过TryWait轮询等待进程的结束。
 namespace dcmd {
 bool DcmdProcess::Run(list<string> const& process_arg,
-    list<string> const& process_env, char* err_2k) {
+    list<string> const& process_env, char* err_2k, char const* user) {
   if (IsRuning()) return true;
   pid_t pid = -1;
   uint32_t index = 0;
+  uid_t self_uid = ::getuid();
+  struct passwd *user_info = NULL;
+  if (user) {
+    //检测用户
+    struct passwd *user_info = getpwnam(user);
+    if (!user_info){
+      if (err_2k) CwxCommon::snprintf(err_2k, kDcmd2kBufLen,
+        "user[%s] doesn't exist.", user);
+      return false;
+    }
+  }
   char const* sz_cmd_ptr = exec_file_.c_str();
   if (process_args_) delete [] process_args_;
   if (process_envs_) delete [] process_envs_;
@@ -35,7 +47,8 @@ bool DcmdProcess::Run(list<string> const& process_arg,
   process_envs_[index] = NULL;
   pid = ::vfork();
   if (-1 == pid) {
-    snprintf(err_2k, kDcmd2kBufLen, "Failure to fork process, errno=%d", errno);
+    if (err_2k) CwxCommon::snprintf(err_2k, kDcmd2kBufLen,
+      "Failure to fork process, errno=%d", errno);
     return false;
   }
   if (pid) {
@@ -47,6 +60,13 @@ bool DcmdProcess::Run(list<string> const& process_arg,
   }
   //子进程，并将进程设置为首进程
   if (-1 == setsid()) _exit(127);
+  if (user) {
+    if (self_uid != user_info->pw_uid) {
+      if (-1 == setuid(user->pw_uid)){
+        _exit(127);
+      }
+    }
+  }
   execve(sz_cmd_ptr, process_args_, process_envs_);
   // 若exec执行失败，则返回1
   _exit(127);
