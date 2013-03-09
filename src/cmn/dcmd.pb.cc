@@ -146,6 +146,7 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 const ::google::protobuf::Descriptor* UiTaskWatchReply_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   UiTaskWatchReply_reflection_ = NULL;
+const ::google::protobuf::EnumDescriptor* DcmdMsgType_descriptor_ = NULL;
 const ::google::protobuf::EnumDescriptor* DcmdState_descriptor_ = NULL;
 const ::google::protobuf::EnumDescriptor* AgentState_descriptor_ = NULL;
 const ::google::protobuf::EnumDescriptor* TaskState_descriptor_ = NULL;
@@ -925,12 +926,13 @@ void protobuf_AssignDesc_dcmd_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(UiTaskWatchReply));
-  DcmdState_descriptor_ = file->enum_type(0);
-  AgentState_descriptor_ = file->enum_type(1);
-  TaskState_descriptor_ = file->enum_type(2);
-  AppPoolState_descriptor_ = file->enum_type(3);
-  SubTaskState_descriptor_ = file->enum_type(4);
-  CmdType_descriptor_ = file->enum_type(5);
+  DcmdMsgType_descriptor_ = file->enum_type(0);
+  DcmdState_descriptor_ = file->enum_type(1);
+  AgentState_descriptor_ = file->enum_type(2);
+  TaskState_descriptor_ = file->enum_type(3);
+  AppPoolState_descriptor_ = file->enum_type(4);
+  SubTaskState_descriptor_ = file->enum_type(5);
+  CmdType_descriptor_ = file->enum_type(6);
 }
 
 namespace {
@@ -1232,29 +1234,60 @@ void protobuf_AddDesc_dcmd_2eproto() {
     "\026.dcmd_api.SubTaskState\022\027\n\017success_subta"
     "sk\030\006 \001(\005\022\026\n\016failed_subtask\030\007 \001(\005\022\025\n\rdoin"
     "g_subtask\030\010 \001(\005\022\026\n\016cancel_subtask\030\t \001(\005\022"
-    "\024\n\014undo_subtask\030\n \001(\005*$\n\tDcmdState\022\013\n\007SU"
-    "CCESS\020\000\022\n\n\006FAILED\020\001*c\n\nAgentState\022\026\n\022AGE"
-    "NT_UN_CONNECTED\020\000\022\021\n\rAGENT_UN_AUTH\020\001\022\025\n\021"
-    "AGENT_UN_REPORTED\020\002\022\023\n\017AGENT_CONNECTED\020\003"
-    "*\220\001\n\tTaskState\022\r\n\tTASK_INIT\020\000\022\016\n\nTASK_DO"
-    "ING\020\001\022\017\n\013TASK_PAUSED\020\002\022\017\n\013TASK_FAILED\020\003\022"
-    "\020\n\014TASK_FREEZED\020\004\022\021\n\rTASK_FINISHED\020\005\022\035\n\031"
-    "TASK_FINISHED_WITH_FAILED\020\006*\231\001\n\014AppPoolS"
-    "tate\022\021\n\rAPP_POOL_INIT\020\000\022\022\n\016APP_POOL_DOIN"
-    "G\020\001\022\023\n\017APP_POOL_PAUSED\020\002\022\023\n\017APP_POOL_FAI"
-    "LED\020\003\022\025\n\021APP_POOL_FINISHED\020\005\022!\n\035APP_POOL"
-    "_FINISHED_WITH_FAILED\020\006*s\n\014SubTaskState\022"
-    "\020\n\014SUBTASK_INIT\020\000\022\021\n\rSUBTASK_DOING\020\001\022\024\n\020"
-    "SUBTASK_FINISHED\020\002\022\022\n\016SUBTASK_FAILED\020\003\022\024"
-    "\n\020SUBTASK_CANCELED\020\004*\236\002\n\007CmdType\022\016\n\nSTAR"
-    "T_TASK\020\001\022\016\n\nPAUSE_TASK\020\002\022\017\n\013FINISH_TASK\020"
-    "\003\022\022\n\016CANCEL_SUBTASK\020\004\022\026\n\022CANCEL_APP_SUBT"
-    "ASK\020\005\022\r\n\tREDO_TASK\020\006\022\021\n\rREDO_APP_POOL\020\007\022"
-    "\020\n\014REDO_SUBTASK\020\010\022\027\n\023REDO_FAILED_SUBTASK"
-    "\020\t\022 \n\034REDO_FAILED_APP_POOL_SUBTASK\020\n\022\022\n\016"
-    "IGNORE_SUBTASK\020\013\022\017\n\013FREEZE_TASK\020\014\022\021\n\rUNF"
-    "REEZE_TASK\020\r\022\017\n\013UPDATE_TASK\020\016B\021\n\017com.cwi"
-    "nux.dcmd", 5008);
+    "\024\n\014undo_subtask\030\n \001(\005*\333\t\n\013DcmdMsgType\022\026\n"
+    "\022MTYPE_AGENT_REPORT\020\001\022\030\n\024MTYPE_AGENT_REP"
+    "ORT_R\020\002\022\030\n\024MTYPE_AGENT_HEATBEAT\020\003\022\036\n\032MTY"
+    "PE_CENTER_MASTER_NOTICE\020\005\022 \n\034MTYPE_CENTE"
+    "R_MASTER_NOTICE_R\020\006\022\034\n\030MTYPE_CENTER_SUBT"
+    "ASK_CMD\020\007\022\036\n\032MTYPE_CENTER_SUBTASK_CMD_R\020"
+    "\010\022\037\n\033MTYPE_AGENT_SUBTASK_PROCESS\020\t\022\"\n\036MT"
+    "YPE_AGENT_SUBTASK_CMD_RESULT\020\013\022$\n MTYPE_"
+    "AGENT_SUBTASK_CMD_RESULT_R\020\014\022\030\n\024MTYPE_CE"
+    "NTER_OPR_CMD\020\r\022\032\n\026MTYPE_CENTER_OPR_CMD_R"
+    "\020\016\022#\n\037MTYPE_CENTER_SUBTASK_CMD_OUTPUT\020\017\022"
+    "%\n!MTYPE_CENTER_SUBTASK_CMD_OUTPUT_R\020\020\022\035"
+    "\n\031MTYPE_CENTER_RUNNING_TASK\020\021\022\037\n\033MTYPE_C"
+    "ENTER_RUNNING_TASK_R\020\022\022\034\n\030MTYPE_CENTER_R"
+    "UNNING_OPR\020\023\022\036\n\032MTYPE_CENTER_RUNNING_OPR"
+    "_R\020\024\022\037\n\033MTYPE_UI_SUBTASK_CMD_OUTPUT\0203\022!\n"
+    "\035MTYPE_UI_SUBTASK_CMD_OUTPUT_R\0204\022\"\n\036MTYP"
+    "E_UI_AGENT_RUNNING_SUBTASK\0205\022$\n MTYPE_UI"
+    "_AGENT_RUNNING_SUBTASK_R\0206\022\036\n\032MTYPE_UI_A"
+    "GENT_RUNNING_OPR\0207\022 \n\034MTYPE_UI_AGENT_RUN"
+    "NING_OPR_R\0208\022\025\n\021MTYPE_UI_EXEC_OPR\0209\022\027\n\023M"
+    "TYPE_UI_EXEC_OPR_R\020:\022\027\n\023MTYPE_UI_AGENT_I"
+    "NFO\020;\022\031\n\025MTYPE_UI_AGENT_INFO_R\020<\022\032\n\026MTYP"
+    "E_UI_INVALID_AGENT\020=\022\034\n\030MTYPE_UI_INVALID"
+    "_AGENT_R\020>\022\033\n\027MTYPE_UI_TASK_TYPE_INFO\020\?\022"
+    "\035\n\031MTYPE_UI_TASK_TYPE_INFO_R\020@\022\025\n\021MTYPE_"
+    "UI_OPR_INFO\020A\022\027\n\023MTYPE_UI_OPR_INFO_R\020B\022\034"
+    "\n\030MTYPE_UI_SUBTASK_PROCESS\020C\022\036\n\032MTYPE_UI"
+    "_SUBTASK_PROCESS_R\020D\022\026\n\022MTYPE_UI_EXEC_TA"
+    "SK\020E\022\030\n\024MTYPE_UI_EXEC_TASK_R\020F\022\027\n\023MTYPE_"
+    "UI_WATCH_TASK\020G\022\031\n\025MTYPE_UI_WATCH_TASK_R"
+    "\020H\022\027\n\023MTYPE_INVALID_MTYPE\020e*$\n\tDcmdState"
+    "\022\013\n\007SUCCESS\020\000\022\n\n\006FAILED\020\001*c\n\nAgentState\022"
+    "\026\n\022AGENT_UN_CONNECTED\020\000\022\021\n\rAGENT_UN_AUTH"
+    "\020\001\022\025\n\021AGENT_UN_REPORTED\020\002\022\023\n\017AGENT_CONNE"
+    "CTED\020\003*\220\001\n\tTaskState\022\r\n\tTASK_INIT\020\000\022\016\n\nT"
+    "ASK_DOING\020\001\022\017\n\013TASK_PAUSED\020\002\022\017\n\013TASK_FAI"
+    "LED\020\003\022\020\n\014TASK_FREEZED\020\004\022\021\n\rTASK_FINISHED"
+    "\020\005\022\035\n\031TASK_FINISHED_WITH_FAILED\020\006*\231\001\n\014Ap"
+    "pPoolState\022\021\n\rAPP_POOL_INIT\020\000\022\022\n\016APP_POO"
+    "L_DOING\020\001\022\023\n\017APP_POOL_PAUSED\020\002\022\023\n\017APP_PO"
+    "OL_FAILED\020\003\022\025\n\021APP_POOL_FINISHED\020\005\022!\n\035AP"
+    "P_POOL_FINISHED_WITH_FAILED\020\006*s\n\014SubTask"
+    "State\022\020\n\014SUBTASK_INIT\020\000\022\021\n\rSUBTASK_DOING"
+    "\020\001\022\024\n\020SUBTASK_FINISHED\020\002\022\022\n\016SUBTASK_FAIL"
+    "ED\020\003\022\024\n\020SUBTASK_CANCELED\020\004*\236\002\n\007CmdType\022\016"
+    "\n\nSTART_TASK\020\001\022\016\n\nPAUSE_TASK\020\002\022\017\n\013FINISH"
+    "_TASK\020\003\022\022\n\016CANCEL_SUBTASK\020\004\022\026\n\022CANCEL_AP"
+    "P_SUBTASK\020\005\022\r\n\tREDO_TASK\020\006\022\021\n\rREDO_APP_P"
+    "OOL\020\007\022\020\n\014REDO_SUBTASK\020\010\022\027\n\023REDO_FAILED_S"
+    "UBTASK\020\t\022 \n\034REDO_FAILED_APP_POOL_SUBTASK"
+    "\020\n\022\022\n\016IGNORE_SUBTASK\020\013\022\017\n\013FREEZE_TASK\020\014\022"
+    "\021\n\rUNFREEZE_TASK\020\r\022\017\n\013UPDATE_TASK\020\016B\021\n\017c"
+    "om.cwinux.dcmd", 6254);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "dcmd.proto", &protobuf_RegisterTypes);
   KeyValue::default_instance_ = new KeyValue();
@@ -1352,6 +1385,59 @@ struct StaticDescriptorInitializer_dcmd_2eproto {
     protobuf_AddDesc_dcmd_2eproto();
   }
 } static_descriptor_initializer_dcmd_2eproto_;
+
+const ::google::protobuf::EnumDescriptor* DcmdMsgType_descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return DcmdMsgType_descriptor_;
+}
+bool DcmdMsgType_IsValid(int value) {
+  switch(value) {
+    case 1:
+    case 2:
+    case 3:
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+    case 9:
+    case 11:
+    case 12:
+    case 13:
+    case 14:
+    case 15:
+    case 16:
+    case 17:
+    case 18:
+    case 19:
+    case 20:
+    case 51:
+    case 52:
+    case 53:
+    case 54:
+    case 55:
+    case 56:
+    case 57:
+    case 58:
+    case 59:
+    case 60:
+    case 61:
+    case 62:
+    case 63:
+    case 64:
+    case 65:
+    case 66:
+    case 67:
+    case 68:
+    case 69:
+    case 70:
+    case 71:
+    case 72:
+    case 101:
+      return true;
+    default:
+      return false;
+  }
+}
 
 const ::google::protobuf::EnumDescriptor* DcmdState_descriptor() {
   protobuf_AssignDescriptorsOnce();
