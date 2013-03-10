@@ -41,6 +41,41 @@ class DcmdCenter{
   string          err_msg_;
 };
 
+class AgentTaskResult {
+ public:
+  AgentTaskResult() {
+    msg_taskid_ = 0;
+  }
+ public:
+  dcmd_api::AgentTaskResult    result_;
+  uint32_t                     msg_taskid_;
+};
+
+class AgentTaskCmd {
+ public:
+  AgentTaskCmd() {
+    msg_taskid_ = 0;
+  }
+ public:
+  dcmd_api::AgentTaskCmd       cmd_;
+  uint32_t                     msg_taskid_;
+};
+
+class AgentOprCmd {
+ public:
+   AgentOprCmd() {
+     msg_taskid_ = 0;
+     processor_ = NULL;
+   }
+   ~AgentOprCmd() {
+     if (processor_) delete processor_;
+   }
+ public:
+   dcmd_api::AgentOprCmd        cmd_;
+   uint32_t                     msg_taskid_;
+   // 操作当前执行的进程
+   DcmdProcess*                 processor_;
+};
 class DcmdAgentAppObj{
  public:
   DcmdAgentAppObj(){
@@ -54,11 +89,11 @@ class DcmdAgentAppObj{
   // 应用的名字
   string			                      app_name_;
   // 应用的命令
-  list<dcmd_api::AgentTaskCmd*>	    cmds_;
+  list<AgentTaskCmd*>	              cmds_;
   // 应用当前执行的进程
   DcmdProcess*                      processor_;
   // 当前正在运行的任务名字
-  dcmd_api::AgentTaskCmd*           running_cmd_;
+  AgentTaskCmd*                     running_cmd_;
 };
 
 }  // dcmd
