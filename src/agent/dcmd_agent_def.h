@@ -15,7 +15,6 @@ namespace dcmd {
 class DcmdCenter{
  public:
   DcmdCenter();
-
  public:
   // center的id
   uint32_t        host_id_;
@@ -45,20 +44,29 @@ class AgentTaskResult {
  public:
   AgentTaskResult() {
     msg_taskid_ = 0;
+    cmd_id_ = 0;
   }
  public:
   dcmd_api::AgentTaskResult    result_;
   uint32_t                     msg_taskid_;
+  uint64_t                     cmd_id_;
 };
 
 class AgentTaskCmd {
  public:
-  AgentTaskCmd() {
+  AgentSubtaskCmd() {
     msg_taskid_ = 0;
+    cmd_id_ = 0;
   }
  public:
+  // 通信接口的对象
   dcmd_api::AgentTaskCmd       cmd_;
+  // 消息的task id
   uint32_t                     msg_taskid_;
+  // subtask的命令id
+  uint64_t                     cmd_id_;
+  // 运行的环境变量信息
+  list<string>                 env_arg_;
 };
 
 class AgentOprCmd {
@@ -66,15 +74,28 @@ class AgentOprCmd {
    AgentOprCmd() {
      msg_taskid_ = 0;
      processor_ = NULL;
+     center_ = NULL;
+     opr_id_ = 0;
+     agent_opr_id_ = 0;
    }
    ~AgentOprCmd() {
      if (processor_) delete processor_;
    }
  public:
+   // 通信接口的对象
    dcmd_api::AgentOprCmd        cmd_;
+   // 通信的task id
    uint32_t                     msg_taskid_;
    // 操作当前执行的进程
    DcmdProcess*                 processor_;
+   // 发送操作的控制中心对象
+   DcmdCenter*                  center_;
+   // 操作的id
+   uint64_t                     opr_id_;
+   // agent自增操作id
+   uint64_t                     agent_opr_id_;
+   // 运行的环境变量信息
+   list<string>                 env_arg_;
 };
 class DcmdAgentAppObj{
  public:

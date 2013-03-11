@@ -8,8 +8,10 @@
 // 环境变量运行。
 // 可以通过Wait等待进程的结束，也可以通过TryWait轮询等待进程的结束。
 namespace dcmd {
-bool DcmdProcess::Run(list<string> const& process_arg,
-    list<string> const& process_env, char* err_2k, char const* user) {
+  bool DcmdProcess::Run(char const* user, 
+    list<string> const* process_arg,
+    list<string> const* process_env,
+    string& err_msg) {
   if (IsRuning()) return true;
   pid_t pid = -1;
   uint32_t index = 0;
@@ -19,32 +21,40 @@ bool DcmdProcess::Run(list<string> const& process_arg,
     //检测用户
     struct passwd *user_info = getpwnam(user);
     if (!user_info){
-      if (err_2k) CwxCommon::snprintf(err_2k, kDcmd2kBufLen,
-        "user[%s] doesn't exist.", user);
+      err_msg = string("user[") + user + string("] doesn't exist.");
       return false;
     }
   }
+  list<string>::const_iterator iter;
   char const* sz_cmd_ptr = exec_file_.c_str();
   if (process_args_) delete [] process_args_;
   if (process_envs_) delete [] process_envs_;
-  process_args_ = new char*[process_arg.size() + 2];
-  process_envs_ = new char*[process_env.size() + 1];
-  list<string>::const_iterator iter = process_arg.begin();
-  // 设置命令参数
-  process_args_[index++] = const_cast<char*>(sz_cmd_ptr);
-  while (iter != process_arg.end()) {
-    process_args_[index++] = const_cast<char*>(iter->c_str());
-    ++iter;
+  if (process_arg) {
+    process_args_ = new char*[process_arg->size() + 2];
+    iter = process_arg->begin();
+    // 设置命令参数
+    process_args_[index++] = const_cast<char*>(sz_cmd_ptr);
+    while (iter != process_arg->end()) {
+      process_args_[index++] = const_cast<char*>(iter->c_str());
+      ++iter;
+    }
+    process_args_[index] = NULL;
+  } else {
+    process_args_ = NULL;
   }
-  process_args_[index] = NULL;
-  // 设置环境变量
-  iter = process_env.begin();
-  index = 0;
-  while (iter != process_env.end()) {
-    process_envs_[index++] = const_cast<char*>(iter->c_str());
-    ++iter;
+  if (process_env) {
+    process_envs_ = new char*[process_env->size() + 1];
+    // 设置环境变量
+    iter = process_env->begin();
+    index = 0;
+    while (iter != process_env->end()) {
+      process_envs_[index++] = const_cast<char*>(iter->c_str());
+      ++iter;
+    }
+    process_envs_[index] = NULL;
+  } else {
+    process_env = NULL;
   }
-  process_envs_[index] = NULL;
   pid = ::vfork();
   if (-1 == pid) {
     if (err_2k) CwxCommon::snprintf(err_2k, kDcmd2kBufLen,
@@ -96,11 +106,13 @@ void DcmdProcess::Kill(bool is_kill_child) {
 }
 
 // 返回值：-1：wait失败；1进程正常退出；2：进程异常退出
-int DcmdProcess::Wait(char* err_2k) {
+int DcmdProcess::Wait(string& err_msg) {
   while (waitpid(pid_, &status_, 0) < 0) {
     if (errno != EINTR) {
       status_ = -1;
-      snprintf(err_2k, kDcmd2kBufLen, "failure to wait, errno=%d", errno);
+      char buf[16];
+      sprintf(buf, "%d", errno);
+      err_msg = string("failure to wait, errno=") + buf;
       return -1;
     }
   }
@@ -109,12 +121,14 @@ int DcmdProcess::Wait(char* err_2k) {
 }
 
 //返回值：-1：wait失败；0：进程还在运行；1：进程正常退出；2：进程异常退出
-int DcmdProcess::TryWait(char* err_2k) {
+int DcmdProcess::TryWait(string& err_msg) {
   int num_ret = waitpid(pid_, &status_, WNOHANG);
   if (0 > num_ret) {
     if (errno == EINTR) return 0;
     status_ = -1;
-    snprintf(err_2k, kDcmd2kBufLen, "failure to wait, errno=%d", errno);
+    char buf[16];
+    sprintf(buf, "%d", errno);
+    err_msg = string("failure to wait, errno=") + buf;
     return -1;
   } else if (0 == num_ret) {
     return 0;

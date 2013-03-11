@@ -28,19 +28,19 @@ class DcmdProcess {
   }
 
  public:
-  // 执行定义的进程。err_2k不能为空，而且空间不能小于2K
-  bool Run(list<string> const& process_arg,
-    list<string> const& process_env, char* err_2k, char const* user);
+  // 执行定义的进程.
+  bool Run(char const* user = NULL, 
+    list<string> const* process_arg = NULL,
+    list<string> const* process_env = NULL,
+    string& err_msg);
   // kill掉进程，若is_kill_child=true，则一并kill掉所有的相关child
   void Kill(bool is_kill_child);
   // 阻塞方式wait进程退出。对于正常、异常退出，都可以通过status()获取进程退出值
-  //err_2k不能为空，而且空间不能小于2K
   //返回值：-1：wait失败；1进程正常退出；2：进程异常退出
-  int Wait(char* err_2k);
+  int Wait(string& err_msg);
   // 非阻塞方式wait进程退出。对于正常、异常退出，都可以通过status()获取进程退出值
-  //err_2k不能为空，而且空间不能小于2K
   //返回值：-1：wait失败；0：进程还在运行；1：进程正常退出；2：进程异常退出
-  int TryWait(char* err_2k);
+  int TryWait(string& err_msg);
   //进程是否运行
   bool IsRuning() const;
   ///进程的exit()代码
