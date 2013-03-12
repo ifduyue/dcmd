@@ -65,8 +65,6 @@ class AgentTaskCmd {
   uint32_t                     msg_taskid_;
   // subtask的命令id
   uint64_t                     cmd_id_;
-  // 运行的环境变量信息
-  list<string>                 env_arg_;
 };
 
 class AgentOprCmd {
@@ -95,8 +93,6 @@ class AgentOprCmd {
    uint64_t                     opr_id_;
    // agent自增操作id
    uint64_t                     agent_opr_id_;
-   // 运行的环境变量信息
-   list<string>                 env_arg_;
    // 运行时间
    uint32_t                     begin_time_;
 };
