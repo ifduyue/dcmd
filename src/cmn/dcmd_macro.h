@@ -97,5 +97,16 @@ const char* const kAgentOprCmdOutputSubPath = "opr_output";
 const char* const kCenterTaskScriptSubPath = "task_script";
 // 操作的script存储目录
 const char* const kCenterOprScriptSubPath = "opr_script";
+
+// agent的subtask结果的state key
+const char* const kAgentTaskResultKeyState = "state";
+// agent的subtask结果的process key
+const char* const kAgentTaskResultKeyProcess = "process";
+// agent的subtask结果的err key
+const char* const kAgentTaskResultKeyErr = "err";
+// agent的subtask结果的state的success
+const char* const kAgentTaskResultKeyStateSuccess = "success";
+// agent的cancel cmd的task_type的名字
+const char* const kDcmdSysCmdCancel = "cancel";
 }  // dcmd
 #endif

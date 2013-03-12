@@ -77,6 +77,7 @@ class AgentOprCmd {
      center_ = NULL;
      opr_id_ = 0;
      agent_opr_id_ = 0;
+     begin_time_ = 0;
    }
    ~AgentOprCmd() {
      if (processor_) delete processor_;
@@ -96,6 +97,8 @@ class AgentOprCmd {
    uint64_t                     agent_opr_id_;
    // 运行的环境变量信息
    list<string>                 env_arg_;
+   // 运行时间
+   uint32_t                     begin_time_;
 };
 class DcmdAgentAppObj{
  public:
@@ -115,6 +118,8 @@ class DcmdAgentAppObj{
   DcmdProcess*                      processor_;
   // 当前正在运行的任务名字
   AgentTaskCmd*                     running_cmd_;
+  // 上次此app当前任务的process
+  string                            running_cmd_process_;
 };
 
 }  // dcmd

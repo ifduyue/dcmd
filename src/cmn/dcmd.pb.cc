@@ -284,9 +284,10 @@ void protobuf_AssignDesc_dcmd_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(AgentMasterNoticeReply));
   AgentTaskCmd_descriptor_ = file->message_type(7);
-  static const int AgentTaskCmd_offsets_[16] = {
+  static const int AgentTaskCmd_offsets_[17] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentTaskCmd, cmd_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentTaskCmd, task_type_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentTaskCmd, ctrl_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentTaskCmd, task_id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentTaskCmd, subtask_id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentTaskCmd, ip_),
@@ -1144,150 +1145,150 @@ void protobuf_AddDesc_dcmd_2eproto() {
     "ps\030\002 \003(\t\"k\n\020AgentReportReply\022\"\n\005state\030\001 "
     "\002(\0162\023.dcmd_api.DcmdState\022\013\n\003err\030\002 \001(\t\022\020\n"
     "\010heatbeat\030\003 \001(\005\022\024\n\014package_size\030\004 \001(\005\"%\n"
-    "\026AgentMasterNoticeReply\022\013\n\003cmd\030\001 \003(\t\"\303\002\n"
+    "\026AgentMasterNoticeReply\022\013\n\003cmd\030\001 \003(\t\"\321\002\n"
     "\014AgentTaskCmd\022\013\n\003cmd\030\001 \002(\t\022\021\n\ttask_type\030"
-    "\002 \002(\t\022\017\n\007task_id\030\003 \001(\t\022\022\n\nsubtask_id\030\004 \001"
-    "(\t\022\n\n\002ip\030\005 \001(\t\022\020\n\010app_name\030\006 \001(\t\022\020\n\010app_"
-    "pool\030\007 \001(\t\022\017\n\007app_ver\030\010 \001(\t\022\020\n\010app_repo\030"
-    "\t \001(\t\022\020\n\010app_path\030\n \001(\t\022\020\n\010app_user\030\013 \001("
-    "\t\022\024\n\014app_env_file\030\014 \001(\t\022\023\n\013app_env_ver\030\r"
-    " \001(\t\022\026\n\016output_process\030\016 \001(\010\022\016\n\006script\030\017"
-    " \001(\014\022$\n\010task_arg\030\020 \003(\0132\022.dcmd_api.KeyVal"
-    "ue\" \n\021AgentTaskCmdReply\022\013\n\003cmd\030\001 \002(\t\"K\n\023"
-    "AgentSubTaskProcess\022\017\n\007task_id\030\001 \002(\t\022\022\n\n"
-    "subtask_id\030\002 \002(\t\022\017\n\007process\030\003 \002(\t\"r\n\017Age"
-    "ntTaskResult\022\013\n\003cmd\030\001 \002(\t\022\017\n\007task_id\030\002 \002"
-    "(\t\022\022\n\nsubtask_id\030\003 \002(\t\022\017\n\007success\030\004 \002(\010\022"
-    "\013\n\003err\030\005 \001(\t\022\017\n\007process\030\006 \001(\t\"#\n\024AgentTa"
-    "skResultReply\022\013\n\003cmd\030\001 \002(\t\"\200\001\n\013AgentOprC"
-    "md\022\016\n\006opr_id\030\001 \002(\t\022\014\n\004name\030\002 \002(\t\022\020\n\010run_"
-    "user\030\003 \002(\t\022\017\n\007timeout\030\004 \002(\005\022\016\n\006script\030\005 "
-    "\002(\014\022 \n\004args\030\006 \003(\0132\022.dcmd_api.KeyValue\"_\n"
-    "\020AgentOprCmdReply\022\"\n\005state\030\001 \002(\0162\023.dcmd_"
-    "api.DcmdState\022\016\n\006result\030\002 \002(\014\022\013\n\003err\030\003 \002"
-    "(\t\022\n\n\002ip\030\004 \001(\t\"A\n\017AgentTaskOutput\022\022\n\nsub"
-    "task_id\030\001 \002(\t\022\016\n\006offset\030\002 \002(\005\022\n\n\002ip\030\003 \001("
-    "\t\"g\n\024AgentTaskOutputReply\022\"\n\005state\030\001 \002(\016"
-    "2\023.dcmd_api.DcmdState\022\016\n\006result\030\002 \002(\014\022\016\n"
-    "\006offset\030\003 \002(\005\022\013\n\003err\030\004 \001(\t\"0\n\020AgentRunni"
-    "ngTask\022\n\n\002ip\030\001 \001(\t\022\020\n\010app_name\030\002 \001(\t\"o\n\025"
-    "AgentRunningTaskReply\022\"\n\005state\030\001 \002(\0162\023.d"
-    "cmd_api.DcmdState\022%\n\006result\030\002 \003(\0132\025.dcmd"
-    "_api.SubTaskInfo\022\013\n\003err\030\003 \001(\t\"\035\n\017AgentRu"
-    "nningOpr\022\n\n\002ip\030\001 \001(\t\"j\n\024AgentRunningOprR"
-    "eply\022\"\n\005state\030\001 \002(\0162\023.dcmd_api.DcmdState"
-    "\022!\n\006result\030\002 \003(\0132\021.dcmd_api.OprInfo\022\013\n\003e"
-    "rr\030\003 \001(\t\"\036\n\nInvalidMsg\022\020\n\010msg_type\030\001 \002(\005"
-    "\"\\\n\014UiTaskOutput\022\022\n\nsubtask_id\030\001 \002(\t\022\n\n\002"
-    "ip\030\002 \002(\t\022\016\n\006offset\030\003 \002(\005\022\014\n\004user\030\004 \002(\t\022\016"
-    "\n\006passwd\030\005 \002(\t\"d\n\021UiTaskOutputReply\022\"\n\005s"
-    "tate\030\001 \002(\0162\023.dcmd_api.DcmdState\022\016\n\006resul"
-    "t\030\002 \002(\014\022\016\n\006offset\030\003 \002(\005\022\013\n\003err\030\004 \001(\t\"P\n\022"
-    "UiAgentRunningTask\022\n\n\002ip\030\001 \001(\t\022\020\n\010app_na"
-    "me\030\002 \001(\t\022\014\n\004user\030\003 \002(\t\022\016\n\006passwd\030\004 \002(\t\"q"
-    "\n\027UiAgentRunningTaskReply\022\"\n\005state\030\001 \002(\016"
-    "2\023.dcmd_api.DcmdState\022%\n\006result\030\002 \003(\0132\025."
-    "dcmd_api.SubTaskInfo\022\013\n\003err\030\003 \001(\t\"=\n\021UiA"
-    "gentRunningOpr\022\n\n\002ip\030\001 \001(\t\022\014\n\004user\030\002 \002(\t"
-    "\022\016\n\006passwd\030\003 \002(\t\"l\n\026UiAgentRunningOprRep"
-    "ly\022\"\n\005state\030\001 \002(\0162\023.dcmd_api.DcmdState\022!"
-    "\n\006result\030\002 \003(\0132\021.dcmd_api.OprInfo\022\013\n\003err"
-    "\030\003 \001(\t\"<\n\014UiExecOprCmd\022\016\n\006opr_id\030\001 \001(\t\022\014"
-    "\n\004user\030\002 \002(\t\022\016\n\006passwd\030\003 \002(\t\"p\n\021UiExecOp"
-    "rCmdReply\022\"\n\005state\030\001 \002(\0162\023.dcmd_api.Dcmd"
-    "State\022*\n\006result\030\002 \003(\0132\032.dcmd_api.AgentOp"
-    "rCmdReply\022\013\n\003err\030\003 \001(\t\"I\n\013UiAgentInfo\022\013\n"
-    "\003ips\030\001 \003(\t\022\017\n\007version\030\002 \002(\010\022\014\n\004user\030\003 \002("
-    "\t\022\016\n\006passwd\030\004 \002(\t\"k\n\020UiAgentInfoReply\022\"\n"
-    "\005state\030\001 \002(\0162\023.dcmd_api.DcmdState\022&\n\tage"
-    "ntinfo\030\002 \003(\0132\023.dcmd_api.AgentInfo\022\013\n\003err"
-    "\030\003 \001(\t\"2\n\022UiInvalidAgentInfo\022\014\n\004user\030\001 \002"
-    "(\t\022\016\n\006passwd\030\002 \002(\t\"r\n\027UiInvalidAgentInfo"
-    "Reply\022\"\n\005state\030\001 \002(\0162\023.dcmd_api.DcmdStat"
-    "e\022&\n\tagentinfo\030\002 \002(\0132\023.dcmd_api.AgentInf"
-    "o\022\013\n\003err\030\003 \001(\t\"C\n\020UiTaskScriptInfo\022\021\n\tta"
-    "sk_type\030\001 \002(\t\022\014\n\004user\030\002 \002(\t\022\016\n\006passwd\030\003 "
-    "\002(\t\"e\n\025UiTaskScriptInfoReply\022\"\n\005state\030\001 "
-    "\002(\0162\023.dcmd_api.DcmdState\022\016\n\006script\030\002 \001(\t"
-    "\022\013\n\003err\030\003 \001(\t\022\013\n\003md5\030\004 \001(\t\"A\n\017UiOprScrip"
-    "tInfo\022\020\n\010opr_file\030\001 \002(\t\022\014\n\004user\030\002 \002(\t\022\016\n"
-    "\006passwd\030\003 \002(\t\"d\n\024UiOprScriptInfoReply\022\"\n"
-    "\005state\030\001 \002(\0162\023.dcmd_api.DcmdState\022\016\n\006scr"
-    "ipt\030\002 \001(\t\022\013\n\003err\030\003 \001(\t\022\013\n\003md5\030\004 \001(\t\"F\n\022U"
-    "iAgentTaskProcess\022\022\n\nsubtask_id\030\001 \003(\t\022\014\n"
-    "\004user\030\002 \002(\t\022\016\n\006passwd\030\003 \002(\t\"[\n\027UiAgentTa"
-    "skProcessReply\022\"\n\005state\030\001 \002(\0162\023.dcmd_api"
-    ".DcmdState\022\017\n\007process\030\002 \003(\t\022\013\n\003err\030\003 \001(\t"
-    "\"\221\001\n\tUiTaskCmd\022\017\n\007task_id\030\001 \002(\t\022\022\n\nsubta"
-    "sk_id\030\002 \001(\t\022\n\n\002ip\030\003 \001(\t\022\020\n\010app_pool\030\004 \001("
-    "\t\022#\n\010cmd_type\030\005 \002(\0162\021.dcmd_api.CmdType\022\014"
-    "\n\004user\030\006 \002(\t\022\016\n\006passwd\030\007 \002(\t\"Q\n\016UiTaskCm"
-    "dReply\022\"\n\005state\030\001 \002(\0162\023.dcmd_api.DcmdSta"
-    "te\022\016\n\006cmd_id\030\002 \001(\t\022\013\n\003err\030\003 \001(\t\"b\n\013UiTas"
-    "kWatch\022\017\n\007task_id\030\001 \002(\t\022\020\n\010app_pool\030\002 \001("
-    "\t\022\022\n\nsubtask_id\030\003 \001(\t\022\014\n\004user\030\004 \002(\t\022\016\n\006p"
-    "asswd\030\005 \002(\t\"\307\002\n\020UiTaskWatchReply\022(\n\013watc"
-    "h_state\030\001 \002(\0162\023.dcmd_api.DcmdState\022\013\n\003er"
-    "r\030\002 \001(\t\022\'\n\ntask_state\030\003 \001(\0162\023.dcmd_api.T"
-    "askState\022.\n\016app_pool_state\030\004 \001(\0162\026.dcmd_"
-    "api.AppPoolState\022-\n\rsubtask_state\030\005 \001(\0162"
-    "\026.dcmd_api.SubTaskState\022\027\n\017success_subta"
-    "sk\030\006 \001(\005\022\026\n\016failed_subtask\030\007 \001(\005\022\025\n\rdoin"
-    "g_subtask\030\010 \001(\005\022\026\n\016cancel_subtask\030\t \001(\005\022"
-    "\024\n\014undo_subtask\030\n \001(\005*\333\t\n\013DcmdMsgType\022\026\n"
-    "\022MTYPE_AGENT_REPORT\020\001\022\030\n\024MTYPE_AGENT_REP"
-    "ORT_R\020\002\022\030\n\024MTYPE_AGENT_HEATBEAT\020\003\022\036\n\032MTY"
-    "PE_CENTER_MASTER_NOTICE\020\005\022 \n\034MTYPE_CENTE"
-    "R_MASTER_NOTICE_R\020\006\022\034\n\030MTYPE_CENTER_SUBT"
-    "ASK_CMD\020\007\022\036\n\032MTYPE_CENTER_SUBTASK_CMD_R\020"
-    "\010\022\037\n\033MTYPE_AGENT_SUBTASK_PROCESS\020\t\022\"\n\036MT"
-    "YPE_AGENT_SUBTASK_CMD_RESULT\020\013\022$\n MTYPE_"
-    "AGENT_SUBTASK_CMD_RESULT_R\020\014\022\030\n\024MTYPE_CE"
-    "NTER_OPR_CMD\020\r\022\032\n\026MTYPE_CENTER_OPR_CMD_R"
-    "\020\016\022#\n\037MTYPE_CENTER_SUBTASK_CMD_OUTPUT\020\017\022"
-    "%\n!MTYPE_CENTER_SUBTASK_CMD_OUTPUT_R\020\020\022\035"
-    "\n\031MTYPE_CENTER_RUNNING_TASK\020\021\022\037\n\033MTYPE_C"
-    "ENTER_RUNNING_TASK_R\020\022\022\034\n\030MTYPE_CENTER_R"
-    "UNNING_OPR\020\023\022\036\n\032MTYPE_CENTER_RUNNING_OPR"
-    "_R\020\024\022\037\n\033MTYPE_UI_SUBTASK_CMD_OUTPUT\0203\022!\n"
-    "\035MTYPE_UI_SUBTASK_CMD_OUTPUT_R\0204\022\"\n\036MTYP"
-    "E_UI_AGENT_RUNNING_SUBTASK\0205\022$\n MTYPE_UI"
-    "_AGENT_RUNNING_SUBTASK_R\0206\022\036\n\032MTYPE_UI_A"
-    "GENT_RUNNING_OPR\0207\022 \n\034MTYPE_UI_AGENT_RUN"
-    "NING_OPR_R\0208\022\025\n\021MTYPE_UI_EXEC_OPR\0209\022\027\n\023M"
-    "TYPE_UI_EXEC_OPR_R\020:\022\027\n\023MTYPE_UI_AGENT_I"
-    "NFO\020;\022\031\n\025MTYPE_UI_AGENT_INFO_R\020<\022\032\n\026MTYP"
-    "E_UI_INVALID_AGENT\020=\022\034\n\030MTYPE_UI_INVALID"
-    "_AGENT_R\020>\022\033\n\027MTYPE_UI_TASK_TYPE_INFO\020\?\022"
-    "\035\n\031MTYPE_UI_TASK_TYPE_INFO_R\020@\022\025\n\021MTYPE_"
-    "UI_OPR_INFO\020A\022\027\n\023MTYPE_UI_OPR_INFO_R\020B\022\034"
-    "\n\030MTYPE_UI_SUBTASK_PROCESS\020C\022\036\n\032MTYPE_UI"
-    "_SUBTASK_PROCESS_R\020D\022\026\n\022MTYPE_UI_EXEC_TA"
-    "SK\020E\022\030\n\024MTYPE_UI_EXEC_TASK_R\020F\022\027\n\023MTYPE_"
-    "UI_WATCH_TASK\020G\022\031\n\025MTYPE_UI_WATCH_TASK_R"
-    "\020H\022\027\n\023MTYPE_INVALID_MTYPE\020e*$\n\tDcmdState"
-    "\022\013\n\007SUCCESS\020\000\022\n\n\006FAILED\020\001*c\n\nAgentState\022"
-    "\026\n\022AGENT_UN_CONNECTED\020\000\022\021\n\rAGENT_UN_AUTH"
-    "\020\001\022\025\n\021AGENT_UN_REPORTED\020\002\022\023\n\017AGENT_CONNE"
-    "CTED\020\003*\220\001\n\tTaskState\022\r\n\tTASK_INIT\020\000\022\016\n\nT"
-    "ASK_DOING\020\001\022\017\n\013TASK_PAUSED\020\002\022\017\n\013TASK_FAI"
-    "LED\020\003\022\020\n\014TASK_FREEZED\020\004\022\021\n\rTASK_FINISHED"
-    "\020\005\022\035\n\031TASK_FINISHED_WITH_FAILED\020\006*\231\001\n\014Ap"
-    "pPoolState\022\021\n\rAPP_POOL_INIT\020\000\022\022\n\016APP_POO"
-    "L_DOING\020\001\022\023\n\017APP_POOL_PAUSED\020\002\022\023\n\017APP_PO"
-    "OL_FAILED\020\003\022\025\n\021APP_POOL_FINISHED\020\005\022!\n\035AP"
-    "P_POOL_FINISHED_WITH_FAILED\020\006*s\n\014SubTask"
-    "State\022\020\n\014SUBTASK_INIT\020\000\022\021\n\rSUBTASK_DOING"
-    "\020\001\022\024\n\020SUBTASK_FINISHED\020\002\022\022\n\016SUBTASK_FAIL"
-    "ED\020\003\022\024\n\020SUBTASK_CANCELED\020\004*\236\002\n\007CmdType\022\016"
-    "\n\nSTART_TASK\020\001\022\016\n\nPAUSE_TASK\020\002\022\017\n\013FINISH"
-    "_TASK\020\003\022\022\n\016CANCEL_SUBTASK\020\004\022\026\n\022CANCEL_AP"
-    "P_SUBTASK\020\005\022\r\n\tREDO_TASK\020\006\022\021\n\rREDO_APP_P"
-    "OOL\020\007\022\020\n\014REDO_SUBTASK\020\010\022\027\n\023REDO_FAILED_S"
-    "UBTASK\020\t\022 \n\034REDO_FAILED_APP_POOL_SUBTASK"
-    "\020\n\022\022\n\016IGNORE_SUBTASK\020\013\022\017\n\013FREEZE_TASK\020\014\022"
-    "\021\n\rUNFREEZE_TASK\020\r\022\017\n\013UPDATE_TASK\020\016B\021\n\017c"
-    "om.cwinux.dcmd", 6254);
+    "\002 \002(\t\022\014\n\004ctrl\030\003 \002(\010\022\017\n\007task_id\030\004 \001(\t\022\022\n\n"
+    "subtask_id\030\005 \001(\t\022\n\n\002ip\030\006 \001(\t\022\020\n\010app_name"
+    "\030\007 \001(\t\022\020\n\010app_pool\030\010 \001(\t\022\017\n\007app_ver\030\t \001("
+    "\t\022\020\n\010app_repo\030\n \001(\t\022\020\n\010app_path\030\013 \001(\t\022\020\n"
+    "\010app_user\030\014 \001(\t\022\024\n\014app_env_file\030\r \001(\t\022\023\n"
+    "\013app_env_ver\030\016 \001(\t\022\026\n\016output_process\030\017 \001"
+    "(\010\022\016\n\006script\030\020 \001(\014\022$\n\010task_arg\030\021 \003(\0132\022.d"
+    "cmd_api.KeyValue\" \n\021AgentTaskCmdReply\022\013\n"
+    "\003cmd\030\001 \002(\t\"K\n\023AgentSubTaskProcess\022\017\n\007tas"
+    "k_id\030\001 \002(\t\022\022\n\nsubtask_id\030\002 \002(\t\022\017\n\007proces"
+    "s\030\003 \002(\t\"r\n\017AgentTaskResult\022\013\n\003cmd\030\001 \002(\t\022"
+    "\017\n\007task_id\030\002 \002(\t\022\022\n\nsubtask_id\030\003 \002(\t\022\017\n\007"
+    "success\030\004 \002(\010\022\013\n\003err\030\005 \001(\t\022\017\n\007process\030\006 "
+    "\001(\t\"#\n\024AgentTaskResultReply\022\013\n\003cmd\030\001 \002(\t"
+    "\"\200\001\n\013AgentOprCmd\022\016\n\006opr_id\030\001 \002(\t\022\014\n\004name"
+    "\030\002 \002(\t\022\020\n\010run_user\030\003 \002(\t\022\017\n\007timeout\030\004 \002("
+    "\005\022\016\n\006script\030\005 \002(\014\022 \n\004args\030\006 \003(\0132\022.dcmd_a"
+    "pi.KeyValue\"_\n\020AgentOprCmdReply\022\"\n\005state"
+    "\030\001 \002(\0162\023.dcmd_api.DcmdState\022\016\n\006result\030\002 "
+    "\002(\014\022\013\n\003err\030\003 \002(\t\022\n\n\002ip\030\004 \001(\t\"A\n\017AgentTas"
+    "kOutput\022\022\n\nsubtask_id\030\001 \002(\t\022\016\n\006offset\030\002 "
+    "\002(\005\022\n\n\002ip\030\003 \001(\t\"g\n\024AgentTaskOutputReply\022"
+    "\"\n\005state\030\001 \002(\0162\023.dcmd_api.DcmdState\022\016\n\006r"
+    "esult\030\002 \002(\014\022\016\n\006offset\030\003 \002(\005\022\013\n\003err\030\004 \001(\t"
+    "\"0\n\020AgentRunningTask\022\n\n\002ip\030\001 \001(\t\022\020\n\010app_"
+    "name\030\002 \001(\t\"o\n\025AgentRunningTaskReply\022\"\n\005s"
+    "tate\030\001 \002(\0162\023.dcmd_api.DcmdState\022%\n\006resul"
+    "t\030\002 \003(\0132\025.dcmd_api.SubTaskInfo\022\013\n\003err\030\003 "
+    "\001(\t\"\035\n\017AgentRunningOpr\022\n\n\002ip\030\001 \001(\t\"j\n\024Ag"
+    "entRunningOprReply\022\"\n\005state\030\001 \002(\0162\023.dcmd"
+    "_api.DcmdState\022!\n\006result\030\002 \003(\0132\021.dcmd_ap"
+    "i.OprInfo\022\013\n\003err\030\003 \001(\t\"\036\n\nInvalidMsg\022\020\n\010"
+    "msg_type\030\001 \002(\005\"\\\n\014UiTaskOutput\022\022\n\nsubtas"
+    "k_id\030\001 \002(\t\022\n\n\002ip\030\002 \002(\t\022\016\n\006offset\030\003 \002(\005\022\014"
+    "\n\004user\030\004 \002(\t\022\016\n\006passwd\030\005 \002(\t\"d\n\021UiTaskOu"
+    "tputReply\022\"\n\005state\030\001 \002(\0162\023.dcmd_api.Dcmd"
+    "State\022\016\n\006result\030\002 \002(\014\022\016\n\006offset\030\003 \002(\005\022\013\n"
+    "\003err\030\004 \001(\t\"P\n\022UiAgentRunningTask\022\n\n\002ip\030\001"
+    " \001(\t\022\020\n\010app_name\030\002 \001(\t\022\014\n\004user\030\003 \002(\t\022\016\n\006"
+    "passwd\030\004 \002(\t\"q\n\027UiAgentRunningTaskReply\022"
+    "\"\n\005state\030\001 \002(\0162\023.dcmd_api.DcmdState\022%\n\006r"
+    "esult\030\002 \003(\0132\025.dcmd_api.SubTaskInfo\022\013\n\003er"
+    "r\030\003 \001(\t\"=\n\021UiAgentRunningOpr\022\n\n\002ip\030\001 \001(\t"
+    "\022\014\n\004user\030\002 \002(\t\022\016\n\006passwd\030\003 \002(\t\"l\n\026UiAgen"
+    "tRunningOprReply\022\"\n\005state\030\001 \002(\0162\023.dcmd_a"
+    "pi.DcmdState\022!\n\006result\030\002 \003(\0132\021.dcmd_api."
+    "OprInfo\022\013\n\003err\030\003 \001(\t\"<\n\014UiExecOprCmd\022\016\n\006"
+    "opr_id\030\001 \001(\t\022\014\n\004user\030\002 \002(\t\022\016\n\006passwd\030\003 \002"
+    "(\t\"p\n\021UiExecOprCmdReply\022\"\n\005state\030\001 \002(\0162\023"
+    ".dcmd_api.DcmdState\022*\n\006result\030\002 \003(\0132\032.dc"
+    "md_api.AgentOprCmdReply\022\013\n\003err\030\003 \001(\t\"I\n\013"
+    "UiAgentInfo\022\013\n\003ips\030\001 \003(\t\022\017\n\007version\030\002 \002("
+    "\010\022\014\n\004user\030\003 \002(\t\022\016\n\006passwd\030\004 \002(\t\"k\n\020UiAge"
+    "ntInfoReply\022\"\n\005state\030\001 \002(\0162\023.dcmd_api.Dc"
+    "mdState\022&\n\tagentinfo\030\002 \003(\0132\023.dcmd_api.Ag"
+    "entInfo\022\013\n\003err\030\003 \001(\t\"2\n\022UiInvalidAgentIn"
+    "fo\022\014\n\004user\030\001 \002(\t\022\016\n\006passwd\030\002 \002(\t\"r\n\027UiIn"
+    "validAgentInfoReply\022\"\n\005state\030\001 \002(\0162\023.dcm"
+    "d_api.DcmdState\022&\n\tagentinfo\030\002 \002(\0132\023.dcm"
+    "d_api.AgentInfo\022\013\n\003err\030\003 \001(\t\"C\n\020UiTaskSc"
+    "riptInfo\022\021\n\ttask_type\030\001 \002(\t\022\014\n\004user\030\002 \002("
+    "\t\022\016\n\006passwd\030\003 \002(\t\"e\n\025UiTaskScriptInfoRep"
+    "ly\022\"\n\005state\030\001 \002(\0162\023.dcmd_api.DcmdState\022\016"
+    "\n\006script\030\002 \001(\t\022\013\n\003err\030\003 \001(\t\022\013\n\003md5\030\004 \001(\t"
+    "\"A\n\017UiOprScriptInfo\022\020\n\010opr_file\030\001 \002(\t\022\014\n"
+    "\004user\030\002 \002(\t\022\016\n\006passwd\030\003 \002(\t\"d\n\024UiOprScri"
+    "ptInfoReply\022\"\n\005state\030\001 \002(\0162\023.dcmd_api.Dc"
+    "mdState\022\016\n\006script\030\002 \001(\t\022\013\n\003err\030\003 \001(\t\022\013\n\003"
+    "md5\030\004 \001(\t\"F\n\022UiAgentTaskProcess\022\022\n\nsubta"
+    "sk_id\030\001 \003(\t\022\014\n\004user\030\002 \002(\t\022\016\n\006passwd\030\003 \002("
+    "\t\"[\n\027UiAgentTaskProcessReply\022\"\n\005state\030\001 "
+    "\002(\0162\023.dcmd_api.DcmdState\022\017\n\007process\030\002 \003("
+    "\t\022\013\n\003err\030\003 \001(\t\"\221\001\n\tUiTaskCmd\022\017\n\007task_id\030"
+    "\001 \002(\t\022\022\n\nsubtask_id\030\002 \001(\t\022\n\n\002ip\030\003 \001(\t\022\020\n"
+    "\010app_pool\030\004 \001(\t\022#\n\010cmd_type\030\005 \002(\0162\021.dcmd"
+    "_api.CmdType\022\014\n\004user\030\006 \002(\t\022\016\n\006passwd\030\007 \002"
+    "(\t\"Q\n\016UiTaskCmdReply\022\"\n\005state\030\001 \002(\0162\023.dc"
+    "md_api.DcmdState\022\016\n\006cmd_id\030\002 \001(\t\022\013\n\003err\030"
+    "\003 \001(\t\"b\n\013UiTaskWatch\022\017\n\007task_id\030\001 \002(\t\022\020\n"
+    "\010app_pool\030\002 \001(\t\022\022\n\nsubtask_id\030\003 \001(\t\022\014\n\004u"
+    "ser\030\004 \002(\t\022\016\n\006passwd\030\005 \002(\t\"\307\002\n\020UiTaskWatc"
+    "hReply\022(\n\013watch_state\030\001 \002(\0162\023.dcmd_api.D"
+    "cmdState\022\013\n\003err\030\002 \001(\t\022\'\n\ntask_state\030\003 \001("
+    "\0162\023.dcmd_api.TaskState\022.\n\016app_pool_state"
+    "\030\004 \001(\0162\026.dcmd_api.AppPoolState\022-\n\rsubtas"
+    "k_state\030\005 \001(\0162\026.dcmd_api.SubTaskState\022\027\n"
+    "\017success_subtask\030\006 \001(\005\022\026\n\016failed_subtask"
+    "\030\007 \001(\005\022\025\n\rdoing_subtask\030\010 \001(\005\022\026\n\016cancel_"
+    "subtask\030\t \001(\005\022\024\n\014undo_subtask\030\n \001(\005*\333\t\n\013"
+    "DcmdMsgType\022\026\n\022MTYPE_AGENT_REPORT\020\001\022\030\n\024M"
+    "TYPE_AGENT_REPORT_R\020\002\022\030\n\024MTYPE_AGENT_HEA"
+    "TBEAT\020\003\022\036\n\032MTYPE_CENTER_MASTER_NOTICE\020\005\022"
+    " \n\034MTYPE_CENTER_MASTER_NOTICE_R\020\006\022\034\n\030MTY"
+    "PE_CENTER_SUBTASK_CMD\020\007\022\036\n\032MTYPE_CENTER_"
+    "SUBTASK_CMD_R\020\010\022\037\n\033MTYPE_AGENT_SUBTASK_P"
+    "ROCESS\020\t\022\"\n\036MTYPE_AGENT_SUBTASK_CMD_RESU"
+    "LT\020\013\022$\n MTYPE_AGENT_SUBTASK_CMD_RESULT_R"
+    "\020\014\022\030\n\024MTYPE_CENTER_OPR_CMD\020\r\022\032\n\026MTYPE_CE"
+    "NTER_OPR_CMD_R\020\016\022#\n\037MTYPE_CENTER_SUBTASK"
+    "_CMD_OUTPUT\020\017\022%\n!MTYPE_CENTER_SUBTASK_CM"
+    "D_OUTPUT_R\020\020\022\035\n\031MTYPE_CENTER_RUNNING_TAS"
+    "K\020\021\022\037\n\033MTYPE_CENTER_RUNNING_TASK_R\020\022\022\034\n\030"
+    "MTYPE_CENTER_RUNNING_OPR\020\023\022\036\n\032MTYPE_CENT"
+    "ER_RUNNING_OPR_R\020\024\022\037\n\033MTYPE_UI_SUBTASK_C"
+    "MD_OUTPUT\0203\022!\n\035MTYPE_UI_SUBTASK_CMD_OUTP"
+    "UT_R\0204\022\"\n\036MTYPE_UI_AGENT_RUNNING_SUBTASK"
+    "\0205\022$\n MTYPE_UI_AGENT_RUNNING_SUBTASK_R\0206"
+    "\022\036\n\032MTYPE_UI_AGENT_RUNNING_OPR\0207\022 \n\034MTYP"
+    "E_UI_AGENT_RUNNING_OPR_R\0208\022\025\n\021MTYPE_UI_E"
+    "XEC_OPR\0209\022\027\n\023MTYPE_UI_EXEC_OPR_R\020:\022\027\n\023MT"
+    "YPE_UI_AGENT_INFO\020;\022\031\n\025MTYPE_UI_AGENT_IN"
+    "FO_R\020<\022\032\n\026MTYPE_UI_INVALID_AGENT\020=\022\034\n\030MT"
+    "YPE_UI_INVALID_AGENT_R\020>\022\033\n\027MTYPE_UI_TAS"
+    "K_TYPE_INFO\020\?\022\035\n\031MTYPE_UI_TASK_TYPE_INFO"
+    "_R\020@\022\025\n\021MTYPE_UI_OPR_INFO\020A\022\027\n\023MTYPE_UI_"
+    "OPR_INFO_R\020B\022\034\n\030MTYPE_UI_SUBTASK_PROCESS"
+    "\020C\022\036\n\032MTYPE_UI_SUBTASK_PROCESS_R\020D\022\026\n\022MT"
+    "YPE_UI_EXEC_TASK\020E\022\030\n\024MTYPE_UI_EXEC_TASK"
+    "_R\020F\022\027\n\023MTYPE_UI_WATCH_TASK\020G\022\031\n\025MTYPE_U"
+    "I_WATCH_TASK_R\020H\022\027\n\023MTYPE_INVALID_MTYPE\020"
+    "e*$\n\tDcmdState\022\013\n\007SUCCESS\020\000\022\n\n\006FAILED\020\001*"
+    "c\n\nAgentState\022\026\n\022AGENT_UN_CONNECTED\020\000\022\021\n"
+    "\rAGENT_UN_AUTH\020\001\022\025\n\021AGENT_UN_REPORTED\020\002\022"
+    "\023\n\017AGENT_CONNECTED\020\003*\220\001\n\tTaskState\022\r\n\tTA"
+    "SK_INIT\020\000\022\016\n\nTASK_DOING\020\001\022\017\n\013TASK_PAUSED"
+    "\020\002\022\017\n\013TASK_FAILED\020\003\022\020\n\014TASK_FREEZED\020\004\022\021\n"
+    "\rTASK_FINISHED\020\005\022\035\n\031TASK_FINISHED_WITH_F"
+    "AILED\020\006*\231\001\n\014AppPoolState\022\021\n\rAPP_POOL_INI"
+    "T\020\000\022\022\n\016APP_POOL_DOING\020\001\022\023\n\017APP_POOL_PAUS"
+    "ED\020\002\022\023\n\017APP_POOL_FAILED\020\003\022\025\n\021APP_POOL_FI"
+    "NISHED\020\005\022!\n\035APP_POOL_FINISHED_WITH_FAILE"
+    "D\020\006*s\n\014SubTaskState\022\020\n\014SUBTASK_INIT\020\000\022\021\n"
+    "\rSUBTASK_DOING\020\001\022\024\n\020SUBTASK_FINISHED\020\002\022\022"
+    "\n\016SUBTASK_FAILED\020\003\022\024\n\020SUBTASK_CANCELED\020\004"
+    "*\236\002\n\007CmdType\022\016\n\nSTART_TASK\020\001\022\016\n\nPAUSE_TA"
+    "SK\020\002\022\017\n\013FINISH_TASK\020\003\022\022\n\016CANCEL_SUBTASK\020"
+    "\004\022\026\n\022CANCEL_APP_SUBTASK\020\005\022\r\n\tREDO_TASK\020\006"
+    "\022\021\n\rREDO_APP_POOL\020\007\022\020\n\014REDO_SUBTASK\020\010\022\027\n"
+    "\023REDO_FAILED_SUBTASK\020\t\022 \n\034REDO_FAILED_AP"
+    "P_POOL_SUBTASK\020\n\022\022\n\016IGNORE_SUBTASK\020\013\022\017\n\013"
+    "FREEZE_TASK\020\014\022\021\n\rUNFREEZE_TASK\020\r\022\017\n\013UPDA"
+    "TE_TASK\020\016B\021\n\017com.cwinux.dcmd", 6268);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "dcmd.proto", &protobuf_RegisterTypes);
   KeyValue::default_instance_ = new KeyValue();
@@ -3877,6 +3878,7 @@ void AgentMasterNoticeReply::Swap(AgentMasterNoticeReply* other) {
 #ifndef _MSC_VER
 const int AgentTaskCmd::kCmdFieldNumber;
 const int AgentTaskCmd::kTaskTypeFieldNumber;
+const int AgentTaskCmd::kCtrlFieldNumber;
 const int AgentTaskCmd::kTaskIdFieldNumber;
 const int AgentTaskCmd::kSubtaskIdFieldNumber;
 const int AgentTaskCmd::kIpFieldNumber;
@@ -3911,6 +3913,7 @@ void AgentTaskCmd::SharedCtor() {
   _cached_size_ = 0;
   cmd_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   task_type_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  ctrl_ = false;
   task_id_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   subtask_id_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   ip_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
@@ -4010,6 +4013,7 @@ void AgentTaskCmd::Clear() {
         task_type_->clear();
       }
     }
+    ctrl_ = false;
     if (has_task_id()) {
       if (task_id_ != &::google::protobuf::internal::kEmptyString) {
         task_id_->clear();
@@ -4035,13 +4039,13 @@ void AgentTaskCmd::Clear() {
         app_pool_->clear();
       }
     }
+  }
+  if (_has_bits_[8 / 32] & (0xffu << (8 % 32))) {
     if (has_app_ver()) {
       if (app_ver_ != &::google::protobuf::internal::kEmptyString) {
         app_ver_->clear();
       }
     }
-  }
-  if (_has_bits_[8 / 32] & (0xffu << (8 % 32))) {
     if (has_app_repo()) {
       if (app_repo_ != &::google::protobuf::internal::kEmptyString) {
         app_repo_->clear();
@@ -4114,12 +4118,28 @@ bool AgentTaskCmd::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(26)) goto parse_task_id;
+        if (input->ExpectTag(24)) goto parse_ctrl;
         break;
       }
       
-      // optional string task_id = 3;
+      // required bool ctrl = 3;
       case 3: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_ctrl:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &ctrl_)));
+          set_has_ctrl();
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(34)) goto parse_task_id;
+        break;
+      }
+      
+      // optional string task_id = 4;
+      case 4: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
          parse_task_id:
@@ -4131,12 +4151,12 @@ bool AgentTaskCmd::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(34)) goto parse_subtask_id;
+        if (input->ExpectTag(42)) goto parse_subtask_id;
         break;
       }
       
-      // optional string subtask_id = 4;
-      case 4: {
+      // optional string subtask_id = 5;
+      case 5: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
          parse_subtask_id:
@@ -4148,12 +4168,12 @@ bool AgentTaskCmd::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(42)) goto parse_ip;
+        if (input->ExpectTag(50)) goto parse_ip;
         break;
       }
       
-      // optional string ip = 5;
-      case 5: {
+      // optional string ip = 6;
+      case 6: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
          parse_ip:
@@ -4165,12 +4185,12 @@ bool AgentTaskCmd::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(50)) goto parse_app_name;
+        if (input->ExpectTag(58)) goto parse_app_name;
         break;
       }
       
-      // optional string app_name = 6;
-      case 6: {
+      // optional string app_name = 7;
+      case 7: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
          parse_app_name:
@@ -4182,12 +4202,12 @@ bool AgentTaskCmd::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(58)) goto parse_app_pool;
+        if (input->ExpectTag(66)) goto parse_app_pool;
         break;
       }
       
-      // optional string app_pool = 7;
-      case 7: {
+      // optional string app_pool = 8;
+      case 8: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
          parse_app_pool:
@@ -4199,12 +4219,12 @@ bool AgentTaskCmd::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(66)) goto parse_app_ver;
+        if (input->ExpectTag(74)) goto parse_app_ver;
         break;
       }
       
-      // optional string app_ver = 8;
-      case 8: {
+      // optional string app_ver = 9;
+      case 9: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
          parse_app_ver:
@@ -4216,12 +4236,12 @@ bool AgentTaskCmd::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(74)) goto parse_app_repo;
+        if (input->ExpectTag(82)) goto parse_app_repo;
         break;
       }
       
-      // optional string app_repo = 9;
-      case 9: {
+      // optional string app_repo = 10;
+      case 10: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
          parse_app_repo:
@@ -4233,12 +4253,12 @@ bool AgentTaskCmd::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(82)) goto parse_app_path;
+        if (input->ExpectTag(90)) goto parse_app_path;
         break;
       }
       
-      // optional string app_path = 10;
-      case 10: {
+      // optional string app_path = 11;
+      case 11: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
          parse_app_path:
@@ -4250,12 +4270,12 @@ bool AgentTaskCmd::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(90)) goto parse_app_user;
+        if (input->ExpectTag(98)) goto parse_app_user;
         break;
       }
       
-      // optional string app_user = 11;
-      case 11: {
+      // optional string app_user = 12;
+      case 12: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
          parse_app_user:
@@ -4267,12 +4287,12 @@ bool AgentTaskCmd::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(98)) goto parse_app_env_file;
+        if (input->ExpectTag(106)) goto parse_app_env_file;
         break;
       }
       
-      // optional string app_env_file = 12;
-      case 12: {
+      // optional string app_env_file = 13;
+      case 13: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
          parse_app_env_file:
@@ -4284,12 +4304,12 @@ bool AgentTaskCmd::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(106)) goto parse_app_env_ver;
+        if (input->ExpectTag(114)) goto parse_app_env_ver;
         break;
       }
       
-      // optional string app_env_ver = 13;
-      case 13: {
+      // optional string app_env_ver = 14;
+      case 14: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
          parse_app_env_ver:
@@ -4301,12 +4321,12 @@ bool AgentTaskCmd::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(112)) goto parse_output_process;
+        if (input->ExpectTag(120)) goto parse_output_process;
         break;
       }
       
-      // optional bool output_process = 14;
-      case 14: {
+      // optional bool output_process = 15;
+      case 15: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
          parse_output_process:
@@ -4317,12 +4337,12 @@ bool AgentTaskCmd::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(122)) goto parse_script;
+        if (input->ExpectTag(130)) goto parse_script;
         break;
       }
       
-      // optional bytes script = 15;
-      case 15: {
+      // optional bytes script = 16;
+      case 16: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
          parse_script:
@@ -4331,12 +4351,12 @@ bool AgentTaskCmd::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(130)) goto parse_task_arg;
+        if (input->ExpectTag(138)) goto parse_task_arg;
         break;
       }
       
-      // repeated .dcmd_api.KeyValue task_arg = 16;
-      case 16: {
+      // repeated .dcmd_api.KeyValue task_arg = 17;
+      case 17: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
          parse_task_arg:
@@ -4345,7 +4365,7 @@ bool AgentTaskCmd::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(130)) goto parse_task_arg;
+        if (input->ExpectTag(138)) goto parse_task_arg;
         if (input->ExpectAtEnd()) return true;
         break;
       }
@@ -4386,120 +4406,125 @@ void AgentTaskCmd::SerializeWithCachedSizes(
       2, this->task_type(), output);
   }
   
-  // optional string task_id = 3;
+  // required bool ctrl = 3;
+  if (has_ctrl()) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(3, this->ctrl(), output);
+  }
+  
+  // optional string task_id = 4;
   if (has_task_id()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->task_id().data(), this->task_id().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     ::google::protobuf::internal::WireFormatLite::WriteString(
-      3, this->task_id(), output);
+      4, this->task_id(), output);
   }
   
-  // optional string subtask_id = 4;
+  // optional string subtask_id = 5;
   if (has_subtask_id()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->subtask_id().data(), this->subtask_id().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     ::google::protobuf::internal::WireFormatLite::WriteString(
-      4, this->subtask_id(), output);
+      5, this->subtask_id(), output);
   }
   
-  // optional string ip = 5;
+  // optional string ip = 6;
   if (has_ip()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->ip().data(), this->ip().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     ::google::protobuf::internal::WireFormatLite::WriteString(
-      5, this->ip(), output);
+      6, this->ip(), output);
   }
   
-  // optional string app_name = 6;
+  // optional string app_name = 7;
   if (has_app_name()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->app_name().data(), this->app_name().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     ::google::protobuf::internal::WireFormatLite::WriteString(
-      6, this->app_name(), output);
+      7, this->app_name(), output);
   }
   
-  // optional string app_pool = 7;
+  // optional string app_pool = 8;
   if (has_app_pool()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->app_pool().data(), this->app_pool().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     ::google::protobuf::internal::WireFormatLite::WriteString(
-      7, this->app_pool(), output);
+      8, this->app_pool(), output);
   }
   
-  // optional string app_ver = 8;
+  // optional string app_ver = 9;
   if (has_app_ver()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->app_ver().data(), this->app_ver().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     ::google::protobuf::internal::WireFormatLite::WriteString(
-      8, this->app_ver(), output);
+      9, this->app_ver(), output);
   }
   
-  // optional string app_repo = 9;
+  // optional string app_repo = 10;
   if (has_app_repo()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->app_repo().data(), this->app_repo().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     ::google::protobuf::internal::WireFormatLite::WriteString(
-      9, this->app_repo(), output);
+      10, this->app_repo(), output);
   }
   
-  // optional string app_path = 10;
+  // optional string app_path = 11;
   if (has_app_path()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->app_path().data(), this->app_path().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     ::google::protobuf::internal::WireFormatLite::WriteString(
-      10, this->app_path(), output);
+      11, this->app_path(), output);
   }
   
-  // optional string app_user = 11;
+  // optional string app_user = 12;
   if (has_app_user()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->app_user().data(), this->app_user().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     ::google::protobuf::internal::WireFormatLite::WriteString(
-      11, this->app_user(), output);
+      12, this->app_user(), output);
   }
   
-  // optional string app_env_file = 12;
+  // optional string app_env_file = 13;
   if (has_app_env_file()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->app_env_file().data(), this->app_env_file().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     ::google::protobuf::internal::WireFormatLite::WriteString(
-      12, this->app_env_file(), output);
+      13, this->app_env_file(), output);
   }
   
-  // optional string app_env_ver = 13;
+  // optional string app_env_ver = 14;
   if (has_app_env_ver()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->app_env_ver().data(), this->app_env_ver().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     ::google::protobuf::internal::WireFormatLite::WriteString(
-      13, this->app_env_ver(), output);
+      14, this->app_env_ver(), output);
   }
   
-  // optional bool output_process = 14;
+  // optional bool output_process = 15;
   if (has_output_process()) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(14, this->output_process(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteBool(15, this->output_process(), output);
   }
   
-  // optional bytes script = 15;
+  // optional bytes script = 16;
   if (has_script()) {
     ::google::protobuf::internal::WireFormatLite::WriteBytes(
-      15, this->script(), output);
+      16, this->script(), output);
   }
   
-  // repeated .dcmd_api.KeyValue task_arg = 16;
+  // repeated .dcmd_api.KeyValue task_arg = 17;
   for (int i = 0; i < this->task_arg_size(); i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      16, this->task_arg(i), output);
+      17, this->task_arg(i), output);
   }
   
   if (!unknown_fields().empty()) {
@@ -4530,133 +4555,138 @@ void AgentTaskCmd::SerializeWithCachedSizes(
         2, this->task_type(), target);
   }
   
-  // optional string task_id = 3;
+  // required bool ctrl = 3;
+  if (has_ctrl()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(3, this->ctrl(), target);
+  }
+  
+  // optional string task_id = 4;
   if (has_task_id()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->task_id().data(), this->task_id().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        3, this->task_id(), target);
+        4, this->task_id(), target);
   }
   
-  // optional string subtask_id = 4;
+  // optional string subtask_id = 5;
   if (has_subtask_id()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->subtask_id().data(), this->subtask_id().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        4, this->subtask_id(), target);
+        5, this->subtask_id(), target);
   }
   
-  // optional string ip = 5;
+  // optional string ip = 6;
   if (has_ip()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->ip().data(), this->ip().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        5, this->ip(), target);
+        6, this->ip(), target);
   }
   
-  // optional string app_name = 6;
+  // optional string app_name = 7;
   if (has_app_name()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->app_name().data(), this->app_name().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        6, this->app_name(), target);
+        7, this->app_name(), target);
   }
   
-  // optional string app_pool = 7;
+  // optional string app_pool = 8;
   if (has_app_pool()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->app_pool().data(), this->app_pool().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        7, this->app_pool(), target);
+        8, this->app_pool(), target);
   }
   
-  // optional string app_ver = 8;
+  // optional string app_ver = 9;
   if (has_app_ver()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->app_ver().data(), this->app_ver().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        8, this->app_ver(), target);
+        9, this->app_ver(), target);
   }
   
-  // optional string app_repo = 9;
+  // optional string app_repo = 10;
   if (has_app_repo()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->app_repo().data(), this->app_repo().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        9, this->app_repo(), target);
+        10, this->app_repo(), target);
   }
   
-  // optional string app_path = 10;
+  // optional string app_path = 11;
   if (has_app_path()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->app_path().data(), this->app_path().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        10, this->app_path(), target);
+        11, this->app_path(), target);
   }
   
-  // optional string app_user = 11;
+  // optional string app_user = 12;
   if (has_app_user()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->app_user().data(), this->app_user().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        11, this->app_user(), target);
+        12, this->app_user(), target);
   }
   
-  // optional string app_env_file = 12;
+  // optional string app_env_file = 13;
   if (has_app_env_file()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->app_env_file().data(), this->app_env_file().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        12, this->app_env_file(), target);
+        13, this->app_env_file(), target);
   }
   
-  // optional string app_env_ver = 13;
+  // optional string app_env_ver = 14;
   if (has_app_env_ver()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->app_env_ver().data(), this->app_env_ver().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        13, this->app_env_ver(), target);
+        14, this->app_env_ver(), target);
   }
   
-  // optional bool output_process = 14;
+  // optional bool output_process = 15;
   if (has_output_process()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(14, this->output_process(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(15, this->output_process(), target);
   }
   
-  // optional bytes script = 15;
+  // optional bytes script = 16;
   if (has_script()) {
     target =
       ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
-        15, this->script(), target);
+        16, this->script(), target);
   }
   
-  // repeated .dcmd_api.KeyValue task_arg = 16;
+  // repeated .dcmd_api.KeyValue task_arg = 17;
   for (int i = 0; i < this->task_arg_size(); i++) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
-        16, this->task_arg(i), target);
+        17, this->task_arg(i), target);
   }
   
   if (!unknown_fields().empty()) {
@@ -4684,99 +4714,104 @@ int AgentTaskCmd::ByteSize() const {
           this->task_type());
     }
     
-    // optional string task_id = 3;
+    // required bool ctrl = 3;
+    if (has_ctrl()) {
+      total_size += 1 + 1;
+    }
+    
+    // optional string task_id = 4;
     if (has_task_id()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::StringSize(
           this->task_id());
     }
     
-    // optional string subtask_id = 4;
+    // optional string subtask_id = 5;
     if (has_subtask_id()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::StringSize(
           this->subtask_id());
     }
     
-    // optional string ip = 5;
+    // optional string ip = 6;
     if (has_ip()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::StringSize(
           this->ip());
     }
     
-    // optional string app_name = 6;
+    // optional string app_name = 7;
     if (has_app_name()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::StringSize(
           this->app_name());
     }
     
-    // optional string app_pool = 7;
+    // optional string app_pool = 8;
     if (has_app_pool()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::StringSize(
           this->app_pool());
     }
     
-    // optional string app_ver = 8;
+  }
+  if (_has_bits_[8 / 32] & (0xffu << (8 % 32))) {
+    // optional string app_ver = 9;
     if (has_app_ver()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::StringSize(
           this->app_ver());
     }
     
-  }
-  if (_has_bits_[8 / 32] & (0xffu << (8 % 32))) {
-    // optional string app_repo = 9;
+    // optional string app_repo = 10;
     if (has_app_repo()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::StringSize(
           this->app_repo());
     }
     
-    // optional string app_path = 10;
+    // optional string app_path = 11;
     if (has_app_path()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::StringSize(
           this->app_path());
     }
     
-    // optional string app_user = 11;
+    // optional string app_user = 12;
     if (has_app_user()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::StringSize(
           this->app_user());
     }
     
-    // optional string app_env_file = 12;
+    // optional string app_env_file = 13;
     if (has_app_env_file()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::StringSize(
           this->app_env_file());
     }
     
-    // optional string app_env_ver = 13;
+    // optional string app_env_ver = 14;
     if (has_app_env_ver()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::StringSize(
           this->app_env_ver());
     }
     
-    // optional bool output_process = 14;
+    // optional bool output_process = 15;
     if (has_output_process()) {
       total_size += 1 + 1;
     }
     
-    // optional bytes script = 15;
+    // optional bytes script = 16;
     if (has_script()) {
-      total_size += 1 +
+      total_size += 2 +
         ::google::protobuf::internal::WireFormatLite::BytesSize(
           this->script());
     }
     
   }
-  // repeated .dcmd_api.KeyValue task_arg = 16;
+  // repeated .dcmd_api.KeyValue task_arg = 17;
   total_size += 2 * this->task_arg_size();
   for (int i = 0; i < this->task_arg_size(); i++) {
     total_size +=
@@ -4817,6 +4852,9 @@ void AgentTaskCmd::MergeFrom(const AgentTaskCmd& from) {
     if (from.has_task_type()) {
       set_task_type(from.task_type());
     }
+    if (from.has_ctrl()) {
+      set_ctrl(from.ctrl());
+    }
     if (from.has_task_id()) {
       set_task_id(from.task_id());
     }
@@ -4832,11 +4870,11 @@ void AgentTaskCmd::MergeFrom(const AgentTaskCmd& from) {
     if (from.has_app_pool()) {
       set_app_pool(from.app_pool());
     }
+  }
+  if (from._has_bits_[8 / 32] & (0xffu << (8 % 32))) {
     if (from.has_app_ver()) {
       set_app_ver(from.app_ver());
     }
-  }
-  if (from._has_bits_[8 / 32] & (0xffu << (8 % 32))) {
     if (from.has_app_repo()) {
       set_app_repo(from.app_repo());
     }
@@ -4875,7 +4913,7 @@ void AgentTaskCmd::CopyFrom(const AgentTaskCmd& from) {
 }
 
 bool AgentTaskCmd::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
+  if ((_has_bits_[0] & 0x00000007) != 0x00000007) return false;
   
   for (int i = 0; i < task_arg_size(); i++) {
     if (!this->task_arg(i).IsInitialized()) return false;
@@ -4887,6 +4925,7 @@ void AgentTaskCmd::Swap(AgentTaskCmd* other) {
   if (other != this) {
     std::swap(cmd_, other->cmd_);
     std::swap(task_type_, other->task_type_);
+    std::swap(ctrl_, other->ctrl_);
     std::swap(task_id_, other->task_id_);
     std::swap(subtask_id_, other->subtask_id_);
     std::swap(ip_, other->ip_);
