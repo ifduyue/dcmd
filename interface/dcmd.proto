@@ -130,20 +130,21 @@ message AgentMasterNoticeReply {
 message AgentTaskCmd {
 required  string   cmd=1;
 required  string   task_type=2;
-optional  string   task_id=3;
-optional  string   subtask_id=4;
-optional  string   ip=5;
-optional  string   app_name=6;
-optional  string   app_pool=7;
-optional  string   app_ver=8;
-optional  string   app_repo=9;
-optional  string   app_path=10;
-optional  string   app_user=11;
-optional  string   app_env_file=12;
-optional  string   app_env_ver=13;
-optional  bool     output_process=14;
-optional  bytes    script=15;
-repeated  KeyValue task_arg=16;
+required  bool     ctrl=3;
+optional  string   task_id=4;
+optional  string   subtask_id=5;
+optional  string   ip=6;
+optional  string   app_name=7;
+optional  string   app_pool=8;
+optional  string   app_ver=9;
+optional  string   app_repo=10;
+optional  string   app_path=11;
+optional  string   app_user=12;
+optional  string   app_env_file=13;
+optional  string   app_env_ver=14;
+optional  bool     output_process=15;
+optional  bytes    script=16;
+repeated  KeyValue task_arg=17;
 }
 
 message AgentTaskCmdReply {
