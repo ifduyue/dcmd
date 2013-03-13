@@ -56,6 +56,9 @@ const uint32_t kMinHeatbeatSecond = 1;
 // 任务指令执行的stdout、stderr的输出日志保存时间
 const uint32_t kTaskCmdOutputExpireDay = 7;
 
+// agent最多同时运行的opr的数量
+const uint32_t kAgentMaxConcurrentOprNum = 50;
+
 // 在Agent最多并行运行的操作指令脚本数量
 const uint32_t kMaxAgentOprNum = 30;
 // Center的master切换时间间隔

@@ -38,12 +38,12 @@ class DcmdProcess {
   // 阻塞方式wait进程退出。对于正常、异常退出，都可以通过status()获取进程退出值
   //返回值：-1：wait失败；1进程正常退出；2：进程异常退出
   int Wait(string& err_msg);
-  // 非阻塞方式wait进程退出。对于正常、异常退出，都可以通过status()获取进程退出值
-  //返回值：-1：wait失败；0：进程还在运行；1：进程正常退出；2：进程异常退出
+  //  非阻塞方式wait进程退出。对于正常、异常退出，都可以通过status()获取进程退出值
+  // 返回值：-1：wait失败；0：进程还在运行；1：进程正常退出；2：进程异常退出
   int TryWait(string& err_msg);
-  //进程是否运行
+  // 进程是否运行
   bool IsRuning() const;
-  ///进程的exit()代码
+  // 进程的exit()代码
   inline int return_code() const {
     return WEXITSTATUS(status_);
   }

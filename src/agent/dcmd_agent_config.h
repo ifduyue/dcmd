@@ -31,7 +31,7 @@ class DcmdAgentConfigData{
   bool                 is_debug_;
 };
 
-///配置文件加载对象
+// 配置文件加载对象
 class DcmdAgentConfig{
  public:
   DcmdAgentConfig(){

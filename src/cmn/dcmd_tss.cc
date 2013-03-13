@@ -1,12 +1,11 @@
 ﻿#include "dcmd_tss.h"
 
 namespace dcmd {
-///构造函数
+
 DcmdTss::~DcmdTss(){
   if (data_buf_) delete []data_buf_;
 }
 
-///tss初始话
 int DcmdTss::Init(){
   if (data_buf_) delete [] data_buf_;
   data_buf_ = NULL;
@@ -14,7 +13,6 @@ int DcmdTss::Init(){
   return 0;
 }
 
-///读取文件内容
 bool DcmdTss::readFile(char const* filename, string& file_content,
   string& err_msg){
   FILE* fd = fopen(filename, "rb");

@@ -11,7 +11,7 @@
 #include "dcmd_process.h"
 
 namespace dcmd {
-  ///控制中心对象
+  // 控制中心对象
 class DcmdCenter{
  public:
   DcmdCenter();
