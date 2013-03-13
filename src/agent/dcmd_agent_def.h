@@ -57,6 +57,7 @@ class AgentTaskCmd {
   AgentSubtaskCmd() {
     msg_taskid_ = 0;
     cmd_id_ = 0;
+    last_check_process_time_ = 0;
   }
  public:
   // 通信接口的对象
@@ -65,6 +66,10 @@ class AgentTaskCmd {
   uint32_t                     msg_taskid_;
   // subtask的命令id
   uint64_t                     cmd_id_;
+  // 上一次检查进度的时间点
+  uint32_t                     last_check_process_time_;
+  // 上一次检查的process
+  string                       last_check_process_;
 };
 
 class AgentOprCmd {
