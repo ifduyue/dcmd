@@ -1293,7 +1293,7 @@ int DcmdAgentApp::MasterChanged(CwxMsgBlock*& msg, DcmdCenter* center) {
   // 获取所有命令id
   map<uint64_t, AgentTaskCmd*>::iterator subtask_iter = subtask_map_.begin();
   while(subtask_iter != subtask_map_.end()) {
-    *reply.add_cmd()= (*subtask_iter)->cmd_.cmd();
+    *reply.add_cmd()= subtask_iter->second->cmd_.cmd();
     ++subtask_iter;
   }
   if (!reply.SerializeToString(&proto_str_)) {
@@ -1434,7 +1434,7 @@ bool DcmdAgentApp::ExecOprCmd(AgentOprCmd* opr_cmd, string& err_msg, DcmdProcess
   string script_file;
   GetOprRunScriptShellFile(opr_cmd->cmd_.name(), opr_cmd->agent_opr_id_, script_file);
   process = new DcmdProcess(script_file);
-  if (!process->Run(opr_cmd->cmd_.has_run_user() && opr_cmd->cmd_.has_run_user().length()?opr_cmd->cmd_.run_user().c_str():NULL,
+  if (!process->Run(opr_cmd->cmd_.has_run_user() && opr_cmd->cmd_.run_user().length()?opr_cmd->cmd_.run_user().c_str():NULL,
     NULL,
     NULL,
     &err_msg))
@@ -1494,12 +1494,12 @@ int DcmdAgentApp::SubTaskCmdRecieved(CwxMsgBlock*& msg, DcmdCenter* center) {
   if (!cmd->cmd_.ParseFromString(proto_str_)) {
     delete cmd;
     snprintf(err_2k_, 2047, "Failure to unpack subtask cmd, center:%s",
-      master_.host_name_.c_str());
+      master_->host_name_.c_str());
     CWX_ERROR((err_2k_));
     return -1;
   }
   cmd->msg_taskid_ = msg->event().getMsgHeader().getTaskId();
-  cmd->cmd_id_ = strtoull(cmd->cmd_.cmd().c_str());
+  cmd->cmd_id_ = strtoull(cmd->cmd_.cmd().c_str(), NULL, 10);
   if (subtask_map_.find(cmd->cmd_id_) != subtask_map_.end()){// 指令存在
     CWX_ERROR(("cmd_id[%s] from %s exists.ignore it.",
       cmd->cmd_.cmd().c_str(),
@@ -1558,7 +1558,7 @@ int DcmdAgentApp::SubTaskResultReply(CwxMsgBlock*& msg, DcmdCenter* center){
   proto_str_.assign(msg->rd_ptr(), msg->length());
   if (!result_reply.ParseFromString(proto_str_)) {
     snprintf(err_2k_, 2047, "Failure to unpack subtask-result reply, center:%s",
-      master_.host_name_.c_str());
+      master_->host_name_.c_str());
     CWX_ERROR((err_2k_));
     return -1;
   }
@@ -1600,7 +1600,7 @@ int DcmdAgentApp::OprCmdRecieved(CwxMsgBlock*& msg, DcmdCenter* center) {
   proto_str_.assign(msg->rd_ptr(), msg->length());
   if (!opr_cmd->cmd_.ParseFromString(proto_str_)) {
     snprintf(err_2k_, 2047, "Failure to unpack opr-cmd, center:%s",
-      center.host_name_.c_str());
+      center->host_name_.c_str());
     CWX_ERROR((err_2k_));
     return -1;
   }
@@ -1727,7 +1727,7 @@ int DcmdAgentApp::GetRunTaskRecieved(CwxMsgBlock*& msg, DcmdCenter* center) {
           subtask->set_cmd_id(iter->second->running_cmd_->cmd_.cmd());
         }
       }
-      subtask_iter = iter->second->cmds_;
+      subtask_iter = iter->second->cmds_.begin();
       while(subtask_iter != iter->second->cmds_.end()) {
         subtask = reply.add_result();
         if (subtask) {
@@ -1754,7 +1754,7 @@ int DcmdAgentApp::GetRunTaskRecieved(CwxMsgBlock*& msg, DcmdCenter* center) {
           subtask->set_cmd_id(iter->second->running_cmd_->cmd_.cmd());
         }
       }
-      subtask_iter = iter->second->cmds_;
+      subtask_iter = iter->second->cmds_.begin();
       while(subtask_iter != iter->second->cmds_.end()) {
         subtask = reply.add_result();
         if (subtask) {
@@ -1816,7 +1816,6 @@ int DcmdAgentApp::GetRunOprRecieved(CwxMsgBlock*& msg, DcmdCenter* center) {
   map<uint64_t, AgentOprCmd*>::iterator iter = opr_cmd_map_.begin();
   dcmd_api::OprInfo* opr_info = NULL;
   string start_time;
-  char buf[64];
   while(iter != opr_cmd_map_.end()){
     opr_info = reply.add_result();
     if (opr_info) {
@@ -1863,7 +1862,7 @@ void DcmdAgentApp::CheckSubTaskProcess(DcmdAgentAppObj* app_obj) {
   string out_process;
   string err_msg;
   if (!master_) return ;
-  if (app_obj->running_cmd_->last_check_process_time_ + 1 < time(NULL)) return;
+  if (app_obj->running_cmd_->last_check_process_time_ + 1 < (uint32_t)time(NULL)) return;
   // 获取进度信息
   LoadSubTaskResult(app_obj->app_name_,
     app_obj->running_cmd_->cmd_.task_type(),
@@ -1881,7 +1880,7 @@ void DcmdAgentApp::CheckSubTaskProcess(DcmdAgentAppObj* app_obj) {
   reply.set_process(out_process);
   if (!reply.SerializeToString(&proto_str_)) {
     CWX_ERROR(("Failure to pack process reply message."));
-    return -1; // 关闭连接
+    return;
   }
   CwxMsgHead head(0, 0, dcmd_api::MTYPE_AGENT_SUBTASK_PROCESS,
     0, proto_str_.length());
@@ -1960,7 +1959,7 @@ void DcmdAgentApp::LoadSubTaskResult(string const& app_name,
   }
   if (!is_success){
     // 获取err信息
-    if (!CwxCommon::findKey(items, DCMD_KEY_kAgentTaskResultKeyErrERR, item)){
+    if (!CwxCommon::findKey(items, kAgentTaskResultKeyErr, item)){
       CwxCommon::snprintf(err_2k_, 2047, "No [%s] key in result file:%s", 
         kAgentTaskResultKeyErr, out_filename.c_str());
       err_msg = err_2k_;
