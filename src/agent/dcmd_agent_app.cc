@@ -986,11 +986,11 @@ void DcmdAgentApp::ExecCtrlTaskCmd(DcmdAgentAppObj* app_obj) {
           (*iter)->cmd_.subtask_id().c_str(),
           (*iter)->cmd_.task_type().c_str()));
         result = new AgentTaskResult();
-        FillTaskResult(**iter, result, "", false, "Unknown ctrl type");
-        wait_send_result_map_[result->m_ullCmdId] = result;
+        FillTaskResult(**iter, *result, "", false, "Unknown ctrl type");
+        wait_send_result_map_[result->cmd_id_] = result;
         app_obj->cmds_.erase(iter);
       }
-      iter = app_obj->m_cmds.begin();
+      iter = app_obj->m_cmds_.begin();
       continue;
     }
     iter++;
@@ -1097,7 +1097,7 @@ bool DcmdAgentApp::PrepareSubtaskRunEnv(AgentTaskCmd* cmd, string& err_msg) {
       err_msg = err_2k_;
       break;
     }
-    if (!OutputShellEnv(fd, "APP_VERSION", cmd->cmd_.app_ver(), err_2k_, script_sh_file.c_str()){
+    if (!OutputShellEnv(fd, "APP_VERSION", cmd->cmd_.app_ver(), err_2k_, script_sh_file.c_str())){
       err_msg = err_2k_;
       break;
     }
@@ -1139,7 +1139,7 @@ bool DcmdAgentApp::PrepareSubtaskRunEnv(AgentTaskCmd* cmd, string& err_msg) {
       err_msg = err_2k_;
       break;
     }
-    if (fprintf(fd, "export APP_PROCESS=%d\n", cmd->cmd_.output_process()?1:0) < 0){
+    if (fprintf(fd, "export APP_PROCESS=%d\n", cmd->cmd_.output_process()?1:0) < 0)){
       CwxCommon::snprintf(err_2k_, 2047, "Failure to write run shell file:%s, errno=%d",
         script_sh_file.c_str(), errno);
       err_msg = err_2k_;
@@ -1213,7 +1213,7 @@ bool DcmdAgentApp::ExecSubTaskCmd(AgentTaskCmd* cmd, string& err_msg,
   string script_file;
   GetTaskRunScriptFile(cmd->cmd_.app_name(), cmd->cmd_.task_type(), script_file);
   process = new DcmdProcess(script_file);
-  if (!process->Run(cmd->cmd_.has_app_user() && cmd->cmd_->app_user().length()?cmd->cmd_->app_user().c_str():NULL,
+  if (!process->Run(cmd->cmd_.has_app_user() && cmd->cmd_.app_user().length()?cmd->cmd_.app_user().c_str():NULL,
     NULL,
     NULL,
     &err_msg)) {
@@ -1230,7 +1230,7 @@ int DcmdAgentApp::ReportReply(CwxMsgBlock*& msg, DcmdCenter* center) {
   if (!report_reply.ParseFromString(proto_str_)) {
     // 解析失败认为是通信错误，关闭连接
     snprintf(err_2k_, 2047,
-      "Failure to unpack report reply msg, center:%s", center->host_name.c_str());
+      "Failure to unpack report reply msg, center:%s", center->host_name_.c_str());
     center->is_auth_ = false;
     center->err_msg_ = err_2k_;
     CWX_ERROR((err_2k_));
@@ -1238,14 +1238,14 @@ int DcmdAgentApp::ReportReply(CwxMsgBlock*& msg, DcmdCenter* center) {
   }
   if (dcmd_api::SUCCESS != report_reply.state()){
     snprintf(err_2k_, 2047, "Failure to auth to center:%s, err:%s",
-      center->host_name.c_str(), report_reply.err().c_str());
+      center->host_name_.c_str(), report_reply.err().c_str());
     center->is_auth_ = false;
     center->err_msg_ = err_2k_;
     CWX_ERROR((err_2k_));
     return -1;
   }else{
     CWX_INFO(("Success to report center:%s, heatbeat:%u, psize:%u",
-      center->host_name.c_str(),
+      center->host_name_.c_str(),
       report_reply.heatbeat(),
       report_reply.package_size()));
   }
@@ -1293,14 +1293,14 @@ int DcmdAgentApp::MasterChanged(CwxMsgBlock*& msg, DcmdCenter* center) {
   CwxMsgBlock* block = NULL;
   dcmd_api::AgentMasterNoticeReply reply;
   // 获取所有命令id
-  map<uint64_t, AgentTaskCmd*>::iterator iter = subtask_map_.begin();
-  while(iter != subtask_map_.end()) {
-    *reply.add_cmd()= (*iter)->cmd_.cmd();
-    ++iter;
+  map<uint64_t, AgentTaskCmd*>::iterator subtask_iter = subtask_map_.begin();
+  while(subtask_iter != subtask_map_.end()) {
+    *reply.add_cmd()= (*subtask_iter)->cmd_.cmd();
+    ++subtask_iter;
   }
   if (!reply.SerializeToString(&proto_str_)) {
     CWX_ERROR(("Failure to serialize master-change reply, center:%s  conn_id:%d",
-      master_->host_name.c_str(),
+      master_->host_name_.c_str(),
       master_->conn_id_));
     return -1; // 关闭连接
   }
@@ -1309,7 +1309,7 @@ int DcmdAgentApp::MasterChanged(CwxMsgBlock*& msg, DcmdCenter* center) {
     dcmd_api::MTYPE_CENTER_MASTER_NOTICE_R,
     msg->event().getMsgHeader().getTaskId(),
     proto_str_.length());
-  block = CwxMsgBlockAlloc::pack(head, proto_str_->c_str(), proto_str_.length());
+  block = CwxMsgBlockAlloc::pack(head, proto_str_.c_str(), proto_str_.length());
   if (!block) {
     CWX_ERROR(("Failure to pack master-change reply package for no memory"));
     exit(0);
@@ -1438,7 +1438,7 @@ bool DcmdAgentApp::ExecOprCmd(AgentOprCmd* opr_cmd, string& err_msg, DcmdProcess
   string script_file;
   GetOprRunScriptShellFile(opr_cmd->cmd_.name(), opr_cmd->agent_opr_id_, script_file);
   process = new DcmdProcess(script_file);
-  if (!process->Run(opr_cmd->cmd_.has_run_user() && opr_cmd->cmd_->has_run_user().length()?opr_cmd->cmd_->run_user().c_str():NULL,
+  if (!process->Run(opr_cmd->cmd_.has_run_user() && opr_cmd->cmd_.has_run_user().length()?opr_cmd->cmd_.run_user().c_str():NULL,
     NULL,
     NULL,
     &err_msg))
@@ -1489,7 +1489,7 @@ int DcmdAgentApp::SubTaskCmdRecieved(CwxMsgBlock*& msg, DcmdCenter* center) {
   if (center  != master_){
     CWX_ERROR(("Receive subtask cmd from the slave center: %s, master center is:%s, close it",
       center->host_name_.c_str(),
-      master_->host_name.c_str()));
+      master_->host_name_.c_str()));
     return -1;
   }
   // 解析消息
@@ -1515,9 +1515,9 @@ int DcmdAgentApp::SubTaskCmdRecieved(CwxMsgBlock*& msg, DcmdCenter* center) {
   }
   CWX_INFO(("Receive command from center:%s, cmd_id=%s, subtask=%s, task_id=%d",
     center->host_name_.c_str(),
-    cmd->cmd_->cmd().c_str(),
-    cmd->cmd_->subtask_id().c_str(),
-    cmd->cmd_->task_id().c_str()));
+    cmd->cmd_.cmd().c_str(),
+    cmd->cmd_.subtask_id().c_str(),
+    cmd->cmd_.task_id().c_str()));
 
   //回复控制中心
   CwxMsgBlock* block = NULL;
@@ -1558,7 +1558,7 @@ int DcmdAgentApp::SubTaskResultReply(CwxMsgBlock*& msg, DcmdCenter* center){
     return -1;
   }
   // 解析消息
-  AgentTaskResultReply result_reply;
+  dcmd_api::AgentTaskResultReply result_reply;
   proto_str_.assign(msg->rd_ptr(), msg->length());
   if (!result_reply.ParseFromString(proto_str_)) {
     snprintf(err_2k_, 2047, "Failure to unpack subtask-result reply, center:%s",
