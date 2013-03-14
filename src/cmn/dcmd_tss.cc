@@ -13,7 +13,7 @@ int DcmdTss::Init(){
   return 0;
 }
 
-bool DcmdTss::readFile(char const* filename, string& file_content,
+bool DcmdTss::ReadFile(char const* filename, string& file_content,
   string& err_msg){
   FILE* fd = fopen(filename, "rb");
   off_t file_size = CwxFile::getFileSize(filename);
@@ -29,7 +29,7 @@ bool DcmdTss::readFile(char const* filename, string& file_content,
     err_msg = m_szBuf2K;
     return false;
   }
-  char* szBuf = getBuf(file_size);
+  char* szBuf = GetBuf(file_size);
   if (file_size != fread(szBuf, 1, file_size, fd)){
     CwxCommon::snprintf(m_szBuf2K, kDcmd2kBufLen, "Failure to read file:%s, errno=%d",
       filename, errno);
