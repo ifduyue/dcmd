@@ -73,7 +73,7 @@ bool DcmdProcess::Run(char const* user,
   if (-1 == setsid()) _exit(127);
   if (user) {
     if (self_uid != user_info->pw_uid) {
-      if (-1 == setuid(user->pw_uid)){
+      if (-1 == setuid(user_info->pw_uid)){
         _exit(127);
       }
     }
