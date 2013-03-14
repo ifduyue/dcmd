@@ -990,7 +990,7 @@ void DcmdAgentApp::ExecCtrlTaskCmd(DcmdAgentAppObj* app_obj) {
         wait_send_result_map_[result->cmd_id_] = result;
         app_obj->cmds_.erase(iter);
       }
-      iter = app_obj->m_cmds_.begin();
+      iter = app_obj->cmds_.begin();
       continue;
     }
     iter++;
@@ -1127,34 +1127,32 @@ bool DcmdAgentApp::PrepareSubtaskRunEnv(AgentTaskCmd* cmd, string& err_msg) {
       err_msg = err_2k_;
       break;
     }
-    if (fprintf(fd, "export APP_ENV_FILE=%s\n", env_file.c_str(), env_file.length()) < 0){
+    if (fprintf(fd, "export APP_ENV_FILE=%s\n", env_file.c_str()) < 0){
       CwxCommon::snprintf(err_2k_, 2047, "Failure to write run shell file:%s, errno=%d",
         script_sh_file.c_str(), errno);
       err_msg = err_2k_;
       break;
     }
-    if (fprintf(fd, "export APP_OUT_FILE=%s\n", output_file.c_str(), output_file.length()) < 0){
+    if (fprintf(fd, "export APP_OUT_FILE=%s\n", output_file.c_str()) < 0){
       CwxCommon::snprintf(err_2k_, 2047, "Failure to write run shell file:%s, errno=%d",
         script_sh_file.c_str(), errno);
       err_msg = err_2k_;
       break;
     }
-    if (fprintf(fd, "export APP_PROCESS=%d\n", cmd->cmd_.output_process()?1:0) < 0)){
+    if (fprintf(fd, "export APP_PROCESS=%d\n", cmd->cmd_.output_process()?1:0) < 0){
       CwxCommon::snprintf(err_2k_, 2047, "Failure to write run shell file:%s, errno=%d",
         script_sh_file.c_str(), errno);
       err_msg = err_2k_;
       break;
     }
     int arg_num = cmd->cmd_.task_arg_size();
-    dcmd_api::KeyValue*  kv = NULL;
     string key;
     string value;
     int i = 0;
     for (i=0; i<arg_num; i++) {
-      kv = cmd->cmd_.task_arg(i);
-      key = string("APP_TASK_") + kv->key();
+      key = string("APP_TASK_") + cmd->cmd_.task_arg(i).key();
       dcmd_remove_spam(key);
-      value = kv->value();
+      value = cmd->cmd_.task_arg(i).value();
       if (!OutputShellEnv(fd, key.c_str(), value, err_2k_, script_sh_file.c_str())){
         err_msg = err_2k_;
         break;
@@ -1360,12 +1358,10 @@ bool DcmdAgentApp::PrepareOprRunEnv(AgentOprCmd* opr_cmd, string& err_msg) {
     int arg_num = opr_cmd->cmd_.args_size();
     string key;
     string value;
-    dcmd_api::KeyValue* kv = NULL;
     int i = 0;
     for (i=0; i<arg_num; i++) {
-      kv = opr_cmd->cmd_.args(i);
-      key = kv->key();
-      value = kv->value();
+      key = opr_cmd->cmd_.args(i).key();
+      value = opr_cmd->cmd_.args(i).value();
       dcmd_remove_spam(key);
       dcmd_remove_spam(value);
       if (fprintf(fd, "export %s%s='%s'\n", kAgentOprArgPrex, key.c_str(), value.c_str()) < 0) {
