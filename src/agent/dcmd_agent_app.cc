@@ -608,7 +608,7 @@ void DcmdAgentApp::CheckHeatbeat(){
         CWX_ERROR(("Failure to send heatbeat to center:%s  conn_id:%d",
           center->host_name_.c_str(),
           center->conn_id_));
-        CwxMsgBlockAlloc::free(msg);
+        CwxMsgBlockAlloc::free(block);
         return ; 
       }
       CWX_DEBUG(("Send heatbeat to:%s", center->host_name_.c_str()));
@@ -685,7 +685,6 @@ bool DcmdAgentApp::CheckOprCmd(AgentOprCmd* opr_cmd, bool is_cancel){
   }
   bool is_success = false;
   string content;
-  string err_msg;
   uint32_t now;
   do{
     now = time(NULL);
@@ -884,7 +883,7 @@ void DcmdAgentApp::ExecCtrlTaskCmdForCancelSubTask(DcmdAgentAppObj* app_obj,
     list<AgentTaskCmd*>::iterator iter_cancel = app_obj->cmds_.begin();
     while(iter_cancel != app_obj->cmds_.end()){
       if((*iter_cancel)->cmd_.cmd() !=  cmd->cmd_.cmd()) {
-        if ((*iter_cancel)->cmd_.subtask_id() ==  cmd->cmd_.subtask_id)) {
+        if ((*iter_cancel)->cmd_.subtask_id() ==  cmd->cmd_.subtask_id()) {
           CWX_INFO(("Cancel subtask, app=%s  cmd_id=%s  sub_task=%s",
             app_obj->app_name_.c_str(),
             (*iter_cancel)->cmd_.cmd().c_str(),
