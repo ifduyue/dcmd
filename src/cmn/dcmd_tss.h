@@ -10,7 +10,7 @@ namespace dcmd {
 //dcmd的tss
 class DcmdTss:public CwxTss{
  public:
-   const uint32_t kMaxSqlBufSize =  2 * 1024 * 1024; // buf最大长度
+   static const uint32_t kMaxSqlBufSize =  2 * 1024 * 1024; // buf最大长度
 
  public:
   DcmdTss():CwxTss(){
