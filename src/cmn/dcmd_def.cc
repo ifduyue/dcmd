@@ -31,12 +31,12 @@ void dcmd_md5(char const* content, uint32_t len, string& md5) {
 }
 
 void dcmd_remove_spam(string& value) {
-  CwxCommon::replaceAll(name, "\n", "");
-  CwxCommon::replaceAll(name, "\r", "");
-  CwxCommon::replaceAll(name, " ", "");
-  CwxCommon::replaceAll(name, "|", "");
-  CwxCommon::replaceAll(name, "\"", "");
-  CwxCommon::replaceAll(name, "'", "");
-  CwxCommon::replaceAll(name, ";", "");
+  CwxCommon::replaceAll(value, "\n", "");
+  CwxCommon::replaceAll(value, "\r", "");
+  CwxCommon::replaceAll(value, " ", "");
+  CwxCommon::replaceAll(value, "|", "");
+  CwxCommon::replaceAll(value, "\"", "");
+  CwxCommon::replaceAll(value, "'", "");
+  CwxCommon::replaceAll(value, ";", "");
 }
 }
