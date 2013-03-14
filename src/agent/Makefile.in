@@ -36,7 +36,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-bin_PROGRAMS = unistor$(EXEEXT)
+bin_PROGRAMS = dcmd_agent$(EXEEXT)
 DIST_COMMON = README $(am__configure_deps) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in $(top_srcdir)/configure AUTHORS COPYING \
 	ChangeLog INSTALL NEWS config.guess config.sub depcomp \
@@ -54,27 +54,15 @@ CONFIG_CLEAN_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS)
-am_unistor_OBJECTS = unistor-UnistorApp.$(OBJEXT) \
-	unistor-UnistorHandler4Dispatch.$(OBJEXT) \
-	unistor-UnistorHandler4RecvWrite.$(OBJEXT) \
-	unistor-unistor.$(OBJEXT) \
-	unistor-UnistorHandler4Master.$(OBJEXT) \
-	unistor-UnistorHandler4Trans.$(OBJEXT) \
-	unistor-UnistorTask4Trans.$(OBJEXT) \
-	unistor-UnistorHandler4Checkpoint.$(OBJEXT) \
-	unistor-UnistorHandler4Recv.$(OBJEXT) \
-	unistor-UnistorHandler4Zk.$(OBJEXT) \
-	unistor-UnistorStore.$(OBJEXT) unistor-CwxBinLogMgr.$(OBJEXT) \
-	unistor-UnistorConfig.$(OBJEXT) unistor-UnistorDef.$(OBJEXT) \
-	unistor-UnistorPoco.$(OBJEXT) unistor-UnistorTss.$(OBJEXT) \
-	unistor-UnistorCache.$(OBJEXT) \
-	unistor-UnistorConnector.$(OBJEXT) \
-	unistor-UnistorStoreBase.$(OBJEXT) \
-	unistor-UnistorSubscribe.$(OBJEXT) \
-	unistor-UnistorReadCacheEx2.$(OBJEXT) \
-	unistor-ZkAdaptor.$(OBJEXT) unistor-ZkLocker.$(OBJEXT)
-unistor_OBJECTS = $(am_unistor_OBJECTS)
-unistor_DEPENDENCIES =
+am_dcmd_agent_OBJECTS = dcmd_agent-dcmd_agent_app.$(OBJEXT) \
+	dcmd_agent-dcmd_agent.$(OBJEXT) \
+	dcmd_agent-dcmd_agent_config.$(OBJEXT) \
+	dcmd_agent-dcmd_agent_def.$(OBJEXT) \
+	dcmd_agent-dcmd_process.$(OBJEXT) \
+	dcmd_agent-dcmd_def.$(OBJEXT) dcmd_agent-dcmd.pb.$(OBJEXT) \
+	dcmd_agent-dcmd_tss.$(OBJEXT)
+dcmd_agent_OBJECTS = $(am_dcmd_agent_OBJECTS)
+dcmd_agent_DEPENDENCIES =
 DEFAULT_INCLUDES = -I. -I$(srcdir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -86,8 +74,8 @@ LTCXXCOMPILE = $(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) \
 CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --tag=CXX --mode=link $(CXXLD) $(AM_CXXFLAGS) \
 	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-SOURCES = $(unistor_SOURCES)
-DIST_SOURCES = $(unistor_SOURCES)
+SOURCES = $(dcmd_agent_SOURCES)
+DIST_SOURCES = $(dcmd_agent_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -136,7 +124,7 @@ INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 LDFLAGS = @LDFLAGS@
 LIBOBJS = @LIBOBJS@
-LIBS = -lcwxapp -lcwxnet -lcwxcmn -lzookeeper_mt -lssl -lpthread -ldl -lrt -lz
+LIBS = -lcwxapp -lcwxnet -lcwxcmn -lprotobuf -lpthread -ldl -lrt 
 LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
 LTLIBOBJS = @LTLIBOBJS@
@@ -195,44 +183,30 @@ mkdir_p = @mkdir_p@
 oldincludedir = @oldincludedir@
 prefix = @prefix@
 program_transform_name = @program_transform_name@
+protobuf_dir = @protobuf_dir@
 sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 pkgconfigdir = 
 BUILD_DATE = $(shell date +%F)
-unistor_CPPFLAGS = -D_BUILD_DATE="$(BUILD_DATE)" -W -Wall
-unistor_SOURCES = UnistorApp.cpp\
-		UnistorHandler4Dispatch.cpp\
-		UnistorHandler4RecvWrite.cpp\
-		unistor.cpp\
-		UnistorHandler4Master.cpp\
-		UnistorHandler4Trans.cpp\
-		UnistorTask4Trans.cpp\
-		UnistorHandler4Checkpoint.cpp\
-		UnistorHandler4Recv.cpp\
-		UnistorHandler4Zk.cpp\
-		../common/UnistorStore.cpp\
-		../common/CwxBinLogMgr.cpp\
-		../common/UnistorConfig.cpp\
-		../common/UnistorDef.cpp\
-		../common/UnistorPoco.cpp\
-		../common/UnistorTss.cpp\
-		../common/UnistorCache.cpp\
-		../common/UnistorConnector.cpp\
-		../common/UnistorStoreBase.cpp\
-		../common/UnistorSubscribe.cpp\
-		../common/UnistorReadCacheEx2.cpp\
-		../zk/ZkAdaptor.cpp\
-		../zk/ZkLocker.cpp
+dcmd_agent_CPPFLAGS = -D_BUILD_DATE="$(BUILD_DATE)" -W -Wall
+dcmd_agent_SOURCES = dcmd_agent_app.cc\
+		dcmd_agent.cc\
+		dcmd_agent_config.cc\
+		dcmd_agent_def.cc\
+		dcmd_process.cc\
+		../cmn/dcmd_def.cc\
+		../cmn/dcmd.pb.cc\
+		../cmn/dcmd_tss.cc
 
-unistor_LDADD = 
-unistor_LDFLAGS = -L@zk_dir@/lib -L@cwinux_dir@/lib -L@openssl_dir@/lib
-INCLUDES = -I@cwinux_dir@/include/app -I@cwinux_dir@/include/cmn -I@cwinux_dir@/include/net -I@zk_dir@/include -I@openssl_dir@/include  -I. -I../common  -I../zk
+dcmd_agent_LDADD = 
+dcmd_agent_LDFLAGS = -L@cwinux_dir@/lib
+INCLUDES = -I@cwinux_dir@/app -I@cwinux_dir@/cmn -I@cwinux_dir@/net -I@protobuf_dir@ -I. -I../cmn
 all: all-am
 
 .SUFFIXES:
-.SUFFIXES: .cpp .lo .o .obj
+.SUFFIXES: .cc .lo .o .obj
 am--refresh:
 	@:
 $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
@@ -294,9 +268,9 @@ clean-binPROGRAMS:
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
-unistor$(EXEEXT): $(unistor_OBJECTS) $(unistor_DEPENDENCIES) 
-	@rm -f unistor$(EXEEXT)
-	$(CXXLINK) $(unistor_LDFLAGS) $(unistor_OBJECTS) $(unistor_LDADD) $(LIBS)
+dcmd_agent$(EXEEXT): $(dcmd_agent_OBJECTS) $(dcmd_agent_DEPENDENCIES) 
+	@rm -f dcmd_agent$(EXEEXT)
+	$(CXXLINK) $(dcmd_agent_LDFLAGS) $(dcmd_agent_OBJECTS) $(dcmd_agent_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -304,372 +278,147 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unistor-CwxBinLogMgr.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unistor-UnistorApp.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unistor-UnistorCache.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unistor-UnistorConfig.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unistor-UnistorConnector.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unistor-UnistorDef.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unistor-UnistorHandler4Checkpoint.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unistor-UnistorHandler4Dispatch.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unistor-UnistorHandler4Master.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unistor-UnistorHandler4Recv.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unistor-UnistorHandler4RecvWrite.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unistor-UnistorHandler4Trans.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unistor-UnistorHandler4Zk.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unistor-UnistorPoco.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unistor-UnistorReadCacheEx2.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unistor-UnistorStore.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unistor-UnistorStoreBase.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unistor-UnistorSubscribe.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unistor-UnistorTask4Trans.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unistor-UnistorTss.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unistor-ZkAdaptor.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unistor-ZkLocker.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unistor-unistor.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_agent-dcmd.pb.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_agent-dcmd_agent.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_agent-dcmd_agent_app.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_agent-dcmd_agent_config.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_agent-dcmd_agent_def.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_agent-dcmd_def.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_agent-dcmd_process.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_agent-dcmd_tss.Po@am__quote@
 
-.cpp.o:
+.cc.o:
 @am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
 @am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/$*.Tpo" "$(DEPDIR)/$*.Po"; else rm -f "$(DEPDIR)/$*.Tpo"; exit 1; fi
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXXCOMPILE) -c -o $@ $<
 
-.cpp.obj:
+.cc.obj:
 @am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ `$(CYGPATH_W) '$<'`; \
 @am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/$*.Tpo" "$(DEPDIR)/$*.Po"; else rm -f "$(DEPDIR)/$*.Tpo"; exit 1; fi
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
 
-.cpp.lo:
+.cc.lo:
 @am__fastdepCXX_TRUE@	if $(LTCXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
 @am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/$*.Tpo" "$(DEPDIR)/$*.Plo"; else rm -f "$(DEPDIR)/$*.Tpo"; exit 1; fi
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LTCXXCOMPILE) -c -o $@ $<
 
-unistor-UnistorApp.o: UnistorApp.cpp
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT unistor-UnistorApp.o -MD -MP -MF "$(DEPDIR)/unistor-UnistorApp.Tpo" -c -o unistor-UnistorApp.o `test -f 'UnistorApp.cpp' || echo '$(srcdir)/'`UnistorApp.cpp; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/unistor-UnistorApp.Tpo" "$(DEPDIR)/unistor-UnistorApp.Po"; else rm -f "$(DEPDIR)/unistor-UnistorApp.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='UnistorApp.cpp' object='unistor-UnistorApp.o' libtool=no @AMDEPBACKSLASH@
+dcmd_agent-dcmd_agent_app.o: dcmd_agent_app.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_agent_app.o -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_agent_app.Tpo" -c -o dcmd_agent-dcmd_agent_app.o `test -f 'dcmd_agent_app.cc' || echo '$(srcdir)/'`dcmd_agent_app.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_agent_app.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_agent_app.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_agent_app.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_agent_app.cc' object='dcmd_agent-dcmd_agent_app.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o unistor-UnistorApp.o `test -f 'UnistorApp.cpp' || echo '$(srcdir)/'`UnistorApp.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_agent_app.o `test -f 'dcmd_agent_app.cc' || echo '$(srcdir)/'`dcmd_agent_app.cc
 
-unistor-UnistorApp.obj: UnistorApp.cpp
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT unistor-UnistorApp.obj -MD -MP -MF "$(DEPDIR)/unistor-UnistorApp.Tpo" -c -o unistor-UnistorApp.obj `if test -f 'UnistorApp.cpp'; then $(CYGPATH_W) 'UnistorApp.cpp'; else $(CYGPATH_W) '$(srcdir)/UnistorApp.cpp'; fi`; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/unistor-UnistorApp.Tpo" "$(DEPDIR)/unistor-UnistorApp.Po"; else rm -f "$(DEPDIR)/unistor-UnistorApp.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='UnistorApp.cpp' object='unistor-UnistorApp.obj' libtool=no @AMDEPBACKSLASH@
+dcmd_agent-dcmd_agent_app.obj: dcmd_agent_app.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_agent_app.obj -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_agent_app.Tpo" -c -o dcmd_agent-dcmd_agent_app.obj `if test -f 'dcmd_agent_app.cc'; then $(CYGPATH_W) 'dcmd_agent_app.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_agent_app.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_agent_app.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_agent_app.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_agent_app.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_agent_app.cc' object='dcmd_agent-dcmd_agent_app.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o unistor-UnistorApp.obj `if test -f 'UnistorApp.cpp'; then $(CYGPATH_W) 'UnistorApp.cpp'; else $(CYGPATH_W) '$(srcdir)/UnistorApp.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_agent_app.obj `if test -f 'dcmd_agent_app.cc'; then $(CYGPATH_W) 'dcmd_agent_app.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_agent_app.cc'; fi`
 
-unistor-UnistorHandler4Dispatch.o: UnistorHandler4Dispatch.cpp
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT unistor-UnistorHandler4Dispatch.o -MD -MP -MF "$(DEPDIR)/unistor-UnistorHandler4Dispatch.Tpo" -c -o unistor-UnistorHandler4Dispatch.o `test -f 'UnistorHandler4Dispatch.cpp' || echo '$(srcdir)/'`UnistorHandler4Dispatch.cpp; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/unistor-UnistorHandler4Dispatch.Tpo" "$(DEPDIR)/unistor-UnistorHandler4Dispatch.Po"; else rm -f "$(DEPDIR)/unistor-UnistorHandler4Dispatch.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='UnistorHandler4Dispatch.cpp' object='unistor-UnistorHandler4Dispatch.o' libtool=no @AMDEPBACKSLASH@
+dcmd_agent-dcmd_agent.o: dcmd_agent.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_agent.o -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_agent.Tpo" -c -o dcmd_agent-dcmd_agent.o `test -f 'dcmd_agent.cc' || echo '$(srcdir)/'`dcmd_agent.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_agent.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_agent.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_agent.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_agent.cc' object='dcmd_agent-dcmd_agent.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o unistor-UnistorHandler4Dispatch.o `test -f 'UnistorHandler4Dispatch.cpp' || echo '$(srcdir)/'`UnistorHandler4Dispatch.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_agent.o `test -f 'dcmd_agent.cc' || echo '$(srcdir)/'`dcmd_agent.cc
 
-unistor-UnistorHandler4Dispatch.obj: UnistorHandler4Dispatch.cpp
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT unistor-UnistorHandler4Dispatch.obj -MD -MP -MF "$(DEPDIR)/unistor-UnistorHandler4Dispatch.Tpo" -c -o unistor-UnistorHandler4Dispatch.obj `if test -f 'UnistorHandler4Dispatch.cpp'; then $(CYGPATH_W) 'UnistorHandler4Dispatch.cpp'; else $(CYGPATH_W) '$(srcdir)/UnistorHandler4Dispatch.cpp'; fi`; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/unistor-UnistorHandler4Dispatch.Tpo" "$(DEPDIR)/unistor-UnistorHandler4Dispatch.Po"; else rm -f "$(DEPDIR)/unistor-UnistorHandler4Dispatch.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='UnistorHandler4Dispatch.cpp' object='unistor-UnistorHandler4Dispatch.obj' libtool=no @AMDEPBACKSLASH@
+dcmd_agent-dcmd_agent.obj: dcmd_agent.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_agent.obj -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_agent.Tpo" -c -o dcmd_agent-dcmd_agent.obj `if test -f 'dcmd_agent.cc'; then $(CYGPATH_W) 'dcmd_agent.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_agent.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_agent.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_agent.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_agent.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_agent.cc' object='dcmd_agent-dcmd_agent.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o unistor-UnistorHandler4Dispatch.obj `if test -f 'UnistorHandler4Dispatch.cpp'; then $(CYGPATH_W) 'UnistorHandler4Dispatch.cpp'; else $(CYGPATH_W) '$(srcdir)/UnistorHandler4Dispatch.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_agent.obj `if test -f 'dcmd_agent.cc'; then $(CYGPATH_W) 'dcmd_agent.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_agent.cc'; fi`
 
-unistor-UnistorHandler4RecvWrite.o: UnistorHandler4RecvWrite.cpp
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT unistor-UnistorHandler4RecvWrite.o -MD -MP -MF "$(DEPDIR)/unistor-UnistorHandler4RecvWrite.Tpo" -c -o unistor-UnistorHandler4RecvWrite.o `test -f 'UnistorHandler4RecvWrite.cpp' || echo '$(srcdir)/'`UnistorHandler4RecvWrite.cpp; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/unistor-UnistorHandler4RecvWrite.Tpo" "$(DEPDIR)/unistor-UnistorHandler4RecvWrite.Po"; else rm -f "$(DEPDIR)/unistor-UnistorHandler4RecvWrite.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='UnistorHandler4RecvWrite.cpp' object='unistor-UnistorHandler4RecvWrite.o' libtool=no @AMDEPBACKSLASH@
+dcmd_agent-dcmd_agent_config.o: dcmd_agent_config.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_agent_config.o -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_agent_config.Tpo" -c -o dcmd_agent-dcmd_agent_config.o `test -f 'dcmd_agent_config.cc' || echo '$(srcdir)/'`dcmd_agent_config.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_agent_config.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_agent_config.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_agent_config.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_agent_config.cc' object='dcmd_agent-dcmd_agent_config.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o unistor-UnistorHandler4RecvWrite.o `test -f 'UnistorHandler4RecvWrite.cpp' || echo '$(srcdir)/'`UnistorHandler4RecvWrite.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_agent_config.o `test -f 'dcmd_agent_config.cc' || echo '$(srcdir)/'`dcmd_agent_config.cc
 
-unistor-UnistorHandler4RecvWrite.obj: UnistorHandler4RecvWrite.cpp
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT unistor-UnistorHandler4RecvWrite.obj -MD -MP -MF "$(DEPDIR)/unistor-UnistorHandler4RecvWrite.Tpo" -c -o unistor-UnistorHandler4RecvWrite.obj `if test -f 'UnistorHandler4RecvWrite.cpp'; then $(CYGPATH_W) 'UnistorHandler4RecvWrite.cpp'; else $(CYGPATH_W) '$(srcdir)/UnistorHandler4RecvWrite.cpp'; fi`; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/unistor-UnistorHandler4RecvWrite.Tpo" "$(DEPDIR)/unistor-UnistorHandler4RecvWrite.Po"; else rm -f "$(DEPDIR)/unistor-UnistorHandler4RecvWrite.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='UnistorHandler4RecvWrite.cpp' object='unistor-UnistorHandler4RecvWrite.obj' libtool=no @AMDEPBACKSLASH@
+dcmd_agent-dcmd_agent_config.obj: dcmd_agent_config.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_agent_config.obj -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_agent_config.Tpo" -c -o dcmd_agent-dcmd_agent_config.obj `if test -f 'dcmd_agent_config.cc'; then $(CYGPATH_W) 'dcmd_agent_config.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_agent_config.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_agent_config.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_agent_config.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_agent_config.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_agent_config.cc' object='dcmd_agent-dcmd_agent_config.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o unistor-UnistorHandler4RecvWrite.obj `if test -f 'UnistorHandler4RecvWrite.cpp'; then $(CYGPATH_W) 'UnistorHandler4RecvWrite.cpp'; else $(CYGPATH_W) '$(srcdir)/UnistorHandler4RecvWrite.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_agent_config.obj `if test -f 'dcmd_agent_config.cc'; then $(CYGPATH_W) 'dcmd_agent_config.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_agent_config.cc'; fi`
 
-unistor-unistor.o: unistor.cpp
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT unistor-unistor.o -MD -MP -MF "$(DEPDIR)/unistor-unistor.Tpo" -c -o unistor-unistor.o `test -f 'unistor.cpp' || echo '$(srcdir)/'`unistor.cpp; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/unistor-unistor.Tpo" "$(DEPDIR)/unistor-unistor.Po"; else rm -f "$(DEPDIR)/unistor-unistor.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='unistor.cpp' object='unistor-unistor.o' libtool=no @AMDEPBACKSLASH@
+dcmd_agent-dcmd_agent_def.o: dcmd_agent_def.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_agent_def.o -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_agent_def.Tpo" -c -o dcmd_agent-dcmd_agent_def.o `test -f 'dcmd_agent_def.cc' || echo '$(srcdir)/'`dcmd_agent_def.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_agent_def.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_agent_def.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_agent_def.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_agent_def.cc' object='dcmd_agent-dcmd_agent_def.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o unistor-unistor.o `test -f 'unistor.cpp' || echo '$(srcdir)/'`unistor.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_agent_def.o `test -f 'dcmd_agent_def.cc' || echo '$(srcdir)/'`dcmd_agent_def.cc
 
-unistor-unistor.obj: unistor.cpp
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT unistor-unistor.obj -MD -MP -MF "$(DEPDIR)/unistor-unistor.Tpo" -c -o unistor-unistor.obj `if test -f 'unistor.cpp'; then $(CYGPATH_W) 'unistor.cpp'; else $(CYGPATH_W) '$(srcdir)/unistor.cpp'; fi`; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/unistor-unistor.Tpo" "$(DEPDIR)/unistor-unistor.Po"; else rm -f "$(DEPDIR)/unistor-unistor.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='unistor.cpp' object='unistor-unistor.obj' libtool=no @AMDEPBACKSLASH@
+dcmd_agent-dcmd_agent_def.obj: dcmd_agent_def.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_agent_def.obj -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_agent_def.Tpo" -c -o dcmd_agent-dcmd_agent_def.obj `if test -f 'dcmd_agent_def.cc'; then $(CYGPATH_W) 'dcmd_agent_def.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_agent_def.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_agent_def.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_agent_def.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_agent_def.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_agent_def.cc' object='dcmd_agent-dcmd_agent_def.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o unistor-unistor.obj `if test -f 'unistor.cpp'; then $(CYGPATH_W) 'unistor.cpp'; else $(CYGPATH_W) '$(srcdir)/unistor.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_agent_def.obj `if test -f 'dcmd_agent_def.cc'; then $(CYGPATH_W) 'dcmd_agent_def.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_agent_def.cc'; fi`
 
-unistor-UnistorHandler4Master.o: UnistorHandler4Master.cpp
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT unistor-UnistorHandler4Master.o -MD -MP -MF "$(DEPDIR)/unistor-UnistorHandler4Master.Tpo" -c -o unistor-UnistorHandler4Master.o `test -f 'UnistorHandler4Master.cpp' || echo '$(srcdir)/'`UnistorHandler4Master.cpp; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/unistor-UnistorHandler4Master.Tpo" "$(DEPDIR)/unistor-UnistorHandler4Master.Po"; else rm -f "$(DEPDIR)/unistor-UnistorHandler4Master.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='UnistorHandler4Master.cpp' object='unistor-UnistorHandler4Master.o' libtool=no @AMDEPBACKSLASH@
+dcmd_agent-dcmd_process.o: dcmd_process.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_process.o -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_process.Tpo" -c -o dcmd_agent-dcmd_process.o `test -f 'dcmd_process.cc' || echo '$(srcdir)/'`dcmd_process.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_process.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_process.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_process.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_process.cc' object='dcmd_agent-dcmd_process.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o unistor-UnistorHandler4Master.o `test -f 'UnistorHandler4Master.cpp' || echo '$(srcdir)/'`UnistorHandler4Master.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_process.o `test -f 'dcmd_process.cc' || echo '$(srcdir)/'`dcmd_process.cc
 
-unistor-UnistorHandler4Master.obj: UnistorHandler4Master.cpp
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT unistor-UnistorHandler4Master.obj -MD -MP -MF "$(DEPDIR)/unistor-UnistorHandler4Master.Tpo" -c -o unistor-UnistorHandler4Master.obj `if test -f 'UnistorHandler4Master.cpp'; then $(CYGPATH_W) 'UnistorHandler4Master.cpp'; else $(CYGPATH_W) '$(srcdir)/UnistorHandler4Master.cpp'; fi`; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/unistor-UnistorHandler4Master.Tpo" "$(DEPDIR)/unistor-UnistorHandler4Master.Po"; else rm -f "$(DEPDIR)/unistor-UnistorHandler4Master.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='UnistorHandler4Master.cpp' object='unistor-UnistorHandler4Master.obj' libtool=no @AMDEPBACKSLASH@
+dcmd_agent-dcmd_process.obj: dcmd_process.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_process.obj -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_process.Tpo" -c -o dcmd_agent-dcmd_process.obj `if test -f 'dcmd_process.cc'; then $(CYGPATH_W) 'dcmd_process.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_process.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_process.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_process.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_process.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_process.cc' object='dcmd_agent-dcmd_process.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o unistor-UnistorHandler4Master.obj `if test -f 'UnistorHandler4Master.cpp'; then $(CYGPATH_W) 'UnistorHandler4Master.cpp'; else $(CYGPATH_W) '$(srcdir)/UnistorHandler4Master.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_process.obj `if test -f 'dcmd_process.cc'; then $(CYGPATH_W) 'dcmd_process.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_process.cc'; fi`
 
-unistor-UnistorHandler4Trans.o: UnistorHandler4Trans.cpp
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT unistor-UnistorHandler4Trans.o -MD -MP -MF "$(DEPDIR)/unistor-UnistorHandler4Trans.Tpo" -c -o unistor-UnistorHandler4Trans.o `test -f 'UnistorHandler4Trans.cpp' || echo '$(srcdir)/'`UnistorHandler4Trans.cpp; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/unistor-UnistorHandler4Trans.Tpo" "$(DEPDIR)/unistor-UnistorHandler4Trans.Po"; else rm -f "$(DEPDIR)/unistor-UnistorHandler4Trans.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='UnistorHandler4Trans.cpp' object='unistor-UnistorHandler4Trans.o' libtool=no @AMDEPBACKSLASH@
+dcmd_agent-dcmd_def.o: ../cmn/dcmd_def.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_def.o -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_def.Tpo" -c -o dcmd_agent-dcmd_def.o `test -f '../cmn/dcmd_def.cc' || echo '$(srcdir)/'`../cmn/dcmd_def.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_def.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_def.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_def.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_def.cc' object='dcmd_agent-dcmd_def.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o unistor-UnistorHandler4Trans.o `test -f 'UnistorHandler4Trans.cpp' || echo '$(srcdir)/'`UnistorHandler4Trans.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_def.o `test -f '../cmn/dcmd_def.cc' || echo '$(srcdir)/'`../cmn/dcmd_def.cc
 
-unistor-UnistorHandler4Trans.obj: UnistorHandler4Trans.cpp
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT unistor-UnistorHandler4Trans.obj -MD -MP -MF "$(DEPDIR)/unistor-UnistorHandler4Trans.Tpo" -c -o unistor-UnistorHandler4Trans.obj `if test -f 'UnistorHandler4Trans.cpp'; then $(CYGPATH_W) 'UnistorHandler4Trans.cpp'; else $(CYGPATH_W) '$(srcdir)/UnistorHandler4Trans.cpp'; fi`; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/unistor-UnistorHandler4Trans.Tpo" "$(DEPDIR)/unistor-UnistorHandler4Trans.Po"; else rm -f "$(DEPDIR)/unistor-UnistorHandler4Trans.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='UnistorHandler4Trans.cpp' object='unistor-UnistorHandler4Trans.obj' libtool=no @AMDEPBACKSLASH@
+dcmd_agent-dcmd_def.obj: ../cmn/dcmd_def.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_def.obj -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_def.Tpo" -c -o dcmd_agent-dcmd_def.obj `if test -f '../cmn/dcmd_def.cc'; then $(CYGPATH_W) '../cmn/dcmd_def.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_def.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_def.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_def.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_def.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_def.cc' object='dcmd_agent-dcmd_def.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o unistor-UnistorHandler4Trans.obj `if test -f 'UnistorHandler4Trans.cpp'; then $(CYGPATH_W) 'UnistorHandler4Trans.cpp'; else $(CYGPATH_W) '$(srcdir)/UnistorHandler4Trans.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_def.obj `if test -f '../cmn/dcmd_def.cc'; then $(CYGPATH_W) '../cmn/dcmd_def.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_def.cc'; fi`
 
-unistor-UnistorTask4Trans.o: UnistorTask4Trans.cpp
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT unistor-UnistorTask4Trans.o -MD -MP -MF "$(DEPDIR)/unistor-UnistorTask4Trans.Tpo" -c -o unistor-UnistorTask4Trans.o `test -f 'UnistorTask4Trans.cpp' || echo '$(srcdir)/'`UnistorTask4Trans.cpp; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/unistor-UnistorTask4Trans.Tpo" "$(DEPDIR)/unistor-UnistorTask4Trans.Po"; else rm -f "$(DEPDIR)/unistor-UnistorTask4Trans.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='UnistorTask4Trans.cpp' object='unistor-UnistorTask4Trans.o' libtool=no @AMDEPBACKSLASH@
+dcmd_agent-dcmd.pb.o: ../cmn/dcmd.pb.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd.pb.o -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd.pb.Tpo" -c -o dcmd_agent-dcmd.pb.o `test -f '../cmn/dcmd.pb.cc' || echo '$(srcdir)/'`../cmn/dcmd.pb.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd.pb.Tpo" "$(DEPDIR)/dcmd_agent-dcmd.pb.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd.pb.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd.pb.cc' object='dcmd_agent-dcmd.pb.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o unistor-UnistorTask4Trans.o `test -f 'UnistorTask4Trans.cpp' || echo '$(srcdir)/'`UnistorTask4Trans.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd.pb.o `test -f '../cmn/dcmd.pb.cc' || echo '$(srcdir)/'`../cmn/dcmd.pb.cc
 
-unistor-UnistorTask4Trans.obj: UnistorTask4Trans.cpp
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT unistor-UnistorTask4Trans.obj -MD -MP -MF "$(DEPDIR)/unistor-UnistorTask4Trans.Tpo" -c -o unistor-UnistorTask4Trans.obj `if test -f 'UnistorTask4Trans.cpp'; then $(CYGPATH_W) 'UnistorTask4Trans.cpp'; else $(CYGPATH_W) '$(srcdir)/UnistorTask4Trans.cpp'; fi`; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/unistor-UnistorTask4Trans.Tpo" "$(DEPDIR)/unistor-UnistorTask4Trans.Po"; else rm -f "$(DEPDIR)/unistor-UnistorTask4Trans.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='UnistorTask4Trans.cpp' object='unistor-UnistorTask4Trans.obj' libtool=no @AMDEPBACKSLASH@
+dcmd_agent-dcmd.pb.obj: ../cmn/dcmd.pb.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd.pb.obj -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd.pb.Tpo" -c -o dcmd_agent-dcmd.pb.obj `if test -f '../cmn/dcmd.pb.cc'; then $(CYGPATH_W) '../cmn/dcmd.pb.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd.pb.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd.pb.Tpo" "$(DEPDIR)/dcmd_agent-dcmd.pb.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd.pb.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd.pb.cc' object='dcmd_agent-dcmd.pb.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o unistor-UnistorTask4Trans.obj `if test -f 'UnistorTask4Trans.cpp'; then $(CYGPATH_W) 'UnistorTask4Trans.cpp'; else $(CYGPATH_W) '$(srcdir)/UnistorTask4Trans.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd.pb.obj `if test -f '../cmn/dcmd.pb.cc'; then $(CYGPATH_W) '../cmn/dcmd.pb.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd.pb.cc'; fi`
 
-unistor-UnistorHandler4Checkpoint.o: UnistorHandler4Checkpoint.cpp
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT unistor-UnistorHandler4Checkpoint.o -MD -MP -MF "$(DEPDIR)/unistor-UnistorHandler4Checkpoint.Tpo" -c -o unistor-UnistorHandler4Checkpoint.o `test -f 'UnistorHandler4Checkpoint.cpp' || echo '$(srcdir)/'`UnistorHandler4Checkpoint.cpp; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/unistor-UnistorHandler4Checkpoint.Tpo" "$(DEPDIR)/unistor-UnistorHandler4Checkpoint.Po"; else rm -f "$(DEPDIR)/unistor-UnistorHandler4Checkpoint.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='UnistorHandler4Checkpoint.cpp' object='unistor-UnistorHandler4Checkpoint.o' libtool=no @AMDEPBACKSLASH@
+dcmd_agent-dcmd_tss.o: ../cmn/dcmd_tss.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_tss.o -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_tss.Tpo" -c -o dcmd_agent-dcmd_tss.o `test -f '../cmn/dcmd_tss.cc' || echo '$(srcdir)/'`../cmn/dcmd_tss.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_tss.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_tss.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_tss.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_tss.cc' object='dcmd_agent-dcmd_tss.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o unistor-UnistorHandler4Checkpoint.o `test -f 'UnistorHandler4Checkpoint.cpp' || echo '$(srcdir)/'`UnistorHandler4Checkpoint.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_tss.o `test -f '../cmn/dcmd_tss.cc' || echo '$(srcdir)/'`../cmn/dcmd_tss.cc
 
-unistor-UnistorHandler4Checkpoint.obj: UnistorHandler4Checkpoint.cpp
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT unistor-UnistorHandler4Checkpoint.obj -MD -MP -MF "$(DEPDIR)/unistor-UnistorHandler4Checkpoint.Tpo" -c -o unistor-UnistorHandler4Checkpoint.obj `if test -f 'UnistorHandler4Checkpoint.cpp'; then $(CYGPATH_W) 'UnistorHandler4Checkpoint.cpp'; else $(CYGPATH_W) '$(srcdir)/UnistorHandler4Checkpoint.cpp'; fi`; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/unistor-UnistorHandler4Checkpoint.Tpo" "$(DEPDIR)/unistor-UnistorHandler4Checkpoint.Po"; else rm -f "$(DEPDIR)/unistor-UnistorHandler4Checkpoint.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='UnistorHandler4Checkpoint.cpp' object='unistor-UnistorHandler4Checkpoint.obj' libtool=no @AMDEPBACKSLASH@
+dcmd_agent-dcmd_tss.obj: ../cmn/dcmd_tss.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_tss.obj -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_tss.Tpo" -c -o dcmd_agent-dcmd_tss.obj `if test -f '../cmn/dcmd_tss.cc'; then $(CYGPATH_W) '../cmn/dcmd_tss.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_tss.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_tss.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_tss.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_tss.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_tss.cc' object='dcmd_agent-dcmd_tss.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o unistor-UnistorHandler4Checkpoint.obj `if test -f 'UnistorHandler4Checkpoint.cpp'; then $(CYGPATH_W) 'UnistorHandler4Checkpoint.cpp'; else $(CYGPATH_W) '$(srcdir)/UnistorHandler4Checkpoint.cpp'; fi`
-
-unistor-UnistorHandler4Recv.o: UnistorHandler4Recv.cpp
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT unistor-UnistorHandler4Recv.o -MD -MP -MF "$(DEPDIR)/unistor-UnistorHandler4Recv.Tpo" -c -o unistor-UnistorHandler4Recv.o `test -f 'UnistorHandler4Recv.cpp' || echo '$(srcdir)/'`UnistorHandler4Recv.cpp; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/unistor-UnistorHandler4Recv.Tpo" "$(DEPDIR)/unistor-UnistorHandler4Recv.Po"; else rm -f "$(DEPDIR)/unistor-UnistorHandler4Recv.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='UnistorHandler4Recv.cpp' object='unistor-UnistorHandler4Recv.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o unistor-UnistorHandler4Recv.o `test -f 'UnistorHandler4Recv.cpp' || echo '$(srcdir)/'`UnistorHandler4Recv.cpp
-
-unistor-UnistorHandler4Recv.obj: UnistorHandler4Recv.cpp
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT unistor-UnistorHandler4Recv.obj -MD -MP -MF "$(DEPDIR)/unistor-UnistorHandler4Recv.Tpo" -c -o unistor-UnistorHandler4Recv.obj `if test -f 'UnistorHandler4Recv.cpp'; then $(CYGPATH_W) 'UnistorHandler4Recv.cpp'; else $(CYGPATH_W) '$(srcdir)/UnistorHandler4Recv.cpp'; fi`; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/unistor-UnistorHandler4Recv.Tpo" "$(DEPDIR)/unistor-UnistorHandler4Recv.Po"; else rm -f "$(DEPDIR)/unistor-UnistorHandler4Recv.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='UnistorHandler4Recv.cpp' object='unistor-UnistorHandler4Recv.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o unistor-UnistorHandler4Recv.obj `if test -f 'UnistorHandler4Recv.cpp'; then $(CYGPATH_W) 'UnistorHandler4Recv.cpp'; else $(CYGPATH_W) '$(srcdir)/UnistorHandler4Recv.cpp'; fi`
-
-unistor-UnistorHandler4Zk.o: UnistorHandler4Zk.cpp
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT unistor-UnistorHandler4Zk.o -MD -MP -MF "$(DEPDIR)/unistor-UnistorHandler4Zk.Tpo" -c -o unistor-UnistorHandler4Zk.o `test -f 'UnistorHandler4Zk.cpp' || echo '$(srcdir)/'`UnistorHandler4Zk.cpp; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/unistor-UnistorHandler4Zk.Tpo" "$(DEPDIR)/unistor-UnistorHandler4Zk.Po"; else rm -f "$(DEPDIR)/unistor-UnistorHandler4Zk.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='UnistorHandler4Zk.cpp' object='unistor-UnistorHandler4Zk.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o unistor-UnistorHandler4Zk.o `test -f 'UnistorHandler4Zk.cpp' || echo '$(srcdir)/'`UnistorHandler4Zk.cpp
-
-unistor-UnistorHandler4Zk.obj: UnistorHandler4Zk.cpp
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT unistor-UnistorHandler4Zk.obj -MD -MP -MF "$(DEPDIR)/unistor-UnistorHandler4Zk.Tpo" -c -o unistor-UnistorHandler4Zk.obj `if test -f 'UnistorHandler4Zk.cpp'; then $(CYGPATH_W) 'UnistorHandler4Zk.cpp'; else $(CYGPATH_W) '$(srcdir)/UnistorHandler4Zk.cpp'; fi`; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/unistor-UnistorHandler4Zk.Tpo" "$(DEPDIR)/unistor-UnistorHandler4Zk.Po"; else rm -f "$(DEPDIR)/unistor-UnistorHandler4Zk.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='UnistorHandler4Zk.cpp' object='unistor-UnistorHandler4Zk.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o unistor-UnistorHandler4Zk.obj `if test -f 'UnistorHandler4Zk.cpp'; then $(CYGPATH_W) 'UnistorHandler4Zk.cpp'; else $(CYGPATH_W) '$(srcdir)/UnistorHandler4Zk.cpp'; fi`
-
-unistor-UnistorStore.o: ../common/UnistorStore.cpp
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT unistor-UnistorStore.o -MD -MP -MF "$(DEPDIR)/unistor-UnistorStore.Tpo" -c -o unistor-UnistorStore.o `test -f '../common/UnistorStore.cpp' || echo '$(srcdir)/'`../common/UnistorStore.cpp; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/unistor-UnistorStore.Tpo" "$(DEPDIR)/unistor-UnistorStore.Po"; else rm -f "$(DEPDIR)/unistor-UnistorStore.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../common/UnistorStore.cpp' object='unistor-UnistorStore.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o unistor-UnistorStore.o `test -f '../common/UnistorStore.cpp' || echo '$(srcdir)/'`../common/UnistorStore.cpp
-
-unistor-UnistorStore.obj: ../common/UnistorStore.cpp
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT unistor-UnistorStore.obj -MD -MP -MF "$(DEPDIR)/unistor-UnistorStore.Tpo" -c -o unistor-UnistorStore.obj `if test -f '../common/UnistorStore.cpp'; then $(CYGPATH_W) '../common/UnistorStore.cpp'; else $(CYGPATH_W) '$(srcdir)/../common/UnistorStore.cpp'; fi`; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/unistor-UnistorStore.Tpo" "$(DEPDIR)/unistor-UnistorStore.Po"; else rm -f "$(DEPDIR)/unistor-UnistorStore.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../common/UnistorStore.cpp' object='unistor-UnistorStore.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o unistor-UnistorStore.obj `if test -f '../common/UnistorStore.cpp'; then $(CYGPATH_W) '../common/UnistorStore.cpp'; else $(CYGPATH_W) '$(srcdir)/../common/UnistorStore.cpp'; fi`
-
-unistor-CwxBinLogMgr.o: ../common/CwxBinLogMgr.cpp
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT unistor-CwxBinLogMgr.o -MD -MP -MF "$(DEPDIR)/unistor-CwxBinLogMgr.Tpo" -c -o unistor-CwxBinLogMgr.o `test -f '../common/CwxBinLogMgr.cpp' || echo '$(srcdir)/'`../common/CwxBinLogMgr.cpp; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/unistor-CwxBinLogMgr.Tpo" "$(DEPDIR)/unistor-CwxBinLogMgr.Po"; else rm -f "$(DEPDIR)/unistor-CwxBinLogMgr.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../common/CwxBinLogMgr.cpp' object='unistor-CwxBinLogMgr.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o unistor-CwxBinLogMgr.o `test -f '../common/CwxBinLogMgr.cpp' || echo '$(srcdir)/'`../common/CwxBinLogMgr.cpp
-
-unistor-CwxBinLogMgr.obj: ../common/CwxBinLogMgr.cpp
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT unistor-CwxBinLogMgr.obj -MD -MP -MF "$(DEPDIR)/unistor-CwxBinLogMgr.Tpo" -c -o unistor-CwxBinLogMgr.obj `if test -f '../common/CwxBinLogMgr.cpp'; then $(CYGPATH_W) '../common/CwxBinLogMgr.cpp'; else $(CYGPATH_W) '$(srcdir)/../common/CwxBinLogMgr.cpp'; fi`; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/unistor-CwxBinLogMgr.Tpo" "$(DEPDIR)/unistor-CwxBinLogMgr.Po"; else rm -f "$(DEPDIR)/unistor-CwxBinLogMgr.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../common/CwxBinLogMgr.cpp' object='unistor-CwxBinLogMgr.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o unistor-CwxBinLogMgr.obj `if test -f '../common/CwxBinLogMgr.cpp'; then $(CYGPATH_W) '../common/CwxBinLogMgr.cpp'; else $(CYGPATH_W) '$(srcdir)/../common/CwxBinLogMgr.cpp'; fi`
-
-unistor-UnistorConfig.o: ../common/UnistorConfig.cpp
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT unistor-UnistorConfig.o -MD -MP -MF "$(DEPDIR)/unistor-UnistorConfig.Tpo" -c -o unistor-UnistorConfig.o `test -f '../common/UnistorConfig.cpp' || echo '$(srcdir)/'`../common/UnistorConfig.cpp; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/unistor-UnistorConfig.Tpo" "$(DEPDIR)/unistor-UnistorConfig.Po"; else rm -f "$(DEPDIR)/unistor-UnistorConfig.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../common/UnistorConfig.cpp' object='unistor-UnistorConfig.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o unistor-UnistorConfig.o `test -f '../common/UnistorConfig.cpp' || echo '$(srcdir)/'`../common/UnistorConfig.cpp
-
-unistor-UnistorConfig.obj: ../common/UnistorConfig.cpp
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT unistor-UnistorConfig.obj -MD -MP -MF "$(DEPDIR)/unistor-UnistorConfig.Tpo" -c -o unistor-UnistorConfig.obj `if test -f '../common/UnistorConfig.cpp'; then $(CYGPATH_W) '../common/UnistorConfig.cpp'; else $(CYGPATH_W) '$(srcdir)/../common/UnistorConfig.cpp'; fi`; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/unistor-UnistorConfig.Tpo" "$(DEPDIR)/unistor-UnistorConfig.Po"; else rm -f "$(DEPDIR)/unistor-UnistorConfig.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../common/UnistorConfig.cpp' object='unistor-UnistorConfig.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o unistor-UnistorConfig.obj `if test -f '../common/UnistorConfig.cpp'; then $(CYGPATH_W) '../common/UnistorConfig.cpp'; else $(CYGPATH_W) '$(srcdir)/../common/UnistorConfig.cpp'; fi`
-
-unistor-UnistorDef.o: ../common/UnistorDef.cpp
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT unistor-UnistorDef.o -MD -MP -MF "$(DEPDIR)/unistor-UnistorDef.Tpo" -c -o unistor-UnistorDef.o `test -f '../common/UnistorDef.cpp' || echo '$(srcdir)/'`../common/UnistorDef.cpp; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/unistor-UnistorDef.Tpo" "$(DEPDIR)/unistor-UnistorDef.Po"; else rm -f "$(DEPDIR)/unistor-UnistorDef.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../common/UnistorDef.cpp' object='unistor-UnistorDef.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o unistor-UnistorDef.o `test -f '../common/UnistorDef.cpp' || echo '$(srcdir)/'`../common/UnistorDef.cpp
-
-unistor-UnistorDef.obj: ../common/UnistorDef.cpp
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT unistor-UnistorDef.obj -MD -MP -MF "$(DEPDIR)/unistor-UnistorDef.Tpo" -c -o unistor-UnistorDef.obj `if test -f '../common/UnistorDef.cpp'; then $(CYGPATH_W) '../common/UnistorDef.cpp'; else $(CYGPATH_W) '$(srcdir)/../common/UnistorDef.cpp'; fi`; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/unistor-UnistorDef.Tpo" "$(DEPDIR)/unistor-UnistorDef.Po"; else rm -f "$(DEPDIR)/unistor-UnistorDef.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../common/UnistorDef.cpp' object='unistor-UnistorDef.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o unistor-UnistorDef.obj `if test -f '../common/UnistorDef.cpp'; then $(CYGPATH_W) '../common/UnistorDef.cpp'; else $(CYGPATH_W) '$(srcdir)/../common/UnistorDef.cpp'; fi`
-
-unistor-UnistorPoco.o: ../common/UnistorPoco.cpp
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT unistor-UnistorPoco.o -MD -MP -MF "$(DEPDIR)/unistor-UnistorPoco.Tpo" -c -o unistor-UnistorPoco.o `test -f '../common/UnistorPoco.cpp' || echo '$(srcdir)/'`../common/UnistorPoco.cpp; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/unistor-UnistorPoco.Tpo" "$(DEPDIR)/unistor-UnistorPoco.Po"; else rm -f "$(DEPDIR)/unistor-UnistorPoco.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../common/UnistorPoco.cpp' object='unistor-UnistorPoco.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o unistor-UnistorPoco.o `test -f '../common/UnistorPoco.cpp' || echo '$(srcdir)/'`../common/UnistorPoco.cpp
-
-unistor-UnistorPoco.obj: ../common/UnistorPoco.cpp
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT unistor-UnistorPoco.obj -MD -MP -MF "$(DEPDIR)/unistor-UnistorPoco.Tpo" -c -o unistor-UnistorPoco.obj `if test -f '../common/UnistorPoco.cpp'; then $(CYGPATH_W) '../common/UnistorPoco.cpp'; else $(CYGPATH_W) '$(srcdir)/../common/UnistorPoco.cpp'; fi`; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/unistor-UnistorPoco.Tpo" "$(DEPDIR)/unistor-UnistorPoco.Po"; else rm -f "$(DEPDIR)/unistor-UnistorPoco.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../common/UnistorPoco.cpp' object='unistor-UnistorPoco.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o unistor-UnistorPoco.obj `if test -f '../common/UnistorPoco.cpp'; then $(CYGPATH_W) '../common/UnistorPoco.cpp'; else $(CYGPATH_W) '$(srcdir)/../common/UnistorPoco.cpp'; fi`
-
-unistor-UnistorTss.o: ../common/UnistorTss.cpp
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT unistor-UnistorTss.o -MD -MP -MF "$(DEPDIR)/unistor-UnistorTss.Tpo" -c -o unistor-UnistorTss.o `test -f '../common/UnistorTss.cpp' || echo '$(srcdir)/'`../common/UnistorTss.cpp; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/unistor-UnistorTss.Tpo" "$(DEPDIR)/unistor-UnistorTss.Po"; else rm -f "$(DEPDIR)/unistor-UnistorTss.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../common/UnistorTss.cpp' object='unistor-UnistorTss.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o unistor-UnistorTss.o `test -f '../common/UnistorTss.cpp' || echo '$(srcdir)/'`../common/UnistorTss.cpp
-
-unistor-UnistorTss.obj: ../common/UnistorTss.cpp
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT unistor-UnistorTss.obj -MD -MP -MF "$(DEPDIR)/unistor-UnistorTss.Tpo" -c -o unistor-UnistorTss.obj `if test -f '../common/UnistorTss.cpp'; then $(CYGPATH_W) '../common/UnistorTss.cpp'; else $(CYGPATH_W) '$(srcdir)/../common/UnistorTss.cpp'; fi`; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/unistor-UnistorTss.Tpo" "$(DEPDIR)/unistor-UnistorTss.Po"; else rm -f "$(DEPDIR)/unistor-UnistorTss.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../common/UnistorTss.cpp' object='unistor-UnistorTss.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o unistor-UnistorTss.obj `if test -f '../common/UnistorTss.cpp'; then $(CYGPATH_W) '../common/UnistorTss.cpp'; else $(CYGPATH_W) '$(srcdir)/../common/UnistorTss.cpp'; fi`
-
-unistor-UnistorCache.o: ../common/UnistorCache.cpp
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT unistor-UnistorCache.o -MD -MP -MF "$(DEPDIR)/unistor-UnistorCache.Tpo" -c -o unistor-UnistorCache.o `test -f '../common/UnistorCache.cpp' || echo '$(srcdir)/'`../common/UnistorCache.cpp; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/unistor-UnistorCache.Tpo" "$(DEPDIR)/unistor-UnistorCache.Po"; else rm -f "$(DEPDIR)/unistor-UnistorCache.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../common/UnistorCache.cpp' object='unistor-UnistorCache.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o unistor-UnistorCache.o `test -f '../common/UnistorCache.cpp' || echo '$(srcdir)/'`../common/UnistorCache.cpp
-
-unistor-UnistorCache.obj: ../common/UnistorCache.cpp
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT unistor-UnistorCache.obj -MD -MP -MF "$(DEPDIR)/unistor-UnistorCache.Tpo" -c -o unistor-UnistorCache.obj `if test -f '../common/UnistorCache.cpp'; then $(CYGPATH_W) '../common/UnistorCache.cpp'; else $(CYGPATH_W) '$(srcdir)/../common/UnistorCache.cpp'; fi`; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/unistor-UnistorCache.Tpo" "$(DEPDIR)/unistor-UnistorCache.Po"; else rm -f "$(DEPDIR)/unistor-UnistorCache.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../common/UnistorCache.cpp' object='unistor-UnistorCache.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o unistor-UnistorCache.obj `if test -f '../common/UnistorCache.cpp'; then $(CYGPATH_W) '../common/UnistorCache.cpp'; else $(CYGPATH_W) '$(srcdir)/../common/UnistorCache.cpp'; fi`
-
-unistor-UnistorConnector.o: ../common/UnistorConnector.cpp
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT unistor-UnistorConnector.o -MD -MP -MF "$(DEPDIR)/unistor-UnistorConnector.Tpo" -c -o unistor-UnistorConnector.o `test -f '../common/UnistorConnector.cpp' || echo '$(srcdir)/'`../common/UnistorConnector.cpp; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/unistor-UnistorConnector.Tpo" "$(DEPDIR)/unistor-UnistorConnector.Po"; else rm -f "$(DEPDIR)/unistor-UnistorConnector.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../common/UnistorConnector.cpp' object='unistor-UnistorConnector.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o unistor-UnistorConnector.o `test -f '../common/UnistorConnector.cpp' || echo '$(srcdir)/'`../common/UnistorConnector.cpp
-
-unistor-UnistorConnector.obj: ../common/UnistorConnector.cpp
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT unistor-UnistorConnector.obj -MD -MP -MF "$(DEPDIR)/unistor-UnistorConnector.Tpo" -c -o unistor-UnistorConnector.obj `if test -f '../common/UnistorConnector.cpp'; then $(CYGPATH_W) '../common/UnistorConnector.cpp'; else $(CYGPATH_W) '$(srcdir)/../common/UnistorConnector.cpp'; fi`; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/unistor-UnistorConnector.Tpo" "$(DEPDIR)/unistor-UnistorConnector.Po"; else rm -f "$(DEPDIR)/unistor-UnistorConnector.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../common/UnistorConnector.cpp' object='unistor-UnistorConnector.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o unistor-UnistorConnector.obj `if test -f '../common/UnistorConnector.cpp'; then $(CYGPATH_W) '../common/UnistorConnector.cpp'; else $(CYGPATH_W) '$(srcdir)/../common/UnistorConnector.cpp'; fi`
-
-unistor-UnistorStoreBase.o: ../common/UnistorStoreBase.cpp
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT unistor-UnistorStoreBase.o -MD -MP -MF "$(DEPDIR)/unistor-UnistorStoreBase.Tpo" -c -o unistor-UnistorStoreBase.o `test -f '../common/UnistorStoreBase.cpp' || echo '$(srcdir)/'`../common/UnistorStoreBase.cpp; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/unistor-UnistorStoreBase.Tpo" "$(DEPDIR)/unistor-UnistorStoreBase.Po"; else rm -f "$(DEPDIR)/unistor-UnistorStoreBase.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../common/UnistorStoreBase.cpp' object='unistor-UnistorStoreBase.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o unistor-UnistorStoreBase.o `test -f '../common/UnistorStoreBase.cpp' || echo '$(srcdir)/'`../common/UnistorStoreBase.cpp
-
-unistor-UnistorStoreBase.obj: ../common/UnistorStoreBase.cpp
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT unistor-UnistorStoreBase.obj -MD -MP -MF "$(DEPDIR)/unistor-UnistorStoreBase.Tpo" -c -o unistor-UnistorStoreBase.obj `if test -f '../common/UnistorStoreBase.cpp'; then $(CYGPATH_W) '../common/UnistorStoreBase.cpp'; else $(CYGPATH_W) '$(srcdir)/../common/UnistorStoreBase.cpp'; fi`; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/unistor-UnistorStoreBase.Tpo" "$(DEPDIR)/unistor-UnistorStoreBase.Po"; else rm -f "$(DEPDIR)/unistor-UnistorStoreBase.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../common/UnistorStoreBase.cpp' object='unistor-UnistorStoreBase.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o unistor-UnistorStoreBase.obj `if test -f '../common/UnistorStoreBase.cpp'; then $(CYGPATH_W) '../common/UnistorStoreBase.cpp'; else $(CYGPATH_W) '$(srcdir)/../common/UnistorStoreBase.cpp'; fi`
-
-unistor-UnistorSubscribe.o: ../common/UnistorSubscribe.cpp
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT unistor-UnistorSubscribe.o -MD -MP -MF "$(DEPDIR)/unistor-UnistorSubscribe.Tpo" -c -o unistor-UnistorSubscribe.o `test -f '../common/UnistorSubscribe.cpp' || echo '$(srcdir)/'`../common/UnistorSubscribe.cpp; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/unistor-UnistorSubscribe.Tpo" "$(DEPDIR)/unistor-UnistorSubscribe.Po"; else rm -f "$(DEPDIR)/unistor-UnistorSubscribe.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../common/UnistorSubscribe.cpp' object='unistor-UnistorSubscribe.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o unistor-UnistorSubscribe.o `test -f '../common/UnistorSubscribe.cpp' || echo '$(srcdir)/'`../common/UnistorSubscribe.cpp
-
-unistor-UnistorSubscribe.obj: ../common/UnistorSubscribe.cpp
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT unistor-UnistorSubscribe.obj -MD -MP -MF "$(DEPDIR)/unistor-UnistorSubscribe.Tpo" -c -o unistor-UnistorSubscribe.obj `if test -f '../common/UnistorSubscribe.cpp'; then $(CYGPATH_W) '../common/UnistorSubscribe.cpp'; else $(CYGPATH_W) '$(srcdir)/../common/UnistorSubscribe.cpp'; fi`; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/unistor-UnistorSubscribe.Tpo" "$(DEPDIR)/unistor-UnistorSubscribe.Po"; else rm -f "$(DEPDIR)/unistor-UnistorSubscribe.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../common/UnistorSubscribe.cpp' object='unistor-UnistorSubscribe.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o unistor-UnistorSubscribe.obj `if test -f '../common/UnistorSubscribe.cpp'; then $(CYGPATH_W) '../common/UnistorSubscribe.cpp'; else $(CYGPATH_W) '$(srcdir)/../common/UnistorSubscribe.cpp'; fi`
-
-unistor-UnistorReadCacheEx2.o: ../common/UnistorReadCacheEx2.cpp
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT unistor-UnistorReadCacheEx2.o -MD -MP -MF "$(DEPDIR)/unistor-UnistorReadCacheEx2.Tpo" -c -o unistor-UnistorReadCacheEx2.o `test -f '../common/UnistorReadCacheEx2.cpp' || echo '$(srcdir)/'`../common/UnistorReadCacheEx2.cpp; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/unistor-UnistorReadCacheEx2.Tpo" "$(DEPDIR)/unistor-UnistorReadCacheEx2.Po"; else rm -f "$(DEPDIR)/unistor-UnistorReadCacheEx2.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../common/UnistorReadCacheEx2.cpp' object='unistor-UnistorReadCacheEx2.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o unistor-UnistorReadCacheEx2.o `test -f '../common/UnistorReadCacheEx2.cpp' || echo '$(srcdir)/'`../common/UnistorReadCacheEx2.cpp
-
-unistor-UnistorReadCacheEx2.obj: ../common/UnistorReadCacheEx2.cpp
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT unistor-UnistorReadCacheEx2.obj -MD -MP -MF "$(DEPDIR)/unistor-UnistorReadCacheEx2.Tpo" -c -o unistor-UnistorReadCacheEx2.obj `if test -f '../common/UnistorReadCacheEx2.cpp'; then $(CYGPATH_W) '../common/UnistorReadCacheEx2.cpp'; else $(CYGPATH_W) '$(srcdir)/../common/UnistorReadCacheEx2.cpp'; fi`; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/unistor-UnistorReadCacheEx2.Tpo" "$(DEPDIR)/unistor-UnistorReadCacheEx2.Po"; else rm -f "$(DEPDIR)/unistor-UnistorReadCacheEx2.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../common/UnistorReadCacheEx2.cpp' object='unistor-UnistorReadCacheEx2.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o unistor-UnistorReadCacheEx2.obj `if test -f '../common/UnistorReadCacheEx2.cpp'; then $(CYGPATH_W) '../common/UnistorReadCacheEx2.cpp'; else $(CYGPATH_W) '$(srcdir)/../common/UnistorReadCacheEx2.cpp'; fi`
-
-unistor-ZkAdaptor.o: ../zk/ZkAdaptor.cpp
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT unistor-ZkAdaptor.o -MD -MP -MF "$(DEPDIR)/unistor-ZkAdaptor.Tpo" -c -o unistor-ZkAdaptor.o `test -f '../zk/ZkAdaptor.cpp' || echo '$(srcdir)/'`../zk/ZkAdaptor.cpp; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/unistor-ZkAdaptor.Tpo" "$(DEPDIR)/unistor-ZkAdaptor.Po"; else rm -f "$(DEPDIR)/unistor-ZkAdaptor.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../zk/ZkAdaptor.cpp' object='unistor-ZkAdaptor.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o unistor-ZkAdaptor.o `test -f '../zk/ZkAdaptor.cpp' || echo '$(srcdir)/'`../zk/ZkAdaptor.cpp
-
-unistor-ZkAdaptor.obj: ../zk/ZkAdaptor.cpp
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT unistor-ZkAdaptor.obj -MD -MP -MF "$(DEPDIR)/unistor-ZkAdaptor.Tpo" -c -o unistor-ZkAdaptor.obj `if test -f '../zk/ZkAdaptor.cpp'; then $(CYGPATH_W) '../zk/ZkAdaptor.cpp'; else $(CYGPATH_W) '$(srcdir)/../zk/ZkAdaptor.cpp'; fi`; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/unistor-ZkAdaptor.Tpo" "$(DEPDIR)/unistor-ZkAdaptor.Po"; else rm -f "$(DEPDIR)/unistor-ZkAdaptor.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../zk/ZkAdaptor.cpp' object='unistor-ZkAdaptor.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o unistor-ZkAdaptor.obj `if test -f '../zk/ZkAdaptor.cpp'; then $(CYGPATH_W) '../zk/ZkAdaptor.cpp'; else $(CYGPATH_W) '$(srcdir)/../zk/ZkAdaptor.cpp'; fi`
-
-unistor-ZkLocker.o: ../zk/ZkLocker.cpp
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT unistor-ZkLocker.o -MD -MP -MF "$(DEPDIR)/unistor-ZkLocker.Tpo" -c -o unistor-ZkLocker.o `test -f '../zk/ZkLocker.cpp' || echo '$(srcdir)/'`../zk/ZkLocker.cpp; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/unistor-ZkLocker.Tpo" "$(DEPDIR)/unistor-ZkLocker.Po"; else rm -f "$(DEPDIR)/unistor-ZkLocker.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../zk/ZkLocker.cpp' object='unistor-ZkLocker.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o unistor-ZkLocker.o `test -f '../zk/ZkLocker.cpp' || echo '$(srcdir)/'`../zk/ZkLocker.cpp
-
-unistor-ZkLocker.obj: ../zk/ZkLocker.cpp
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT unistor-ZkLocker.obj -MD -MP -MF "$(DEPDIR)/unistor-ZkLocker.Tpo" -c -o unistor-ZkLocker.obj `if test -f '../zk/ZkLocker.cpp'; then $(CYGPATH_W) '../zk/ZkLocker.cpp'; else $(CYGPATH_W) '$(srcdir)/../zk/ZkLocker.cpp'; fi`; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/unistor-ZkLocker.Tpo" "$(DEPDIR)/unistor-ZkLocker.Po"; else rm -f "$(DEPDIR)/unistor-ZkLocker.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../zk/ZkLocker.cpp' object='unistor-ZkLocker.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unistor_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o unistor-ZkLocker.obj `if test -f '../zk/ZkLocker.cpp'; then $(CYGPATH_W) '../zk/ZkLocker.cpp'; else $(CYGPATH_W) '$(srcdir)/../zk/ZkLocker.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_tss.obj `if test -f '../cmn/dcmd_tss.cc'; then $(CYGPATH_W) '../cmn/dcmd_tss.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_tss.cc'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo
