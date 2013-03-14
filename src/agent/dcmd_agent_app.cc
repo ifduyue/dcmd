@@ -1035,8 +1035,8 @@ bool DcmdAgentApp::PrepareSubtaskRunEnv(AgentTaskCmd* cmd, string& err_msg) {
     if (fwrite(cmd->cmd_.app_env_file().c_str(), 1,
       cmd->cmd_.app_env_file().length(), fd) != cmd->cmd_.app_env_file().length())
     {
-      CwxCommon::snprintf(err_2k_, 2047, "Failure to write env file:%s,
-        errno=%d", env_file.c_str(), errno);
+      CwxCommon::snprintf(err_2k_, 2047, "Failure to write env file:%s,"\
+        "errno=%d", env_file.c_str(), errno);
       err_msg = err_2k_;
       fclose(fd);
       return false;
@@ -1222,7 +1222,7 @@ bool DcmdAgentApp::ExecSubTaskCmd(AgentTaskCmd* cmd, string& err_msg,
   if (!process->Run(cmd->cmd_.has_app_user() && cmd->cmd_->app_user().length()?cmd->cmd_->app_user().c_str():NULL,
     NULL,
     NULL,
-    err_msg)) {
+    &err_msg)) {
     delete process;
     return false;
   }
@@ -1447,7 +1447,7 @@ bool DcmdAgentApp::ExecOprCmd(AgentOprCmd* opr_cmd, string& err_msg, DcmdProcess
   if (!process->Run(opr_cmd->cmd_.has_run_user() && opr_cmd->cmd_->has_run_user().length()?opr_cmd->cmd_->run_user().c_str():NULL,
     NULL,
     NULL,
-    err_msg))
+    &err_msg))
   {
     delete process;
     return false;

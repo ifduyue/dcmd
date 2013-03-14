@@ -32,7 +32,7 @@ class DcmdProcess {
   bool Run(char const* user = NULL, 
     list<string> const* process_arg = NULL,
     list<string> const* process_env = NULL,
-    string& err_msg);
+    string* err_msg = NULL);
   // kill掉进程，若is_kill_child=true，则一并kill掉所有的相关child
   void Kill(bool is_kill_child);
   // 阻塞方式wait进程退出。对于正常、异常退出，都可以通过status()获取进程退出值

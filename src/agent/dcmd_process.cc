@@ -8,10 +8,10 @@
 // 环境变量运行。
 // 可以通过Wait等待进程的结束，也可以通过TryWait轮询等待进程的结束。
 namespace dcmd {
-  bool DcmdProcess::Run(char const* user, 
+bool DcmdProcess::Run(char const* user, 
     list<string> const* process_arg,
     list<string> const* process_env,
-    string& err_msg) {
+    string* err_msg) {
   if (IsRuning()) return true;
   pid_t pid = -1;
   uint32_t index = 0;
@@ -21,7 +21,7 @@ namespace dcmd {
     //检测用户
     struct passwd *user_info = getpwnam(user);
     if (!user_info){
-      err_msg = string("user[") + user + string("] doesn't exist.");
+      if (err_msg) *err_msg = string("user[") + user + string("] doesn't exist.");
       return false;
     }
   }
@@ -57,8 +57,9 @@ namespace dcmd {
   }
   pid = ::vfork();
   if (-1 == pid) {
-    if (err_2k) CwxCommon::snprintf(err_2k, kDcmd2kBufLen,
-      "Failure to fork process, errno=%d", errno);
+    char err_str[16];
+    sprintf(err_str, "%d", errno);
+    if (err_msg ) *err_msg = string("Failure to fork process, errno=") + err_str;
     return false;
   }
   if (pid) {
