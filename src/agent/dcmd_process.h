@@ -3,10 +3,11 @@
 
 #include <sys/types.h>
 #include <sys/wait.h>
-#include <stdint.h>
-#include <unistd.h>
-#include <string>
 #include <list>
+#include <pwd.h>
+#include <stdint.h>
+#include <string>
+#include <unistd.h>
 
 #include "../cmn/dcmd_macro.h"
 
