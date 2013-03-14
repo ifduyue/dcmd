@@ -91,7 +91,7 @@ class DcmdAgentApp : public CwxAppFramework{
     string& env_file) {
     GetTaskScriptPath(env_file);
     env_file += string("/") + app + string("_") + task_type + string(".env");
-    return file;
+    return env_file;
   }
   // 获取任务执行的script文件
   inline string& GetTaskRunScriptFile(string const& app, string const& task_type,
@@ -137,7 +137,7 @@ class DcmdAgentApp : public CwxAppFramework{
     return file;
   }
   // 获取操作指令的stdout、stderr输出文件名
-  inline string& GetOprOuputFile(string const& script_file, uint64_t agent_opr_id,
+  inline string& GetOprOuputFile(string const& script_name, uint64_t agent_opr_id,
     string& file) {
     char buf[64];
     CwxCommon::toString(agent_opr_id, buf, 10);

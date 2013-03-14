@@ -13,7 +13,7 @@
 
 namespace dcmd {
 // 获取主机的所有网卡的IP列表。0：成功；-1：失败
-static int get_hostIpAddr(list<string>& ips){
+static int get_host_ip_addr(list<string>& ips){
   int s=-1, num=0, i=0;
   struct ifconf conf;
   struct ifreq *ifr;
@@ -133,7 +133,7 @@ int DcmdAgentApp::initRunEnv(){
   string ips;
   {// 获取ip地址
     agent_ips_.clear();
-    if (0 != getHostIpAddr(agent_ips_)){
+    if (0 != get_host_ip_addr(agent_ips_)) {
       CWX_ERROR(("Failure to get host's ip list, errno=%d", errno));
       return -1;
     }
@@ -467,12 +467,12 @@ void DcmdAgentApp::CheckTaskAndOprCmd(){
     map<string, DcmdAgentAppObj*>::iterator app_iter;
     while(iter != recieved_subtasks_.end()){
       //find app
-      app_iter = app_map_.find((*iter)->app_name_);
+      app_iter = app_map_.find((*iter)->cmd_.app_name());
       if (app_iter != app_map_.end()){
         app_obj = app_iter->second;
       }else{
         app_obj = new DcmdAgentAppObj();
-        app_obj->app_name_ = (*iter)->app_name_;
+        app_obj->app_name_ = (*iter)->cmd_.app_name();
         app_obj->processor_ = NULL;
         app_obj->running_cmd_ = NULL;
         app_obj->running_cmd_process_.erase();
@@ -580,7 +580,7 @@ void DcmdAgentApp::CheckHeatbeat(){
   if (is_clock_back || (last_check_heatbeat < now) ){
     last_check_heatbeat = now;
     map<uint32_t, DcmdCenter*>::iterator iter = center_map_.begin();
-    CwxMsgBlock* msg = NULL;
+    CwxMsgBlock* block = NULL;
     DcmdCenter* center = NULL;
     while(iter != center_map_.end()){
       center = iter->second;
@@ -667,16 +667,15 @@ void DcmdAgentApp::CheckAppTask(DcmdAgentAppObj* app_obj) {
 }
 
 bool DcmdAgentApp::CheckOprCmd(AgentOprCmd* opr_cmd, bool is_cancel){
-  char szTmp[128];
   int ret=0;
-  int statues = 0;
   string out_file;
   string script_file;
-  GetOprRunScriptFile(opr_cmd->cmd_->name(), opr_cmd->agent_opr_id_, script_file);
-  GetOprOuputFile(opr_cmd->cmd_->name(), opr_cmd->agent_opr_id_, out_file);
+  string err_msg;
+  GetOprRunScriptFile(opr_cmd->cmd_.name(), opr_cmd->agent_opr_id_, script_file);
+  GetOprOuputFile(opr_cmd->cmd_.name(), opr_cmd->agent_opr_id_, out_file);
   if (is_cancel) {
     if(opr_cmd->processor_) { // 进程在运行
-      if (0 == opr_cmd->processor_->TryWait()) {
+      if (0 == opr_cmd->processor_->TryWait(err_msg)) {
         opr_cmd->processor_->Kill(true);
       }
     }
@@ -716,8 +715,7 @@ bool DcmdAgentApp::CheckOprCmd(AgentOprCmd* opr_cmd, bool is_cancel){
     // 检查正在执行shell的状态
     ret =opr_cmd->processor_->TryWait(err_msg);
     if (0 == ret){// 进程还在运行
-      if (now < opr_cmd->begin_time_ +
-        strtoul(opr_cmd->cmd_.timeout().c_str(), NULL, 0)){
+      if (now < opr_cmd->begin_time_ + opr_cmd->cmd_.timeout() ) {
         // 正常运行而且没有超时
         return false;
       }
@@ -750,11 +748,11 @@ bool DcmdAgentApp::CheckOprCmd(AgentOprCmd* opr_cmd, bool is_cancel){
 
   // 回复执行结果，成功或失败
   CWX_DEBUG(("Reply opr-cmd result, id=%s  name=%s  success=%s",
-    opr_cmd->cmd_->opr_id().c_str(),
-    opr_cmd->cmd_->name().c_str(),
+    opr_cmd->cmd_.opr_id().c_str(),
+    opr_cmd->cmd_.name().c_str(),
     is_success?"true":"false"));
 
-  ReplyOprCmd(opr_cmd->center_
+  ReplyOprCmd(opr_cmd->center_,
     opr_cmd->msg_taskid_,
     is_success,
     content.c_str(),
@@ -792,7 +790,7 @@ int DcmdAgentApp::RecvMsg(CwxMsgBlock*& msg){
     CWX_INFO(("Receive MTYPE_CENTER_RUNNING_TASK, center:%s", center->host_name_.c_str()));
     return GetRunTaskRecieved(msg, center);
   }else if (dcmd_api::MTYPE_CENTER_RUNNING_OPR == msg->event().getMsgHeader().getMsgType()){
-    CWX_INFO(("Receive MTYPE_CENTER_RUNNING_OPR, center:%s", center->m_strHostName.c_str()));
+    CWX_INFO(("Receive MTYPE_CENTER_RUNNING_OPR, center:%s", center->host_name_.c_str()));
     return GetRunOprRecieved(msg, center);
   }
   CWX_INFO(("Receive invalid msg type from center:%s, msg-type=%d, reconnect it.\n",
