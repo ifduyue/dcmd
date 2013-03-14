@@ -5,8 +5,7 @@
 #include <CwxIniParse.h>
 #include <CwxHostInfo.h>
 
-#include "dcmd_macro.h"
-#include "dcmd_def.h"
+#include "dcmd_agent_def.h"
 
 namespace dcmd{
 // 配置文件的数据对象

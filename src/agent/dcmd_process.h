@@ -8,7 +8,7 @@
 #include <string>
 #include <list>
 
-#include "dcmd_macro.h"
+#include "../cmn/dcmd_macro.h"
 
 namespace dcmd {
 class DcmdProcess {
