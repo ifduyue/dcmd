@@ -54,7 +54,7 @@ class AgentTaskResult {
 
 class AgentTaskCmd {
  public:
-  AgentSubtaskCmd() {
+  AgentTaskCmd() {
     msg_taskid_ = 0;
     cmd_id_ = 0;
     last_check_process_time_ = 0;

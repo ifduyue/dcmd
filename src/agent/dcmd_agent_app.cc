@@ -109,7 +109,7 @@ int DcmdAgentApp::initRunEnv(){
   // set compile date
   this->setLastCompileDatetime(CWX_COMPILE_DATE(_BUILD_DATE));
   // 将加载的配置文件信息输出到日志文件中，以供查看检查
-  config_.OutputConfig()();
+  config_.OutputConfig();
   // 清空环境
   Reset();
   // 初始化目录
@@ -120,15 +120,15 @@ int DcmdAgentApp::initRunEnv(){
 
   GetTaskOutputPath(path);
   CWX_INFO(("Check task output path: %s......", path.c_str()));
-  if (!InitPath(strPath, false)) return -1;
+  if (!InitPath(path, false)) return -1;
 
   GetOprScriptPath(path);
   CWX_INFO(("Check opr script path: %s......", path.c_str()));
-  if (!InitPath(strPath, true)) return -1;
+  if (!InitPath(path, true)) return -1;
 
   GetOprOutputPath(path);
   CWX_INFO(("Check opr output path: %s......", path.c_str()));
-  if (!InitPath(strPath, true)) return -1;
+  if (!InitPath(path, true)) return -1;
 
   string ips;
   {// 获取ip地址
@@ -199,7 +199,6 @@ void DcmdAgentApp::onTime(CwxTimeValue const& current){
   static uint32_t base_time = 0;
   static uint32_t last_check_time = 0;
   uint32_t  now = time(NULL);
-  uint32_t  modify_time = 0;
   bool is_clock_back = IsClockBack(base_time, now);
   // 调用基类的onTime函数
   CwxAppFramework::onTime(current);
@@ -238,7 +237,7 @@ int DcmdAgentApp::onConnCreated(CwxAppHandler4Msg& conn,
   map<uint32_t, DcmdCenter*>::iterator iter;
   iter = center_map_.find(conn.getConnInfo().getConnId());
   CWX_ASSERT(iter != center_map_.end());
-  CWX_ASSERT(!iter->second->m_bConnected);
+  CWX_ASSERT(!iter->second->is_connected_);
   DcmdCenter* center = iter->second;
   CWX_INFO(("Report agent to center:%s", center->host_name_.c_str()));
   // 向center报告自己的状态信息
@@ -250,7 +249,7 @@ int DcmdAgentApp::onConnCreated(CwxAppHandler4Msg& conn,
     *report.add_agent_ips()=*ip_iter;
     ip_iter++;
   }
-  if (!agent_ips_.SerializeToString(&proto_str_)) {
+  if (!report.SerializeToString(&proto_str_)) {
     CWX_ERROR(("Failure to pack heatbeat msg."));
     return -1;
   }
@@ -415,7 +414,7 @@ void DcmdAgentApp::Reset(){
 bool DcmdAgentApp::InitPath(string const& path, bool is_clean_path) {
   if (!CwxFile::isDir(path.c_str())) {
     CWX_INFO(("create directory:%s", path.c_str()));
-    if (!CwxFile::createDir(strPath.c_str())) {
+    if (!CwxFile::createDir(path.c_str())) {
       CWX_ERROR(("Failure to create path:%s", path.c_str()));
       return false;
     }
@@ -426,7 +425,7 @@ bool DcmdAgentApp::InitPath(string const& path, bool is_clean_path) {
   }
   if (is_clean_path) {
     CWX_INFO(("clear directory:%s", path.c_str()));
-    sprintf(err_2k_, "rm -f %s/*", strPath.c_str());
+    sprintf(err_2k_, "rm -f %s/*", path.c_str());
     ::system(err_2k_);
   }
   return true;
@@ -447,7 +446,7 @@ void DcmdAgentApp::CheckExpiredTaskOutput(uint32_t now){
   while(iter != file_list.end()){
     file = path + "/" + *iter;
     modify_time = CwxFile::getFileMTime(file.c_str());
-    if (modify_time + kTaskCmdOutputExpireDay * 24 * 3600 < uiNow){//remove it
+    if (modify_time + kTaskCmdOutputExpireDay * 24 * 3600 < now){//remove it
       CwxDate::getDate(modify_time, file_time);
       CWX_INFO(("Remove out-date tasknode output file:%s, modify-time=%s, now=%s",
         file.c_str(), file_time.c_str(), now_time.c_str()));
@@ -468,12 +467,12 @@ void DcmdAgentApp::CheckTaskAndOprCmd(){
     map<string, DcmdAgentAppObj*>::iterator app_iter;
     while(iter != recieved_subtasks_.end()){
       //find app
-      app_iter = app_map_.find((*iter)->app_name());
+      app_iter = app_map_.find((*iter)->app_name_);
       if (app_iter != app_map_.end()){
         app_obj = app_iter->second;
       }else{
         app_obj = new DcmdAgentAppObj();
-        app_obj->app_name_ = (*iter)->app_name();
+        app_obj->app_name_ = (*iter)->app_name_;
         app_obj->processor_ = NULL;
         app_obj->running_cmd_ = NULL;
         app_obj->running_cmd_process_.erase();
@@ -523,12 +522,12 @@ void DcmdAgentApp::CheckTaskAndOprCmd(){
         dcmd_api::MTYPE_AGENT_SUBTASK_CMD_RESULT,
         iter->second->msg_taskid_,
         proto_str_.length());
-      block = CwxMsgBlockAlloc::pack(head, proto_str_->c_str(), proto_str_.length());
+      block = CwxMsgBlockAlloc::pack(head, proto_str_.c_str(), proto_str_.length());
       if (!block) {
         CWX_ERROR(("Failure to pack subtask result package for no memory"));
         exit(0);
       }
-      block->send_ctrl().setConnId(master_->m_uiConnId);
+      block->send_ctrl().setConnId(master_->conn_id_);
       block->send_ctrl().setSvrId(SVR_TYPE_CENTER);
       block->send_ctrl().setHostId(0);
       block->send_ctrl().setMsgAttr(CwxMsgSendCtrl::NONE); 
@@ -537,13 +536,13 @@ void DcmdAgentApp::CheckTaskAndOprCmd(){
                    "cmd:%s, subtask:%s, conn_id:%d",
           master_->host_name_.c_str(),
           result->result_.cmd().c_str(),
-          result->result_.subtask_id().c(),
+          result->result_.subtask_id().c_str(),
           master_->conn_id_));
         CwxMsgBlockAlloc::free(block);
         return ;
       }
       CWX_DEBUG(("Send subtask result to center:%s, cmd:%s, subtask:%s",
-        result->cmd().c_str(),
+        result->result_.cmd().c_str(),
         result->result_.cmd().c_str(),
         result->result_.subtask_id().c_str()));
       // 将处理结果从待发送队列已送到等待回复的队列
@@ -583,7 +582,6 @@ void DcmdAgentApp::CheckHeatbeat(){
     map<uint32_t, DcmdCenter*>::iterator iter = center_map_.begin();
     CwxMsgBlock* msg = NULL;
     DcmdCenter* center = NULL;
-    int ret = 0;
     while(iter != center_map_.end()){
       center = iter->second;
       if (!center->is_connected_){
@@ -639,7 +637,6 @@ void DcmdAgentApp::CheckAppTask(DcmdAgentAppObj* app_obj) {
       cmd->cmd_.task_id().c_str(),
       cmd->cmd_.subtask_id().c_str(),
       cmd->cmd_.cmd().c_str()));
-    string err_msg;
     if (!PrepareSubtaskRunEnv(cmd, err_msg)){
       CWX_ERROR(("Failure to prepare subtask's execution: task_id=%s "\
         "subtask=%s cmd_id=%s. err=%s",
@@ -648,7 +645,7 @@ void DcmdAgentApp::CheckAppTask(DcmdAgentAppObj* app_obj) {
         cmd->cmd_.cmd().c_str(),
         err_msg.c_str()));
       result = new AgentTaskResult();
-      FillTaskResult(*cmd, *result, false, err_msg, "0");
+      FillTaskResult(*cmd, *result, "", false, err_msg);
       wait_send_result_map_[result->cmd_id_] = result;
       return;
     }
@@ -660,7 +657,7 @@ void DcmdAgentApp::CheckAppTask(DcmdAgentAppObj* app_obj) {
         err_msg.c_str()));
       app_obj->processor_ = NULL;
       result = new AgentTaskResult();
-      FillTaskResult(*cmd, *result, false, err_msg, "0");
+      FillTaskResult(*cmd, *result, "", false, err_msg);
       wait_send_result_map_[result->cmd_id_] = result;
       return;
     }
@@ -851,7 +848,7 @@ void DcmdAgentApp::CheckRuningSubTask(DcmdAgentAppObj* app_obj, bool is_cancel){
     out_process = "";
   }
   result = new AgentTaskResult();
-  FillTaskResult(*app_obj->running_cmd_, *result)
+  FillTaskResult(*app_obj->running_cmd_, *result, out_process, is_success, err_msg);
   CWX_INFO(("App[%s]'s cmd finished, task-type=%s task_id=%s subtask_id=%s, cmd_id=%s, state=%s, err=%s",
     app_obj->app_name_.c_str(),
     app_obj->running_cmd_->cmd_.task_type().c_str(),
@@ -895,7 +892,7 @@ void DcmdAgentApp::ExecCtrlTaskCmdForCancelSubTask(DcmdAgentAppObj* app_obj,
             (*iter_cancel)->cmd_.cmd().c_str(),
             (*iter_cancel)->cmd_.subtask_id().c_str()));
           result = new AgentTaskResult();
-          FillTaskResult(*(*iter_cancel), *result, "0", false, "Subtask is canceled.");
+          FillTaskResult(*(*iter_cancel), *result, "", false, "Subtask is canceled.");
           wait_send_result_map_[result->cmd_id_] = result;
           app_obj->cmds_.erase(iter_cancel);
           break;
@@ -915,7 +912,7 @@ void DcmdAgentApp::ExecCtrlTaskCmdForCancelSubTask(DcmdAgentAppObj* app_obj,
   }
   CWX_ASSERT(iter != app_obj->cmds_.end());
   result = new AgentTaskResult();
-  FillTaskResult(*cmd, *result, "", true, "");
+  FillTaskResult(*cmd, *result, "0", true, "");
   wait_send_result_map_[result->cmd_id_] = result;
   // 将cancel指令从队里中删除
   app_obj->cmds_.erase(iter);
@@ -948,7 +945,7 @@ void DcmdAgentApp::ExecCtrlTaskCmdForCancelAll(DcmdAgentAppObj* app_obj,
           (*iter_cancel)->cmd_.cmd().c_str(),
           (*iter_cancel)->cmd_.subtask_id().c_str()));
         result = new AgentTaskResult();
-        FillTaskResult(*(*iter_cancel), *result, "0", false, "Subtask is canceled.");
+        FillTaskResult(*(*iter_cancel), *result, "", false, "Subtask is canceled.");
         wait_send_result_map_[result->cmd_id_] = result;
         app_obj->cmds_.erase(iter_cancel);
         iter_cancel = app_obj->cmds_.begin(); // 重新从begin开始

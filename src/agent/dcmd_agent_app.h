@@ -48,7 +48,7 @@ class DcmdAgentApp : public CwxAppFramework{
   // 计算机的时钟是否回调
   inline bool IsClockBack(uint32_t& last_time, uint32_t now) const{
     if (last_time > now + 1){
-      last_time = uiNow;
+      last_time = now;
       return true;
     }
     last_time = now;
@@ -89,8 +89,8 @@ class DcmdAgentApp : public CwxAppFramework{
   // 获取Task的app的环境配置文件
   inline string& GetTaskAppEnvFile(string const& app, string const& task_type,
     string& env_file) {
-    GetTaskScriptPath(file);
-    file += string("/") + app + string("_") + task_type + string(".env");
+    GetTaskScriptPath(env_file);
+    env_file += string("/") + app + string("_") + task_type + string(".env");
     return file;
   }
   // 获取任务执行的script文件
@@ -104,7 +104,7 @@ class DcmdAgentApp : public CwxAppFramework{
   inline string& GetTaskRunScriptShellFile(string const& app, string const& task_type,
     string& file)
   {
-    GetTaskRunScriptFile(file);
+    GetTaskRunScriptFile(app, task_type, file);
     file += ".sh";
     return file;        
   }
@@ -132,7 +132,7 @@ class DcmdAgentApp : public CwxAppFramework{
   inline string& GetOprRunScriptShellFile(string const& script_name, uint64_t agent_opr_id,
     string& file)
   {
-    GetOprRunScriptFile(script_file, opr_id, file);
+    GetOprRunScriptFile(script_name, agent_opr_id, file);
     file += string(".sh");
     return file;
   }
