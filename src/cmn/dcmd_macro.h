@@ -12,7 +12,14 @@ namespace dcmd {
 
 // 操作指令的参数的前缀
 const char* const kAgentOprArgPrex = "DCMD";
-
+// center的task type 文件的前缀
+const char* const kTaskTypeFilePrex = "dcmd_task_";
+// center的task type 文件的后缀
+const char* const kTaskTypeFileSuffix = ".script";
+// center的opr cmd文件的前缀
+const char* const kOprCmdFilePrex = "dcmd_opr_";
+// center的opr cmd文件的后缀
+const char* const kOprCmdFileSuffix = ".script";
 // 操作指令的缺省超时时间
 const uint32_t kDefOprCmdTimeoutSecond = 30;
 // 操作指令的最小超时时间
@@ -27,6 +34,14 @@ const uint32_t kMaxIpTableRefreshSecond = 1800;
 // 最小的设备ip表的刷新间隔
 const uint32_t kMinIpTableRefreshSecond = 30;
 
+// 缺省的illegal agent的block的时间
+const uint32_t kDefIlegalAgentBlockSecond = 180;
+// 最小的illegal agnet的block的时间
+const uint32_t kMinIllegalAgentBlockSecond = 5;
+// 最大的illegal agent的block的时间
+const uint32_t kMaxIllegalAgentBlockSecond = 1800;
+
+
 // 缺省的请求超时时间
 const uint32_t kDefReqTimeoutSecond = 10;
 // 最小的请求超时时间
@@ -37,7 +52,7 @@ const uint32_t kMaxReqTimeoutSecond = 600;
 // 缺省的数据包的最大大小
 const uint32_t kDefMaxPackageMSize = 4;
 // 最小的数据包的最大大小
-const uint32_t kMinMaxPackageMSize = 2;
+const uint32_t kMinMaxPackageMSize = 1;
 // 最大的数据包的最大大小
 const uint32_t kMaxMaxPackageMSize = 16;
 
