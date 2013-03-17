@@ -63,7 +63,7 @@ class DcmdCenterApp : public CwxAppFramework {
   virtual CWX_UINT32 onEndSendMsg(CwxMsgBlock*& msg, CwxAppHandler4Msg& conn);
  public:
     // 连接数据库的函数
-    bool ConnectMysql(Mysql* my);
+    bool ConnectMysql(Mysql* my, uint32_t timeout);
     // 检查mysql连接，若没有连接则连接，返回false表示连接失败
     bool CheckMysql(Mysql* my);
     // 检测计算机的时钟是否回调

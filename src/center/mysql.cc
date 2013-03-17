@@ -24,9 +24,6 @@ bool Mysql::connect(char const* szSvrName,
     if (uiTimeoutSecond){
         mysql_options(&m_handle, MYSQL_OPT_CONNECT_TIMEOUT, (const char *)&uiTimeoutSecond);
     }
-    if (szCharset) {
-      mysql_options(&handle_, MYSQL_SET_CHARSET_NAME, szCharset);
-    }
     if (!mysql_real_connect(&m_handle, 
         szSvrName,
         szUser,
