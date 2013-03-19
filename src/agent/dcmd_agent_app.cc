@@ -156,7 +156,7 @@ int DcmdAgentApp::initRunEnv(){
   { // 连接控制中心
     list<CwxHostInfo>::const_iterator iter = config_.conf().centers_.begin();
     uint32_t host_id = 1;
-    DcmdCenter* center = NULL;
+    AgentCenter* center = NULL;
     while(iter != config_.conf().centers_.end()){
       int ret = 0;
       CWX_INFO(("Connecting to center:%s:%u......",
@@ -174,7 +174,7 @@ int DcmdAgentApp::initRunEnv(){
           iter->getPort()));
         return -1;
       }
-      center = new DcmdCenter();
+      center = new AgentCenter();
       center->host_name_ = iter->getHostName();
       sprintf(err_2k_, ":%u", iter->getPort());
       center->host_name_ += err_2k_;
@@ -234,11 +234,11 @@ int DcmdAgentApp::onConnCreated(CwxAppHandler4Msg& conn,
                                  bool& ,
                                  bool& )
 {
-  map<uint32_t, DcmdCenter*>::iterator iter;
+  map<uint32_t, AgentCenter*>::iterator iter;
   iter = center_map_.find(conn.getConnInfo().getConnId());
   CWX_ASSERT(iter != center_map_.end());
   CWX_ASSERT(!iter->second->is_connected_);
-  DcmdCenter* center = iter->second;
+  AgentCenter* center = iter->second;
   CWX_INFO(("Report agent to center:%s", center->host_name_.c_str()));
   // 向center报告自己的状态信息
   CwxMsgBlock* msg = NULL;
@@ -278,9 +278,9 @@ int DcmdAgentApp::onConnCreated(CwxAppHandler4Msg& conn,
 
 int DcmdAgentApp::onConnClosed(CwxAppHandler4Msg& conn) {
   // 控制中心的连接关闭
-  DcmdCenter* center = NULL;
+  AgentCenter* center = NULL;
   {
-    map<uint32_t, DcmdCenter*> ::iterator iter;
+    map<uint32_t, AgentCenter*> ::iterator iter;
     iter = center_map_.find(conn.getConnInfo().getConnId());
     CWX_ASSERT(iter != center_map_.end());
     center = iter->second;
@@ -346,7 +346,7 @@ void DcmdAgentApp::destroy(){
 
 void DcmdAgentApp::Reset(){
   {// 释放控制中心对象map
-    map<uint32_t, DcmdCenter*>::iterator iter = center_map_.begin();
+    map<uint32_t, AgentCenter*>::iterator iter = center_map_.begin();
     while(iter != center_map_.end()){
       delete iter->second;
       iter++;
@@ -357,7 +357,7 @@ void DcmdAgentApp::Reset(){
   master_ = NULL;
 
   {// 释放app的task的map
-    map<string, DcmdAgentAppObj*>::iterator iter = app_map_.begin();
+    map<string, AgentAppObj*>::iterator iter = app_map_.begin();
     while(iter != app_map_.end()){
       delete iter->second;
       iter++;
@@ -463,15 +463,15 @@ void DcmdAgentApp::CheckTaskAndOprCmd(){
   // 检查新收到的新指令
   if (recieved_subtasks_.begin() != recieved_subtasks_.end()){
     list<AgentTaskCmd*>::iterator iter = recieved_subtasks_.begin();
-    DcmdAgentAppObj* app_obj = NULL;
-    map<string, DcmdAgentAppObj*>::iterator app_iter;
+    AgentAppObj* app_obj = NULL;
+    map<string, AgentAppObj*>::iterator app_iter;
     while(iter != recieved_subtasks_.end()){
       //find app
       app_iter = app_map_.find((*iter)->cmd_.app_name());
       if (app_iter != app_map_.end()){
         app_obj = app_iter->second;
       }else{
-        app_obj = new DcmdAgentAppObj();
+        app_obj = new AgentAppObj();
         app_obj->app_name_ = (*iter)->cmd_.app_name();
         app_obj->processor_ = NULL;
         app_obj->running_cmd_ = NULL;
@@ -486,7 +486,7 @@ void DcmdAgentApp::CheckTaskAndOprCmd(){
 
   // 检查app的task的运行状况
   if (app_map_.size()) {
-    map<string, DcmdAgentAppObj*>::iterator iter = app_map_.begin();
+    map<string, AgentAppObj*>::iterator iter = app_map_.begin();
     while(iter != app_map_.end()){
       CheckAppTask(iter->second);
       ++iter;
@@ -579,9 +579,9 @@ void DcmdAgentApp::CheckHeatbeat(){
   bool is_clock_back = IsClockBack(time_base, now);
   if (is_clock_back || (last_check_heatbeat < now) ){
     last_check_heatbeat = now;
-    map<uint32_t, DcmdCenter*>::iterator iter = center_map_.begin();
+    map<uint32_t, AgentCenter*>::iterator iter = center_map_.begin();
     CwxMsgBlock* block = NULL;
-    DcmdCenter* center = NULL;
+    AgentCenter* center = NULL;
     while(iter != center_map_.end()){
       center = iter->second;
       if (!center->is_connected_){
@@ -618,7 +618,7 @@ void DcmdAgentApp::CheckHeatbeat(){
   }
 }
 
-void DcmdAgentApp::CheckAppTask(DcmdAgentAppObj* app_obj) {
+void DcmdAgentApp::CheckAppTask(AgentAppObj* app_obj) {
   AgentTaskResult* result = NULL;
   // 检查当前的进程
   if (app_obj->processor_) CheckRuningSubTask(app_obj, false);
@@ -762,8 +762,8 @@ bool DcmdAgentApp::CheckOprCmd(AgentOprCmd* opr_cmd, bool is_cancel){
 }
 
 int DcmdAgentApp::RecvMsg(CwxMsgBlock*& msg){
-  DcmdCenter* center = NULL;
-  map<uint32_t, DcmdCenter*>::iterator iter = center_map_.find(msg->event().getConnId());
+  AgentCenter* center = NULL;
+  map<uint32_t, AgentCenter*>::iterator iter = center_map_.find(msg->event().getConnId());
   CWX_ASSERT(iter != center_map_.end());
   CWX_ASSERT(msg);
   center = iter->second;
@@ -797,7 +797,7 @@ int DcmdAgentApp::RecvMsg(CwxMsgBlock*& msg){
   return -1;
 }
 
-void DcmdAgentApp::CheckRuningSubTask(DcmdAgentAppObj* app_obj, bool is_cancel){
+void DcmdAgentApp::CheckRuningSubTask(AgentAppObj* app_obj, bool is_cancel){
   AgentTaskResult* result = NULL;
   bool is_kill = false;
   CWX_ASSERT(0 != app_obj->processor_);
@@ -859,7 +859,7 @@ void DcmdAgentApp::CheckRuningSubTask(DcmdAgentAppObj* app_obj, bool is_cancel){
   app_obj->running_cmd_ = NULL;
 }
 
-void DcmdAgentApp::ExecCtrlTaskCmdForCancelSubTask(DcmdAgentAppObj* app_obj,
+void DcmdAgentApp::ExecCtrlTaskCmdForCancelSubTask(AgentAppObj* app_obj,
   AgentTaskCmd* cmd)
 {
   AgentTaskResult* result = NULL;
@@ -915,7 +915,7 @@ void DcmdAgentApp::ExecCtrlTaskCmdForCancelSubTask(DcmdAgentAppObj* app_obj,
   app_obj->cmds_.erase(iter);
 }
 
-void DcmdAgentApp::ExecCtrlTaskCmdForCancelAll(DcmdAgentAppObj* app_obj,
+void DcmdAgentApp::ExecCtrlTaskCmdForCancelAll(AgentAppObj* app_obj,
   AgentTaskCmd* cmd)
 {
   AgentTaskResult* result = NULL;
@@ -968,7 +968,7 @@ void DcmdAgentApp::ExecCtrlTaskCmdForCancelAll(DcmdAgentAppObj* app_obj,
 }
 
 // 处理控制指令
-void DcmdAgentApp::ExecCtrlTaskCmd(DcmdAgentAppObj* app_obj) {
+void DcmdAgentApp::ExecCtrlTaskCmd(AgentAppObj* app_obj) {
   AgentTaskResult* result = NULL;
   list<AgentTaskCmd*>::iterator iter = app_obj->cmds_.begin();
   while(iter != app_obj->cmds_.end()){
@@ -1221,7 +1221,7 @@ bool DcmdAgentApp::ExecSubTaskCmd(AgentTaskCmd* cmd, string& err_msg,
   return true;
 }
 
-int DcmdAgentApp::ReportReply(CwxMsgBlock*& msg, DcmdCenter* center) {
+int DcmdAgentApp::ReportReply(CwxMsgBlock*& msg, AgentCenter* center) {
   CWX_INFO(("Receive report-reply msg from center:%s", center->host_name_.c_str()));
   proto_str_.assign(msg->rd_ptr(),msg->length());
   dcmd_api::AgentReportReply report_reply;
@@ -1271,7 +1271,7 @@ int DcmdAgentApp::ReportReply(CwxMsgBlock*& msg, DcmdCenter* center) {
   return 0;
 }
 
-int DcmdAgentApp::MasterChanged(CwxMsgBlock*& msg, DcmdCenter* center) {
+int DcmdAgentApp::MasterChanged(CwxMsgBlock*& msg, AgentCenter* center) {
   // 如果控制中心改变，则设置新的控制中心连接ID
   if (master_ != center){
     CWX_INFO(("center master is changed, prev=%s, now=%s",
@@ -1445,7 +1445,7 @@ bool DcmdAgentApp::ExecOprCmd(AgentOprCmd* opr_cmd, string& err_msg, DcmdProcess
   return true;
 }
 
-int DcmdAgentApp::ReplyOprCmd(DcmdCenter* center,
+int DcmdAgentApp::ReplyOprCmd(AgentCenter* center,
   uint32_t msg_task_id,
   bool is_success,
   char const* result,
@@ -1480,7 +1480,7 @@ int DcmdAgentApp::ReplyOprCmd(DcmdCenter* center,
   return 0;
 }
 
-int DcmdAgentApp::SubTaskCmdRecieved(CwxMsgBlock*& msg, DcmdCenter* center) {
+int DcmdAgentApp::SubTaskCmdRecieved(CwxMsgBlock*& msg, AgentCenter* center) {
   // 如果此消息不是来自与master控制中心，则关闭连接
   if (center  != master_){
     CWX_ERROR(("Receive subtask cmd from the slave center: %s, master center is:%s, close it",
@@ -1545,7 +1545,7 @@ int DcmdAgentApp::SubTaskCmdRecieved(CwxMsgBlock*& msg, DcmdCenter* center) {
   return 0;
 }
 
-int DcmdAgentApp::SubTaskResultReply(CwxMsgBlock*& msg, DcmdCenter* center){
+int DcmdAgentApp::SubTaskResultReply(CwxMsgBlock*& msg, AgentCenter* center){
   // 如果此消息不是来自与master控制中心，则关闭连接
   if (center  != master_){
     CWX_ERROR(("Receive cmd msg from the slave center: %s, master center is:%s, close it",
@@ -1584,7 +1584,7 @@ int DcmdAgentApp::SubTaskResultReply(CwxMsgBlock*& msg, DcmdCenter* center){
   return 0;
 }
 
-int DcmdAgentApp::OprCmdRecieved(CwxMsgBlock*& msg, DcmdCenter* center) {
+int DcmdAgentApp::OprCmdRecieved(CwxMsgBlock*& msg, AgentCenter* center) {
   if (opr_cmd_map_.size() > kAgentMaxConcurrentOprNum){// 待处理的命令太多
     sprintf(err_2k_, "Too many queuing opr cmd, max=%d",
       kAgentMaxConcurrentOprNum);
@@ -1623,7 +1623,7 @@ int DcmdAgentApp::OprCmdRecieved(CwxMsgBlock*& msg, DcmdCenter* center) {
   return 0;
 }
 
-int DcmdAgentApp::FetchTaskOutputResultRecieved(CwxMsgBlock*& msg, DcmdCenter* center) {
+int DcmdAgentApp::FetchTaskOutputResultRecieved(CwxMsgBlock*& msg, AgentCenter* center) {
   // 解析消息
   dcmd_api::AgentTaskOutput  recv;
   dcmd_api::AgentTaskOutputReply reply;
@@ -1699,7 +1699,7 @@ int DcmdAgentApp::FetchTaskOutputResultRecieved(CwxMsgBlock*& msg, DcmdCenter* c
   return 0;
 }
 
-int DcmdAgentApp::GetRunTaskRecieved(CwxMsgBlock*& msg, DcmdCenter* center) {
+int DcmdAgentApp::GetRunTaskRecieved(CwxMsgBlock*& msg, AgentCenter* center) {
   // 解析消息
   dcmd_api::AgentRunningTask  recv;
   dcmd_api::AgentRunningTaskReply reply;
@@ -1714,7 +1714,7 @@ int DcmdAgentApp::GetRunTaskRecieved(CwxMsgBlock*& msg, DcmdCenter* center) {
   dcmd_api::SubTaskInfo* subtask = NULL;
 
   if (recv.app_name().length()){
-    map<string, DcmdAgentAppObj*>::iterator iter = app_map_.find(recv.app_name());
+    map<string, AgentAppObj*>::iterator iter = app_map_.find(recv.app_name());
     if (iter != app_map_.end()){
       list<AgentTaskCmd*>::iterator subtask_iter;
       if (iter->second->running_cmd_) {
@@ -1741,7 +1741,7 @@ int DcmdAgentApp::GetRunTaskRecieved(CwxMsgBlock*& msg, DcmdCenter* center) {
       }
     }
   }else{
-    map<string, DcmdAgentAppObj*>::iterator iter = app_map_.begin();
+    map<string, AgentAppObj*>::iterator iter = app_map_.begin();
     list<AgentTaskCmd*>::iterator subtask_iter;
     while(iter != app_map_.end()){
       if (iter->second->running_cmd_) {
@@ -1800,7 +1800,7 @@ int DcmdAgentApp::GetRunTaskRecieved(CwxMsgBlock*& msg, DcmdCenter* center) {
   return 0;
 }
 
-int DcmdAgentApp::GetRunOprRecieved(CwxMsgBlock*& msg, DcmdCenter* center) {
+int DcmdAgentApp::GetRunOprRecieved(CwxMsgBlock*& msg, AgentCenter* center) {
   // 解析消息
   dcmd_api::AgentRunningOpr  recv;
   dcmd_api::AgentRunningOprReply reply;
@@ -1857,7 +1857,7 @@ int DcmdAgentApp::GetRunOprRecieved(CwxMsgBlock*& msg, DcmdCenter* center) {
   return 0;
 }
 
-void DcmdAgentApp::CheckSubTaskProcess(DcmdAgentAppObj* app_obj) {
+void DcmdAgentApp::CheckSubTaskProcess(AgentAppObj* app_obj) {
   bool is_success = false;
   string out_process;
   string err_msg;

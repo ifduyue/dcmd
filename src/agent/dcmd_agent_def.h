@@ -12,9 +12,9 @@
 
 namespace dcmd {
   // 控制中心对象
-class DcmdCenter{
+class AgentCenter{
  public:
-  DcmdCenter();
+  AgentCenter();
  public:
   // center的id
   uint32_t        host_id_;
@@ -93,7 +93,7 @@ class AgentOprCmd {
    // 操作当前执行的进程
    DcmdProcess*                 processor_;
    // 发送操作的控制中心对象
-   DcmdCenter*                  center_;
+   AgentCenter*                  center_;
    // 操作的id
    uint64_t                     opr_id_;
    // agent自增操作id
@@ -101,13 +101,13 @@ class AgentOprCmd {
    // 运行时间
    uint32_t                     begin_time_;
 };
-class DcmdAgentAppObj{
+class AgentAppObj{
  public:
-  DcmdAgentAppObj(){
+  AgentAppObj(){
     processor_ = NULL;
     running_cmd_ = NULL;
   }
-  ~DcmdAgentAppObj() {
+  ~AgentAppObj() {
     if (processor_) delete processor_;
   }
  public:

@@ -152,19 +152,19 @@ class DcmdAgentApp : public CwxAppFramework{
   // 心跳检测
 	void CheckHeatbeat();
   // 检查app的task指令
-  void CheckAppTask(DcmdAgentAppObj* app_obj);
+  void CheckAppTask(AgentAppObj* app_obj);
   // 执行操作整理。true：已经完成；false：正在执行
   bool CheckOprCmd(AgentOprCmd* opr_cmd, bool is_cancel=false);
 	// 处理收到的消息。 -1：失败并关闭连接；0：成功
 	int RecvMsg(CwxMsgBlock*& msg);
   // 检查正在运行的subtask
-  void CheckRuningSubTask(DcmdAgentAppObj* app_obj, bool is_cancel=false);
+  void CheckRuningSubTask(AgentAppObj* app_obj, bool is_cancel=false);
   // 处理控制指令
-  void ExecCtrlTaskCmd(DcmdAgentAppObj* app_obj);
+  void ExecCtrlTaskCmd(AgentAppObj* app_obj);
   // 处理控制指令
-  void ExecCtrlTaskCmdForCancelAll(DcmdAgentAppObj* app_obj, AgentTaskCmd* cmd);
+  void ExecCtrlTaskCmdForCancelAll(AgentAppObj* app_obj, AgentTaskCmd* cmd);
   // 处理控制指令
-  void ExecCtrlTaskCmdForCancelSubTask(DcmdAgentAppObj* app_obj, AgentTaskCmd* cmd);
+  void ExecCtrlTaskCmdForCancelSubTask(AgentAppObj* app_obj, AgentTaskCmd* cmd);
   // 准备subtask命令运行的环境
   bool PrepareSubtaskRunEnv(AgentTaskCmd* cmd, string& err_msg);
   // 基于subtask形成task result
@@ -177,29 +177,29 @@ class DcmdAgentApp : public CwxAppFramework{
   // 执行操作的命令。 true：成功；false：失败
   bool ExecOprCmd(AgentOprCmd* opr_cmd, string& err_msg, DcmdProcess*& process);
   // 回复操作指令的处理结果，0：成功；-1：失败
-  int ReplyOprCmd(DcmdCenter* center,
+  int ReplyOprCmd(AgentCenter* center,
     uint32_t msg_task_id,
     bool  is_success,
     char const* result,
     char const* err_msg);
   // 处理report的结果。 -1：失败并关闭连接；0：成功
-  int ReportReply(CwxMsgBlock*& msg, DcmdCenter* center);
+  int ReportReply(CwxMsgBlock*& msg, AgentCenter* center);
 	// master发生改变。 -1：失败并关闭连接；0：成功
-	int MasterChanged(CwxMsgBlock*& msg, DcmdCenter* center);
+	int MasterChanged(CwxMsgBlock*& msg, AgentCenter* center);
 	// 处理收到的任务。 -1：失败并关闭连接；0：成功
-	int SubTaskCmdRecieved(CwxMsgBlock*& msg, DcmdCenter* center);
+	int SubTaskCmdRecieved(CwxMsgBlock*& msg, AgentCenter* center);
 	// 处理任务结果的回复。 -1：失败并关闭连接；0：成功
-	int SubTaskResultReply(CwxMsgBlock*& msg, DcmdCenter* center);
+	int SubTaskResultReply(CwxMsgBlock*& msg, AgentCenter* center);
   // 处理收到的操作指令。 -1：失败并关闭连接；0：成功
-  int OprCmdRecieved(CwxMsgBlock*& msg, DcmdCenter* center);
+  int OprCmdRecieved(CwxMsgBlock*& msg, AgentCenter* center);
   // 处理收到的获取任务执行输出的消息。 -1：失败并关闭连接；0：成功
-  int FetchTaskOutputResultRecieved(CwxMsgBlock*& msg, DcmdCenter* center);
+  int FetchTaskOutputResultRecieved(CwxMsgBlock*& msg, AgentCenter* center);
   // 处理收到的获取运行task的命令。 -1：失败并关闭连接；0：成功
-  int GetRunTaskRecieved(CwxMsgBlock*& msg, DcmdCenter* center);
+  int GetRunTaskRecieved(CwxMsgBlock*& msg, AgentCenter* center);
   // 处理收到的获取运行操作指令。 -1：失败并关闭连接；0：成功
-  int GetRunOprRecieved(CwxMsgBlock*& msg, DcmdCenter* center);
+  int GetRunOprRecieved(CwxMsgBlock*& msg, AgentCenter* center);
   // 检查service当前命令的进度信息
-  void CheckSubTaskProcess(DcmdAgentAppObj* app_obj);
+  void CheckSubTaskProcess(AgentAppObj* app_obj);
   // 获取app任务执行的输出文件内容
   void LoadSubTaskResult(string const& app_name,
     string const& task_type,
@@ -208,7 +208,7 @@ class DcmdAgentApp : public CwxAppFramework{
     string& err_msg,
     bool is_process_only);
   // 获取一个service的运行任务信息
-  void DumpRuningAppSubTask(DcmdAgentAppObj* app_obj, string& dump);
+  void DumpRuningAppSubTask(AgentAppObj* app_obj, string& dump);
   // 获取package的buf，返回NULL表示失败
   inline char* GetBuf(uint32_t size){
     if (data_buf_len_ < size){
@@ -221,13 +221,13 @@ class DcmdAgentApp : public CwxAppFramework{
 
  private:
   // 控制中心的map
-  map<uint32_t, DcmdCenter*>                 center_map_;
+  map<uint32_t, AgentCenter*>                 center_map_;
   // 当前的master控制中心
-  DcmdCenter*                                master_;
+  AgentCenter*                                master_;
   // 配置文件
   DcmdAgentConfig                            config_;
   // app的指令，key为app name
-  map<string, DcmdAgentAppObj*>              app_map_;
+  map<string, AgentAppObj*>              app_map_;
   // 等待回复的命令结果，key为cmd_id
   map<uint64_t, AgentTaskResult*>            wait_reply_result_map_;
   // 等待发送的处理结果，此是由于与center失去联系造成的,key为cmd_id。
