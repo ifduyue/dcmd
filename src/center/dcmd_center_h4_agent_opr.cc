@@ -47,7 +47,7 @@ int DcmdCenterH4AgentOpr::onFailSendMsg(CwxMsgBlock*& msg, CwxTss* pThrEnv) {
   return 1;
 }
 
-bool DcmdCenterH4AgentOpr::sendAgentMsg(DcmdCenterApp* app,
+bool DcmdCenterH4AgentOpr::SendAgentMsg(DcmdCenterApp* app,
   string const& agent_ip,
   uint32_t msg_task_id,
   CwxMsgBlock*& msg,
