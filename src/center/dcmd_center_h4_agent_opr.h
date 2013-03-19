@@ -25,7 +25,7 @@ class DcmdCenterH4AgentOpr: public CwxCmdOp{
   virtual int onEndSendMsg(CwxMsgBlock*& msg, CwxTss* pThrEnv);
   // 消息发送失败的事件
   virtual int onFailSendMsg(CwxMsgBlock*& msg, CwxTss* pThrEnv);
-  // 发送agent的消息
+  // 发送agent的opr cmd消息
   static bool SendAgentMsg(DcmdCenterApp* app,
     string const& agent_ip,
     uint32_t msg_task_id,
