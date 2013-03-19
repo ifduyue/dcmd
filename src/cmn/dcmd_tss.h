@@ -5,6 +5,7 @@
 #include <CwxTss.h>
 
 #include "dcmd_macro.h"
+#include "dcmd.pb.h"
 
 namespace dcmd {
 //dcmd的tss
@@ -35,10 +36,17 @@ class DcmdTss:public CwxTss{
    // 读取文件内容
   bool ReadFile(char const* filename, string& file_content,
     string& err_msg);
-  char                  sql_[kMaxSqlBufSize]; // sql的buf
+ public:
+  // sql的buf
+  char                                  sql_[kMaxSqlBufSize];
+  dcmd_api::UiExecOprCmdReply           opr_cmd_reply_;
+  dcmd_api::UiExecOprCmd                opr_cmd_;
+  string                                proto_str_;
  private:
-  char*                 data_buf_; // 数据buf
-  uint32_t              data_buf_len_; // 数据buf的空间大小
+  // 数据buf
+  char*                                 data_buf_;
+  // 数据buf的空间大小
+  uint32_t                              data_buf_len_;
 };
 }  // dcmd
 #endif
