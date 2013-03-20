@@ -15,8 +15,8 @@
 #include "dcmd_center_run_subtask_task.h"
 #include "dcmd_center_subtask_output_task.h"
 #include "dcmd_center_task_mgr.h"
-#include "mysql.h"
-#include "xml_parse.h"
+#include "dcmd_mysql.h"
+#include "dcmd_xml_parse.h"
 
 namespace dcmd {
 // 服务版本信息定义
