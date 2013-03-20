@@ -1,5 +1,5 @@
-﻿#ifndef __XML_PARSE_H__
-#define __XML_PARSE_H__
+﻿#ifndef __DCMD_XML_PARSE_H__
+#define __DCMD_XML_PARSE_H__
 
 
 #include "CwxStl.h"

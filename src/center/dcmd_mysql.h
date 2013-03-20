@@ -1,14 +1,8 @@
-﻿#ifndef __MYSQL_H__
-#define __MYSQL_H__
-
-/*
-版权声明：
-    本软件遵循GNU GPL V3（http://www.gnu.org/licenses/gpl.html），
-    联系方式：email:cwinux@gmail.com
-*/
+﻿#ifndef __DCMD_MYSQL_H__
+#define __DCMD_MYSQL_H__
 
 /**
-@file Mysql.h
+@file dcmd_mysql.h
 @brief Mysql数据库的接口类Mysql。
 @author cwinux@gmail.com
 @version 0.1
