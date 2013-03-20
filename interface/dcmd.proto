@@ -52,7 +52,7 @@ enum DcmdState {
 
 message KeyValue {
   required  string   key = 1;
-  required  bytes    value= 2;
+  required  string   value= 2;
 }
 
 message SubTaskInfo {
@@ -103,6 +103,12 @@ enum SubTaskState{
    SUBTASK_CANCELED = 4;
 }
 
+enum CommandState {
+   COMMAND_DOING = 0;
+   COMMAND_SUCCESS = 1;
+   COMMAND_FAILED = 2;
+}
+
 message AgentInfo {
   required string     ip=1;
   required AgentState state=2;
@@ -143,7 +149,7 @@ optional  string   app_user=12;
 optional  string   app_env_file=13;
 optional  string   app_env_ver=14;
 optional  bool     output_process=15;
-optional  bytes    script=16;
+optional  string   script=16;
 repeated  KeyValue task_arg=17;
 }
 
@@ -171,19 +177,19 @@ message AgentTaskResultReply {
 }
 
 message AgentOprCmd {
-  required  string  opr_id = 1; 
-  required  string  name = 2;
-  required  string  run_user = 3;
-  required  int32   timeout= 4;
-  required  bytes   script = 5;
+  required  string   opr_id = 1; 
+  required  string   name = 2;
+  required  string   run_user = 3;
+  required  int32    timeout= 4;
+  required  string   script = 5;
   repeated  KeyValue args= 6;
 }
 
 message AgentOprCmdReply {
   required  DcmdState  state = 1;
-  required  bytes  result = 2;
-  required  string  err= 3; 
-  optional  string  ip=4;
+  required  string     result = 2;
+  required  string     err= 3; 
+  optional  string     ip=4;
 }
 
 message AgentTaskOutput {
@@ -194,7 +200,7 @@ message AgentTaskOutput {
 
 message AgentTaskOutputReply {
   required  DcmdState   state = 1;
-  required  bytes       result= 2;
+  required  string      result= 2;
   required  int32       offset=3;
   optional  string      err=4;
 }
@@ -234,7 +240,7 @@ message UiTaskOutput {
 
 message UiTaskOutputReply {
   required  DcmdState   state = 1;
-  required  bytes       result= 2;
+  required  string      result= 2;
   required  int32       offset=3;
   optional  string      err=4;
 }
