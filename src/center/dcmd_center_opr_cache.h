@@ -29,6 +29,7 @@ class DcmdCenterOprCmd{
     opr_timeout_ = 0;
     repeat_type_ = DCMD_OPR_CMD_NO_REPEAT;
     is_arg_mutable_ = false;
+    is_agent_mutable_ = false;
     cache_time_ = 0;
     expire_time_ = 0;
   }
@@ -45,6 +46,8 @@ class DcmdCenterOprCmd{
     opr_script_content_ = item.opr_script_content_;
     repeat_type_ = item.repeat_type_;
     is_arg_mutable_ = item.is_arg_mutable_;
+    is_agent_mutable_ = item.is_agent_mutable_;
+    mutable_args_ = item.mutable_args_;
     cache_time_ = item.cache_time_;
     expire_time_ = item.expire_time_;
     return *this;
@@ -61,6 +64,8 @@ class DcmdCenterOprCmd{
     opr_script_content_ = item.opr_script_content_;
     repeat_type_ = item.repeat_type_;
     is_arg_mutable_ = item.is_arg_mutable_;
+    is_agent_mutable_ = item.is_agent_mutable_;
+    mutable_args_ = item.mutable_args_;
     cache_time_ = item.cache_time_;
     expire_time_ = item.expire_time_;
   }
@@ -87,6 +92,10 @@ class DcmdCenterOprCmd{
   uint8_t               repeat_type_;
   // 参数是否是可变的
   bool                  is_arg_mutable_;
+  // 是否agent的列表可变
+  bool                  is_agent_mutable_;
+  // 可变的参数列表
+  list<string>          mutable_args_;
   // cache的秒数
   uint32_t              cache_time_;
   // 失效的时间
