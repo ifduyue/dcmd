@@ -271,9 +271,10 @@ message UiAgentRunningOprReply {
 }
 
 message UiExecOprCmd {
-  optional  string  opr_id=1;
-  required  string  user=2;
-  required  string  passwd=3;
+  optional  string   opr_id=1;
+  repeated  KeyValue args=2;
+  required  string   user=3;
+  required  string   passwd=4;
 }
 
 message UiExecOprCmdReply{
