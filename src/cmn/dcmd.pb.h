@@ -243,6 +243,26 @@ inline bool SubTaskState_Parse(
   return ::google::protobuf::internal::ParseNamedEnum<SubTaskState>(
     SubTaskState_descriptor(), name, value);
 }
+enum CommandState {
+  COMMAND_DOING = 0,
+  COMMAND_SUCCESS = 1,
+  COMMAND_FAILED = 2
+};
+bool CommandState_IsValid(int value);
+const CommandState CommandState_MIN = COMMAND_DOING;
+const CommandState CommandState_MAX = COMMAND_FAILED;
+const int CommandState_ARRAYSIZE = CommandState_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* CommandState_descriptor();
+inline const ::std::string& CommandState_Name(CommandState value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    CommandState_descriptor(), value);
+}
+inline bool CommandState_Parse(
+    const ::std::string& name, CommandState* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<CommandState>(
+    CommandState_descriptor(), name, value);
+}
 enum CmdType {
   START_TASK = 1,
   PAUSE_TASK = 2,
@@ -341,14 +361,14 @@ class KeyValue : public ::google::protobuf::Message {
   inline ::std::string* mutable_key();
   inline ::std::string* release_key();
   
-  // required bytes value = 2;
+  // required string value = 2;
   inline bool has_value() const;
   inline void clear_value();
   static const int kValueFieldNumber = 2;
   inline const ::std::string& value() const;
   inline void set_value(const ::std::string& value);
   inline void set_value(const char* value);
-  inline void set_value(const void* value, size_t size);
+  inline void set_value(const char* value, size_t size);
   inline ::std::string* mutable_value();
   inline ::std::string* release_value();
   
@@ -1285,14 +1305,14 @@ class AgentTaskCmd : public ::google::protobuf::Message {
   inline bool output_process() const;
   inline void set_output_process(bool value);
   
-  // optional bytes script = 16;
+  // optional string script = 16;
   inline bool has_script() const;
   inline void clear_script();
   static const int kScriptFieldNumber = 16;
   inline const ::std::string& script() const;
   inline void set_script(const ::std::string& value);
   inline void set_script(const char* value);
-  inline void set_script(const void* value, size_t size);
+  inline void set_script(const char* value, size_t size);
   inline ::std::string* mutable_script();
   inline ::std::string* release_script();
   
@@ -1907,14 +1927,14 @@ class AgentOprCmd : public ::google::protobuf::Message {
   inline ::google::protobuf::int32 timeout() const;
   inline void set_timeout(::google::protobuf::int32 value);
   
-  // required bytes script = 5;
+  // required string script = 5;
   inline bool has_script() const;
   inline void clear_script();
   static const int kScriptFieldNumber = 5;
   inline const ::std::string& script() const;
   inline void set_script(const ::std::string& value);
   inline void set_script(const char* value);
-  inline void set_script(const void* value, size_t size);
+  inline void set_script(const char* value, size_t size);
   inline ::std::string* mutable_script();
   inline ::std::string* release_script();
   
@@ -2025,14 +2045,14 @@ class AgentOprCmdReply : public ::google::protobuf::Message {
   inline dcmd_api::DcmdState state() const;
   inline void set_state(dcmd_api::DcmdState value);
   
-  // required bytes result = 2;
+  // required string result = 2;
   inline bool has_result() const;
   inline void clear_result();
   static const int kResultFieldNumber = 2;
   inline const ::std::string& result() const;
   inline void set_result(const ::std::string& value);
   inline void set_result(const char* value);
-  inline void set_result(const void* value, size_t size);
+  inline void set_result(const char* value, size_t size);
   inline ::std::string* mutable_result();
   inline ::std::string* release_result();
   
@@ -2259,14 +2279,14 @@ class AgentTaskOutputReply : public ::google::protobuf::Message {
   inline dcmd_api::DcmdState state() const;
   inline void set_state(dcmd_api::DcmdState value);
   
-  // required bytes result = 2;
+  // required string result = 2;
   inline bool has_result() const;
   inline void clear_result();
   static const int kResultFieldNumber = 2;
   inline const ::std::string& result() const;
   inline void set_result(const ::std::string& value);
   inline void set_result(const char* value);
-  inline void set_result(const void* value, size_t size);
+  inline void set_result(const char* value, size_t size);
   inline ::std::string* mutable_result();
   inline ::std::string* release_result();
   
@@ -3003,14 +3023,14 @@ class UiTaskOutputReply : public ::google::protobuf::Message {
   inline dcmd_api::DcmdState state() const;
   inline void set_state(dcmd_api::DcmdState value);
   
-  // required bytes result = 2;
+  // required string result = 2;
   inline bool has_result() const;
   inline void clear_result();
   static const int kResultFieldNumber = 2;
   inline const ::std::string& result() const;
   inline void set_result(const ::std::string& value);
   inline void set_result(const char* value);
-  inline void set_result(const void* value, size_t size);
+  inline void set_result(const char* value, size_t size);
   inline ::std::string* mutable_result();
   inline ::std::string* release_result();
   
@@ -5551,7 +5571,7 @@ inline ::std::string* KeyValue::release_key() {
   }
 }
 
-// required bytes value = 2;
+// required string value = 2;
 inline bool KeyValue::has_value() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
@@ -5584,7 +5604,7 @@ inline void KeyValue::set_value(const char* value) {
   }
   value_->assign(value);
 }
-inline void KeyValue::set_value(const void* value, size_t size) {
+inline void KeyValue::set_value(const char* value, size_t size) {
   set_has_value();
   if (value_ == &::google::protobuf::internal::kEmptyString) {
     value_ = new ::std::string;
@@ -7389,7 +7409,7 @@ inline void AgentTaskCmd::set_output_process(bool value) {
   output_process_ = value;
 }
 
-// optional bytes script = 16;
+// optional string script = 16;
 inline bool AgentTaskCmd::has_script() const {
   return (_has_bits_[0] & 0x00008000u) != 0;
 }
@@ -7422,7 +7442,7 @@ inline void AgentTaskCmd::set_script(const char* value) {
   }
   script_->assign(value);
 }
-inline void AgentTaskCmd::set_script(const void* value, size_t size) {
+inline void AgentTaskCmd::set_script(const char* value, size_t size) {
   set_has_script();
   if (script_ == &::google::protobuf::internal::kEmptyString) {
     script_ = new ::std::string;
@@ -8290,7 +8310,7 @@ inline void AgentOprCmd::set_timeout(::google::protobuf::int32 value) {
   timeout_ = value;
 }
 
-// required bytes script = 5;
+// required string script = 5;
 inline bool AgentOprCmd::has_script() const {
   return (_has_bits_[0] & 0x00000010u) != 0;
 }
@@ -8323,7 +8343,7 @@ inline void AgentOprCmd::set_script(const char* value) {
   }
   script_->assign(value);
 }
-inline void AgentOprCmd::set_script(const void* value, size_t size) {
+inline void AgentOprCmd::set_script(const char* value, size_t size) {
   set_has_script();
   if (script_ == &::google::protobuf::internal::kEmptyString) {
     script_ = new ::std::string;
@@ -8400,7 +8420,7 @@ inline void AgentOprCmdReply::set_state(dcmd_api::DcmdState value) {
   state_ = value;
 }
 
-// required bytes result = 2;
+// required string result = 2;
 inline bool AgentOprCmdReply::has_result() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
@@ -8433,7 +8453,7 @@ inline void AgentOprCmdReply::set_result(const char* value) {
   }
   result_->assign(value);
 }
-inline void AgentOprCmdReply::set_result(const void* value, size_t size) {
+inline void AgentOprCmdReply::set_result(const char* value, size_t size) {
   set_has_result();
   if (result_ == &::google::protobuf::internal::kEmptyString) {
     result_ = new ::std::string;
@@ -8743,7 +8763,7 @@ inline void AgentTaskOutputReply::set_state(dcmd_api::DcmdState value) {
   state_ = value;
 }
 
-// required bytes result = 2;
+// required string result = 2;
 inline bool AgentTaskOutputReply::has_result() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
@@ -8776,7 +8796,7 @@ inline void AgentTaskOutputReply::set_result(const char* value) {
   }
   result_->assign(value);
 }
-inline void AgentTaskOutputReply::set_result(const void* value, size_t size) {
+inline void AgentTaskOutputReply::set_result(const char* value, size_t size) {
   set_has_result();
   if (result_ == &::google::protobuf::internal::kEmptyString) {
     result_ = new ::std::string;
@@ -9594,7 +9614,7 @@ inline void UiTaskOutputReply::set_state(dcmd_api::DcmdState value) {
   state_ = value;
 }
 
-// required bytes result = 2;
+// required string result = 2;
 inline bool UiTaskOutputReply::has_result() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
@@ -9627,7 +9647,7 @@ inline void UiTaskOutputReply::set_result(const char* value) {
   }
   result_->assign(value);
 }
-inline void UiTaskOutputReply::set_result(const void* value, size_t size) {
+inline void UiTaskOutputReply::set_result(const char* value, size_t size) {
   set_has_result();
   if (result_ == &::google::protobuf::internal::kEmptyString) {
     result_ = new ::std::string;
@@ -13343,6 +13363,10 @@ inline const EnumDescriptor* GetEnumDescriptor< dcmd_api::AppPoolState>() {
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< dcmd_api::SubTaskState>() {
   return dcmd_api::SubTaskState_descriptor();
+}
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< dcmd_api::CommandState>() {
+  return dcmd_api::CommandState_descriptor();
 }
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< dcmd_api::CmdType>() {

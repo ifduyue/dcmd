@@ -152,6 +152,7 @@ const ::google::protobuf::EnumDescriptor* AgentState_descriptor_ = NULL;
 const ::google::protobuf::EnumDescriptor* TaskState_descriptor_ = NULL;
 const ::google::protobuf::EnumDescriptor* AppPoolState_descriptor_ = NULL;
 const ::google::protobuf::EnumDescriptor* SubTaskState_descriptor_ = NULL;
+const ::google::protobuf::EnumDescriptor* CommandState_descriptor_ = NULL;
 const ::google::protobuf::EnumDescriptor* CmdType_descriptor_ = NULL;
 
 }  // namespace
@@ -933,7 +934,8 @@ void protobuf_AssignDesc_dcmd_2eproto() {
   TaskState_descriptor_ = file->enum_type(3);
   AppPoolState_descriptor_ = file->enum_type(4);
   SubTaskState_descriptor_ = file->enum_type(5);
-  CmdType_descriptor_ = file->enum_type(6);
+  CommandState_descriptor_ = file->enum_type(6);
+  CmdType_descriptor_ = file->enum_type(7);
 }
 
 namespace {
@@ -1133,7 +1135,7 @@ void protobuf_AddDesc_dcmd_2eproto() {
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
     "\n\ndcmd.proto\022\010dcmd_api\"&\n\010KeyValue\022\013\n\003ke"
-    "y\030\001 \002(\t\022\r\n\005value\030\002 \002(\014\"g\n\013SubTaskInfo\022\020\n"
+    "y\030\001 \002(\t\022\r\n\005value\030\002 \002(\t\"g\n\013SubTaskInfo\022\020\n"
     "\010app_name\030\001 \002(\t\022\021\n\ttask_type\030\002 \002(\t\022\017\n\007ta"
     "sk_id\030\003 \002(\t\022\022\n\nsubtask_id\030\004 \002(\t\022\016\n\006cmd_i"
     "d\030\005 \002(\t\"C\n\007OprInfo\022\014\n\004name\030\001 \002(\t\022\022\n\nstar"
@@ -1153,7 +1155,7 @@ void protobuf_AddDesc_dcmd_2eproto() {
     "\t\022\020\n\010app_repo\030\n \001(\t\022\020\n\010app_path\030\013 \001(\t\022\020\n"
     "\010app_user\030\014 \001(\t\022\024\n\014app_env_file\030\r \001(\t\022\023\n"
     "\013app_env_ver\030\016 \001(\t\022\026\n\016output_process\030\017 \001"
-    "(\010\022\016\n\006script\030\020 \001(\014\022$\n\010task_arg\030\021 \003(\0132\022.d"
+    "(\010\022\016\n\006script\030\020 \001(\t\022$\n\010task_arg\030\021 \003(\0132\022.d"
     "cmd_api.KeyValue\" \n\021AgentTaskCmdReply\022\013\n"
     "\003cmd\030\001 \002(\t\"K\n\023AgentSubTaskProcess\022\017\n\007tas"
     "k_id\030\001 \002(\t\022\022\n\nsubtask_id\030\002 \002(\t\022\017\n\007proces"
@@ -1163,14 +1165,14 @@ void protobuf_AddDesc_dcmd_2eproto() {
     "\001(\t\"#\n\024AgentTaskResultReply\022\013\n\003cmd\030\001 \002(\t"
     "\"\200\001\n\013AgentOprCmd\022\016\n\006opr_id\030\001 \002(\t\022\014\n\004name"
     "\030\002 \002(\t\022\020\n\010run_user\030\003 \002(\t\022\017\n\007timeout\030\004 \002("
-    "\005\022\016\n\006script\030\005 \002(\014\022 \n\004args\030\006 \003(\0132\022.dcmd_a"
+    "\005\022\016\n\006script\030\005 \002(\t\022 \n\004args\030\006 \003(\0132\022.dcmd_a"
     "pi.KeyValue\"_\n\020AgentOprCmdReply\022\"\n\005state"
     "\030\001 \002(\0162\023.dcmd_api.DcmdState\022\016\n\006result\030\002 "
-    "\002(\014\022\013\n\003err\030\003 \002(\t\022\n\n\002ip\030\004 \001(\t\"A\n\017AgentTas"
+    "\002(\t\022\013\n\003err\030\003 \002(\t\022\n\n\002ip\030\004 \001(\t\"A\n\017AgentTas"
     "kOutput\022\022\n\nsubtask_id\030\001 \002(\t\022\016\n\006offset\030\002 "
     "\002(\005\022\n\n\002ip\030\003 \001(\t\"g\n\024AgentTaskOutputReply\022"
     "\"\n\005state\030\001 \002(\0162\023.dcmd_api.DcmdState\022\016\n\006r"
-    "esult\030\002 \002(\014\022\016\n\006offset\030\003 \002(\005\022\013\n\003err\030\004 \001(\t"
+    "esult\030\002 \002(\t\022\016\n\006offset\030\003 \002(\005\022\013\n\003err\030\004 \001(\t"
     "\"0\n\020AgentRunningTask\022\n\n\002ip\030\001 \001(\t\022\020\n\010app_"
     "name\030\002 \001(\t\"o\n\025AgentRunningTaskReply\022\"\n\005s"
     "tate\030\001 \002(\0162\023.dcmd_api.DcmdState\022%\n\006resul"
@@ -1183,7 +1185,7 @@ void protobuf_AddDesc_dcmd_2eproto() {
     "k_id\030\001 \002(\t\022\n\n\002ip\030\002 \002(\t\022\016\n\006offset\030\003 \002(\005\022\014"
     "\n\004user\030\004 \002(\t\022\016\n\006passwd\030\005 \002(\t\"d\n\021UiTaskOu"
     "tputReply\022\"\n\005state\030\001 \002(\0162\023.dcmd_api.Dcmd"
-    "State\022\016\n\006result\030\002 \002(\014\022\016\n\006offset\030\003 \002(\005\022\013\n"
+    "State\022\016\n\006result\030\002 \002(\t\022\016\n\006offset\030\003 \002(\005\022\013\n"
     "\003err\030\004 \001(\t\"P\n\022UiAgentRunningTask\022\n\n\002ip\030\001"
     " \001(\t\022\020\n\010app_name\030\002 \001(\t\022\014\n\004user\030\003 \002(\t\022\016\n\006"
     "passwd\030\004 \002(\t\"q\n\027UiAgentRunningTaskReply\022"
@@ -1281,14 +1283,16 @@ void protobuf_AddDesc_dcmd_2eproto() {
     "D\020\006*s\n\014SubTaskState\022\020\n\014SUBTASK_INIT\020\000\022\021\n"
     "\rSUBTASK_DOING\020\001\022\024\n\020SUBTASK_FINISHED\020\002\022\022"
     "\n\016SUBTASK_FAILED\020\003\022\024\n\020SUBTASK_CANCELED\020\004"
-    "*\236\002\n\007CmdType\022\016\n\nSTART_TASK\020\001\022\016\n\nPAUSE_TA"
-    "SK\020\002\022\017\n\013FINISH_TASK\020\003\022\022\n\016CANCEL_SUBTASK\020"
-    "\004\022\026\n\022CANCEL_APP_SUBTASK\020\005\022\r\n\tREDO_TASK\020\006"
-    "\022\021\n\rREDO_APP_POOL\020\007\022\020\n\014REDO_SUBTASK\020\010\022\027\n"
-    "\023REDO_FAILED_SUBTASK\020\t\022 \n\034REDO_FAILED_AP"
-    "P_POOL_SUBTASK\020\n\022\022\n\016IGNORE_SUBTASK\020\013\022\017\n\013"
-    "FREEZE_TASK\020\014\022\021\n\rUNFREEZE_TASK\020\r\022\017\n\013UPDA"
-    "TE_TASK\020\016B\021\n\017com.cwinux.dcmd", 6268);
+    "*J\n\014CommandState\022\021\n\rCOMMAND_DOING\020\000\022\023\n\017C"
+    "OMMAND_SUCCESS\020\001\022\022\n\016COMMAND_FAILED\020\002*\236\002\n"
+    "\007CmdType\022\016\n\nSTART_TASK\020\001\022\016\n\nPAUSE_TASK\020\002"
+    "\022\017\n\013FINISH_TASK\020\003\022\022\n\016CANCEL_SUBTASK\020\004\022\026\n"
+    "\022CANCEL_APP_SUBTASK\020\005\022\r\n\tREDO_TASK\020\006\022\021\n\r"
+    "REDO_APP_POOL\020\007\022\020\n\014REDO_SUBTASK\020\010\022\027\n\023RED"
+    "O_FAILED_SUBTASK\020\t\022 \n\034REDO_FAILED_APP_PO"
+    "OL_SUBTASK\020\n\022\022\n\016IGNORE_SUBTASK\020\013\022\017\n\013FREE"
+    "ZE_TASK\020\014\022\021\n\rUNFREEZE_TASK\020\r\022\017\n\013UPDATE_T"
+    "ASK\020\016B\021\n\017com.cwinux.dcmd", 6344);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "dcmd.proto", &protobuf_RegisterTypes);
   KeyValue::default_instance_ = new KeyValue();
@@ -1524,6 +1528,21 @@ bool SubTaskState_IsValid(int value) {
   }
 }
 
+const ::google::protobuf::EnumDescriptor* CommandState_descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return CommandState_descriptor_;
+}
+bool CommandState_IsValid(int value) {
+  switch(value) {
+    case 0:
+    case 1:
+    case 2:
+      return true;
+    default:
+      return false;
+  }
+}
+
 const ::google::protobuf::EnumDescriptor* CmdType_descriptor() {
   protobuf_AssignDescriptorsOnce();
   return CmdType_descriptor_;
@@ -1653,13 +1672,16 @@ bool KeyValue::MergePartialFromCodedStream(
         break;
       }
       
-      // required bytes value = 2;
+      // required string value = 2;
       case 2: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
          parse_value:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
                 input, this->mutable_value()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+            this->value().data(), this->value().length(),
+            ::google::protobuf::internal::WireFormat::PARSE);
         } else {
           goto handle_uninterpreted;
         }
@@ -1694,9 +1716,12 @@ void KeyValue::SerializeWithCachedSizes(
       1, this->key(), output);
   }
   
-  // required bytes value = 2;
+  // required string value = 2;
   if (has_value()) {
-    ::google::protobuf::internal::WireFormatLite::WriteBytes(
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->value().data(), this->value().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    ::google::protobuf::internal::WireFormatLite::WriteString(
       2, this->value(), output);
   }
   
@@ -1718,10 +1743,13 @@ void KeyValue::SerializeWithCachedSizes(
         1, this->key(), target);
   }
   
-  // required bytes value = 2;
+  // required string value = 2;
   if (has_value()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->value().data(), this->value().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
     target =
-      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
         2, this->value(), target);
   }
   
@@ -1743,10 +1771,10 @@ int KeyValue::ByteSize() const {
           this->key());
     }
     
-    // required bytes value = 2;
+    // required string value = 2;
     if (has_value()) {
       total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::BytesSize(
+        ::google::protobuf::internal::WireFormatLite::StringSize(
           this->value());
     }
     
@@ -4341,13 +4369,16 @@ bool AgentTaskCmd::MergePartialFromCodedStream(
         break;
       }
       
-      // optional bytes script = 16;
+      // optional string script = 16;
       case 16: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
          parse_script:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
                 input, this->mutable_script()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+            this->script().data(), this->script().length(),
+            ::google::protobuf::internal::WireFormat::PARSE);
         } else {
           goto handle_uninterpreted;
         }
@@ -4515,9 +4546,12 @@ void AgentTaskCmd::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteBool(15, this->output_process(), output);
   }
   
-  // optional bytes script = 16;
+  // optional string script = 16;
   if (has_script()) {
-    ::google::protobuf::internal::WireFormatLite::WriteBytes(
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->script().data(), this->script().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    ::google::protobuf::internal::WireFormatLite::WriteString(
       16, this->script(), output);
   }
   
@@ -4675,10 +4709,13 @@ void AgentTaskCmd::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(15, this->output_process(), target);
   }
   
-  // optional bytes script = 16;
+  // optional string script = 16;
   if (has_script()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->script().data(), this->script().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
     target =
-      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
         16, this->script(), target);
   }
   
@@ -4803,10 +4840,10 @@ int AgentTaskCmd::ByteSize() const {
       total_size += 1 + 1;
     }
     
-    // optional bytes script = 16;
+    // optional string script = 16;
     if (has_script()) {
       total_size += 2 +
-        ::google::protobuf::internal::WireFormatLite::BytesSize(
+        ::google::protobuf::internal::WireFormatLite::StringSize(
           this->script());
     }
     
@@ -6412,13 +6449,16 @@ bool AgentOprCmd::MergePartialFromCodedStream(
         break;
       }
       
-      // required bytes script = 5;
+      // required string script = 5;
       case 5: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
          parse_script:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
                 input, this->mutable_script()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+            this->script().data(), this->script().length(),
+            ::google::protobuf::internal::WireFormat::PARSE);
         } else {
           goto handle_uninterpreted;
         }
@@ -6491,9 +6531,12 @@ void AgentOprCmd::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteInt32(4, this->timeout(), output);
   }
   
-  // required bytes script = 5;
+  // required string script = 5;
   if (has_script()) {
-    ::google::protobuf::internal::WireFormatLite::WriteBytes(
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->script().data(), this->script().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    ::google::protobuf::internal::WireFormatLite::WriteString(
       5, this->script(), output);
   }
   
@@ -6546,10 +6589,13 @@ void AgentOprCmd::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(4, this->timeout(), target);
   }
   
-  // required bytes script = 5;
+  // required string script = 5;
   if (has_script()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->script().data(), this->script().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
     target =
-      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
         5, this->script(), target);
   }
   
@@ -6599,10 +6645,10 @@ int AgentOprCmd::ByteSize() const {
           this->timeout());
     }
     
-    // required bytes script = 5;
+    // required string script = 5;
     if (has_script()) {
       total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::BytesSize(
+        ::google::protobuf::internal::WireFormatLite::StringSize(
           this->script());
     }
     
@@ -6824,13 +6870,16 @@ bool AgentOprCmdReply::MergePartialFromCodedStream(
         break;
       }
       
-      // required bytes result = 2;
+      // required string result = 2;
       case 2: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
          parse_result:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
                 input, this->mutable_result()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+            this->result().data(), this->result().length(),
+            ::google::protobuf::internal::WireFormat::PARSE);
         } else {
           goto handle_uninterpreted;
         }
@@ -6896,9 +6945,12 @@ void AgentOprCmdReply::SerializeWithCachedSizes(
       1, this->state(), output);
   }
   
-  // required bytes result = 2;
+  // required string result = 2;
   if (has_result()) {
-    ::google::protobuf::internal::WireFormatLite::WriteBytes(
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->result().data(), this->result().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    ::google::protobuf::internal::WireFormatLite::WriteString(
       2, this->result(), output);
   }
   
@@ -6934,10 +6986,13 @@ void AgentOprCmdReply::SerializeWithCachedSizes(
       1, this->state(), target);
   }
   
-  // required bytes result = 2;
+  // required string result = 2;
   if (has_result()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->result().data(), this->result().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
     target =
-      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
         2, this->result(), target);
   }
   
@@ -6978,10 +7033,10 @@ int AgentOprCmdReply::ByteSize() const {
         ::google::protobuf::internal::WireFormatLite::EnumSize(this->state());
     }
     
-    // required bytes result = 2;
+    // required string result = 2;
     if (has_result()) {
       total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::BytesSize(
+        ::google::protobuf::internal::WireFormatLite::StringSize(
           this->result());
     }
     
@@ -7515,13 +7570,16 @@ bool AgentTaskOutputReply::MergePartialFromCodedStream(
         break;
       }
       
-      // required bytes result = 2;
+      // required string result = 2;
       case 2: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
          parse_result:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
                 input, this->mutable_result()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+            this->result().data(), this->result().length(),
+            ::google::protobuf::internal::WireFormat::PARSE);
         } else {
           goto handle_uninterpreted;
         }
@@ -7586,9 +7644,12 @@ void AgentTaskOutputReply::SerializeWithCachedSizes(
       1, this->state(), output);
   }
   
-  // required bytes result = 2;
+  // required string result = 2;
   if (has_result()) {
-    ::google::protobuf::internal::WireFormatLite::WriteBytes(
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->result().data(), this->result().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    ::google::protobuf::internal::WireFormatLite::WriteString(
       2, this->result(), output);
   }
   
@@ -7620,10 +7681,13 @@ void AgentTaskOutputReply::SerializeWithCachedSizes(
       1, this->state(), target);
   }
   
-  // required bytes result = 2;
+  // required string result = 2;
   if (has_result()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->result().data(), this->result().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
     target =
-      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
         2, this->result(), target);
   }
   
@@ -7659,10 +7723,10 @@ int AgentTaskOutputReply::ByteSize() const {
         ::google::protobuf::internal::WireFormatLite::EnumSize(this->state());
     }
     
-    // required bytes result = 2;
+    // required string result = 2;
     if (has_result()) {
       total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::BytesSize(
+        ::google::protobuf::internal::WireFormatLite::StringSize(
           this->result());
     }
     
@@ -9651,13 +9715,16 @@ bool UiTaskOutputReply::MergePartialFromCodedStream(
         break;
       }
       
-      // required bytes result = 2;
+      // required string result = 2;
       case 2: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
          parse_result:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
                 input, this->mutable_result()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+            this->result().data(), this->result().length(),
+            ::google::protobuf::internal::WireFormat::PARSE);
         } else {
           goto handle_uninterpreted;
         }
@@ -9722,9 +9789,12 @@ void UiTaskOutputReply::SerializeWithCachedSizes(
       1, this->state(), output);
   }
   
-  // required bytes result = 2;
+  // required string result = 2;
   if (has_result()) {
-    ::google::protobuf::internal::WireFormatLite::WriteBytes(
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->result().data(), this->result().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    ::google::protobuf::internal::WireFormatLite::WriteString(
       2, this->result(), output);
   }
   
@@ -9756,10 +9826,13 @@ void UiTaskOutputReply::SerializeWithCachedSizes(
       1, this->state(), target);
   }
   
-  // required bytes result = 2;
+  // required string result = 2;
   if (has_result()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->result().data(), this->result().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
     target =
-      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
         2, this->result(), target);
   }
   
@@ -9795,10 +9868,10 @@ int UiTaskOutputReply::ByteSize() const {
         ::google::protobuf::internal::WireFormatLite::EnumSize(this->state());
     }
     
-    // required bytes result = 2;
+    // required string result = 2;
     if (has_result()) {
       total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::BytesSize(
+        ::google::protobuf::internal::WireFormatLite::StringSize(
           this->result());
     }
     
