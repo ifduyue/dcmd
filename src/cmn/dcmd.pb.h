@@ -3607,10 +3607,22 @@ class UiExecOprCmd : public ::google::protobuf::Message {
   inline ::std::string* mutable_opr_id();
   inline ::std::string* release_opr_id();
   
-  // required string user = 2;
+  // repeated .dcmd_api.KeyValue args = 2;
+  inline int args_size() const;
+  inline void clear_args();
+  static const int kArgsFieldNumber = 2;
+  inline const ::dcmd_api::KeyValue& args(int index) const;
+  inline ::dcmd_api::KeyValue* mutable_args(int index);
+  inline ::dcmd_api::KeyValue* add_args();
+  inline const ::google::protobuf::RepeatedPtrField< ::dcmd_api::KeyValue >&
+      args() const;
+  inline ::google::protobuf::RepeatedPtrField< ::dcmd_api::KeyValue >*
+      mutable_args();
+  
+  // required string user = 3;
   inline bool has_user() const;
   inline void clear_user();
-  static const int kUserFieldNumber = 2;
+  static const int kUserFieldNumber = 3;
   inline const ::std::string& user() const;
   inline void set_user(const ::std::string& value);
   inline void set_user(const char* value);
@@ -3618,10 +3630,10 @@ class UiExecOprCmd : public ::google::protobuf::Message {
   inline ::std::string* mutable_user();
   inline ::std::string* release_user();
   
-  // required string passwd = 3;
+  // required string passwd = 4;
   inline bool has_passwd() const;
   inline void clear_passwd();
-  static const int kPasswdFieldNumber = 3;
+  static const int kPasswdFieldNumber = 4;
   inline const ::std::string& passwd() const;
   inline void set_passwd(const ::std::string& value);
   inline void set_passwd(const char* value);
@@ -3641,11 +3653,12 @@ class UiExecOprCmd : public ::google::protobuf::Message {
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
   ::std::string* opr_id_;
+  ::google::protobuf::RepeatedPtrField< ::dcmd_api::KeyValue > args_;
   ::std::string* user_;
   ::std::string* passwd_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(3 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(4 + 31) / 32];
   
   friend void  protobuf_AddDesc_dcmd_2eproto();
   friend void protobuf_AssignDesc_dcmd_2eproto();
@@ -10448,15 +10461,40 @@ inline ::std::string* UiExecOprCmd::release_opr_id() {
   }
 }
 
-// required string user = 2;
+// repeated .dcmd_api.KeyValue args = 2;
+inline int UiExecOprCmd::args_size() const {
+  return args_.size();
+}
+inline void UiExecOprCmd::clear_args() {
+  args_.Clear();
+}
+inline const ::dcmd_api::KeyValue& UiExecOprCmd::args(int index) const {
+  return args_.Get(index);
+}
+inline ::dcmd_api::KeyValue* UiExecOprCmd::mutable_args(int index) {
+  return args_.Mutable(index);
+}
+inline ::dcmd_api::KeyValue* UiExecOprCmd::add_args() {
+  return args_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::dcmd_api::KeyValue >&
+UiExecOprCmd::args() const {
+  return args_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::dcmd_api::KeyValue >*
+UiExecOprCmd::mutable_args() {
+  return &args_;
+}
+
+// required string user = 3;
 inline bool UiExecOprCmd::has_user() const {
-  return (_has_bits_[0] & 0x00000002u) != 0;
+  return (_has_bits_[0] & 0x00000004u) != 0;
 }
 inline void UiExecOprCmd::set_has_user() {
-  _has_bits_[0] |= 0x00000002u;
+  _has_bits_[0] |= 0x00000004u;
 }
 inline void UiExecOprCmd::clear_has_user() {
-  _has_bits_[0] &= ~0x00000002u;
+  _has_bits_[0] &= ~0x00000004u;
 }
 inline void UiExecOprCmd::clear_user() {
   if (user_ != &::google::protobuf::internal::kEmptyString) {
@@ -10506,15 +10544,15 @@ inline ::std::string* UiExecOprCmd::release_user() {
   }
 }
 
-// required string passwd = 3;
+// required string passwd = 4;
 inline bool UiExecOprCmd::has_passwd() const {
-  return (_has_bits_[0] & 0x00000004u) != 0;
+  return (_has_bits_[0] & 0x00000008u) != 0;
 }
 inline void UiExecOprCmd::set_has_passwd() {
-  _has_bits_[0] |= 0x00000004u;
+  _has_bits_[0] |= 0x00000008u;
 }
 inline void UiExecOprCmd::clear_has_passwd() {
-  _has_bits_[0] &= ~0x00000004u;
+  _has_bits_[0] &= ~0x00000008u;
 }
 inline void UiExecOprCmd::clear_passwd() {
   if (passwd_ != &::google::protobuf::internal::kEmptyString) {
