@@ -25,7 +25,7 @@ class DcmdCenterH4Check: public CwxCmdOp {
    // unlock table
    bool UnlockCenterTable(Mysql* my, DcmdTss* tss);
    // 设置心跳信息
-   bool SetHeatbeat(bool master, DcmdTss* tss);
+   bool SetHeatbeat(Mysql* my, bool is_master, DcmdTss* tss);
    // 检测自己是否为master
    void CheckMasterCenter(DcmdTss* tss);
  private:
