@@ -39,8 +39,6 @@ class DcmdTss:public CwxTss{
  public:
   // sql的buf
   char                                  sql_[kMaxSqlBufSize];
-  dcmd_api::UiExecOprCmdReply           opr_cmd_reply_;
-  dcmd_api::UiExecOprCmd                opr_cmd_;
   string                                proto_str_;
  private:
   // 数据buf
