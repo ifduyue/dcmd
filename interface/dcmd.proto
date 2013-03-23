@@ -14,14 +14,14 @@ enum DcmdMsgType {
    MTYPE_AGENT_SUBTASK_CMD_RESULT_R = 12;
    MTYPE_CENTER_OPR_CMD = 13;
    MTYPE_CENTER_OPR_CMD_R = 14;
-   MTYPE_CENTER_SUBTASK_CMD_OUTPUT = 15;
-   MTYPE_CENTER_SUBTASK_CMD_OUTPUT_R = 16;
-   MTYPE_CENTER_RUNNING_TASK = 17;
-   MTYPE_CENTER_RUNNING_TASK_R = 18;
-   MTYPE_CENTER_RUNNING_OPR = 19;
-   MTYPE_CENTER_RUNNING_OPR_R = 20;
-   MTYPE_UI_SUBTASK_CMD_OUTPUT = 51;
-   MTYPE_UI_SUBTASK_CMD_OUTPUT_R = 52;
+   MTYPE_CENTER_AGENT_SUBTASK_OUTPUT = 15;
+   MTYPE_CENTER_AGENT_SUBTASK_CMD_OUTPUT_R = 16;
+   MTYPE_CENTER_AGENT_RUNNING_TASK = 17;
+   MTYPE_CENTER_AGENT_RUNNING_TASK_R = 18;
+   MTYPE_CENTER_AGENT_RUNNING_OPR = 19;
+   MTYPE_CENTER_AGENT_RUNNING_OPR_R = 20;
+   MTYPE_UI_AGENT_SUBTASK_OUTPUT = 51;
+   MTYPE_UI_AGENT_SUBTASK_OUTPUT_R = 52;
    MTYPE_UI_AGENT_RUNNING_SUBTASK = 53;
    MTYPE_UI_AGENT_RUNNING_SUBTASK_R = 54;
    MTYPE_UI_AGENT_RUNNING_OPR = 55;
@@ -32,10 +32,10 @@ enum DcmdMsgType {
    MTYPE_UI_AGENT_INFO_R = 60;
    MTYPE_UI_INVALID_AGENT = 61;
    MTYPE_UI_INVALID_AGENT_R = 62;
-   MTYPE_UI_TASK_TYPE_INFO = 63;
-   MTYPE_UI_TASK_TYPE_INFO_R = 64;
-   MTYPE_UI_OPR_INFO = 65;
-   MTYPE_UI_OPR_INFO_R = 66;
+   MTYPE_UI_TASK_CMD_INFO = 63;
+   MTYPE_UI_TASK_CMD_INFO_R = 64;
+   MTYPE_UI_OPR_CMD_INFO = 65;
+   MTYPE_UI_OPR_CMD_INFO_R = 66;
    MTYPE_UI_SUBTASK_PROCESS = 67;
    MTYPE_UI_SUBTASK_PROCESS_R = 68;
    MTYPE_UI_EXEC_TASK = 69;
@@ -56,17 +56,17 @@ message KeyValue {
 }
 
 message SubTaskInfo {
-  required  string   app_name=1;
-  required  string   task_type=2;
+  required  string   svr_name=1;
+  required  string   task_cmd=2;
   required  string   task_id=3;
   required  string   subtask_id=4;
   required  string   cmd_id=5;
 }
 
 message OprInfo {
-  required string    name=1;
-  required  string    start_time=2;
-  required  int32    running_second=3;
+  required  string     name=1;
+  required  string     start_time=2;
+  required  int32      running_second=3;
 }
 
 enum AgentState {
@@ -86,14 +86,6 @@ enum TaskState {
    TASK_FINISHED_WITH_FAILED = 6;
 }
 
-enum AppPoolState {
-   APP_POOL_INIT = 0;
-   APP_POOL_DOING = 1;
-   APP_POOL_PAUSED = 2;
-   APP_POOL_FAILED = 3;
-   APP_POOL_FINISHED = 5;
-   APP_POOL_FINISHED_WITH_FAILED = 6;
-}
 
 enum SubTaskState{
    SUBTASK_INIT = 0;
@@ -107,6 +99,19 @@ enum CommandState {
    COMMAND_DOING = 0;
    COMMAND_SUCCESS = 1;
    COMMAND_FAILED = 2;
+}
+
+message TaskInfo {
+  required  string      task_id=1;
+  required  TaskState   task_state=2;
+  required  int32       order = 3;
+  optional  string      parent_task_id = 4;
+  optional  string      err=5;
+  optional  int32       success_subtask=6;
+  optional  int32       failed_subtask=7;
+  optional  int32       doing_subtask=8;
+  optional  int32       cancel_subtask=9;
+  optional  int32       undo_subtask=10;
 }
 
 message AgentInfo {
@@ -127,6 +132,8 @@ message AgentReportReply {
   optional string      err = 2; 
   optional int32       heatbeat=3;
   optional int32       package_size=4;
+  optional int32       opr_queue_threshold=5;
+  optional int32       opr_overflow_threshold=6;
 }
 
 message AgentMasterNoticeReply {
@@ -135,22 +142,21 @@ message AgentMasterNoticeReply {
 
 message AgentTaskCmd {
 required  string   cmd=1;
-required  string   task_type=2;
+required  string   task_cmd=2;
 required  bool     ctrl=3;
 optional  string   task_id=4;
 optional  string   subtask_id=5;
 optional  string   ip=6;
-optional  string   app_name=7;
-optional  string   app_pool=8;
-optional  string   app_ver=9;
-optional  string   app_repo=10;
-optional  string   app_path=11;
-optional  string   app_user=12;
-optional  string   app_env_file=13;
-optional  string   app_env_ver=14;
-optional  bool     output_process=15;
-optional  string   script=16;
-repeated  KeyValue task_arg=17;
+optional  string   svr_name=7;
+optional  string   svr_pool=8;
+optional  string   svr_ver=9;
+optional  string   svr_repo=10;
+optional  string   svr_user=11;
+optional  string   svr_env_content=12;
+optional  string   svr_env_ver=13;
+optional  bool     output_process=14;
+optional  string   script=15;
+repeated  KeyValue task_arg=16;
 }
 
 message AgentTaskCmdReply {
@@ -179,10 +185,11 @@ message AgentTaskResultReply {
 message AgentOprCmd {
   required  string   opr_id = 1; 
   required  string   name = 2;
-  required  string   run_user = 3;
-  required  int32    timeout= 4;
-  required  string   script = 5;
-  repeated  KeyValue args= 6;
+  required  int32    priority=3;
+  required  string   run_user = 4;
+  required  int32    timeout= 5;
+  required  string   script = 6;
+  repeated  KeyValue args= 7;
 }
 
 message AgentOprCmdReply {
@@ -207,7 +214,7 @@ message AgentTaskOutputReply {
 
 message AgentRunningTask {
   optional  string  ip=1;
-  optional  string  app_name=2;
+  optional  string  svr_name=2;
 }
 
 message AgentRunningTaskReply {
@@ -247,7 +254,7 @@ message UiTaskOutputReply {
 
 message UiAgentRunningTask {
   optional  string  ip=1;
-  optional  string  app_name=2;
+  optional  string  svr_name=2;
   required  string  user=3;
   required  string  passwd=4;
 }
@@ -350,12 +357,12 @@ enum  CmdType {
    PAUSE_TASK = 2;
    FINISH_TASK = 3;
    CANCEL_SUBTASK=4;
-   CANCEL_APP_SUBTASK=5;
+   CANCEL_SVR_SUBTASK=5;
    REDO_TASK = 6;
-   REDO_APP_POOL = 7;
+   REDO_SVR_POOL = 7;
    REDO_SUBTASK = 8;
    REDO_FAILED_SUBTASK=9;
-   REDO_FAILED_APP_POOL_SUBTASK=10;
+   REDO_FAILED_SVR_POOL_SUBTASK=10;
    IGNORE_SUBTASK=11;
    FREEZE_TASK=12;
    UNFREEZE_TASK=13;
@@ -365,7 +372,7 @@ message UiTaskCmd {
   required  string  task_id =1;
   optional  string  subtask_id=2;
   optional  string  ip=3;
-  optional  string  app_pool=4;
+  optional  string  svr_pool=4;
   required  CmdType cmd_type = 5;
   required  string  user=6;
   required  string  passwd=7;
@@ -379,23 +386,16 @@ message UiTaskCmdReply{
 
 message UiTaskWatch {
   required  string  task_id =1;
-  optional  string  app_pool=2;
-  optional  string  subtask_id=3;
-  required  string  user=4;
-  required  string  passwd=5;
+  required  bool    last_state=2;
+  required  string  user=3;
+  required  string  passwd=4;
 }
 
 message UiTaskWatchReply{
   required  DcmdState   watch_state=1;
-  optional  string      err=2;  
-  optional  TaskState   task_state=3;
-  optional  AppPoolState app_pool_state=4;
-  optional  SubTaskState subtask_state=5;
-  optional  int32       success_subtask=6;
-  optional  int32       failed_subtask=7;
-  optional  int32       doing_subtask=8;
-  optional  int32       cancel_subtask=9;
-  optional  int32       undo_subtask=10;
+  optional  string      err=2;
+  required  TaskInfo    task_info=3;
+  repeated  TaskInfo    child_tasks=4;
 }
 
 

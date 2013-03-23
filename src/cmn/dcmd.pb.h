@@ -35,6 +35,7 @@ void protobuf_ShutdownFile_dcmd_2eproto();
 class KeyValue;
 class SubTaskInfo;
 class OprInfo;
+class TaskInfo;
 class AgentInfo;
 class AgentReport;
 class AgentReportReply;
@@ -89,14 +90,14 @@ enum DcmdMsgType {
   MTYPE_AGENT_SUBTASK_CMD_RESULT_R = 12,
   MTYPE_CENTER_OPR_CMD = 13,
   MTYPE_CENTER_OPR_CMD_R = 14,
-  MTYPE_CENTER_SUBTASK_CMD_OUTPUT = 15,
-  MTYPE_CENTER_SUBTASK_CMD_OUTPUT_R = 16,
-  MTYPE_CENTER_RUNNING_TASK = 17,
-  MTYPE_CENTER_RUNNING_TASK_R = 18,
-  MTYPE_CENTER_RUNNING_OPR = 19,
-  MTYPE_CENTER_RUNNING_OPR_R = 20,
-  MTYPE_UI_SUBTASK_CMD_OUTPUT = 51,
-  MTYPE_UI_SUBTASK_CMD_OUTPUT_R = 52,
+  MTYPE_CENTER_AGENT_SUBTASK_OUTPUT = 15,
+  MTYPE_CENTER_AGENT_SUBTASK_CMD_OUTPUT_R = 16,
+  MTYPE_CENTER_AGENT_RUNNING_TASK = 17,
+  MTYPE_CENTER_AGENT_RUNNING_TASK_R = 18,
+  MTYPE_CENTER_AGENT_RUNNING_OPR = 19,
+  MTYPE_CENTER_AGENT_RUNNING_OPR_R = 20,
+  MTYPE_UI_AGENT_SUBTASK_OUTPUT = 51,
+  MTYPE_UI_AGENT_SUBTASK_OUTPUT_R = 52,
   MTYPE_UI_AGENT_RUNNING_SUBTASK = 53,
   MTYPE_UI_AGENT_RUNNING_SUBTASK_R = 54,
   MTYPE_UI_AGENT_RUNNING_OPR = 55,
@@ -107,10 +108,10 @@ enum DcmdMsgType {
   MTYPE_UI_AGENT_INFO_R = 60,
   MTYPE_UI_INVALID_AGENT = 61,
   MTYPE_UI_INVALID_AGENT_R = 62,
-  MTYPE_UI_TASK_TYPE_INFO = 63,
-  MTYPE_UI_TASK_TYPE_INFO_R = 64,
-  MTYPE_UI_OPR_INFO = 65,
-  MTYPE_UI_OPR_INFO_R = 66,
+  MTYPE_UI_TASK_CMD_INFO = 63,
+  MTYPE_UI_TASK_CMD_INFO_R = 64,
+  MTYPE_UI_OPR_CMD_INFO = 65,
+  MTYPE_UI_OPR_CMD_INFO_R = 66,
   MTYPE_UI_SUBTASK_PROCESS = 67,
   MTYPE_UI_SUBTASK_PROCESS_R = 68,
   MTYPE_UI_EXEC_TASK = 69,
@@ -198,29 +199,6 @@ inline bool TaskState_Parse(
   return ::google::protobuf::internal::ParseNamedEnum<TaskState>(
     TaskState_descriptor(), name, value);
 }
-enum AppPoolState {
-  APP_POOL_INIT = 0,
-  APP_POOL_DOING = 1,
-  APP_POOL_PAUSED = 2,
-  APP_POOL_FAILED = 3,
-  APP_POOL_FINISHED = 5,
-  APP_POOL_FINISHED_WITH_FAILED = 6
-};
-bool AppPoolState_IsValid(int value);
-const AppPoolState AppPoolState_MIN = APP_POOL_INIT;
-const AppPoolState AppPoolState_MAX = APP_POOL_FINISHED_WITH_FAILED;
-const int AppPoolState_ARRAYSIZE = AppPoolState_MAX + 1;
-
-const ::google::protobuf::EnumDescriptor* AppPoolState_descriptor();
-inline const ::std::string& AppPoolState_Name(AppPoolState value) {
-  return ::google::protobuf::internal::NameOfEnum(
-    AppPoolState_descriptor(), value);
-}
-inline bool AppPoolState_Parse(
-    const ::std::string& name, AppPoolState* value) {
-  return ::google::protobuf::internal::ParseNamedEnum<AppPoolState>(
-    AppPoolState_descriptor(), name, value);
-}
 enum SubTaskState {
   SUBTASK_INIT = 0,
   SUBTASK_DOING = 1,
@@ -268,12 +246,12 @@ enum CmdType {
   PAUSE_TASK = 2,
   FINISH_TASK = 3,
   CANCEL_SUBTASK = 4,
-  CANCEL_APP_SUBTASK = 5,
+  CANCEL_SVR_SUBTASK = 5,
   REDO_TASK = 6,
-  REDO_APP_POOL = 7,
+  REDO_SVR_POOL = 7,
   REDO_SUBTASK = 8,
   REDO_FAILED_SUBTASK = 9,
-  REDO_FAILED_APP_POOL_SUBTASK = 10,
+  REDO_FAILED_SVR_POOL_SUBTASK = 10,
   IGNORE_SUBTASK = 11,
   FREEZE_TASK = 12,
   UNFREEZE_TASK = 13,
@@ -450,27 +428,27 @@ class SubTaskInfo : public ::google::protobuf::Message {
   
   // accessors -------------------------------------------------------
   
-  // required string app_name = 1;
-  inline bool has_app_name() const;
-  inline void clear_app_name();
-  static const int kAppNameFieldNumber = 1;
-  inline const ::std::string& app_name() const;
-  inline void set_app_name(const ::std::string& value);
-  inline void set_app_name(const char* value);
-  inline void set_app_name(const char* value, size_t size);
-  inline ::std::string* mutable_app_name();
-  inline ::std::string* release_app_name();
+  // required string svr_name = 1;
+  inline bool has_svr_name() const;
+  inline void clear_svr_name();
+  static const int kSvrNameFieldNumber = 1;
+  inline const ::std::string& svr_name() const;
+  inline void set_svr_name(const ::std::string& value);
+  inline void set_svr_name(const char* value);
+  inline void set_svr_name(const char* value, size_t size);
+  inline ::std::string* mutable_svr_name();
+  inline ::std::string* release_svr_name();
   
-  // required string task_type = 2;
-  inline bool has_task_type() const;
-  inline void clear_task_type();
-  static const int kTaskTypeFieldNumber = 2;
-  inline const ::std::string& task_type() const;
-  inline void set_task_type(const ::std::string& value);
-  inline void set_task_type(const char* value);
-  inline void set_task_type(const char* value, size_t size);
-  inline ::std::string* mutable_task_type();
-  inline ::std::string* release_task_type();
+  // required string task_cmd = 2;
+  inline bool has_task_cmd() const;
+  inline void clear_task_cmd();
+  static const int kTaskCmdFieldNumber = 2;
+  inline const ::std::string& task_cmd() const;
+  inline void set_task_cmd(const ::std::string& value);
+  inline void set_task_cmd(const char* value);
+  inline void set_task_cmd(const char* value, size_t size);
+  inline ::std::string* mutable_task_cmd();
+  inline ::std::string* release_task_cmd();
   
   // required string task_id = 3;
   inline bool has_task_id() const;
@@ -507,10 +485,10 @@ class SubTaskInfo : public ::google::protobuf::Message {
   
   // @@protoc_insertion_point(class_scope:dcmd_api.SubTaskInfo)
  private:
-  inline void set_has_app_name();
-  inline void clear_has_app_name();
-  inline void set_has_task_type();
-  inline void clear_has_task_type();
+  inline void set_has_svr_name();
+  inline void clear_has_svr_name();
+  inline void set_has_task_cmd();
+  inline void clear_has_task_cmd();
   inline void set_has_task_id();
   inline void clear_has_task_id();
   inline void set_has_subtask_id();
@@ -520,8 +498,8 @@ class SubTaskInfo : public ::google::protobuf::Message {
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
-  ::std::string* app_name_;
-  ::std::string* task_type_;
+  ::std::string* svr_name_;
+  ::std::string* task_cmd_;
   ::std::string* task_id_;
   ::std::string* subtask_id_;
   ::std::string* cmd_id_;
@@ -645,6 +623,190 @@ class OprInfo : public ::google::protobuf::Message {
   
   void InitAsDefaultInstance();
   static OprInfo* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class TaskInfo : public ::google::protobuf::Message {
+ public:
+  TaskInfo();
+  virtual ~TaskInfo();
+  
+  TaskInfo(const TaskInfo& from);
+  
+  inline TaskInfo& operator=(const TaskInfo& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const TaskInfo& default_instance();
+  
+  void Swap(TaskInfo* other);
+  
+  // implements Message ----------------------------------------------
+  
+  TaskInfo* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const TaskInfo& from);
+  void MergeFrom(const TaskInfo& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required string task_id = 1;
+  inline bool has_task_id() const;
+  inline void clear_task_id();
+  static const int kTaskIdFieldNumber = 1;
+  inline const ::std::string& task_id() const;
+  inline void set_task_id(const ::std::string& value);
+  inline void set_task_id(const char* value);
+  inline void set_task_id(const char* value, size_t size);
+  inline ::std::string* mutable_task_id();
+  inline ::std::string* release_task_id();
+  
+  // required .dcmd_api.TaskState task_state = 2;
+  inline bool has_task_state() const;
+  inline void clear_task_state();
+  static const int kTaskStateFieldNumber = 2;
+  inline dcmd_api::TaskState task_state() const;
+  inline void set_task_state(dcmd_api::TaskState value);
+  
+  // required int32 order = 3;
+  inline bool has_order() const;
+  inline void clear_order();
+  static const int kOrderFieldNumber = 3;
+  inline ::google::protobuf::int32 order() const;
+  inline void set_order(::google::protobuf::int32 value);
+  
+  // optional string parent_task_id = 4;
+  inline bool has_parent_task_id() const;
+  inline void clear_parent_task_id();
+  static const int kParentTaskIdFieldNumber = 4;
+  inline const ::std::string& parent_task_id() const;
+  inline void set_parent_task_id(const ::std::string& value);
+  inline void set_parent_task_id(const char* value);
+  inline void set_parent_task_id(const char* value, size_t size);
+  inline ::std::string* mutable_parent_task_id();
+  inline ::std::string* release_parent_task_id();
+  
+  // optional string err = 5;
+  inline bool has_err() const;
+  inline void clear_err();
+  static const int kErrFieldNumber = 5;
+  inline const ::std::string& err() const;
+  inline void set_err(const ::std::string& value);
+  inline void set_err(const char* value);
+  inline void set_err(const char* value, size_t size);
+  inline ::std::string* mutable_err();
+  inline ::std::string* release_err();
+  
+  // optional int32 success_subtask = 6;
+  inline bool has_success_subtask() const;
+  inline void clear_success_subtask();
+  static const int kSuccessSubtaskFieldNumber = 6;
+  inline ::google::protobuf::int32 success_subtask() const;
+  inline void set_success_subtask(::google::protobuf::int32 value);
+  
+  // optional int32 failed_subtask = 7;
+  inline bool has_failed_subtask() const;
+  inline void clear_failed_subtask();
+  static const int kFailedSubtaskFieldNumber = 7;
+  inline ::google::protobuf::int32 failed_subtask() const;
+  inline void set_failed_subtask(::google::protobuf::int32 value);
+  
+  // optional int32 doing_subtask = 8;
+  inline bool has_doing_subtask() const;
+  inline void clear_doing_subtask();
+  static const int kDoingSubtaskFieldNumber = 8;
+  inline ::google::protobuf::int32 doing_subtask() const;
+  inline void set_doing_subtask(::google::protobuf::int32 value);
+  
+  // optional int32 cancel_subtask = 9;
+  inline bool has_cancel_subtask() const;
+  inline void clear_cancel_subtask();
+  static const int kCancelSubtaskFieldNumber = 9;
+  inline ::google::protobuf::int32 cancel_subtask() const;
+  inline void set_cancel_subtask(::google::protobuf::int32 value);
+  
+  // optional int32 undo_subtask = 10;
+  inline bool has_undo_subtask() const;
+  inline void clear_undo_subtask();
+  static const int kUndoSubtaskFieldNumber = 10;
+  inline ::google::protobuf::int32 undo_subtask() const;
+  inline void set_undo_subtask(::google::protobuf::int32 value);
+  
+  // @@protoc_insertion_point(class_scope:dcmd_api.TaskInfo)
+ private:
+  inline void set_has_task_id();
+  inline void clear_has_task_id();
+  inline void set_has_task_state();
+  inline void clear_has_task_state();
+  inline void set_has_order();
+  inline void clear_has_order();
+  inline void set_has_parent_task_id();
+  inline void clear_has_parent_task_id();
+  inline void set_has_err();
+  inline void clear_has_err();
+  inline void set_has_success_subtask();
+  inline void clear_has_success_subtask();
+  inline void set_has_failed_subtask();
+  inline void clear_has_failed_subtask();
+  inline void set_has_doing_subtask();
+  inline void clear_has_doing_subtask();
+  inline void set_has_cancel_subtask();
+  inline void clear_has_cancel_subtask();
+  inline void set_has_undo_subtask();
+  inline void clear_has_undo_subtask();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::std::string* task_id_;
+  int task_state_;
+  ::google::protobuf::int32 order_;
+  ::std::string* parent_task_id_;
+  ::std::string* err_;
+  ::google::protobuf::int32 success_subtask_;
+  ::google::protobuf::int32 failed_subtask_;
+  ::google::protobuf::int32 doing_subtask_;
+  ::google::protobuf::int32 cancel_subtask_;
+  ::google::protobuf::int32 undo_subtask_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(10 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_dcmd_2eproto();
+  friend void protobuf_AssignDesc_dcmd_2eproto();
+  friend void protobuf_ShutdownFile_dcmd_2eproto();
+  
+  void InitAsDefaultInstance();
+  static TaskInfo* default_instance_;
 };
 // -------------------------------------------------------------------
 
@@ -975,6 +1137,20 @@ class AgentReportReply : public ::google::protobuf::Message {
   inline ::google::protobuf::int32 package_size() const;
   inline void set_package_size(::google::protobuf::int32 value);
   
+  // optional int32 opr_queue_threshold = 5;
+  inline bool has_opr_queue_threshold() const;
+  inline void clear_opr_queue_threshold();
+  static const int kOprQueueThresholdFieldNumber = 5;
+  inline ::google::protobuf::int32 opr_queue_threshold() const;
+  inline void set_opr_queue_threshold(::google::protobuf::int32 value);
+  
+  // optional int32 opr_overflow_threshold = 6;
+  inline bool has_opr_overflow_threshold() const;
+  inline void clear_opr_overflow_threshold();
+  static const int kOprOverflowThresholdFieldNumber = 6;
+  inline ::google::protobuf::int32 opr_overflow_threshold() const;
+  inline void set_opr_overflow_threshold(::google::protobuf::int32 value);
+  
   // @@protoc_insertion_point(class_scope:dcmd_api.AgentReportReply)
  private:
   inline void set_has_state();
@@ -985,6 +1161,10 @@ class AgentReportReply : public ::google::protobuf::Message {
   inline void clear_has_heatbeat();
   inline void set_has_package_size();
   inline void clear_has_package_size();
+  inline void set_has_opr_queue_threshold();
+  inline void clear_has_opr_queue_threshold();
+  inline void set_has_opr_overflow_threshold();
+  inline void clear_has_opr_overflow_threshold();
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
@@ -992,9 +1172,11 @@ class AgentReportReply : public ::google::protobuf::Message {
   int state_;
   ::google::protobuf::int32 heatbeat_;
   ::google::protobuf::int32 package_size_;
+  ::google::protobuf::int32 opr_queue_threshold_;
+  ::google::protobuf::int32 opr_overflow_threshold_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(4 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(6 + 31) / 32];
   
   friend void  protobuf_AddDesc_dcmd_2eproto();
   friend void protobuf_AssignDesc_dcmd_2eproto();
@@ -1159,16 +1341,16 @@ class AgentTaskCmd : public ::google::protobuf::Message {
   inline ::std::string* mutable_cmd();
   inline ::std::string* release_cmd();
   
-  // required string task_type = 2;
-  inline bool has_task_type() const;
-  inline void clear_task_type();
-  static const int kTaskTypeFieldNumber = 2;
-  inline const ::std::string& task_type() const;
-  inline void set_task_type(const ::std::string& value);
-  inline void set_task_type(const char* value);
-  inline void set_task_type(const char* value, size_t size);
-  inline ::std::string* mutable_task_type();
-  inline ::std::string* release_task_type();
+  // required string task_cmd = 2;
+  inline bool has_task_cmd() const;
+  inline void clear_task_cmd();
+  static const int kTaskCmdFieldNumber = 2;
+  inline const ::std::string& task_cmd() const;
+  inline void set_task_cmd(const ::std::string& value);
+  inline void set_task_cmd(const char* value);
+  inline void set_task_cmd(const char* value, size_t size);
+  inline ::std::string* mutable_task_cmd();
+  inline ::std::string* release_task_cmd();
   
   // required bool ctrl = 3;
   inline bool has_ctrl() const;
@@ -1210,105 +1392,94 @@ class AgentTaskCmd : public ::google::protobuf::Message {
   inline ::std::string* mutable_ip();
   inline ::std::string* release_ip();
   
-  // optional string app_name = 7;
-  inline bool has_app_name() const;
-  inline void clear_app_name();
-  static const int kAppNameFieldNumber = 7;
-  inline const ::std::string& app_name() const;
-  inline void set_app_name(const ::std::string& value);
-  inline void set_app_name(const char* value);
-  inline void set_app_name(const char* value, size_t size);
-  inline ::std::string* mutable_app_name();
-  inline ::std::string* release_app_name();
+  // optional string svr_name = 7;
+  inline bool has_svr_name() const;
+  inline void clear_svr_name();
+  static const int kSvrNameFieldNumber = 7;
+  inline const ::std::string& svr_name() const;
+  inline void set_svr_name(const ::std::string& value);
+  inline void set_svr_name(const char* value);
+  inline void set_svr_name(const char* value, size_t size);
+  inline ::std::string* mutable_svr_name();
+  inline ::std::string* release_svr_name();
   
-  // optional string app_pool = 8;
-  inline bool has_app_pool() const;
-  inline void clear_app_pool();
-  static const int kAppPoolFieldNumber = 8;
-  inline const ::std::string& app_pool() const;
-  inline void set_app_pool(const ::std::string& value);
-  inline void set_app_pool(const char* value);
-  inline void set_app_pool(const char* value, size_t size);
-  inline ::std::string* mutable_app_pool();
-  inline ::std::string* release_app_pool();
+  // optional string svr_pool = 8;
+  inline bool has_svr_pool() const;
+  inline void clear_svr_pool();
+  static const int kSvrPoolFieldNumber = 8;
+  inline const ::std::string& svr_pool() const;
+  inline void set_svr_pool(const ::std::string& value);
+  inline void set_svr_pool(const char* value);
+  inline void set_svr_pool(const char* value, size_t size);
+  inline ::std::string* mutable_svr_pool();
+  inline ::std::string* release_svr_pool();
   
-  // optional string app_ver = 9;
-  inline bool has_app_ver() const;
-  inline void clear_app_ver();
-  static const int kAppVerFieldNumber = 9;
-  inline const ::std::string& app_ver() const;
-  inline void set_app_ver(const ::std::string& value);
-  inline void set_app_ver(const char* value);
-  inline void set_app_ver(const char* value, size_t size);
-  inline ::std::string* mutable_app_ver();
-  inline ::std::string* release_app_ver();
+  // optional string svr_ver = 9;
+  inline bool has_svr_ver() const;
+  inline void clear_svr_ver();
+  static const int kSvrVerFieldNumber = 9;
+  inline const ::std::string& svr_ver() const;
+  inline void set_svr_ver(const ::std::string& value);
+  inline void set_svr_ver(const char* value);
+  inline void set_svr_ver(const char* value, size_t size);
+  inline ::std::string* mutable_svr_ver();
+  inline ::std::string* release_svr_ver();
   
-  // optional string app_repo = 10;
-  inline bool has_app_repo() const;
-  inline void clear_app_repo();
-  static const int kAppRepoFieldNumber = 10;
-  inline const ::std::string& app_repo() const;
-  inline void set_app_repo(const ::std::string& value);
-  inline void set_app_repo(const char* value);
-  inline void set_app_repo(const char* value, size_t size);
-  inline ::std::string* mutable_app_repo();
-  inline ::std::string* release_app_repo();
+  // optional string svr_repo = 10;
+  inline bool has_svr_repo() const;
+  inline void clear_svr_repo();
+  static const int kSvrRepoFieldNumber = 10;
+  inline const ::std::string& svr_repo() const;
+  inline void set_svr_repo(const ::std::string& value);
+  inline void set_svr_repo(const char* value);
+  inline void set_svr_repo(const char* value, size_t size);
+  inline ::std::string* mutable_svr_repo();
+  inline ::std::string* release_svr_repo();
   
-  // optional string app_path = 11;
-  inline bool has_app_path() const;
-  inline void clear_app_path();
-  static const int kAppPathFieldNumber = 11;
-  inline const ::std::string& app_path() const;
-  inline void set_app_path(const ::std::string& value);
-  inline void set_app_path(const char* value);
-  inline void set_app_path(const char* value, size_t size);
-  inline ::std::string* mutable_app_path();
-  inline ::std::string* release_app_path();
+  // optional string svr_user = 11;
+  inline bool has_svr_user() const;
+  inline void clear_svr_user();
+  static const int kSvrUserFieldNumber = 11;
+  inline const ::std::string& svr_user() const;
+  inline void set_svr_user(const ::std::string& value);
+  inline void set_svr_user(const char* value);
+  inline void set_svr_user(const char* value, size_t size);
+  inline ::std::string* mutable_svr_user();
+  inline ::std::string* release_svr_user();
   
-  // optional string app_user = 12;
-  inline bool has_app_user() const;
-  inline void clear_app_user();
-  static const int kAppUserFieldNumber = 12;
-  inline const ::std::string& app_user() const;
-  inline void set_app_user(const ::std::string& value);
-  inline void set_app_user(const char* value);
-  inline void set_app_user(const char* value, size_t size);
-  inline ::std::string* mutable_app_user();
-  inline ::std::string* release_app_user();
+  // optional string svr_env_content = 12;
+  inline bool has_svr_env_content() const;
+  inline void clear_svr_env_content();
+  static const int kSvrEnvContentFieldNumber = 12;
+  inline const ::std::string& svr_env_content() const;
+  inline void set_svr_env_content(const ::std::string& value);
+  inline void set_svr_env_content(const char* value);
+  inline void set_svr_env_content(const char* value, size_t size);
+  inline ::std::string* mutable_svr_env_content();
+  inline ::std::string* release_svr_env_content();
   
-  // optional string app_env_file = 13;
-  inline bool has_app_env_file() const;
-  inline void clear_app_env_file();
-  static const int kAppEnvFileFieldNumber = 13;
-  inline const ::std::string& app_env_file() const;
-  inline void set_app_env_file(const ::std::string& value);
-  inline void set_app_env_file(const char* value);
-  inline void set_app_env_file(const char* value, size_t size);
-  inline ::std::string* mutable_app_env_file();
-  inline ::std::string* release_app_env_file();
+  // optional string svr_env_ver = 13;
+  inline bool has_svr_env_ver() const;
+  inline void clear_svr_env_ver();
+  static const int kSvrEnvVerFieldNumber = 13;
+  inline const ::std::string& svr_env_ver() const;
+  inline void set_svr_env_ver(const ::std::string& value);
+  inline void set_svr_env_ver(const char* value);
+  inline void set_svr_env_ver(const char* value, size_t size);
+  inline ::std::string* mutable_svr_env_ver();
+  inline ::std::string* release_svr_env_ver();
   
-  // optional string app_env_ver = 14;
-  inline bool has_app_env_ver() const;
-  inline void clear_app_env_ver();
-  static const int kAppEnvVerFieldNumber = 14;
-  inline const ::std::string& app_env_ver() const;
-  inline void set_app_env_ver(const ::std::string& value);
-  inline void set_app_env_ver(const char* value);
-  inline void set_app_env_ver(const char* value, size_t size);
-  inline ::std::string* mutable_app_env_ver();
-  inline ::std::string* release_app_env_ver();
-  
-  // optional bool output_process = 15;
+  // optional bool output_process = 14;
   inline bool has_output_process() const;
   inline void clear_output_process();
-  static const int kOutputProcessFieldNumber = 15;
+  static const int kOutputProcessFieldNumber = 14;
   inline bool output_process() const;
   inline void set_output_process(bool value);
   
-  // optional string script = 16;
+  // optional string script = 15;
   inline bool has_script() const;
   inline void clear_script();
-  static const int kScriptFieldNumber = 16;
+  static const int kScriptFieldNumber = 15;
   inline const ::std::string& script() const;
   inline void set_script(const ::std::string& value);
   inline void set_script(const char* value);
@@ -1316,10 +1487,10 @@ class AgentTaskCmd : public ::google::protobuf::Message {
   inline ::std::string* mutable_script();
   inline ::std::string* release_script();
   
-  // repeated .dcmd_api.KeyValue task_arg = 17;
+  // repeated .dcmd_api.KeyValue task_arg = 16;
   inline int task_arg_size() const;
   inline void clear_task_arg();
-  static const int kTaskArgFieldNumber = 17;
+  static const int kTaskArgFieldNumber = 16;
   inline const ::dcmd_api::KeyValue& task_arg(int index) const;
   inline ::dcmd_api::KeyValue* mutable_task_arg(int index);
   inline ::dcmd_api::KeyValue* add_task_arg();
@@ -1332,8 +1503,8 @@ class AgentTaskCmd : public ::google::protobuf::Message {
  private:
   inline void set_has_cmd();
   inline void clear_has_cmd();
-  inline void set_has_task_type();
-  inline void clear_has_task_type();
+  inline void set_has_task_cmd();
+  inline void clear_has_task_cmd();
   inline void set_has_ctrl();
   inline void clear_has_ctrl();
   inline void set_has_task_id();
@@ -1342,22 +1513,20 @@ class AgentTaskCmd : public ::google::protobuf::Message {
   inline void clear_has_subtask_id();
   inline void set_has_ip();
   inline void clear_has_ip();
-  inline void set_has_app_name();
-  inline void clear_has_app_name();
-  inline void set_has_app_pool();
-  inline void clear_has_app_pool();
-  inline void set_has_app_ver();
-  inline void clear_has_app_ver();
-  inline void set_has_app_repo();
-  inline void clear_has_app_repo();
-  inline void set_has_app_path();
-  inline void clear_has_app_path();
-  inline void set_has_app_user();
-  inline void clear_has_app_user();
-  inline void set_has_app_env_file();
-  inline void clear_has_app_env_file();
-  inline void set_has_app_env_ver();
-  inline void clear_has_app_env_ver();
+  inline void set_has_svr_name();
+  inline void clear_has_svr_name();
+  inline void set_has_svr_pool();
+  inline void clear_has_svr_pool();
+  inline void set_has_svr_ver();
+  inline void clear_has_svr_ver();
+  inline void set_has_svr_repo();
+  inline void clear_has_svr_repo();
+  inline void set_has_svr_user();
+  inline void clear_has_svr_user();
+  inline void set_has_svr_env_content();
+  inline void clear_has_svr_env_content();
+  inline void set_has_svr_env_ver();
+  inline void clear_has_svr_env_ver();
   inline void set_has_output_process();
   inline void clear_has_output_process();
   inline void set_has_script();
@@ -1366,25 +1535,24 @@ class AgentTaskCmd : public ::google::protobuf::Message {
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
   ::std::string* cmd_;
-  ::std::string* task_type_;
+  ::std::string* task_cmd_;
   ::std::string* task_id_;
   ::std::string* subtask_id_;
   ::std::string* ip_;
-  ::std::string* app_name_;
-  ::std::string* app_pool_;
-  ::std::string* app_ver_;
-  ::std::string* app_repo_;
-  ::std::string* app_path_;
-  ::std::string* app_user_;
-  ::std::string* app_env_file_;
-  ::std::string* app_env_ver_;
+  ::std::string* svr_name_;
+  ::std::string* svr_pool_;
+  ::std::string* svr_ver_;
+  ::std::string* svr_repo_;
+  ::std::string* svr_user_;
+  ::std::string* svr_env_content_;
+  ::std::string* svr_env_ver_;
   ::std::string* script_;
   ::google::protobuf::RepeatedPtrField< ::dcmd_api::KeyValue > task_arg_;
   bool ctrl_;
   bool output_process_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(17 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(16 + 31) / 32];
   
   friend void  protobuf_AddDesc_dcmd_2eproto();
   friend void protobuf_AssignDesc_dcmd_2eproto();
@@ -1909,10 +2077,17 @@ class AgentOprCmd : public ::google::protobuf::Message {
   inline ::std::string* mutable_name();
   inline ::std::string* release_name();
   
-  // required string run_user = 3;
+  // required int32 priority = 3;
+  inline bool has_priority() const;
+  inline void clear_priority();
+  static const int kPriorityFieldNumber = 3;
+  inline ::google::protobuf::int32 priority() const;
+  inline void set_priority(::google::protobuf::int32 value);
+  
+  // required string run_user = 4;
   inline bool has_run_user() const;
   inline void clear_run_user();
-  static const int kRunUserFieldNumber = 3;
+  static const int kRunUserFieldNumber = 4;
   inline const ::std::string& run_user() const;
   inline void set_run_user(const ::std::string& value);
   inline void set_run_user(const char* value);
@@ -1920,17 +2095,17 @@ class AgentOprCmd : public ::google::protobuf::Message {
   inline ::std::string* mutable_run_user();
   inline ::std::string* release_run_user();
   
-  // required int32 timeout = 4;
+  // required int32 timeout = 5;
   inline bool has_timeout() const;
   inline void clear_timeout();
-  static const int kTimeoutFieldNumber = 4;
+  static const int kTimeoutFieldNumber = 5;
   inline ::google::protobuf::int32 timeout() const;
   inline void set_timeout(::google::protobuf::int32 value);
   
-  // required string script = 5;
+  // required string script = 6;
   inline bool has_script() const;
   inline void clear_script();
-  static const int kScriptFieldNumber = 5;
+  static const int kScriptFieldNumber = 6;
   inline const ::std::string& script() const;
   inline void set_script(const ::std::string& value);
   inline void set_script(const char* value);
@@ -1938,10 +2113,10 @@ class AgentOprCmd : public ::google::protobuf::Message {
   inline ::std::string* mutable_script();
   inline ::std::string* release_script();
   
-  // repeated .dcmd_api.KeyValue args = 6;
+  // repeated .dcmd_api.KeyValue args = 7;
   inline int args_size() const;
   inline void clear_args();
-  static const int kArgsFieldNumber = 6;
+  static const int kArgsFieldNumber = 7;
   inline const ::dcmd_api::KeyValue& args(int index) const;
   inline ::dcmd_api::KeyValue* mutable_args(int index);
   inline ::dcmd_api::KeyValue* add_args();
@@ -1956,6 +2131,8 @@ class AgentOprCmd : public ::google::protobuf::Message {
   inline void clear_has_opr_id();
   inline void set_has_name();
   inline void clear_has_name();
+  inline void set_has_priority();
+  inline void clear_has_priority();
   inline void set_has_run_user();
   inline void clear_has_run_user();
   inline void set_has_timeout();
@@ -1968,12 +2145,13 @@ class AgentOprCmd : public ::google::protobuf::Message {
   ::std::string* opr_id_;
   ::std::string* name_;
   ::std::string* run_user_;
+  ::google::protobuf::int32 priority_;
+  ::google::protobuf::int32 timeout_;
   ::std::string* script_;
   ::google::protobuf::RepeatedPtrField< ::dcmd_api::KeyValue > args_;
-  ::google::protobuf::int32 timeout_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(6 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(7 + 31) / 32];
   
   friend void  protobuf_AddDesc_dcmd_2eproto();
   friend void protobuf_AssignDesc_dcmd_2eproto();
@@ -2403,28 +2581,28 @@ class AgentRunningTask : public ::google::protobuf::Message {
   inline ::std::string* mutable_ip();
   inline ::std::string* release_ip();
   
-  // optional string app_name = 2;
-  inline bool has_app_name() const;
-  inline void clear_app_name();
-  static const int kAppNameFieldNumber = 2;
-  inline const ::std::string& app_name() const;
-  inline void set_app_name(const ::std::string& value);
-  inline void set_app_name(const char* value);
-  inline void set_app_name(const char* value, size_t size);
-  inline ::std::string* mutable_app_name();
-  inline ::std::string* release_app_name();
+  // optional string svr_name = 2;
+  inline bool has_svr_name() const;
+  inline void clear_svr_name();
+  static const int kSvrNameFieldNumber = 2;
+  inline const ::std::string& svr_name() const;
+  inline void set_svr_name(const ::std::string& value);
+  inline void set_svr_name(const char* value);
+  inline void set_svr_name(const char* value, size_t size);
+  inline ::std::string* mutable_svr_name();
+  inline ::std::string* release_svr_name();
   
   // @@protoc_insertion_point(class_scope:dcmd_api.AgentRunningTask)
  private:
   inline void set_has_ip();
   inline void clear_has_ip();
-  inline void set_has_app_name();
-  inline void clear_has_app_name();
+  inline void set_has_svr_name();
+  inline void clear_has_svr_name();
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
   ::std::string* ip_;
-  ::std::string* app_name_;
+  ::std::string* svr_name_;
   
   mutable int _cached_size_;
   ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
@@ -3147,16 +3325,16 @@ class UiAgentRunningTask : public ::google::protobuf::Message {
   inline ::std::string* mutable_ip();
   inline ::std::string* release_ip();
   
-  // optional string app_name = 2;
-  inline bool has_app_name() const;
-  inline void clear_app_name();
-  static const int kAppNameFieldNumber = 2;
-  inline const ::std::string& app_name() const;
-  inline void set_app_name(const ::std::string& value);
-  inline void set_app_name(const char* value);
-  inline void set_app_name(const char* value, size_t size);
-  inline ::std::string* mutable_app_name();
-  inline ::std::string* release_app_name();
+  // optional string svr_name = 2;
+  inline bool has_svr_name() const;
+  inline void clear_svr_name();
+  static const int kSvrNameFieldNumber = 2;
+  inline const ::std::string& svr_name() const;
+  inline void set_svr_name(const ::std::string& value);
+  inline void set_svr_name(const char* value);
+  inline void set_svr_name(const char* value, size_t size);
+  inline ::std::string* mutable_svr_name();
+  inline ::std::string* release_svr_name();
   
   // required string user = 3;
   inline bool has_user() const;
@@ -3184,8 +3362,8 @@ class UiAgentRunningTask : public ::google::protobuf::Message {
  private:
   inline void set_has_ip();
   inline void clear_has_ip();
-  inline void set_has_app_name();
-  inline void clear_has_app_name();
+  inline void set_has_svr_name();
+  inline void clear_has_svr_name();
   inline void set_has_user();
   inline void clear_has_user();
   inline void set_has_passwd();
@@ -3194,7 +3372,7 @@ class UiAgentRunningTask : public ::google::protobuf::Message {
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
   ::std::string* ip_;
-  ::std::string* app_name_;
+  ::std::string* svr_name_;
   ::std::string* user_;
   ::std::string* passwd_;
   
@@ -5014,16 +5192,16 @@ class UiTaskCmd : public ::google::protobuf::Message {
   inline ::std::string* mutable_ip();
   inline ::std::string* release_ip();
   
-  // optional string app_pool = 4;
-  inline bool has_app_pool() const;
-  inline void clear_app_pool();
-  static const int kAppPoolFieldNumber = 4;
-  inline const ::std::string& app_pool() const;
-  inline void set_app_pool(const ::std::string& value);
-  inline void set_app_pool(const char* value);
-  inline void set_app_pool(const char* value, size_t size);
-  inline ::std::string* mutable_app_pool();
-  inline ::std::string* release_app_pool();
+  // optional string svr_pool = 4;
+  inline bool has_svr_pool() const;
+  inline void clear_svr_pool();
+  static const int kSvrPoolFieldNumber = 4;
+  inline const ::std::string& svr_pool() const;
+  inline void set_svr_pool(const ::std::string& value);
+  inline void set_svr_pool(const char* value);
+  inline void set_svr_pool(const char* value, size_t size);
+  inline ::std::string* mutable_svr_pool();
+  inline ::std::string* release_svr_pool();
   
   // required .dcmd_api.CmdType cmd_type = 5;
   inline bool has_cmd_type() const;
@@ -5062,8 +5240,8 @@ class UiTaskCmd : public ::google::protobuf::Message {
   inline void clear_has_subtask_id();
   inline void set_has_ip();
   inline void clear_has_ip();
-  inline void set_has_app_pool();
-  inline void clear_has_app_pool();
+  inline void set_has_svr_pool();
+  inline void clear_has_svr_pool();
   inline void set_has_cmd_type();
   inline void clear_has_cmd_type();
   inline void set_has_user();
@@ -5076,7 +5254,7 @@ class UiTaskCmd : public ::google::protobuf::Message {
   ::std::string* task_id_;
   ::std::string* subtask_id_;
   ::std::string* ip_;
-  ::std::string* app_pool_;
+  ::std::string* svr_pool_;
   ::std::string* user_;
   ::std::string* passwd_;
   int cmd_type_;
@@ -5268,32 +5446,17 @@ class UiTaskWatch : public ::google::protobuf::Message {
   inline ::std::string* mutable_task_id();
   inline ::std::string* release_task_id();
   
-  // optional string app_pool = 2;
-  inline bool has_app_pool() const;
-  inline void clear_app_pool();
-  static const int kAppPoolFieldNumber = 2;
-  inline const ::std::string& app_pool() const;
-  inline void set_app_pool(const ::std::string& value);
-  inline void set_app_pool(const char* value);
-  inline void set_app_pool(const char* value, size_t size);
-  inline ::std::string* mutable_app_pool();
-  inline ::std::string* release_app_pool();
+  // required bool last_state = 2;
+  inline bool has_last_state() const;
+  inline void clear_last_state();
+  static const int kLastStateFieldNumber = 2;
+  inline bool last_state() const;
+  inline void set_last_state(bool value);
   
-  // optional string subtask_id = 3;
-  inline bool has_subtask_id() const;
-  inline void clear_subtask_id();
-  static const int kSubtaskIdFieldNumber = 3;
-  inline const ::std::string& subtask_id() const;
-  inline void set_subtask_id(const ::std::string& value);
-  inline void set_subtask_id(const char* value);
-  inline void set_subtask_id(const char* value, size_t size);
-  inline ::std::string* mutable_subtask_id();
-  inline ::std::string* release_subtask_id();
-  
-  // required string user = 4;
+  // required string user = 3;
   inline bool has_user() const;
   inline void clear_user();
-  static const int kUserFieldNumber = 4;
+  static const int kUserFieldNumber = 3;
   inline const ::std::string& user() const;
   inline void set_user(const ::std::string& value);
   inline void set_user(const char* value);
@@ -5301,10 +5464,10 @@ class UiTaskWatch : public ::google::protobuf::Message {
   inline ::std::string* mutable_user();
   inline ::std::string* release_user();
   
-  // required string passwd = 5;
+  // required string passwd = 4;
   inline bool has_passwd() const;
   inline void clear_passwd();
-  static const int kPasswdFieldNumber = 5;
+  static const int kPasswdFieldNumber = 4;
   inline const ::std::string& passwd() const;
   inline void set_passwd(const ::std::string& value);
   inline void set_passwd(const char* value);
@@ -5316,10 +5479,8 @@ class UiTaskWatch : public ::google::protobuf::Message {
  private:
   inline void set_has_task_id();
   inline void clear_has_task_id();
-  inline void set_has_app_pool();
-  inline void clear_has_app_pool();
-  inline void set_has_subtask_id();
-  inline void clear_has_subtask_id();
+  inline void set_has_last_state();
+  inline void clear_has_last_state();
   inline void set_has_user();
   inline void clear_has_user();
   inline void set_has_passwd();
@@ -5328,13 +5489,12 @@ class UiTaskWatch : public ::google::protobuf::Message {
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
   ::std::string* task_id_;
-  ::std::string* app_pool_;
-  ::std::string* subtask_id_;
   ::std::string* user_;
   ::std::string* passwd_;
+  bool last_state_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(5 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(4 + 31) / 32];
   
   friend void  protobuf_AddDesc_dcmd_2eproto();
   friend void protobuf_AssignDesc_dcmd_2eproto();
@@ -5417,61 +5577,25 @@ class UiTaskWatchReply : public ::google::protobuf::Message {
   inline ::std::string* mutable_err();
   inline ::std::string* release_err();
   
-  // optional .dcmd_api.TaskState task_state = 3;
-  inline bool has_task_state() const;
-  inline void clear_task_state();
-  static const int kTaskStateFieldNumber = 3;
-  inline dcmd_api::TaskState task_state() const;
-  inline void set_task_state(dcmd_api::TaskState value);
+  // required .dcmd_api.TaskInfo task_info = 3;
+  inline bool has_task_info() const;
+  inline void clear_task_info();
+  static const int kTaskInfoFieldNumber = 3;
+  inline const ::dcmd_api::TaskInfo& task_info() const;
+  inline ::dcmd_api::TaskInfo* mutable_task_info();
+  inline ::dcmd_api::TaskInfo* release_task_info();
   
-  // optional .dcmd_api.AppPoolState app_pool_state = 4;
-  inline bool has_app_pool_state() const;
-  inline void clear_app_pool_state();
-  static const int kAppPoolStateFieldNumber = 4;
-  inline dcmd_api::AppPoolState app_pool_state() const;
-  inline void set_app_pool_state(dcmd_api::AppPoolState value);
-  
-  // optional .dcmd_api.SubTaskState subtask_state = 5;
-  inline bool has_subtask_state() const;
-  inline void clear_subtask_state();
-  static const int kSubtaskStateFieldNumber = 5;
-  inline dcmd_api::SubTaskState subtask_state() const;
-  inline void set_subtask_state(dcmd_api::SubTaskState value);
-  
-  // optional int32 success_subtask = 6;
-  inline bool has_success_subtask() const;
-  inline void clear_success_subtask();
-  static const int kSuccessSubtaskFieldNumber = 6;
-  inline ::google::protobuf::int32 success_subtask() const;
-  inline void set_success_subtask(::google::protobuf::int32 value);
-  
-  // optional int32 failed_subtask = 7;
-  inline bool has_failed_subtask() const;
-  inline void clear_failed_subtask();
-  static const int kFailedSubtaskFieldNumber = 7;
-  inline ::google::protobuf::int32 failed_subtask() const;
-  inline void set_failed_subtask(::google::protobuf::int32 value);
-  
-  // optional int32 doing_subtask = 8;
-  inline bool has_doing_subtask() const;
-  inline void clear_doing_subtask();
-  static const int kDoingSubtaskFieldNumber = 8;
-  inline ::google::protobuf::int32 doing_subtask() const;
-  inline void set_doing_subtask(::google::protobuf::int32 value);
-  
-  // optional int32 cancel_subtask = 9;
-  inline bool has_cancel_subtask() const;
-  inline void clear_cancel_subtask();
-  static const int kCancelSubtaskFieldNumber = 9;
-  inline ::google::protobuf::int32 cancel_subtask() const;
-  inline void set_cancel_subtask(::google::protobuf::int32 value);
-  
-  // optional int32 undo_subtask = 10;
-  inline bool has_undo_subtask() const;
-  inline void clear_undo_subtask();
-  static const int kUndoSubtaskFieldNumber = 10;
-  inline ::google::protobuf::int32 undo_subtask() const;
-  inline void set_undo_subtask(::google::protobuf::int32 value);
+  // repeated .dcmd_api.TaskInfo child_tasks = 4;
+  inline int child_tasks_size() const;
+  inline void clear_child_tasks();
+  static const int kChildTasksFieldNumber = 4;
+  inline const ::dcmd_api::TaskInfo& child_tasks(int index) const;
+  inline ::dcmd_api::TaskInfo* mutable_child_tasks(int index);
+  inline ::dcmd_api::TaskInfo* add_child_tasks();
+  inline const ::google::protobuf::RepeatedPtrField< ::dcmd_api::TaskInfo >&
+      child_tasks() const;
+  inline ::google::protobuf::RepeatedPtrField< ::dcmd_api::TaskInfo >*
+      mutable_child_tasks();
   
   // @@protoc_insertion_point(class_scope:dcmd_api.UiTaskWatchReply)
  private:
@@ -5479,38 +5603,18 @@ class UiTaskWatchReply : public ::google::protobuf::Message {
   inline void clear_has_watch_state();
   inline void set_has_err();
   inline void clear_has_err();
-  inline void set_has_task_state();
-  inline void clear_has_task_state();
-  inline void set_has_app_pool_state();
-  inline void clear_has_app_pool_state();
-  inline void set_has_subtask_state();
-  inline void clear_has_subtask_state();
-  inline void set_has_success_subtask();
-  inline void clear_has_success_subtask();
-  inline void set_has_failed_subtask();
-  inline void clear_has_failed_subtask();
-  inline void set_has_doing_subtask();
-  inline void clear_has_doing_subtask();
-  inline void set_has_cancel_subtask();
-  inline void clear_has_cancel_subtask();
-  inline void set_has_undo_subtask();
-  inline void clear_has_undo_subtask();
+  inline void set_has_task_info();
+  inline void clear_has_task_info();
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
   ::std::string* err_;
+  ::dcmd_api::TaskInfo* task_info_;
+  ::google::protobuf::RepeatedPtrField< ::dcmd_api::TaskInfo > child_tasks_;
   int watch_state_;
-  int task_state_;
-  int app_pool_state_;
-  int subtask_state_;
-  ::google::protobuf::int32 success_subtask_;
-  ::google::protobuf::int32 failed_subtask_;
-  ::google::protobuf::int32 doing_subtask_;
-  ::google::protobuf::int32 cancel_subtask_;
-  ::google::protobuf::int32 undo_subtask_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(10 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(4 + 31) / 32];
   
   friend void  protobuf_AddDesc_dcmd_2eproto();
   friend void protobuf_AssignDesc_dcmd_2eproto();
@@ -5646,118 +5750,118 @@ inline ::std::string* KeyValue::release_value() {
 
 // SubTaskInfo
 
-// required string app_name = 1;
-inline bool SubTaskInfo::has_app_name() const {
+// required string svr_name = 1;
+inline bool SubTaskInfo::has_svr_name() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void SubTaskInfo::set_has_app_name() {
+inline void SubTaskInfo::set_has_svr_name() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void SubTaskInfo::clear_has_app_name() {
+inline void SubTaskInfo::clear_has_svr_name() {
   _has_bits_[0] &= ~0x00000001u;
 }
-inline void SubTaskInfo::clear_app_name() {
-  if (app_name_ != &::google::protobuf::internal::kEmptyString) {
-    app_name_->clear();
+inline void SubTaskInfo::clear_svr_name() {
+  if (svr_name_ != &::google::protobuf::internal::kEmptyString) {
+    svr_name_->clear();
   }
-  clear_has_app_name();
+  clear_has_svr_name();
 }
-inline const ::std::string& SubTaskInfo::app_name() const {
-  return *app_name_;
+inline const ::std::string& SubTaskInfo::svr_name() const {
+  return *svr_name_;
 }
-inline void SubTaskInfo::set_app_name(const ::std::string& value) {
-  set_has_app_name();
-  if (app_name_ == &::google::protobuf::internal::kEmptyString) {
-    app_name_ = new ::std::string;
+inline void SubTaskInfo::set_svr_name(const ::std::string& value) {
+  set_has_svr_name();
+  if (svr_name_ == &::google::protobuf::internal::kEmptyString) {
+    svr_name_ = new ::std::string;
   }
-  app_name_->assign(value);
+  svr_name_->assign(value);
 }
-inline void SubTaskInfo::set_app_name(const char* value) {
-  set_has_app_name();
-  if (app_name_ == &::google::protobuf::internal::kEmptyString) {
-    app_name_ = new ::std::string;
+inline void SubTaskInfo::set_svr_name(const char* value) {
+  set_has_svr_name();
+  if (svr_name_ == &::google::protobuf::internal::kEmptyString) {
+    svr_name_ = new ::std::string;
   }
-  app_name_->assign(value);
+  svr_name_->assign(value);
 }
-inline void SubTaskInfo::set_app_name(const char* value, size_t size) {
-  set_has_app_name();
-  if (app_name_ == &::google::protobuf::internal::kEmptyString) {
-    app_name_ = new ::std::string;
+inline void SubTaskInfo::set_svr_name(const char* value, size_t size) {
+  set_has_svr_name();
+  if (svr_name_ == &::google::protobuf::internal::kEmptyString) {
+    svr_name_ = new ::std::string;
   }
-  app_name_->assign(reinterpret_cast<const char*>(value), size);
+  svr_name_->assign(reinterpret_cast<const char*>(value), size);
 }
-inline ::std::string* SubTaskInfo::mutable_app_name() {
-  set_has_app_name();
-  if (app_name_ == &::google::protobuf::internal::kEmptyString) {
-    app_name_ = new ::std::string;
+inline ::std::string* SubTaskInfo::mutable_svr_name() {
+  set_has_svr_name();
+  if (svr_name_ == &::google::protobuf::internal::kEmptyString) {
+    svr_name_ = new ::std::string;
   }
-  return app_name_;
+  return svr_name_;
 }
-inline ::std::string* SubTaskInfo::release_app_name() {
-  clear_has_app_name();
-  if (app_name_ == &::google::protobuf::internal::kEmptyString) {
+inline ::std::string* SubTaskInfo::release_svr_name() {
+  clear_has_svr_name();
+  if (svr_name_ == &::google::protobuf::internal::kEmptyString) {
     return NULL;
   } else {
-    ::std::string* temp = app_name_;
-    app_name_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    ::std::string* temp = svr_name_;
+    svr_name_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
     return temp;
   }
 }
 
-// required string task_type = 2;
-inline bool SubTaskInfo::has_task_type() const {
+// required string task_cmd = 2;
+inline bool SubTaskInfo::has_task_cmd() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void SubTaskInfo::set_has_task_type() {
+inline void SubTaskInfo::set_has_task_cmd() {
   _has_bits_[0] |= 0x00000002u;
 }
-inline void SubTaskInfo::clear_has_task_type() {
+inline void SubTaskInfo::clear_has_task_cmd() {
   _has_bits_[0] &= ~0x00000002u;
 }
-inline void SubTaskInfo::clear_task_type() {
-  if (task_type_ != &::google::protobuf::internal::kEmptyString) {
-    task_type_->clear();
+inline void SubTaskInfo::clear_task_cmd() {
+  if (task_cmd_ != &::google::protobuf::internal::kEmptyString) {
+    task_cmd_->clear();
   }
-  clear_has_task_type();
+  clear_has_task_cmd();
 }
-inline const ::std::string& SubTaskInfo::task_type() const {
-  return *task_type_;
+inline const ::std::string& SubTaskInfo::task_cmd() const {
+  return *task_cmd_;
 }
-inline void SubTaskInfo::set_task_type(const ::std::string& value) {
-  set_has_task_type();
-  if (task_type_ == &::google::protobuf::internal::kEmptyString) {
-    task_type_ = new ::std::string;
+inline void SubTaskInfo::set_task_cmd(const ::std::string& value) {
+  set_has_task_cmd();
+  if (task_cmd_ == &::google::protobuf::internal::kEmptyString) {
+    task_cmd_ = new ::std::string;
   }
-  task_type_->assign(value);
+  task_cmd_->assign(value);
 }
-inline void SubTaskInfo::set_task_type(const char* value) {
-  set_has_task_type();
-  if (task_type_ == &::google::protobuf::internal::kEmptyString) {
-    task_type_ = new ::std::string;
+inline void SubTaskInfo::set_task_cmd(const char* value) {
+  set_has_task_cmd();
+  if (task_cmd_ == &::google::protobuf::internal::kEmptyString) {
+    task_cmd_ = new ::std::string;
   }
-  task_type_->assign(value);
+  task_cmd_->assign(value);
 }
-inline void SubTaskInfo::set_task_type(const char* value, size_t size) {
-  set_has_task_type();
-  if (task_type_ == &::google::protobuf::internal::kEmptyString) {
-    task_type_ = new ::std::string;
+inline void SubTaskInfo::set_task_cmd(const char* value, size_t size) {
+  set_has_task_cmd();
+  if (task_cmd_ == &::google::protobuf::internal::kEmptyString) {
+    task_cmd_ = new ::std::string;
   }
-  task_type_->assign(reinterpret_cast<const char*>(value), size);
+  task_cmd_->assign(reinterpret_cast<const char*>(value), size);
 }
-inline ::std::string* SubTaskInfo::mutable_task_type() {
-  set_has_task_type();
-  if (task_type_ == &::google::protobuf::internal::kEmptyString) {
-    task_type_ = new ::std::string;
+inline ::std::string* SubTaskInfo::mutable_task_cmd() {
+  set_has_task_cmd();
+  if (task_cmd_ == &::google::protobuf::internal::kEmptyString) {
+    task_cmd_ = new ::std::string;
   }
-  return task_type_;
+  return task_cmd_;
 }
-inline ::std::string* SubTaskInfo::release_task_type() {
-  clear_has_task_type();
-  if (task_type_ == &::google::protobuf::internal::kEmptyString) {
+inline ::std::string* SubTaskInfo::release_task_cmd() {
+  clear_has_task_cmd();
+  if (task_cmd_ == &::google::protobuf::internal::kEmptyString) {
     return NULL;
   } else {
-    ::std::string* temp = task_type_;
-    task_type_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    ::std::string* temp = task_cmd_;
+    task_cmd_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
     return temp;
   }
 }
@@ -6076,6 +6180,339 @@ inline ::google::protobuf::int32 OprInfo::running_second() const {
 inline void OprInfo::set_running_second(::google::protobuf::int32 value) {
   set_has_running_second();
   running_second_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// TaskInfo
+
+// required string task_id = 1;
+inline bool TaskInfo::has_task_id() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void TaskInfo::set_has_task_id() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void TaskInfo::clear_has_task_id() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void TaskInfo::clear_task_id() {
+  if (task_id_ != &::google::protobuf::internal::kEmptyString) {
+    task_id_->clear();
+  }
+  clear_has_task_id();
+}
+inline const ::std::string& TaskInfo::task_id() const {
+  return *task_id_;
+}
+inline void TaskInfo::set_task_id(const ::std::string& value) {
+  set_has_task_id();
+  if (task_id_ == &::google::protobuf::internal::kEmptyString) {
+    task_id_ = new ::std::string;
+  }
+  task_id_->assign(value);
+}
+inline void TaskInfo::set_task_id(const char* value) {
+  set_has_task_id();
+  if (task_id_ == &::google::protobuf::internal::kEmptyString) {
+    task_id_ = new ::std::string;
+  }
+  task_id_->assign(value);
+}
+inline void TaskInfo::set_task_id(const char* value, size_t size) {
+  set_has_task_id();
+  if (task_id_ == &::google::protobuf::internal::kEmptyString) {
+    task_id_ = new ::std::string;
+  }
+  task_id_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* TaskInfo::mutable_task_id() {
+  set_has_task_id();
+  if (task_id_ == &::google::protobuf::internal::kEmptyString) {
+    task_id_ = new ::std::string;
+  }
+  return task_id_;
+}
+inline ::std::string* TaskInfo::release_task_id() {
+  clear_has_task_id();
+  if (task_id_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = task_id_;
+    task_id_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+
+// required .dcmd_api.TaskState task_state = 2;
+inline bool TaskInfo::has_task_state() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void TaskInfo::set_has_task_state() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void TaskInfo::clear_has_task_state() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void TaskInfo::clear_task_state() {
+  task_state_ = 0;
+  clear_has_task_state();
+}
+inline dcmd_api::TaskState TaskInfo::task_state() const {
+  return static_cast< dcmd_api::TaskState >(task_state_);
+}
+inline void TaskInfo::set_task_state(dcmd_api::TaskState value) {
+  GOOGLE_DCHECK(dcmd_api::TaskState_IsValid(value));
+  set_has_task_state();
+  task_state_ = value;
+}
+
+// required int32 order = 3;
+inline bool TaskInfo::has_order() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void TaskInfo::set_has_order() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void TaskInfo::clear_has_order() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void TaskInfo::clear_order() {
+  order_ = 0;
+  clear_has_order();
+}
+inline ::google::protobuf::int32 TaskInfo::order() const {
+  return order_;
+}
+inline void TaskInfo::set_order(::google::protobuf::int32 value) {
+  set_has_order();
+  order_ = value;
+}
+
+// optional string parent_task_id = 4;
+inline bool TaskInfo::has_parent_task_id() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void TaskInfo::set_has_parent_task_id() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void TaskInfo::clear_has_parent_task_id() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void TaskInfo::clear_parent_task_id() {
+  if (parent_task_id_ != &::google::protobuf::internal::kEmptyString) {
+    parent_task_id_->clear();
+  }
+  clear_has_parent_task_id();
+}
+inline const ::std::string& TaskInfo::parent_task_id() const {
+  return *parent_task_id_;
+}
+inline void TaskInfo::set_parent_task_id(const ::std::string& value) {
+  set_has_parent_task_id();
+  if (parent_task_id_ == &::google::protobuf::internal::kEmptyString) {
+    parent_task_id_ = new ::std::string;
+  }
+  parent_task_id_->assign(value);
+}
+inline void TaskInfo::set_parent_task_id(const char* value) {
+  set_has_parent_task_id();
+  if (parent_task_id_ == &::google::protobuf::internal::kEmptyString) {
+    parent_task_id_ = new ::std::string;
+  }
+  parent_task_id_->assign(value);
+}
+inline void TaskInfo::set_parent_task_id(const char* value, size_t size) {
+  set_has_parent_task_id();
+  if (parent_task_id_ == &::google::protobuf::internal::kEmptyString) {
+    parent_task_id_ = new ::std::string;
+  }
+  parent_task_id_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* TaskInfo::mutable_parent_task_id() {
+  set_has_parent_task_id();
+  if (parent_task_id_ == &::google::protobuf::internal::kEmptyString) {
+    parent_task_id_ = new ::std::string;
+  }
+  return parent_task_id_;
+}
+inline ::std::string* TaskInfo::release_parent_task_id() {
+  clear_has_parent_task_id();
+  if (parent_task_id_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = parent_task_id_;
+    parent_task_id_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+
+// optional string err = 5;
+inline bool TaskInfo::has_err() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void TaskInfo::set_has_err() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void TaskInfo::clear_has_err() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void TaskInfo::clear_err() {
+  if (err_ != &::google::protobuf::internal::kEmptyString) {
+    err_->clear();
+  }
+  clear_has_err();
+}
+inline const ::std::string& TaskInfo::err() const {
+  return *err_;
+}
+inline void TaskInfo::set_err(const ::std::string& value) {
+  set_has_err();
+  if (err_ == &::google::protobuf::internal::kEmptyString) {
+    err_ = new ::std::string;
+  }
+  err_->assign(value);
+}
+inline void TaskInfo::set_err(const char* value) {
+  set_has_err();
+  if (err_ == &::google::protobuf::internal::kEmptyString) {
+    err_ = new ::std::string;
+  }
+  err_->assign(value);
+}
+inline void TaskInfo::set_err(const char* value, size_t size) {
+  set_has_err();
+  if (err_ == &::google::protobuf::internal::kEmptyString) {
+    err_ = new ::std::string;
+  }
+  err_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* TaskInfo::mutable_err() {
+  set_has_err();
+  if (err_ == &::google::protobuf::internal::kEmptyString) {
+    err_ = new ::std::string;
+  }
+  return err_;
+}
+inline ::std::string* TaskInfo::release_err() {
+  clear_has_err();
+  if (err_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = err_;
+    err_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+
+// optional int32 success_subtask = 6;
+inline bool TaskInfo::has_success_subtask() const {
+  return (_has_bits_[0] & 0x00000020u) != 0;
+}
+inline void TaskInfo::set_has_success_subtask() {
+  _has_bits_[0] |= 0x00000020u;
+}
+inline void TaskInfo::clear_has_success_subtask() {
+  _has_bits_[0] &= ~0x00000020u;
+}
+inline void TaskInfo::clear_success_subtask() {
+  success_subtask_ = 0;
+  clear_has_success_subtask();
+}
+inline ::google::protobuf::int32 TaskInfo::success_subtask() const {
+  return success_subtask_;
+}
+inline void TaskInfo::set_success_subtask(::google::protobuf::int32 value) {
+  set_has_success_subtask();
+  success_subtask_ = value;
+}
+
+// optional int32 failed_subtask = 7;
+inline bool TaskInfo::has_failed_subtask() const {
+  return (_has_bits_[0] & 0x00000040u) != 0;
+}
+inline void TaskInfo::set_has_failed_subtask() {
+  _has_bits_[0] |= 0x00000040u;
+}
+inline void TaskInfo::clear_has_failed_subtask() {
+  _has_bits_[0] &= ~0x00000040u;
+}
+inline void TaskInfo::clear_failed_subtask() {
+  failed_subtask_ = 0;
+  clear_has_failed_subtask();
+}
+inline ::google::protobuf::int32 TaskInfo::failed_subtask() const {
+  return failed_subtask_;
+}
+inline void TaskInfo::set_failed_subtask(::google::protobuf::int32 value) {
+  set_has_failed_subtask();
+  failed_subtask_ = value;
+}
+
+// optional int32 doing_subtask = 8;
+inline bool TaskInfo::has_doing_subtask() const {
+  return (_has_bits_[0] & 0x00000080u) != 0;
+}
+inline void TaskInfo::set_has_doing_subtask() {
+  _has_bits_[0] |= 0x00000080u;
+}
+inline void TaskInfo::clear_has_doing_subtask() {
+  _has_bits_[0] &= ~0x00000080u;
+}
+inline void TaskInfo::clear_doing_subtask() {
+  doing_subtask_ = 0;
+  clear_has_doing_subtask();
+}
+inline ::google::protobuf::int32 TaskInfo::doing_subtask() const {
+  return doing_subtask_;
+}
+inline void TaskInfo::set_doing_subtask(::google::protobuf::int32 value) {
+  set_has_doing_subtask();
+  doing_subtask_ = value;
+}
+
+// optional int32 cancel_subtask = 9;
+inline bool TaskInfo::has_cancel_subtask() const {
+  return (_has_bits_[0] & 0x00000100u) != 0;
+}
+inline void TaskInfo::set_has_cancel_subtask() {
+  _has_bits_[0] |= 0x00000100u;
+}
+inline void TaskInfo::clear_has_cancel_subtask() {
+  _has_bits_[0] &= ~0x00000100u;
+}
+inline void TaskInfo::clear_cancel_subtask() {
+  cancel_subtask_ = 0;
+  clear_has_cancel_subtask();
+}
+inline ::google::protobuf::int32 TaskInfo::cancel_subtask() const {
+  return cancel_subtask_;
+}
+inline void TaskInfo::set_cancel_subtask(::google::protobuf::int32 value) {
+  set_has_cancel_subtask();
+  cancel_subtask_ = value;
+}
+
+// optional int32 undo_subtask = 10;
+inline bool TaskInfo::has_undo_subtask() const {
+  return (_has_bits_[0] & 0x00000200u) != 0;
+}
+inline void TaskInfo::set_has_undo_subtask() {
+  _has_bits_[0] |= 0x00000200u;
+}
+inline void TaskInfo::clear_has_undo_subtask() {
+  _has_bits_[0] &= ~0x00000200u;
+}
+inline void TaskInfo::clear_undo_subtask() {
+  undo_subtask_ = 0;
+  clear_has_undo_subtask();
+}
+inline ::google::protobuf::int32 TaskInfo::undo_subtask() const {
+  return undo_subtask_;
+}
+inline void TaskInfo::set_undo_subtask(::google::protobuf::int32 value) {
+  set_has_undo_subtask();
+  undo_subtask_ = value;
 }
 
 // -------------------------------------------------------------------
@@ -6572,6 +7009,50 @@ inline void AgentReportReply::set_package_size(::google::protobuf::int32 value) 
   package_size_ = value;
 }
 
+// optional int32 opr_queue_threshold = 5;
+inline bool AgentReportReply::has_opr_queue_threshold() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void AgentReportReply::set_has_opr_queue_threshold() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void AgentReportReply::clear_has_opr_queue_threshold() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void AgentReportReply::clear_opr_queue_threshold() {
+  opr_queue_threshold_ = 0;
+  clear_has_opr_queue_threshold();
+}
+inline ::google::protobuf::int32 AgentReportReply::opr_queue_threshold() const {
+  return opr_queue_threshold_;
+}
+inline void AgentReportReply::set_opr_queue_threshold(::google::protobuf::int32 value) {
+  set_has_opr_queue_threshold();
+  opr_queue_threshold_ = value;
+}
+
+// optional int32 opr_overflow_threshold = 6;
+inline bool AgentReportReply::has_opr_overflow_threshold() const {
+  return (_has_bits_[0] & 0x00000020u) != 0;
+}
+inline void AgentReportReply::set_has_opr_overflow_threshold() {
+  _has_bits_[0] |= 0x00000020u;
+}
+inline void AgentReportReply::clear_has_opr_overflow_threshold() {
+  _has_bits_[0] &= ~0x00000020u;
+}
+inline void AgentReportReply::clear_opr_overflow_threshold() {
+  opr_overflow_threshold_ = 0;
+  clear_has_opr_overflow_threshold();
+}
+inline ::google::protobuf::int32 AgentReportReply::opr_overflow_threshold() const {
+  return opr_overflow_threshold_;
+}
+inline void AgentReportReply::set_opr_overflow_threshold(::google::protobuf::int32 value) {
+  set_has_opr_overflow_threshold();
+  opr_overflow_threshold_ = value;
+}
+
 // -------------------------------------------------------------------
 
 // AgentMasterNoticeReply
@@ -6682,60 +7163,60 @@ inline ::std::string* AgentTaskCmd::release_cmd() {
   }
 }
 
-// required string task_type = 2;
-inline bool AgentTaskCmd::has_task_type() const {
+// required string task_cmd = 2;
+inline bool AgentTaskCmd::has_task_cmd() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void AgentTaskCmd::set_has_task_type() {
+inline void AgentTaskCmd::set_has_task_cmd() {
   _has_bits_[0] |= 0x00000002u;
 }
-inline void AgentTaskCmd::clear_has_task_type() {
+inline void AgentTaskCmd::clear_has_task_cmd() {
   _has_bits_[0] &= ~0x00000002u;
 }
-inline void AgentTaskCmd::clear_task_type() {
-  if (task_type_ != &::google::protobuf::internal::kEmptyString) {
-    task_type_->clear();
+inline void AgentTaskCmd::clear_task_cmd() {
+  if (task_cmd_ != &::google::protobuf::internal::kEmptyString) {
+    task_cmd_->clear();
   }
-  clear_has_task_type();
+  clear_has_task_cmd();
 }
-inline const ::std::string& AgentTaskCmd::task_type() const {
-  return *task_type_;
+inline const ::std::string& AgentTaskCmd::task_cmd() const {
+  return *task_cmd_;
 }
-inline void AgentTaskCmd::set_task_type(const ::std::string& value) {
-  set_has_task_type();
-  if (task_type_ == &::google::protobuf::internal::kEmptyString) {
-    task_type_ = new ::std::string;
+inline void AgentTaskCmd::set_task_cmd(const ::std::string& value) {
+  set_has_task_cmd();
+  if (task_cmd_ == &::google::protobuf::internal::kEmptyString) {
+    task_cmd_ = new ::std::string;
   }
-  task_type_->assign(value);
+  task_cmd_->assign(value);
 }
-inline void AgentTaskCmd::set_task_type(const char* value) {
-  set_has_task_type();
-  if (task_type_ == &::google::protobuf::internal::kEmptyString) {
-    task_type_ = new ::std::string;
+inline void AgentTaskCmd::set_task_cmd(const char* value) {
+  set_has_task_cmd();
+  if (task_cmd_ == &::google::protobuf::internal::kEmptyString) {
+    task_cmd_ = new ::std::string;
   }
-  task_type_->assign(value);
+  task_cmd_->assign(value);
 }
-inline void AgentTaskCmd::set_task_type(const char* value, size_t size) {
-  set_has_task_type();
-  if (task_type_ == &::google::protobuf::internal::kEmptyString) {
-    task_type_ = new ::std::string;
+inline void AgentTaskCmd::set_task_cmd(const char* value, size_t size) {
+  set_has_task_cmd();
+  if (task_cmd_ == &::google::protobuf::internal::kEmptyString) {
+    task_cmd_ = new ::std::string;
   }
-  task_type_->assign(reinterpret_cast<const char*>(value), size);
+  task_cmd_->assign(reinterpret_cast<const char*>(value), size);
 }
-inline ::std::string* AgentTaskCmd::mutable_task_type() {
-  set_has_task_type();
-  if (task_type_ == &::google::protobuf::internal::kEmptyString) {
-    task_type_ = new ::std::string;
+inline ::std::string* AgentTaskCmd::mutable_task_cmd() {
+  set_has_task_cmd();
+  if (task_cmd_ == &::google::protobuf::internal::kEmptyString) {
+    task_cmd_ = new ::std::string;
   }
-  return task_type_;
+  return task_cmd_;
 }
-inline ::std::string* AgentTaskCmd::release_task_type() {
-  clear_has_task_type();
-  if (task_type_ == &::google::protobuf::internal::kEmptyString) {
+inline ::std::string* AgentTaskCmd::release_task_cmd() {
+  clear_has_task_cmd();
+  if (task_cmd_ == &::google::protobuf::internal::kEmptyString) {
     return NULL;
   } else {
-    ::std::string* temp = task_type_;
-    task_type_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    ::std::string* temp = task_cmd_;
+    task_cmd_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
     return temp;
   }
 }
@@ -6936,479 +7417,421 @@ inline ::std::string* AgentTaskCmd::release_ip() {
   }
 }
 
-// optional string app_name = 7;
-inline bool AgentTaskCmd::has_app_name() const {
+// optional string svr_name = 7;
+inline bool AgentTaskCmd::has_svr_name() const {
   return (_has_bits_[0] & 0x00000040u) != 0;
 }
-inline void AgentTaskCmd::set_has_app_name() {
+inline void AgentTaskCmd::set_has_svr_name() {
   _has_bits_[0] |= 0x00000040u;
 }
-inline void AgentTaskCmd::clear_has_app_name() {
+inline void AgentTaskCmd::clear_has_svr_name() {
   _has_bits_[0] &= ~0x00000040u;
 }
-inline void AgentTaskCmd::clear_app_name() {
-  if (app_name_ != &::google::protobuf::internal::kEmptyString) {
-    app_name_->clear();
+inline void AgentTaskCmd::clear_svr_name() {
+  if (svr_name_ != &::google::protobuf::internal::kEmptyString) {
+    svr_name_->clear();
   }
-  clear_has_app_name();
+  clear_has_svr_name();
 }
-inline const ::std::string& AgentTaskCmd::app_name() const {
-  return *app_name_;
+inline const ::std::string& AgentTaskCmd::svr_name() const {
+  return *svr_name_;
 }
-inline void AgentTaskCmd::set_app_name(const ::std::string& value) {
-  set_has_app_name();
-  if (app_name_ == &::google::protobuf::internal::kEmptyString) {
-    app_name_ = new ::std::string;
+inline void AgentTaskCmd::set_svr_name(const ::std::string& value) {
+  set_has_svr_name();
+  if (svr_name_ == &::google::protobuf::internal::kEmptyString) {
+    svr_name_ = new ::std::string;
   }
-  app_name_->assign(value);
+  svr_name_->assign(value);
 }
-inline void AgentTaskCmd::set_app_name(const char* value) {
-  set_has_app_name();
-  if (app_name_ == &::google::protobuf::internal::kEmptyString) {
-    app_name_ = new ::std::string;
+inline void AgentTaskCmd::set_svr_name(const char* value) {
+  set_has_svr_name();
+  if (svr_name_ == &::google::protobuf::internal::kEmptyString) {
+    svr_name_ = new ::std::string;
   }
-  app_name_->assign(value);
+  svr_name_->assign(value);
 }
-inline void AgentTaskCmd::set_app_name(const char* value, size_t size) {
-  set_has_app_name();
-  if (app_name_ == &::google::protobuf::internal::kEmptyString) {
-    app_name_ = new ::std::string;
+inline void AgentTaskCmd::set_svr_name(const char* value, size_t size) {
+  set_has_svr_name();
+  if (svr_name_ == &::google::protobuf::internal::kEmptyString) {
+    svr_name_ = new ::std::string;
   }
-  app_name_->assign(reinterpret_cast<const char*>(value), size);
+  svr_name_->assign(reinterpret_cast<const char*>(value), size);
 }
-inline ::std::string* AgentTaskCmd::mutable_app_name() {
-  set_has_app_name();
-  if (app_name_ == &::google::protobuf::internal::kEmptyString) {
-    app_name_ = new ::std::string;
+inline ::std::string* AgentTaskCmd::mutable_svr_name() {
+  set_has_svr_name();
+  if (svr_name_ == &::google::protobuf::internal::kEmptyString) {
+    svr_name_ = new ::std::string;
   }
-  return app_name_;
+  return svr_name_;
 }
-inline ::std::string* AgentTaskCmd::release_app_name() {
-  clear_has_app_name();
-  if (app_name_ == &::google::protobuf::internal::kEmptyString) {
+inline ::std::string* AgentTaskCmd::release_svr_name() {
+  clear_has_svr_name();
+  if (svr_name_ == &::google::protobuf::internal::kEmptyString) {
     return NULL;
   } else {
-    ::std::string* temp = app_name_;
-    app_name_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    ::std::string* temp = svr_name_;
+    svr_name_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
     return temp;
   }
 }
 
-// optional string app_pool = 8;
-inline bool AgentTaskCmd::has_app_pool() const {
+// optional string svr_pool = 8;
+inline bool AgentTaskCmd::has_svr_pool() const {
   return (_has_bits_[0] & 0x00000080u) != 0;
 }
-inline void AgentTaskCmd::set_has_app_pool() {
+inline void AgentTaskCmd::set_has_svr_pool() {
   _has_bits_[0] |= 0x00000080u;
 }
-inline void AgentTaskCmd::clear_has_app_pool() {
+inline void AgentTaskCmd::clear_has_svr_pool() {
   _has_bits_[0] &= ~0x00000080u;
 }
-inline void AgentTaskCmd::clear_app_pool() {
-  if (app_pool_ != &::google::protobuf::internal::kEmptyString) {
-    app_pool_->clear();
+inline void AgentTaskCmd::clear_svr_pool() {
+  if (svr_pool_ != &::google::protobuf::internal::kEmptyString) {
+    svr_pool_->clear();
   }
-  clear_has_app_pool();
+  clear_has_svr_pool();
 }
-inline const ::std::string& AgentTaskCmd::app_pool() const {
-  return *app_pool_;
+inline const ::std::string& AgentTaskCmd::svr_pool() const {
+  return *svr_pool_;
 }
-inline void AgentTaskCmd::set_app_pool(const ::std::string& value) {
-  set_has_app_pool();
-  if (app_pool_ == &::google::protobuf::internal::kEmptyString) {
-    app_pool_ = new ::std::string;
+inline void AgentTaskCmd::set_svr_pool(const ::std::string& value) {
+  set_has_svr_pool();
+  if (svr_pool_ == &::google::protobuf::internal::kEmptyString) {
+    svr_pool_ = new ::std::string;
   }
-  app_pool_->assign(value);
+  svr_pool_->assign(value);
 }
-inline void AgentTaskCmd::set_app_pool(const char* value) {
-  set_has_app_pool();
-  if (app_pool_ == &::google::protobuf::internal::kEmptyString) {
-    app_pool_ = new ::std::string;
+inline void AgentTaskCmd::set_svr_pool(const char* value) {
+  set_has_svr_pool();
+  if (svr_pool_ == &::google::protobuf::internal::kEmptyString) {
+    svr_pool_ = new ::std::string;
   }
-  app_pool_->assign(value);
+  svr_pool_->assign(value);
 }
-inline void AgentTaskCmd::set_app_pool(const char* value, size_t size) {
-  set_has_app_pool();
-  if (app_pool_ == &::google::protobuf::internal::kEmptyString) {
-    app_pool_ = new ::std::string;
+inline void AgentTaskCmd::set_svr_pool(const char* value, size_t size) {
+  set_has_svr_pool();
+  if (svr_pool_ == &::google::protobuf::internal::kEmptyString) {
+    svr_pool_ = new ::std::string;
   }
-  app_pool_->assign(reinterpret_cast<const char*>(value), size);
+  svr_pool_->assign(reinterpret_cast<const char*>(value), size);
 }
-inline ::std::string* AgentTaskCmd::mutable_app_pool() {
-  set_has_app_pool();
-  if (app_pool_ == &::google::protobuf::internal::kEmptyString) {
-    app_pool_ = new ::std::string;
+inline ::std::string* AgentTaskCmd::mutable_svr_pool() {
+  set_has_svr_pool();
+  if (svr_pool_ == &::google::protobuf::internal::kEmptyString) {
+    svr_pool_ = new ::std::string;
   }
-  return app_pool_;
+  return svr_pool_;
 }
-inline ::std::string* AgentTaskCmd::release_app_pool() {
-  clear_has_app_pool();
-  if (app_pool_ == &::google::protobuf::internal::kEmptyString) {
+inline ::std::string* AgentTaskCmd::release_svr_pool() {
+  clear_has_svr_pool();
+  if (svr_pool_ == &::google::protobuf::internal::kEmptyString) {
     return NULL;
   } else {
-    ::std::string* temp = app_pool_;
-    app_pool_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    ::std::string* temp = svr_pool_;
+    svr_pool_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
     return temp;
   }
 }
 
-// optional string app_ver = 9;
-inline bool AgentTaskCmd::has_app_ver() const {
+// optional string svr_ver = 9;
+inline bool AgentTaskCmd::has_svr_ver() const {
   return (_has_bits_[0] & 0x00000100u) != 0;
 }
-inline void AgentTaskCmd::set_has_app_ver() {
+inline void AgentTaskCmd::set_has_svr_ver() {
   _has_bits_[0] |= 0x00000100u;
 }
-inline void AgentTaskCmd::clear_has_app_ver() {
+inline void AgentTaskCmd::clear_has_svr_ver() {
   _has_bits_[0] &= ~0x00000100u;
 }
-inline void AgentTaskCmd::clear_app_ver() {
-  if (app_ver_ != &::google::protobuf::internal::kEmptyString) {
-    app_ver_->clear();
+inline void AgentTaskCmd::clear_svr_ver() {
+  if (svr_ver_ != &::google::protobuf::internal::kEmptyString) {
+    svr_ver_->clear();
   }
-  clear_has_app_ver();
+  clear_has_svr_ver();
 }
-inline const ::std::string& AgentTaskCmd::app_ver() const {
-  return *app_ver_;
+inline const ::std::string& AgentTaskCmd::svr_ver() const {
+  return *svr_ver_;
 }
-inline void AgentTaskCmd::set_app_ver(const ::std::string& value) {
-  set_has_app_ver();
-  if (app_ver_ == &::google::protobuf::internal::kEmptyString) {
-    app_ver_ = new ::std::string;
+inline void AgentTaskCmd::set_svr_ver(const ::std::string& value) {
+  set_has_svr_ver();
+  if (svr_ver_ == &::google::protobuf::internal::kEmptyString) {
+    svr_ver_ = new ::std::string;
   }
-  app_ver_->assign(value);
+  svr_ver_->assign(value);
 }
-inline void AgentTaskCmd::set_app_ver(const char* value) {
-  set_has_app_ver();
-  if (app_ver_ == &::google::protobuf::internal::kEmptyString) {
-    app_ver_ = new ::std::string;
+inline void AgentTaskCmd::set_svr_ver(const char* value) {
+  set_has_svr_ver();
+  if (svr_ver_ == &::google::protobuf::internal::kEmptyString) {
+    svr_ver_ = new ::std::string;
   }
-  app_ver_->assign(value);
+  svr_ver_->assign(value);
 }
-inline void AgentTaskCmd::set_app_ver(const char* value, size_t size) {
-  set_has_app_ver();
-  if (app_ver_ == &::google::protobuf::internal::kEmptyString) {
-    app_ver_ = new ::std::string;
+inline void AgentTaskCmd::set_svr_ver(const char* value, size_t size) {
+  set_has_svr_ver();
+  if (svr_ver_ == &::google::protobuf::internal::kEmptyString) {
+    svr_ver_ = new ::std::string;
   }
-  app_ver_->assign(reinterpret_cast<const char*>(value), size);
+  svr_ver_->assign(reinterpret_cast<const char*>(value), size);
 }
-inline ::std::string* AgentTaskCmd::mutable_app_ver() {
-  set_has_app_ver();
-  if (app_ver_ == &::google::protobuf::internal::kEmptyString) {
-    app_ver_ = new ::std::string;
+inline ::std::string* AgentTaskCmd::mutable_svr_ver() {
+  set_has_svr_ver();
+  if (svr_ver_ == &::google::protobuf::internal::kEmptyString) {
+    svr_ver_ = new ::std::string;
   }
-  return app_ver_;
+  return svr_ver_;
 }
-inline ::std::string* AgentTaskCmd::release_app_ver() {
-  clear_has_app_ver();
-  if (app_ver_ == &::google::protobuf::internal::kEmptyString) {
+inline ::std::string* AgentTaskCmd::release_svr_ver() {
+  clear_has_svr_ver();
+  if (svr_ver_ == &::google::protobuf::internal::kEmptyString) {
     return NULL;
   } else {
-    ::std::string* temp = app_ver_;
-    app_ver_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    ::std::string* temp = svr_ver_;
+    svr_ver_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
     return temp;
   }
 }
 
-// optional string app_repo = 10;
-inline bool AgentTaskCmd::has_app_repo() const {
+// optional string svr_repo = 10;
+inline bool AgentTaskCmd::has_svr_repo() const {
   return (_has_bits_[0] & 0x00000200u) != 0;
 }
-inline void AgentTaskCmd::set_has_app_repo() {
+inline void AgentTaskCmd::set_has_svr_repo() {
   _has_bits_[0] |= 0x00000200u;
 }
-inline void AgentTaskCmd::clear_has_app_repo() {
+inline void AgentTaskCmd::clear_has_svr_repo() {
   _has_bits_[0] &= ~0x00000200u;
 }
-inline void AgentTaskCmd::clear_app_repo() {
-  if (app_repo_ != &::google::protobuf::internal::kEmptyString) {
-    app_repo_->clear();
+inline void AgentTaskCmd::clear_svr_repo() {
+  if (svr_repo_ != &::google::protobuf::internal::kEmptyString) {
+    svr_repo_->clear();
   }
-  clear_has_app_repo();
+  clear_has_svr_repo();
 }
-inline const ::std::string& AgentTaskCmd::app_repo() const {
-  return *app_repo_;
+inline const ::std::string& AgentTaskCmd::svr_repo() const {
+  return *svr_repo_;
 }
-inline void AgentTaskCmd::set_app_repo(const ::std::string& value) {
-  set_has_app_repo();
-  if (app_repo_ == &::google::protobuf::internal::kEmptyString) {
-    app_repo_ = new ::std::string;
+inline void AgentTaskCmd::set_svr_repo(const ::std::string& value) {
+  set_has_svr_repo();
+  if (svr_repo_ == &::google::protobuf::internal::kEmptyString) {
+    svr_repo_ = new ::std::string;
   }
-  app_repo_->assign(value);
+  svr_repo_->assign(value);
 }
-inline void AgentTaskCmd::set_app_repo(const char* value) {
-  set_has_app_repo();
-  if (app_repo_ == &::google::protobuf::internal::kEmptyString) {
-    app_repo_ = new ::std::string;
+inline void AgentTaskCmd::set_svr_repo(const char* value) {
+  set_has_svr_repo();
+  if (svr_repo_ == &::google::protobuf::internal::kEmptyString) {
+    svr_repo_ = new ::std::string;
   }
-  app_repo_->assign(value);
+  svr_repo_->assign(value);
 }
-inline void AgentTaskCmd::set_app_repo(const char* value, size_t size) {
-  set_has_app_repo();
-  if (app_repo_ == &::google::protobuf::internal::kEmptyString) {
-    app_repo_ = new ::std::string;
+inline void AgentTaskCmd::set_svr_repo(const char* value, size_t size) {
+  set_has_svr_repo();
+  if (svr_repo_ == &::google::protobuf::internal::kEmptyString) {
+    svr_repo_ = new ::std::string;
   }
-  app_repo_->assign(reinterpret_cast<const char*>(value), size);
+  svr_repo_->assign(reinterpret_cast<const char*>(value), size);
 }
-inline ::std::string* AgentTaskCmd::mutable_app_repo() {
-  set_has_app_repo();
-  if (app_repo_ == &::google::protobuf::internal::kEmptyString) {
-    app_repo_ = new ::std::string;
+inline ::std::string* AgentTaskCmd::mutable_svr_repo() {
+  set_has_svr_repo();
+  if (svr_repo_ == &::google::protobuf::internal::kEmptyString) {
+    svr_repo_ = new ::std::string;
   }
-  return app_repo_;
+  return svr_repo_;
 }
-inline ::std::string* AgentTaskCmd::release_app_repo() {
-  clear_has_app_repo();
-  if (app_repo_ == &::google::protobuf::internal::kEmptyString) {
+inline ::std::string* AgentTaskCmd::release_svr_repo() {
+  clear_has_svr_repo();
+  if (svr_repo_ == &::google::protobuf::internal::kEmptyString) {
     return NULL;
   } else {
-    ::std::string* temp = app_repo_;
-    app_repo_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    ::std::string* temp = svr_repo_;
+    svr_repo_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
     return temp;
   }
 }
 
-// optional string app_path = 11;
-inline bool AgentTaskCmd::has_app_path() const {
+// optional string svr_user = 11;
+inline bool AgentTaskCmd::has_svr_user() const {
   return (_has_bits_[0] & 0x00000400u) != 0;
 }
-inline void AgentTaskCmd::set_has_app_path() {
+inline void AgentTaskCmd::set_has_svr_user() {
   _has_bits_[0] |= 0x00000400u;
 }
-inline void AgentTaskCmd::clear_has_app_path() {
+inline void AgentTaskCmd::clear_has_svr_user() {
   _has_bits_[0] &= ~0x00000400u;
 }
-inline void AgentTaskCmd::clear_app_path() {
-  if (app_path_ != &::google::protobuf::internal::kEmptyString) {
-    app_path_->clear();
+inline void AgentTaskCmd::clear_svr_user() {
+  if (svr_user_ != &::google::protobuf::internal::kEmptyString) {
+    svr_user_->clear();
   }
-  clear_has_app_path();
+  clear_has_svr_user();
 }
-inline const ::std::string& AgentTaskCmd::app_path() const {
-  return *app_path_;
+inline const ::std::string& AgentTaskCmd::svr_user() const {
+  return *svr_user_;
 }
-inline void AgentTaskCmd::set_app_path(const ::std::string& value) {
-  set_has_app_path();
-  if (app_path_ == &::google::protobuf::internal::kEmptyString) {
-    app_path_ = new ::std::string;
+inline void AgentTaskCmd::set_svr_user(const ::std::string& value) {
+  set_has_svr_user();
+  if (svr_user_ == &::google::protobuf::internal::kEmptyString) {
+    svr_user_ = new ::std::string;
   }
-  app_path_->assign(value);
+  svr_user_->assign(value);
 }
-inline void AgentTaskCmd::set_app_path(const char* value) {
-  set_has_app_path();
-  if (app_path_ == &::google::protobuf::internal::kEmptyString) {
-    app_path_ = new ::std::string;
+inline void AgentTaskCmd::set_svr_user(const char* value) {
+  set_has_svr_user();
+  if (svr_user_ == &::google::protobuf::internal::kEmptyString) {
+    svr_user_ = new ::std::string;
   }
-  app_path_->assign(value);
+  svr_user_->assign(value);
 }
-inline void AgentTaskCmd::set_app_path(const char* value, size_t size) {
-  set_has_app_path();
-  if (app_path_ == &::google::protobuf::internal::kEmptyString) {
-    app_path_ = new ::std::string;
+inline void AgentTaskCmd::set_svr_user(const char* value, size_t size) {
+  set_has_svr_user();
+  if (svr_user_ == &::google::protobuf::internal::kEmptyString) {
+    svr_user_ = new ::std::string;
   }
-  app_path_->assign(reinterpret_cast<const char*>(value), size);
+  svr_user_->assign(reinterpret_cast<const char*>(value), size);
 }
-inline ::std::string* AgentTaskCmd::mutable_app_path() {
-  set_has_app_path();
-  if (app_path_ == &::google::protobuf::internal::kEmptyString) {
-    app_path_ = new ::std::string;
+inline ::std::string* AgentTaskCmd::mutable_svr_user() {
+  set_has_svr_user();
+  if (svr_user_ == &::google::protobuf::internal::kEmptyString) {
+    svr_user_ = new ::std::string;
   }
-  return app_path_;
+  return svr_user_;
 }
-inline ::std::string* AgentTaskCmd::release_app_path() {
-  clear_has_app_path();
-  if (app_path_ == &::google::protobuf::internal::kEmptyString) {
+inline ::std::string* AgentTaskCmd::release_svr_user() {
+  clear_has_svr_user();
+  if (svr_user_ == &::google::protobuf::internal::kEmptyString) {
     return NULL;
   } else {
-    ::std::string* temp = app_path_;
-    app_path_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    ::std::string* temp = svr_user_;
+    svr_user_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
     return temp;
   }
 }
 
-// optional string app_user = 12;
-inline bool AgentTaskCmd::has_app_user() const {
+// optional string svr_env_content = 12;
+inline bool AgentTaskCmd::has_svr_env_content() const {
   return (_has_bits_[0] & 0x00000800u) != 0;
 }
-inline void AgentTaskCmd::set_has_app_user() {
+inline void AgentTaskCmd::set_has_svr_env_content() {
   _has_bits_[0] |= 0x00000800u;
 }
-inline void AgentTaskCmd::clear_has_app_user() {
+inline void AgentTaskCmd::clear_has_svr_env_content() {
   _has_bits_[0] &= ~0x00000800u;
 }
-inline void AgentTaskCmd::clear_app_user() {
-  if (app_user_ != &::google::protobuf::internal::kEmptyString) {
-    app_user_->clear();
+inline void AgentTaskCmd::clear_svr_env_content() {
+  if (svr_env_content_ != &::google::protobuf::internal::kEmptyString) {
+    svr_env_content_->clear();
   }
-  clear_has_app_user();
+  clear_has_svr_env_content();
 }
-inline const ::std::string& AgentTaskCmd::app_user() const {
-  return *app_user_;
+inline const ::std::string& AgentTaskCmd::svr_env_content() const {
+  return *svr_env_content_;
 }
-inline void AgentTaskCmd::set_app_user(const ::std::string& value) {
-  set_has_app_user();
-  if (app_user_ == &::google::protobuf::internal::kEmptyString) {
-    app_user_ = new ::std::string;
+inline void AgentTaskCmd::set_svr_env_content(const ::std::string& value) {
+  set_has_svr_env_content();
+  if (svr_env_content_ == &::google::protobuf::internal::kEmptyString) {
+    svr_env_content_ = new ::std::string;
   }
-  app_user_->assign(value);
+  svr_env_content_->assign(value);
 }
-inline void AgentTaskCmd::set_app_user(const char* value) {
-  set_has_app_user();
-  if (app_user_ == &::google::protobuf::internal::kEmptyString) {
-    app_user_ = new ::std::string;
+inline void AgentTaskCmd::set_svr_env_content(const char* value) {
+  set_has_svr_env_content();
+  if (svr_env_content_ == &::google::protobuf::internal::kEmptyString) {
+    svr_env_content_ = new ::std::string;
   }
-  app_user_->assign(value);
+  svr_env_content_->assign(value);
 }
-inline void AgentTaskCmd::set_app_user(const char* value, size_t size) {
-  set_has_app_user();
-  if (app_user_ == &::google::protobuf::internal::kEmptyString) {
-    app_user_ = new ::std::string;
+inline void AgentTaskCmd::set_svr_env_content(const char* value, size_t size) {
+  set_has_svr_env_content();
+  if (svr_env_content_ == &::google::protobuf::internal::kEmptyString) {
+    svr_env_content_ = new ::std::string;
   }
-  app_user_->assign(reinterpret_cast<const char*>(value), size);
+  svr_env_content_->assign(reinterpret_cast<const char*>(value), size);
 }
-inline ::std::string* AgentTaskCmd::mutable_app_user() {
-  set_has_app_user();
-  if (app_user_ == &::google::protobuf::internal::kEmptyString) {
-    app_user_ = new ::std::string;
+inline ::std::string* AgentTaskCmd::mutable_svr_env_content() {
+  set_has_svr_env_content();
+  if (svr_env_content_ == &::google::protobuf::internal::kEmptyString) {
+    svr_env_content_ = new ::std::string;
   }
-  return app_user_;
+  return svr_env_content_;
 }
-inline ::std::string* AgentTaskCmd::release_app_user() {
-  clear_has_app_user();
-  if (app_user_ == &::google::protobuf::internal::kEmptyString) {
+inline ::std::string* AgentTaskCmd::release_svr_env_content() {
+  clear_has_svr_env_content();
+  if (svr_env_content_ == &::google::protobuf::internal::kEmptyString) {
     return NULL;
   } else {
-    ::std::string* temp = app_user_;
-    app_user_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    ::std::string* temp = svr_env_content_;
+    svr_env_content_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
     return temp;
   }
 }
 
-// optional string app_env_file = 13;
-inline bool AgentTaskCmd::has_app_env_file() const {
+// optional string svr_env_ver = 13;
+inline bool AgentTaskCmd::has_svr_env_ver() const {
   return (_has_bits_[0] & 0x00001000u) != 0;
 }
-inline void AgentTaskCmd::set_has_app_env_file() {
+inline void AgentTaskCmd::set_has_svr_env_ver() {
   _has_bits_[0] |= 0x00001000u;
 }
-inline void AgentTaskCmd::clear_has_app_env_file() {
+inline void AgentTaskCmd::clear_has_svr_env_ver() {
   _has_bits_[0] &= ~0x00001000u;
 }
-inline void AgentTaskCmd::clear_app_env_file() {
-  if (app_env_file_ != &::google::protobuf::internal::kEmptyString) {
-    app_env_file_->clear();
+inline void AgentTaskCmd::clear_svr_env_ver() {
+  if (svr_env_ver_ != &::google::protobuf::internal::kEmptyString) {
+    svr_env_ver_->clear();
   }
-  clear_has_app_env_file();
+  clear_has_svr_env_ver();
 }
-inline const ::std::string& AgentTaskCmd::app_env_file() const {
-  return *app_env_file_;
+inline const ::std::string& AgentTaskCmd::svr_env_ver() const {
+  return *svr_env_ver_;
 }
-inline void AgentTaskCmd::set_app_env_file(const ::std::string& value) {
-  set_has_app_env_file();
-  if (app_env_file_ == &::google::protobuf::internal::kEmptyString) {
-    app_env_file_ = new ::std::string;
+inline void AgentTaskCmd::set_svr_env_ver(const ::std::string& value) {
+  set_has_svr_env_ver();
+  if (svr_env_ver_ == &::google::protobuf::internal::kEmptyString) {
+    svr_env_ver_ = new ::std::string;
   }
-  app_env_file_->assign(value);
+  svr_env_ver_->assign(value);
 }
-inline void AgentTaskCmd::set_app_env_file(const char* value) {
-  set_has_app_env_file();
-  if (app_env_file_ == &::google::protobuf::internal::kEmptyString) {
-    app_env_file_ = new ::std::string;
+inline void AgentTaskCmd::set_svr_env_ver(const char* value) {
+  set_has_svr_env_ver();
+  if (svr_env_ver_ == &::google::protobuf::internal::kEmptyString) {
+    svr_env_ver_ = new ::std::string;
   }
-  app_env_file_->assign(value);
+  svr_env_ver_->assign(value);
 }
-inline void AgentTaskCmd::set_app_env_file(const char* value, size_t size) {
-  set_has_app_env_file();
-  if (app_env_file_ == &::google::protobuf::internal::kEmptyString) {
-    app_env_file_ = new ::std::string;
+inline void AgentTaskCmd::set_svr_env_ver(const char* value, size_t size) {
+  set_has_svr_env_ver();
+  if (svr_env_ver_ == &::google::protobuf::internal::kEmptyString) {
+    svr_env_ver_ = new ::std::string;
   }
-  app_env_file_->assign(reinterpret_cast<const char*>(value), size);
+  svr_env_ver_->assign(reinterpret_cast<const char*>(value), size);
 }
-inline ::std::string* AgentTaskCmd::mutable_app_env_file() {
-  set_has_app_env_file();
-  if (app_env_file_ == &::google::protobuf::internal::kEmptyString) {
-    app_env_file_ = new ::std::string;
+inline ::std::string* AgentTaskCmd::mutable_svr_env_ver() {
+  set_has_svr_env_ver();
+  if (svr_env_ver_ == &::google::protobuf::internal::kEmptyString) {
+    svr_env_ver_ = new ::std::string;
   }
-  return app_env_file_;
+  return svr_env_ver_;
 }
-inline ::std::string* AgentTaskCmd::release_app_env_file() {
-  clear_has_app_env_file();
-  if (app_env_file_ == &::google::protobuf::internal::kEmptyString) {
+inline ::std::string* AgentTaskCmd::release_svr_env_ver() {
+  clear_has_svr_env_ver();
+  if (svr_env_ver_ == &::google::protobuf::internal::kEmptyString) {
     return NULL;
   } else {
-    ::std::string* temp = app_env_file_;
-    app_env_file_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    ::std::string* temp = svr_env_ver_;
+    svr_env_ver_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
     return temp;
   }
 }
 
-// optional string app_env_ver = 14;
-inline bool AgentTaskCmd::has_app_env_ver() const {
+// optional bool output_process = 14;
+inline bool AgentTaskCmd::has_output_process() const {
   return (_has_bits_[0] & 0x00002000u) != 0;
 }
-inline void AgentTaskCmd::set_has_app_env_ver() {
+inline void AgentTaskCmd::set_has_output_process() {
   _has_bits_[0] |= 0x00002000u;
 }
-inline void AgentTaskCmd::clear_has_app_env_ver() {
-  _has_bits_[0] &= ~0x00002000u;
-}
-inline void AgentTaskCmd::clear_app_env_ver() {
-  if (app_env_ver_ != &::google::protobuf::internal::kEmptyString) {
-    app_env_ver_->clear();
-  }
-  clear_has_app_env_ver();
-}
-inline const ::std::string& AgentTaskCmd::app_env_ver() const {
-  return *app_env_ver_;
-}
-inline void AgentTaskCmd::set_app_env_ver(const ::std::string& value) {
-  set_has_app_env_ver();
-  if (app_env_ver_ == &::google::protobuf::internal::kEmptyString) {
-    app_env_ver_ = new ::std::string;
-  }
-  app_env_ver_->assign(value);
-}
-inline void AgentTaskCmd::set_app_env_ver(const char* value) {
-  set_has_app_env_ver();
-  if (app_env_ver_ == &::google::protobuf::internal::kEmptyString) {
-    app_env_ver_ = new ::std::string;
-  }
-  app_env_ver_->assign(value);
-}
-inline void AgentTaskCmd::set_app_env_ver(const char* value, size_t size) {
-  set_has_app_env_ver();
-  if (app_env_ver_ == &::google::protobuf::internal::kEmptyString) {
-    app_env_ver_ = new ::std::string;
-  }
-  app_env_ver_->assign(reinterpret_cast<const char*>(value), size);
-}
-inline ::std::string* AgentTaskCmd::mutable_app_env_ver() {
-  set_has_app_env_ver();
-  if (app_env_ver_ == &::google::protobuf::internal::kEmptyString) {
-    app_env_ver_ = new ::std::string;
-  }
-  return app_env_ver_;
-}
-inline ::std::string* AgentTaskCmd::release_app_env_ver() {
-  clear_has_app_env_ver();
-  if (app_env_ver_ == &::google::protobuf::internal::kEmptyString) {
-    return NULL;
-  } else {
-    ::std::string* temp = app_env_ver_;
-    app_env_ver_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
-    return temp;
-  }
-}
-
-// optional bool output_process = 15;
-inline bool AgentTaskCmd::has_output_process() const {
-  return (_has_bits_[0] & 0x00004000u) != 0;
-}
-inline void AgentTaskCmd::set_has_output_process() {
-  _has_bits_[0] |= 0x00004000u;
-}
 inline void AgentTaskCmd::clear_has_output_process() {
-  _has_bits_[0] &= ~0x00004000u;
+  _has_bits_[0] &= ~0x00002000u;
 }
 inline void AgentTaskCmd::clear_output_process() {
   output_process_ = false;
@@ -7422,15 +7845,15 @@ inline void AgentTaskCmd::set_output_process(bool value) {
   output_process_ = value;
 }
 
-// optional string script = 16;
+// optional string script = 15;
 inline bool AgentTaskCmd::has_script() const {
-  return (_has_bits_[0] & 0x00008000u) != 0;
+  return (_has_bits_[0] & 0x00004000u) != 0;
 }
 inline void AgentTaskCmd::set_has_script() {
-  _has_bits_[0] |= 0x00008000u;
+  _has_bits_[0] |= 0x00004000u;
 }
 inline void AgentTaskCmd::clear_has_script() {
-  _has_bits_[0] &= ~0x00008000u;
+  _has_bits_[0] &= ~0x00004000u;
 }
 inline void AgentTaskCmd::clear_script() {
   if (script_ != &::google::protobuf::internal::kEmptyString) {
@@ -7480,7 +7903,7 @@ inline ::std::string* AgentTaskCmd::release_script() {
   }
 }
 
-// repeated .dcmd_api.KeyValue task_arg = 17;
+// repeated .dcmd_api.KeyValue task_arg = 16;
 inline int AgentTaskCmd::task_arg_size() const {
   return task_arg_.size();
 }
@@ -8243,15 +8666,37 @@ inline ::std::string* AgentOprCmd::release_name() {
   }
 }
 
-// required string run_user = 3;
-inline bool AgentOprCmd::has_run_user() const {
+// required int32 priority = 3;
+inline bool AgentOprCmd::has_priority() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
-inline void AgentOprCmd::set_has_run_user() {
+inline void AgentOprCmd::set_has_priority() {
   _has_bits_[0] |= 0x00000004u;
 }
-inline void AgentOprCmd::clear_has_run_user() {
+inline void AgentOprCmd::clear_has_priority() {
   _has_bits_[0] &= ~0x00000004u;
+}
+inline void AgentOprCmd::clear_priority() {
+  priority_ = 0;
+  clear_has_priority();
+}
+inline ::google::protobuf::int32 AgentOprCmd::priority() const {
+  return priority_;
+}
+inline void AgentOprCmd::set_priority(::google::protobuf::int32 value) {
+  set_has_priority();
+  priority_ = value;
+}
+
+// required string run_user = 4;
+inline bool AgentOprCmd::has_run_user() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void AgentOprCmd::set_has_run_user() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void AgentOprCmd::clear_has_run_user() {
+  _has_bits_[0] &= ~0x00000008u;
 }
 inline void AgentOprCmd::clear_run_user() {
   if (run_user_ != &::google::protobuf::internal::kEmptyString) {
@@ -8301,15 +8746,15 @@ inline ::std::string* AgentOprCmd::release_run_user() {
   }
 }
 
-// required int32 timeout = 4;
+// required int32 timeout = 5;
 inline bool AgentOprCmd::has_timeout() const {
-  return (_has_bits_[0] & 0x00000008u) != 0;
+  return (_has_bits_[0] & 0x00000010u) != 0;
 }
 inline void AgentOprCmd::set_has_timeout() {
-  _has_bits_[0] |= 0x00000008u;
+  _has_bits_[0] |= 0x00000010u;
 }
 inline void AgentOprCmd::clear_has_timeout() {
-  _has_bits_[0] &= ~0x00000008u;
+  _has_bits_[0] &= ~0x00000010u;
 }
 inline void AgentOprCmd::clear_timeout() {
   timeout_ = 0;
@@ -8323,15 +8768,15 @@ inline void AgentOprCmd::set_timeout(::google::protobuf::int32 value) {
   timeout_ = value;
 }
 
-// required string script = 5;
+// required string script = 6;
 inline bool AgentOprCmd::has_script() const {
-  return (_has_bits_[0] & 0x00000010u) != 0;
+  return (_has_bits_[0] & 0x00000020u) != 0;
 }
 inline void AgentOprCmd::set_has_script() {
-  _has_bits_[0] |= 0x00000010u;
+  _has_bits_[0] |= 0x00000020u;
 }
 inline void AgentOprCmd::clear_has_script() {
-  _has_bits_[0] &= ~0x00000010u;
+  _has_bits_[0] &= ~0x00000020u;
 }
 inline void AgentOprCmd::clear_script() {
   if (script_ != &::google::protobuf::internal::kEmptyString) {
@@ -8381,7 +8826,7 @@ inline ::std::string* AgentOprCmd::release_script() {
   }
 }
 
-// repeated .dcmd_api.KeyValue args = 6;
+// repeated .dcmd_api.KeyValue args = 7;
 inline int AgentOprCmd::args_size() const {
   return args_.size();
 }
@@ -8976,60 +9421,60 @@ inline ::std::string* AgentRunningTask::release_ip() {
   }
 }
 
-// optional string app_name = 2;
-inline bool AgentRunningTask::has_app_name() const {
+// optional string svr_name = 2;
+inline bool AgentRunningTask::has_svr_name() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void AgentRunningTask::set_has_app_name() {
+inline void AgentRunningTask::set_has_svr_name() {
   _has_bits_[0] |= 0x00000002u;
 }
-inline void AgentRunningTask::clear_has_app_name() {
+inline void AgentRunningTask::clear_has_svr_name() {
   _has_bits_[0] &= ~0x00000002u;
 }
-inline void AgentRunningTask::clear_app_name() {
-  if (app_name_ != &::google::protobuf::internal::kEmptyString) {
-    app_name_->clear();
+inline void AgentRunningTask::clear_svr_name() {
+  if (svr_name_ != &::google::protobuf::internal::kEmptyString) {
+    svr_name_->clear();
   }
-  clear_has_app_name();
+  clear_has_svr_name();
 }
-inline const ::std::string& AgentRunningTask::app_name() const {
-  return *app_name_;
+inline const ::std::string& AgentRunningTask::svr_name() const {
+  return *svr_name_;
 }
-inline void AgentRunningTask::set_app_name(const ::std::string& value) {
-  set_has_app_name();
-  if (app_name_ == &::google::protobuf::internal::kEmptyString) {
-    app_name_ = new ::std::string;
+inline void AgentRunningTask::set_svr_name(const ::std::string& value) {
+  set_has_svr_name();
+  if (svr_name_ == &::google::protobuf::internal::kEmptyString) {
+    svr_name_ = new ::std::string;
   }
-  app_name_->assign(value);
+  svr_name_->assign(value);
 }
-inline void AgentRunningTask::set_app_name(const char* value) {
-  set_has_app_name();
-  if (app_name_ == &::google::protobuf::internal::kEmptyString) {
-    app_name_ = new ::std::string;
+inline void AgentRunningTask::set_svr_name(const char* value) {
+  set_has_svr_name();
+  if (svr_name_ == &::google::protobuf::internal::kEmptyString) {
+    svr_name_ = new ::std::string;
   }
-  app_name_->assign(value);
+  svr_name_->assign(value);
 }
-inline void AgentRunningTask::set_app_name(const char* value, size_t size) {
-  set_has_app_name();
-  if (app_name_ == &::google::protobuf::internal::kEmptyString) {
-    app_name_ = new ::std::string;
+inline void AgentRunningTask::set_svr_name(const char* value, size_t size) {
+  set_has_svr_name();
+  if (svr_name_ == &::google::protobuf::internal::kEmptyString) {
+    svr_name_ = new ::std::string;
   }
-  app_name_->assign(reinterpret_cast<const char*>(value), size);
+  svr_name_->assign(reinterpret_cast<const char*>(value), size);
 }
-inline ::std::string* AgentRunningTask::mutable_app_name() {
-  set_has_app_name();
-  if (app_name_ == &::google::protobuf::internal::kEmptyString) {
-    app_name_ = new ::std::string;
+inline ::std::string* AgentRunningTask::mutable_svr_name() {
+  set_has_svr_name();
+  if (svr_name_ == &::google::protobuf::internal::kEmptyString) {
+    svr_name_ = new ::std::string;
   }
-  return app_name_;
+  return svr_name_;
 }
-inline ::std::string* AgentRunningTask::release_app_name() {
-  clear_has_app_name();
-  if (app_name_ == &::google::protobuf::internal::kEmptyString) {
+inline ::std::string* AgentRunningTask::release_svr_name() {
+  clear_has_svr_name();
+  if (svr_name_ == &::google::protobuf::internal::kEmptyString) {
     return NULL;
   } else {
-    ::std::string* temp = app_name_;
-    app_name_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    ::std::string* temp = svr_name_;
+    svr_name_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
     return temp;
   }
 }
@@ -9827,60 +10272,60 @@ inline ::std::string* UiAgentRunningTask::release_ip() {
   }
 }
 
-// optional string app_name = 2;
-inline bool UiAgentRunningTask::has_app_name() const {
+// optional string svr_name = 2;
+inline bool UiAgentRunningTask::has_svr_name() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void UiAgentRunningTask::set_has_app_name() {
+inline void UiAgentRunningTask::set_has_svr_name() {
   _has_bits_[0] |= 0x00000002u;
 }
-inline void UiAgentRunningTask::clear_has_app_name() {
+inline void UiAgentRunningTask::clear_has_svr_name() {
   _has_bits_[0] &= ~0x00000002u;
 }
-inline void UiAgentRunningTask::clear_app_name() {
-  if (app_name_ != &::google::protobuf::internal::kEmptyString) {
-    app_name_->clear();
+inline void UiAgentRunningTask::clear_svr_name() {
+  if (svr_name_ != &::google::protobuf::internal::kEmptyString) {
+    svr_name_->clear();
   }
-  clear_has_app_name();
+  clear_has_svr_name();
 }
-inline const ::std::string& UiAgentRunningTask::app_name() const {
-  return *app_name_;
+inline const ::std::string& UiAgentRunningTask::svr_name() const {
+  return *svr_name_;
 }
-inline void UiAgentRunningTask::set_app_name(const ::std::string& value) {
-  set_has_app_name();
-  if (app_name_ == &::google::protobuf::internal::kEmptyString) {
-    app_name_ = new ::std::string;
+inline void UiAgentRunningTask::set_svr_name(const ::std::string& value) {
+  set_has_svr_name();
+  if (svr_name_ == &::google::protobuf::internal::kEmptyString) {
+    svr_name_ = new ::std::string;
   }
-  app_name_->assign(value);
+  svr_name_->assign(value);
 }
-inline void UiAgentRunningTask::set_app_name(const char* value) {
-  set_has_app_name();
-  if (app_name_ == &::google::protobuf::internal::kEmptyString) {
-    app_name_ = new ::std::string;
+inline void UiAgentRunningTask::set_svr_name(const char* value) {
+  set_has_svr_name();
+  if (svr_name_ == &::google::protobuf::internal::kEmptyString) {
+    svr_name_ = new ::std::string;
   }
-  app_name_->assign(value);
+  svr_name_->assign(value);
 }
-inline void UiAgentRunningTask::set_app_name(const char* value, size_t size) {
-  set_has_app_name();
-  if (app_name_ == &::google::protobuf::internal::kEmptyString) {
-    app_name_ = new ::std::string;
+inline void UiAgentRunningTask::set_svr_name(const char* value, size_t size) {
+  set_has_svr_name();
+  if (svr_name_ == &::google::protobuf::internal::kEmptyString) {
+    svr_name_ = new ::std::string;
   }
-  app_name_->assign(reinterpret_cast<const char*>(value), size);
+  svr_name_->assign(reinterpret_cast<const char*>(value), size);
 }
-inline ::std::string* UiAgentRunningTask::mutable_app_name() {
-  set_has_app_name();
-  if (app_name_ == &::google::protobuf::internal::kEmptyString) {
-    app_name_ = new ::std::string;
+inline ::std::string* UiAgentRunningTask::mutable_svr_name() {
+  set_has_svr_name();
+  if (svr_name_ == &::google::protobuf::internal::kEmptyString) {
+    svr_name_ = new ::std::string;
   }
-  return app_name_;
+  return svr_name_;
 }
-inline ::std::string* UiAgentRunningTask::release_app_name() {
-  clear_has_app_name();
-  if (app_name_ == &::google::protobuf::internal::kEmptyString) {
+inline ::std::string* UiAgentRunningTask::release_svr_name() {
+  clear_has_svr_name();
+  if (svr_name_ == &::google::protobuf::internal::kEmptyString) {
     return NULL;
   } else {
-    ::std::string* temp = app_name_;
-    app_name_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    ::std::string* temp = svr_name_;
+    svr_name_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
     return temp;
   }
 }
@@ -12471,60 +12916,60 @@ inline ::std::string* UiTaskCmd::release_ip() {
   }
 }
 
-// optional string app_pool = 4;
-inline bool UiTaskCmd::has_app_pool() const {
+// optional string svr_pool = 4;
+inline bool UiTaskCmd::has_svr_pool() const {
   return (_has_bits_[0] & 0x00000008u) != 0;
 }
-inline void UiTaskCmd::set_has_app_pool() {
+inline void UiTaskCmd::set_has_svr_pool() {
   _has_bits_[0] |= 0x00000008u;
 }
-inline void UiTaskCmd::clear_has_app_pool() {
+inline void UiTaskCmd::clear_has_svr_pool() {
   _has_bits_[0] &= ~0x00000008u;
 }
-inline void UiTaskCmd::clear_app_pool() {
-  if (app_pool_ != &::google::protobuf::internal::kEmptyString) {
-    app_pool_->clear();
+inline void UiTaskCmd::clear_svr_pool() {
+  if (svr_pool_ != &::google::protobuf::internal::kEmptyString) {
+    svr_pool_->clear();
   }
-  clear_has_app_pool();
+  clear_has_svr_pool();
 }
-inline const ::std::string& UiTaskCmd::app_pool() const {
-  return *app_pool_;
+inline const ::std::string& UiTaskCmd::svr_pool() const {
+  return *svr_pool_;
 }
-inline void UiTaskCmd::set_app_pool(const ::std::string& value) {
-  set_has_app_pool();
-  if (app_pool_ == &::google::protobuf::internal::kEmptyString) {
-    app_pool_ = new ::std::string;
+inline void UiTaskCmd::set_svr_pool(const ::std::string& value) {
+  set_has_svr_pool();
+  if (svr_pool_ == &::google::protobuf::internal::kEmptyString) {
+    svr_pool_ = new ::std::string;
   }
-  app_pool_->assign(value);
+  svr_pool_->assign(value);
 }
-inline void UiTaskCmd::set_app_pool(const char* value) {
-  set_has_app_pool();
-  if (app_pool_ == &::google::protobuf::internal::kEmptyString) {
-    app_pool_ = new ::std::string;
+inline void UiTaskCmd::set_svr_pool(const char* value) {
+  set_has_svr_pool();
+  if (svr_pool_ == &::google::protobuf::internal::kEmptyString) {
+    svr_pool_ = new ::std::string;
   }
-  app_pool_->assign(value);
+  svr_pool_->assign(value);
 }
-inline void UiTaskCmd::set_app_pool(const char* value, size_t size) {
-  set_has_app_pool();
-  if (app_pool_ == &::google::protobuf::internal::kEmptyString) {
-    app_pool_ = new ::std::string;
+inline void UiTaskCmd::set_svr_pool(const char* value, size_t size) {
+  set_has_svr_pool();
+  if (svr_pool_ == &::google::protobuf::internal::kEmptyString) {
+    svr_pool_ = new ::std::string;
   }
-  app_pool_->assign(reinterpret_cast<const char*>(value), size);
+  svr_pool_->assign(reinterpret_cast<const char*>(value), size);
 }
-inline ::std::string* UiTaskCmd::mutable_app_pool() {
-  set_has_app_pool();
-  if (app_pool_ == &::google::protobuf::internal::kEmptyString) {
-    app_pool_ = new ::std::string;
+inline ::std::string* UiTaskCmd::mutable_svr_pool() {
+  set_has_svr_pool();
+  if (svr_pool_ == &::google::protobuf::internal::kEmptyString) {
+    svr_pool_ = new ::std::string;
   }
-  return app_pool_;
+  return svr_pool_;
 }
-inline ::std::string* UiTaskCmd::release_app_pool() {
-  clear_has_app_pool();
-  if (app_pool_ == &::google::protobuf::internal::kEmptyString) {
+inline ::std::string* UiTaskCmd::release_svr_pool() {
+  clear_has_svr_pool();
+  if (svr_pool_ == &::google::protobuf::internal::kEmptyString) {
     return NULL;
   } else {
-    ::std::string* temp = app_pool_;
-    app_pool_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    ::std::string* temp = svr_pool_;
+    svr_pool_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
     return temp;
   }
 }
@@ -12873,131 +13318,37 @@ inline ::std::string* UiTaskWatch::release_task_id() {
   }
 }
 
-// optional string app_pool = 2;
-inline bool UiTaskWatch::has_app_pool() const {
+// required bool last_state = 2;
+inline bool UiTaskWatch::has_last_state() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void UiTaskWatch::set_has_app_pool() {
+inline void UiTaskWatch::set_has_last_state() {
   _has_bits_[0] |= 0x00000002u;
 }
-inline void UiTaskWatch::clear_has_app_pool() {
+inline void UiTaskWatch::clear_has_last_state() {
   _has_bits_[0] &= ~0x00000002u;
 }
-inline void UiTaskWatch::clear_app_pool() {
-  if (app_pool_ != &::google::protobuf::internal::kEmptyString) {
-    app_pool_->clear();
-  }
-  clear_has_app_pool();
+inline void UiTaskWatch::clear_last_state() {
+  last_state_ = false;
+  clear_has_last_state();
 }
-inline const ::std::string& UiTaskWatch::app_pool() const {
-  return *app_pool_;
+inline bool UiTaskWatch::last_state() const {
+  return last_state_;
 }
-inline void UiTaskWatch::set_app_pool(const ::std::string& value) {
-  set_has_app_pool();
-  if (app_pool_ == &::google::protobuf::internal::kEmptyString) {
-    app_pool_ = new ::std::string;
-  }
-  app_pool_->assign(value);
-}
-inline void UiTaskWatch::set_app_pool(const char* value) {
-  set_has_app_pool();
-  if (app_pool_ == &::google::protobuf::internal::kEmptyString) {
-    app_pool_ = new ::std::string;
-  }
-  app_pool_->assign(value);
-}
-inline void UiTaskWatch::set_app_pool(const char* value, size_t size) {
-  set_has_app_pool();
-  if (app_pool_ == &::google::protobuf::internal::kEmptyString) {
-    app_pool_ = new ::std::string;
-  }
-  app_pool_->assign(reinterpret_cast<const char*>(value), size);
-}
-inline ::std::string* UiTaskWatch::mutable_app_pool() {
-  set_has_app_pool();
-  if (app_pool_ == &::google::protobuf::internal::kEmptyString) {
-    app_pool_ = new ::std::string;
-  }
-  return app_pool_;
-}
-inline ::std::string* UiTaskWatch::release_app_pool() {
-  clear_has_app_pool();
-  if (app_pool_ == &::google::protobuf::internal::kEmptyString) {
-    return NULL;
-  } else {
-    ::std::string* temp = app_pool_;
-    app_pool_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
-    return temp;
-  }
+inline void UiTaskWatch::set_last_state(bool value) {
+  set_has_last_state();
+  last_state_ = value;
 }
 
-// optional string subtask_id = 3;
-inline bool UiTaskWatch::has_subtask_id() const {
+// required string user = 3;
+inline bool UiTaskWatch::has_user() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
-inline void UiTaskWatch::set_has_subtask_id() {
+inline void UiTaskWatch::set_has_user() {
   _has_bits_[0] |= 0x00000004u;
 }
-inline void UiTaskWatch::clear_has_subtask_id() {
-  _has_bits_[0] &= ~0x00000004u;
-}
-inline void UiTaskWatch::clear_subtask_id() {
-  if (subtask_id_ != &::google::protobuf::internal::kEmptyString) {
-    subtask_id_->clear();
-  }
-  clear_has_subtask_id();
-}
-inline const ::std::string& UiTaskWatch::subtask_id() const {
-  return *subtask_id_;
-}
-inline void UiTaskWatch::set_subtask_id(const ::std::string& value) {
-  set_has_subtask_id();
-  if (subtask_id_ == &::google::protobuf::internal::kEmptyString) {
-    subtask_id_ = new ::std::string;
-  }
-  subtask_id_->assign(value);
-}
-inline void UiTaskWatch::set_subtask_id(const char* value) {
-  set_has_subtask_id();
-  if (subtask_id_ == &::google::protobuf::internal::kEmptyString) {
-    subtask_id_ = new ::std::string;
-  }
-  subtask_id_->assign(value);
-}
-inline void UiTaskWatch::set_subtask_id(const char* value, size_t size) {
-  set_has_subtask_id();
-  if (subtask_id_ == &::google::protobuf::internal::kEmptyString) {
-    subtask_id_ = new ::std::string;
-  }
-  subtask_id_->assign(reinterpret_cast<const char*>(value), size);
-}
-inline ::std::string* UiTaskWatch::mutable_subtask_id() {
-  set_has_subtask_id();
-  if (subtask_id_ == &::google::protobuf::internal::kEmptyString) {
-    subtask_id_ = new ::std::string;
-  }
-  return subtask_id_;
-}
-inline ::std::string* UiTaskWatch::release_subtask_id() {
-  clear_has_subtask_id();
-  if (subtask_id_ == &::google::protobuf::internal::kEmptyString) {
-    return NULL;
-  } else {
-    ::std::string* temp = subtask_id_;
-    subtask_id_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
-    return temp;
-  }
-}
-
-// required string user = 4;
-inline bool UiTaskWatch::has_user() const {
-  return (_has_bits_[0] & 0x00000008u) != 0;
-}
-inline void UiTaskWatch::set_has_user() {
-  _has_bits_[0] |= 0x00000008u;
-}
 inline void UiTaskWatch::clear_has_user() {
-  _has_bits_[0] &= ~0x00000008u;
+  _has_bits_[0] &= ~0x00000004u;
 }
 inline void UiTaskWatch::clear_user() {
   if (user_ != &::google::protobuf::internal::kEmptyString) {
@@ -13047,15 +13398,15 @@ inline ::std::string* UiTaskWatch::release_user() {
   }
 }
 
-// required string passwd = 5;
+// required string passwd = 4;
 inline bool UiTaskWatch::has_passwd() const {
-  return (_has_bits_[0] & 0x00000010u) != 0;
+  return (_has_bits_[0] & 0x00000008u) != 0;
 }
 inline void UiTaskWatch::set_has_passwd() {
-  _has_bits_[0] |= 0x00000010u;
+  _has_bits_[0] |= 0x00000008u;
 }
 inline void UiTaskWatch::clear_has_passwd() {
-  _has_bits_[0] &= ~0x00000010u;
+  _has_bits_[0] &= ~0x00000008u;
 }
 inline void UiTaskWatch::clear_passwd() {
   if (passwd_ != &::google::protobuf::internal::kEmptyString) {
@@ -13190,183 +13541,58 @@ inline ::std::string* UiTaskWatchReply::release_err() {
   }
 }
 
-// optional .dcmd_api.TaskState task_state = 3;
-inline bool UiTaskWatchReply::has_task_state() const {
+// required .dcmd_api.TaskInfo task_info = 3;
+inline bool UiTaskWatchReply::has_task_info() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
-inline void UiTaskWatchReply::set_has_task_state() {
+inline void UiTaskWatchReply::set_has_task_info() {
   _has_bits_[0] |= 0x00000004u;
 }
-inline void UiTaskWatchReply::clear_has_task_state() {
+inline void UiTaskWatchReply::clear_has_task_info() {
   _has_bits_[0] &= ~0x00000004u;
 }
-inline void UiTaskWatchReply::clear_task_state() {
-  task_state_ = 0;
-  clear_has_task_state();
+inline void UiTaskWatchReply::clear_task_info() {
+  if (task_info_ != NULL) task_info_->::dcmd_api::TaskInfo::Clear();
+  clear_has_task_info();
 }
-inline dcmd_api::TaskState UiTaskWatchReply::task_state() const {
-  return static_cast< dcmd_api::TaskState >(task_state_);
+inline const ::dcmd_api::TaskInfo& UiTaskWatchReply::task_info() const {
+  return task_info_ != NULL ? *task_info_ : *default_instance_->task_info_;
 }
-inline void UiTaskWatchReply::set_task_state(dcmd_api::TaskState value) {
-  GOOGLE_DCHECK(dcmd_api::TaskState_IsValid(value));
-  set_has_task_state();
-  task_state_ = value;
+inline ::dcmd_api::TaskInfo* UiTaskWatchReply::mutable_task_info() {
+  set_has_task_info();
+  if (task_info_ == NULL) task_info_ = new ::dcmd_api::TaskInfo;
+  return task_info_;
 }
-
-// optional .dcmd_api.AppPoolState app_pool_state = 4;
-inline bool UiTaskWatchReply::has_app_pool_state() const {
-  return (_has_bits_[0] & 0x00000008u) != 0;
-}
-inline void UiTaskWatchReply::set_has_app_pool_state() {
-  _has_bits_[0] |= 0x00000008u;
-}
-inline void UiTaskWatchReply::clear_has_app_pool_state() {
-  _has_bits_[0] &= ~0x00000008u;
-}
-inline void UiTaskWatchReply::clear_app_pool_state() {
-  app_pool_state_ = 0;
-  clear_has_app_pool_state();
-}
-inline dcmd_api::AppPoolState UiTaskWatchReply::app_pool_state() const {
-  return static_cast< dcmd_api::AppPoolState >(app_pool_state_);
-}
-inline void UiTaskWatchReply::set_app_pool_state(dcmd_api::AppPoolState value) {
-  GOOGLE_DCHECK(dcmd_api::AppPoolState_IsValid(value));
-  set_has_app_pool_state();
-  app_pool_state_ = value;
+inline ::dcmd_api::TaskInfo* UiTaskWatchReply::release_task_info() {
+  clear_has_task_info();
+  ::dcmd_api::TaskInfo* temp = task_info_;
+  task_info_ = NULL;
+  return temp;
 }
 
-// optional .dcmd_api.SubTaskState subtask_state = 5;
-inline bool UiTaskWatchReply::has_subtask_state() const {
-  return (_has_bits_[0] & 0x00000010u) != 0;
+// repeated .dcmd_api.TaskInfo child_tasks = 4;
+inline int UiTaskWatchReply::child_tasks_size() const {
+  return child_tasks_.size();
 }
-inline void UiTaskWatchReply::set_has_subtask_state() {
-  _has_bits_[0] |= 0x00000010u;
+inline void UiTaskWatchReply::clear_child_tasks() {
+  child_tasks_.Clear();
 }
-inline void UiTaskWatchReply::clear_has_subtask_state() {
-  _has_bits_[0] &= ~0x00000010u;
+inline const ::dcmd_api::TaskInfo& UiTaskWatchReply::child_tasks(int index) const {
+  return child_tasks_.Get(index);
 }
-inline void UiTaskWatchReply::clear_subtask_state() {
-  subtask_state_ = 0;
-  clear_has_subtask_state();
+inline ::dcmd_api::TaskInfo* UiTaskWatchReply::mutable_child_tasks(int index) {
+  return child_tasks_.Mutable(index);
 }
-inline dcmd_api::SubTaskState UiTaskWatchReply::subtask_state() const {
-  return static_cast< dcmd_api::SubTaskState >(subtask_state_);
+inline ::dcmd_api::TaskInfo* UiTaskWatchReply::add_child_tasks() {
+  return child_tasks_.Add();
 }
-inline void UiTaskWatchReply::set_subtask_state(dcmd_api::SubTaskState value) {
-  GOOGLE_DCHECK(dcmd_api::SubTaskState_IsValid(value));
-  set_has_subtask_state();
-  subtask_state_ = value;
+inline const ::google::protobuf::RepeatedPtrField< ::dcmd_api::TaskInfo >&
+UiTaskWatchReply::child_tasks() const {
+  return child_tasks_;
 }
-
-// optional int32 success_subtask = 6;
-inline bool UiTaskWatchReply::has_success_subtask() const {
-  return (_has_bits_[0] & 0x00000020u) != 0;
-}
-inline void UiTaskWatchReply::set_has_success_subtask() {
-  _has_bits_[0] |= 0x00000020u;
-}
-inline void UiTaskWatchReply::clear_has_success_subtask() {
-  _has_bits_[0] &= ~0x00000020u;
-}
-inline void UiTaskWatchReply::clear_success_subtask() {
-  success_subtask_ = 0;
-  clear_has_success_subtask();
-}
-inline ::google::protobuf::int32 UiTaskWatchReply::success_subtask() const {
-  return success_subtask_;
-}
-inline void UiTaskWatchReply::set_success_subtask(::google::protobuf::int32 value) {
-  set_has_success_subtask();
-  success_subtask_ = value;
-}
-
-// optional int32 failed_subtask = 7;
-inline bool UiTaskWatchReply::has_failed_subtask() const {
-  return (_has_bits_[0] & 0x00000040u) != 0;
-}
-inline void UiTaskWatchReply::set_has_failed_subtask() {
-  _has_bits_[0] |= 0x00000040u;
-}
-inline void UiTaskWatchReply::clear_has_failed_subtask() {
-  _has_bits_[0] &= ~0x00000040u;
-}
-inline void UiTaskWatchReply::clear_failed_subtask() {
-  failed_subtask_ = 0;
-  clear_has_failed_subtask();
-}
-inline ::google::protobuf::int32 UiTaskWatchReply::failed_subtask() const {
-  return failed_subtask_;
-}
-inline void UiTaskWatchReply::set_failed_subtask(::google::protobuf::int32 value) {
-  set_has_failed_subtask();
-  failed_subtask_ = value;
-}
-
-// optional int32 doing_subtask = 8;
-inline bool UiTaskWatchReply::has_doing_subtask() const {
-  return (_has_bits_[0] & 0x00000080u) != 0;
-}
-inline void UiTaskWatchReply::set_has_doing_subtask() {
-  _has_bits_[0] |= 0x00000080u;
-}
-inline void UiTaskWatchReply::clear_has_doing_subtask() {
-  _has_bits_[0] &= ~0x00000080u;
-}
-inline void UiTaskWatchReply::clear_doing_subtask() {
-  doing_subtask_ = 0;
-  clear_has_doing_subtask();
-}
-inline ::google::protobuf::int32 UiTaskWatchReply::doing_subtask() const {
-  return doing_subtask_;
-}
-inline void UiTaskWatchReply::set_doing_subtask(::google::protobuf::int32 value) {
-  set_has_doing_subtask();
-  doing_subtask_ = value;
-}
-
-// optional int32 cancel_subtask = 9;
-inline bool UiTaskWatchReply::has_cancel_subtask() const {
-  return (_has_bits_[0] & 0x00000100u) != 0;
-}
-inline void UiTaskWatchReply::set_has_cancel_subtask() {
-  _has_bits_[0] |= 0x00000100u;
-}
-inline void UiTaskWatchReply::clear_has_cancel_subtask() {
-  _has_bits_[0] &= ~0x00000100u;
-}
-inline void UiTaskWatchReply::clear_cancel_subtask() {
-  cancel_subtask_ = 0;
-  clear_has_cancel_subtask();
-}
-inline ::google::protobuf::int32 UiTaskWatchReply::cancel_subtask() const {
-  return cancel_subtask_;
-}
-inline void UiTaskWatchReply::set_cancel_subtask(::google::protobuf::int32 value) {
-  set_has_cancel_subtask();
-  cancel_subtask_ = value;
-}
-
-// optional int32 undo_subtask = 10;
-inline bool UiTaskWatchReply::has_undo_subtask() const {
-  return (_has_bits_[0] & 0x00000200u) != 0;
-}
-inline void UiTaskWatchReply::set_has_undo_subtask() {
-  _has_bits_[0] |= 0x00000200u;
-}
-inline void UiTaskWatchReply::clear_has_undo_subtask() {
-  _has_bits_[0] &= ~0x00000200u;
-}
-inline void UiTaskWatchReply::clear_undo_subtask() {
-  undo_subtask_ = 0;
-  clear_has_undo_subtask();
-}
-inline ::google::protobuf::int32 UiTaskWatchReply::undo_subtask() const {
-  return undo_subtask_;
-}
-inline void UiTaskWatchReply::set_undo_subtask(::google::protobuf::int32 value) {
-  set_has_undo_subtask();
-  undo_subtask_ = value;
+inline ::google::protobuf::RepeatedPtrField< ::dcmd_api::TaskInfo >*
+UiTaskWatchReply::mutable_child_tasks() {
+  return &child_tasks_;
 }
 
 
@@ -13393,10 +13619,6 @@ inline const EnumDescriptor* GetEnumDescriptor< dcmd_api::AgentState>() {
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< dcmd_api::TaskState>() {
   return dcmd_api::TaskState_descriptor();
-}
-template <>
-inline const EnumDescriptor* GetEnumDescriptor< dcmd_api::AppPoolState>() {
-  return dcmd_api::AppPoolState_descriptor();
 }
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< dcmd_api::SubTaskState>() {
