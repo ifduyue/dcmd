@@ -112,8 +112,8 @@ class DcmdCenterConf{
     return err_msg_;
   };
   // 获取任务指令的文件名
-  inline static string& task_cmd_file(string const& task_type, string& cmd_file) {
-    cmd_file = string(kTaskTypeFilePrex) + task_type + kTaskTypeFileSuffix;
+  inline static string& task_cmd_file(string const& task_cmd, string& cmd_file) {
+    cmd_file = string(kTaskTypeFilePrex) + task_cmd + kTaskTypeFileSuffix;
     return cmd_file;
   }
   // 获取操作指令的文件名

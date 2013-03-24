@@ -80,31 +80,31 @@ class DcmdAgentApp : public CwxAppFramework{
     return file;
   }
   // 获取Task执行的结果文件
-  inline string& GetTaskResultFile(string const& app, string const& task_type,
+  inline string& GetTaskResultFile(string const& svr, string const& task_cmd,
     string& file) {
     GetTaskOutputPath(file);
-    file += string("/") + app + string("_") + task_type + string(".result");
+    file += string("/") + svr + string("_") + task_cmd + string(".result");
     return file;
   }
   // 获取Task的app的环境配置文件
-  inline string& GetTaskAppEnvFile(string const& app, string const& task_type,
+  inline string& GetTaskAppEnvFile(string const& svr, string const& task_cmd,
     string& env_file) {
     GetTaskScriptPath(env_file);
-    env_file += string("/") + app + string("_") + task_type + string(".env");
+    env_file += string("/") + svr + string("_") + task_cmd + string(".env");
     return env_file;
   }
   // 获取任务执行的script文件
-  inline string& GetTaskRunScriptFile(string const& app, string const& task_type,
+  inline string& GetTaskRunScriptFile(string const& svr, string const& task_cmd,
     string& file) {
     GetTaskScriptPath(file);
-    file += string("/dcmd_task_") + app + "_" + task_type + ".script";
+    file += string("/dcmd_task_") + svr + "_" + task_cmd + ".script";
     return file;        
   }
   // 获取任务执行的脚本shell文件
-  inline string& GetTaskRunScriptShellFile(string const& app, string const& task_type,
+  inline string& GetTaskRunScriptShellFile(string const& svr, string const& task_cmd,
     string& file)
   {
-    GetTaskRunScriptFile(app, task_type, file);
+    GetTaskRunScriptFile(svr, task_cmd, file);
     file += ".sh";
     return file;        
   }
@@ -152,19 +152,19 @@ class DcmdAgentApp : public CwxAppFramework{
   // 心跳检测
 	void CheckHeatbeat();
   // 检查app的task指令
-  void CheckAppTask(AgentAppObj* app_obj);
+  void CheckAppTask(AgentSvrObj* svr_obj);
   // 执行操作整理。true：已经完成；false：正在执行
   bool CheckOprCmd(AgentOprCmd* opr_cmd, bool is_cancel=false);
 	// 处理收到的消息。 -1：失败并关闭连接；0：成功
 	int RecvMsg(CwxMsgBlock*& msg);
   // 检查正在运行的subtask
-  void CheckRuningSubTask(AgentAppObj* app_obj, bool is_cancel=false);
+  void CheckRuningSubTask(AgentSvrObj* svr_obj, bool is_cancel=false);
   // 处理控制指令
-  void ExecCtrlTaskCmd(AgentAppObj* app_obj);
+  void ExecCtrlTaskCmd(AgentSvrObj* svr_obj);
   // 处理控制指令
-  void ExecCtrlTaskCmdForCancelAll(AgentAppObj* app_obj, AgentTaskCmd* cmd);
+  void ExecCtrlTaskCmdForCancelAll(AgentSvrObj* svr_obj, AgentTaskCmd* cmd);
   // 处理控制指令
-  void ExecCtrlTaskCmdForCancelSubTask(AgentAppObj* app_obj, AgentTaskCmd* cmd);
+  void ExecCtrlTaskCmdForCancelSubTask(AgentSvrObj* svr_obj, AgentTaskCmd* cmd);
   // 准备subtask命令运行的环境
   bool PrepareSubtaskRunEnv(AgentTaskCmd* cmd, string& err_msg);
   // 基于subtask形成task result
@@ -199,16 +199,16 @@ class DcmdAgentApp : public CwxAppFramework{
   // 处理收到的获取运行操作指令。 -1：失败并关闭连接；0：成功
   int GetRunOprRecieved(CwxMsgBlock*& msg, AgentCenter* center);
   // 检查service当前命令的进度信息
-  void CheckSubTaskProcess(AgentAppObj* app_obj);
+  void CheckSubTaskProcess(AgentSvrObj* svr_obj);
   // 获取app任务执行的输出文件内容
   void LoadSubTaskResult(string const& app_name,
-    string const& task_type,
+    string const& task_cmd,
     string& out_process,
     bool& is_success,
     string& err_msg,
     bool is_process_only);
   // 获取一个service的运行任务信息
-  void DumpRuningAppSubTask(AgentAppObj* app_obj, string& dump);
+  void DumpRuningAppSubTask(AgentSvrObj* svr_obj, string& dump);
   // 获取package的buf，返回NULL表示失败
   inline char* GetBuf(uint32_t size){
     if (data_buf_len_ < size){
@@ -225,15 +225,15 @@ class DcmdAgentApp : public CwxAppFramework{
   // 当前的master控制中心
   AgentCenter*                                master_;
   // 配置文件
-  DcmdAgentConfig                            config_;
-  // app的指令，key为app name
-  map<string, AgentAppObj*>              app_map_;
+  DcmdAgentConfig                             config_;
+  // svr的指令，key为svr name
+  map<string, AgentSvrObj*>                   svr_map_;
   // 等待回复的命令结果，key为cmd_id
-  map<uint64_t, AgentTaskResult*>            wait_reply_result_map_;
+  map<uint64_t, AgentTaskResult*>             wait_reply_result_map_;
   // 等待发送的处理结果，此是由于与center失去联系造成的,key为cmd_id。
-  map<uint64_t, AgentTaskResult*>            wait_send_result_map_;
+  map<uint64_t, AgentTaskResult*>             wait_send_result_map_;
   // 刚刚收到的subtask命令
-  list<AgentTaskCmd*>                        recieved_subtasks_;
+  list<AgentTaskCmd*>                         recieved_subtasks_;
   // 所有待处理的subtask指令列表
   map<uint64_t, AgentTaskCmd*>               subtask_map_;
   // 操作命令的map。

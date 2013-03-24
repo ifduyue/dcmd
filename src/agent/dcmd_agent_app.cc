@@ -180,6 +180,8 @@ int DcmdAgentApp::initRunEnv(){
       center->host_name_ += err_2k_;
       center->host_port_ = iter->getPort();
       center->last_heatbeat_time_ = 0;
+      center->opr_queue_threshold_ = kDefOprOverflowThreshold;
+      center->opr_overflow_threshold_ = kDefIpTableRefreshSecond;
       center->conn_id_ = ret;
       center->host_id_ = host_id;
       center->is_connected_ = false;
@@ -357,12 +359,12 @@ void DcmdAgentApp::Reset(){
   master_ = NULL;
 
   {// 释放app的task的map
-    map<string, AgentAppObj*>::iterator iter = app_map_.begin();
-    while(iter != app_map_.end()){
+    map<string, AgentSvrObj*>::iterator iter = svr_map_.begin();
+    while(iter != svr_map_.end()){
       delete iter->second;
       iter++;
     }
-    app_map_.clear();
+    svr_map_.clear();
   }
 
   {// 释放等待回复的task执行结果
@@ -463,44 +465,43 @@ void DcmdAgentApp::CheckTaskAndOprCmd(){
   // 检查新收到的新指令
   if (recieved_subtasks_.begin() != recieved_subtasks_.end()){
     list<AgentTaskCmd*>::iterator iter = recieved_subtasks_.begin();
-    AgentAppObj* app_obj = NULL;
-    map<string, AgentAppObj*>::iterator app_iter;
+    AgentSvrObj* svr_obj = NULL;
+    map<string, AgentSvrObj*>::iterator app_iter;
     while(iter != recieved_subtasks_.end()){
       //find app
-      app_iter = app_map_.find((*iter)->cmd_.app_name());
-      if (app_iter != app_map_.end()){
-        app_obj = app_iter->second;
+      app_iter = svr_map_.find((*iter)->cmd_.app_name());
+      if (app_iter != svr_map_.end()){
+        svr_obj = app_iter->second;
       }else{
-        app_obj = new AgentAppObj();
-        app_obj->app_name_ = (*iter)->cmd_.app_name();
-        app_obj->processor_ = NULL;
-        app_obj->running_cmd_ = NULL;
-        app_obj->running_cmd_process_.erase();
-        app_map_[app_obj->app_name_] = app_obj;
+        svr_obj = new AgentSvrObj();
+        svr_obj->app_name_ = (*iter)->cmd_.app_name();
+        svr_obj->processor_ = NULL;
+        svr_obj->running_cmd_ = NULL;
+        svr_map_[svr_obj->app_name_] = svr_obj;
       }
-      app_obj->cmds_.push_back(*iter);
+      svr_obj->cmds_.push_back(*iter);
       ++iter;
     }
     recieved_subtasks_.clear();
   }
 
   // 检查app的task的运行状况
-  if (app_map_.size()) {
-    map<string, AgentAppObj*>::iterator iter = app_map_.begin();
-    while(iter != app_map_.end()){
+  if (svr_map_.size()) {
+    map<string, AgentSvrObj*>::iterator iter = svr_map_.begin();
+    while(iter != svr_map_.end()){
       CheckAppTask(iter->second);
       ++iter;
     }
     // 删除没有任务的app
-    iter = app_map_.begin();
-    while(iter != app_map_.end()){
+    iter = svr_map_.begin();
+    while(iter != svr_map_.end()){
       if ((iter->second->cmds_.begin() == iter->second->cmds_.end())
         && !iter->second->running_cmd_)
       {
         CWX_ASSERT(!iter->second->processor_);
         delete iter->second;
-        app_map_.erase(iter);
-        iter = app_map_.begin();
+        svr_map_.erase(iter);
+        iter = svr_map_.begin();
         continue;
       }
       iter++;
@@ -618,22 +619,22 @@ void DcmdAgentApp::CheckHeatbeat(){
   }
 }
 
-void DcmdAgentApp::CheckAppTask(AgentAppObj* app_obj) {
+void DcmdAgentApp::CheckAppTask(AgentSvrObj* svr_obj) {
   AgentTaskResult* result = NULL;
   // 检查当前的进程
-  if (app_obj->processor_) CheckRuningSubTask(app_obj, false);
+  if (svr_obj->processor_) CheckRuningSubTask(svr_obj, false);
   // 首先处理控制指令
-  ExecCtrlTaskCmd(app_obj);
+  ExecCtrlTaskCmd(svr_obj);
   // 检测是否要fork进程执行subtask
-  if (!app_obj->processor_ && (app_obj->cmds_.begin() != app_obj->cmds_.end())) {
-    CWX_ASSERT(!app_obj->running_cmd_);
+  if (!svr_obj->processor_ && (svr_obj->cmds_.begin() != svr_obj->cmds_.end())) {
+    CWX_ASSERT(!svr_obj->running_cmd_);
     string err_msg;
-    AgentTaskCmd* cmd = *app_obj->cmds_.begin();
-    app_obj->cmds_.pop_front();
+    AgentTaskCmd* cmd = *svr_obj->cmds_.begin();
+    svr_obj->cmds_.pop_front();
     CWX_INFO(("Execute subtask for app:%s, task-type=%s,"\
       "task_id=%s  subtask=%s cmd-id=%s",
-      app_obj->app_name_.c_str(),
-      cmd->cmd_.task_type().c_str(),
+      svr_obj->app_name_.c_str(),
+      cmd->cmd_.task_cmd().c_str(),
       cmd->cmd_.task_id().c_str(),
       cmd->cmd_.subtask_id().c_str(),
       cmd->cmd_.cmd().c_str()));
@@ -649,20 +650,19 @@ void DcmdAgentApp::CheckAppTask(AgentAppObj* app_obj) {
       wait_send_result_map_[result->cmd_id_] = result;
       return;
     }
-    if (!ExecSubTaskCmd(cmd, err_msg, app_obj->processor_)) {
+    if (!ExecSubTaskCmd(cmd, err_msg, svr_obj->processor_)) {
       CWX_ERROR(("Failure to exec subtask: task_id=%s  subtask=%s cmd-id=%s. err=%s",
         cmd->cmd_.task_id().c_str(),
         cmd->cmd_.subtask_id().c_str(),
         cmd->cmd_.cmd().c_str(),
         err_msg.c_str()));
-      app_obj->processor_ = NULL;
+      svr_obj->processor_ = NULL;
       result = new AgentTaskResult();
       FillTaskResult(*cmd, *result, "", false, err_msg);
       wait_send_result_map_[result->cmd_id_] = result;
       return;
     }
-    app_obj->running_cmd_ = cmd;
-    app_obj->running_cmd_process_.erase();
+    svr_obj->running_cmd_ = cmd;
   }
 }
 
@@ -797,44 +797,44 @@ int DcmdAgentApp::RecvMsg(CwxMsgBlock*& msg){
   return -1;
 }
 
-void DcmdAgentApp::CheckRuningSubTask(AgentAppObj* app_obj, bool is_cancel){
+void DcmdAgentApp::CheckRuningSubTask(AgentSvrObj* svr_obj, bool is_cancel){
   AgentTaskResult* result = NULL;
   bool is_kill = false;
-  CWX_ASSERT(0 != app_obj->processor_);
-  CWX_ASSERT(app_obj->running_cmd_);
+  CWX_ASSERT(0 != svr_obj->processor_);
+  CWX_ASSERT(svr_obj->running_cmd_);
   int ret = 0;
   string err_msg;
-  ret =app_obj->processor_->TryWait(err_msg);
+  ret =svr_obj->processor_->TryWait(err_msg);
   if (0 == ret){// 进程还在运行
     if (!is_cancel){
-      if (master_ && app_obj->running_cmd_->cmd_.output_process()){
+      if (master_ && svr_obj->running_cmd_->cmd_.output_process()){
         // 如果需要检查进度
-        CheckSubTaskProcess(app_obj);
+        CheckSubTaskProcess(svr_obj);
       }
       return;
     }
     // 否则kill进程
-    app_obj->processor_->Kill(true);
+    svr_obj->processor_->Kill(true);
     is_kill = true;
   }
   if (-1 == ret){// 进程不存在
     CWX_INFO(("app[%s]'s task[%s] for type[%s] doesn't exist, proc=%d.", 
-      app_obj->app_name_.c_str(),
-      app_obj->running_cmd_->cmd_.task_id().c_str(),
-      app_obj->running_cmd_->cmd_.task_type().c_str(),
-      app_obj->processor_->pid()));
+      svr_obj->app_name_.c_str(),
+      svr_obj->running_cmd_->cmd_.task_id().c_str(),
+      svr_obj->running_cmd_->cmd_.task_cmd().c_str(),
+      svr_obj->processor_->pid()));
   }else{// it's finish
     CWX_INFO(("app[%s]'s task[%d] for type[%s] is finished.", 
-      app_obj->app_name_.c_str(),
-      app_obj->running_cmd_->cmd_.task_id().c_str(),
-      app_obj->running_cmd_->cmd_.task_type().c_str()));
+      svr_obj->app_name_.c_str(),
+      svr_obj->running_cmd_->cmd_.task_id().c_str(),
+      svr_obj->running_cmd_->cmd_.task_cmd().c_str()));
   }
   // 处理结果
   string out_process;
   bool is_success = true;
   if (!is_kill){
-    LoadSubTaskResult(app_obj->app_name_,
-      app_obj->running_cmd_->cmd_.task_type(),
+    LoadSubTaskResult(svr_obj->app_name_,
+      svr_obj->running_cmd_->cmd_.task_cmd(),
       out_process,
       is_success,
       err_msg,
@@ -845,53 +845,53 @@ void DcmdAgentApp::CheckRuningSubTask(AgentAppObj* app_obj, bool is_cancel){
     out_process = "";
   }
   result = new AgentTaskResult();
-  FillTaskResult(*app_obj->running_cmd_, *result, out_process, is_success, err_msg);
+  FillTaskResult(*svr_obj->running_cmd_, *result, out_process, is_success, err_msg);
   CWX_INFO(("App[%s]'s cmd finished, task-type=%s task_id=%s subtask_id=%s, cmd_id=%s, state=%s, err=%s",
-    app_obj->app_name_.c_str(),
-    app_obj->running_cmd_->cmd_.task_type().c_str(),
-    app_obj->running_cmd_->cmd_.task_id().c_str(),
-    app_obj->running_cmd_->cmd_.subtask_id().c_str(),
-    app_obj->running_cmd_->cmd_.cmd().c_str(),
+    svr_obj->app_name_.c_str(),
+    svr_obj->running_cmd_->cmd_.task_cmd().c_str(),
+    svr_obj->running_cmd_->cmd_.task_id().c_str(),
+    svr_obj->running_cmd_->cmd_.subtask_id().c_str(),
+    svr_obj->running_cmd_->cmd_.cmd().c_str(),
     is_success?"success":"fail",
     is_success?"":err_msg.c_str()));
   wait_send_result_map_[result->cmd_id_] = result;
-  app_obj->processor_ = NULL;
-  app_obj->running_cmd_ = NULL;
+  svr_obj->processor_ = NULL;
+  svr_obj->running_cmd_ = NULL;
 }
 
-void DcmdAgentApp::ExecCtrlTaskCmdForCancelSubTask(AgentAppObj* app_obj,
+void DcmdAgentApp::ExecCtrlTaskCmdForCancelSubTask(AgentSvrObj* svr_obj,
   AgentTaskCmd* cmd)
 {
   AgentTaskResult* result = NULL;
-  CWX_ASSERT(cmd->cmd_.task_type() == kDcmdSysCmdCancel);
+  CWX_ASSERT(cmd->cmd_.task_cmd() == kDcmdSysCmdCancel);
   CWX_INFO(("Exec cancel command for all, app=%s  cmd_id=%s  subtask_id=%s",
-    app_obj->app_name_.c_str(),
+    svr_obj->app_name_.c_str(),
     cmd->cmd_.cmd().c_str(),
     cmd->cmd_.subtask_id().length()?cmd->cmd_.subtask_id().c_str():""));
   bool bCanceled = false;
   // 检查是否需要cancel当前正在执行的任务
-  if (app_obj->running_cmd_) {
+  if (svr_obj->running_cmd_) {
     CWX_INFO(("Cancel running subtask, app=%s  cmd_id=%s  sub_task=%s",
-      app_obj->app_name_.c_str(),
-      app_obj->running_cmd_->cmd_.cmd().c_str(),
-      app_obj->running_cmd_->cmd_.subtask_id().c_str()));
-    CheckRuningSubTask(app_obj, true);
+      svr_obj->app_name_.c_str(),
+      svr_obj->running_cmd_->cmd_.cmd().c_str(),
+      svr_obj->running_cmd_->cmd_.subtask_id().c_str()));
+    CheckRuningSubTask(svr_obj, true);
     bCanceled = true;
   }
   // 将cmds中cancel之前的任务全部cancel掉
   if (!bCanceled) {
-    list<AgentTaskCmd*>::iterator iter_cancel = app_obj->cmds_.begin();
-    while(iter_cancel != app_obj->cmds_.end()){
+    list<AgentTaskCmd*>::iterator iter_cancel = svr_obj->cmds_.begin();
+    while(iter_cancel != svr_obj->cmds_.end()){
       if((*iter_cancel)->cmd_.cmd() !=  cmd->cmd_.cmd()) {
         if ((*iter_cancel)->cmd_.subtask_id() ==  cmd->cmd_.subtask_id()) {
           CWX_INFO(("Cancel subtask, app=%s  cmd_id=%s  sub_task=%s",
-            app_obj->app_name_.c_str(),
+            svr_obj->app_name_.c_str(),
             (*iter_cancel)->cmd_.cmd().c_str(),
             (*iter_cancel)->cmd_.subtask_id().c_str()));
           result = new AgentTaskResult();
           FillTaskResult(*(*iter_cancel), *result, "", false, "Subtask is canceled.");
           wait_send_result_map_[result->cmd_id_] = result;
-          app_obj->cmds_.erase(iter_cancel);
+          svr_obj->cmds_.erase(iter_cancel);
           break;
         }
       }else{
@@ -900,97 +900,97 @@ void DcmdAgentApp::ExecCtrlTaskCmdForCancelSubTask(AgentAppObj* app_obj,
     }
   }
   // 处理cancel指令
-  list<AgentTaskCmd*>::iterator iter = app_obj->cmds_.begin();
-  while(iter != app_obj->cmds_.end()){
+  list<AgentTaskCmd*>::iterator iter = svr_obj->cmds_.begin();
+  while(iter != svr_obj->cmds_.end()){
     if ((*iter)->cmd_id_ == cmd->cmd_id_){
       break;
     }
     iter++;
   }
-  CWX_ASSERT(iter != app_obj->cmds_.end());
+  CWX_ASSERT(iter != svr_obj->cmds_.end());
   result = new AgentTaskResult();
   FillTaskResult(*cmd, *result, "0", true, "");
   wait_send_result_map_[result->cmd_id_] = result;
   // 将cancel指令从队里中删除
-  app_obj->cmds_.erase(iter);
+  svr_obj->cmds_.erase(iter);
 }
 
-void DcmdAgentApp::ExecCtrlTaskCmdForCancelAll(AgentAppObj* app_obj,
+void DcmdAgentApp::ExecCtrlTaskCmdForCancelAll(AgentSvrObj* svr_obj,
   AgentTaskCmd* cmd)
 {
   AgentTaskResult* result = NULL;
-  CWX_ASSERT(cmd->cmd_.task_type() == kDcmdSysCmdCancel);
+  CWX_ASSERT(cmd->cmd_.task_cmd() == kDcmdSysCmdCancel);
   CWX_INFO(("Exec cancel command, app=%s  cmd_id=%s  subtask_id=%s",
-    app_obj->app_name_.c_str(),
+    svr_obj->app_name_.c_str(),
     cmd->cmd_.cmd().c_str(),
     cmd->cmd_.subtask_id().length()?cmd->cmd_.subtask_id().c_str():""));
   // 检查是否需要cancel当前正在执行的任务
-  if (app_obj->running_cmd_) {
+  if (svr_obj->running_cmd_) {
     CWX_INFO(("Cancel running subtask, app=%s  cmd_id=%s  sub_task=%s",
-      app_obj->app_name_.c_str(),
-      app_obj->running_cmd_->cmd_.cmd().c_str(),
-      app_obj->running_cmd_->cmd_.subtask_id().c_str()));
-    CheckRuningSubTask(app_obj, true);
+      svr_obj->app_name_.c_str(),
+      svr_obj->running_cmd_->cmd_.cmd().c_str(),
+      svr_obj->running_cmd_->cmd_.subtask_id().c_str()));
+    CheckRuningSubTask(svr_obj, true);
   }
   // 将cmds中cancel之前的任务全部cancel掉
   {
-    list<AgentTaskCmd*>::iterator iter_cancel = app_obj->cmds_.begin();
-    while(iter_cancel != app_obj->cmds_.end()){
+    list<AgentTaskCmd*>::iterator iter_cancel = svr_obj->cmds_.begin();
+    while(iter_cancel != svr_obj->cmds_.end()){
       if((*iter_cancel)->cmd_.cmd() !=  cmd->cmd_.cmd()) {
         CWX_INFO(("Cancel subtask, app=%s  cmd_id=%s  sub_task=%s",
-          app_obj->app_name_.c_str(),
+          svr_obj->app_name_.c_str(),
           (*iter_cancel)->cmd_.cmd().c_str(),
           (*iter_cancel)->cmd_.subtask_id().c_str()));
         result = new AgentTaskResult();
         FillTaskResult(*(*iter_cancel), *result, "", false, "Subtask is canceled.");
         wait_send_result_map_[result->cmd_id_] = result;
-        app_obj->cmds_.erase(iter_cancel);
-        iter_cancel = app_obj->cmds_.begin(); // 重新从begin开始
+        svr_obj->cmds_.erase(iter_cancel);
+        iter_cancel = svr_obj->cmds_.begin(); // 重新从begin开始
       }else{
         break; // 到了cancel指令自身
       }
     }
   }
   // 处理cancel指令
-  list<AgentTaskCmd*>::iterator iter = app_obj->cmds_.begin();
-  while(iter != app_obj->cmds_.end()){
+  list<AgentTaskCmd*>::iterator iter = svr_obj->cmds_.begin();
+  while(iter != svr_obj->cmds_.end()){
     if ((*iter)->cmd_id_ == cmd->cmd_id_){
       break;
     }
     iter++;
   }
-  CWX_ASSERT(iter != app_obj->cmds_.end());
+  CWX_ASSERT(iter != svr_obj->cmds_.end());
   result = new AgentTaskResult();
   FillTaskResult(*cmd, *result, "", true, "");
   wait_send_result_map_[result->cmd_id_] = result;
   // 将cancel指令从队里中删除
-  app_obj->cmds_.erase(iter);
+  svr_obj->cmds_.erase(iter);
 }
 
 // 处理控制指令
-void DcmdAgentApp::ExecCtrlTaskCmd(AgentAppObj* app_obj) {
+void DcmdAgentApp::ExecCtrlTaskCmd(AgentSvrObj* svr_obj) {
   AgentTaskResult* result = NULL;
-  list<AgentTaskCmd*>::iterator iter = app_obj->cmds_.begin();
-  while(iter != app_obj->cmds_.end()){
+  list<AgentTaskCmd*>::iterator iter = svr_obj->cmds_.begin();
+  while(iter != svr_obj->cmds_.end()){
     if ((*iter)->cmd_.ctrl()){
-      if ((*iter)->cmd_.task_type() == kDcmdSysCmdCancel){
+      if ((*iter)->cmd_.task_cmd() == kDcmdSysCmdCancel){
         if ((*iter)->cmd_.subtask_id().length()) {
-          ExecCtrlTaskCmdForCancelSubTask(app_obj, *iter);
+          ExecCtrlTaskCmdForCancelSubTask(svr_obj, *iter);
         } else {
-          ExecCtrlTaskCmdForCancelAll(app_obj, *iter);
+          ExecCtrlTaskCmdForCancelAll(svr_obj, *iter);
         }
       }else{// 未知的命令
         CWX_INFO(("Unknown control command , app=%s  cmd_id=%s  sub_task=%s, type=%s",
-          app_obj->app_name_.c_str(),
+          svr_obj->app_name_.c_str(),
           (*iter)->cmd_.cmd().c_str(),
           (*iter)->cmd_.subtask_id().c_str(),
-          (*iter)->cmd_.task_type().c_str()));
+          (*iter)->cmd_.task_cmd().c_str()));
         result = new AgentTaskResult();
         FillTaskResult(**iter, *result, "", false, "Unknown ctrl type");
         wait_send_result_map_[result->cmd_id_] = result;
-        app_obj->cmds_.erase(iter);
+        svr_obj->cmds_.erase(iter);
       }
-      iter = app_obj->cmds_.begin();
+      iter = svr_obj->cmds_.begin();
       continue;
     }
     iter++;
@@ -1005,15 +1005,15 @@ bool DcmdAgentApp::PrepareSubtaskRunEnv(AgentTaskCmd* cmd, string& err_msg) {
   string env_file;
   string script_file;
   string script_sh_file;
-  GetTaskResultFile(cmd->cmd_.app_name(), cmd->cmd_.task_type(), result_file);
+  GetTaskResultFile(cmd->cmd_.app_name(), cmd->cmd_.task_cmd(), result_file);
   if (CwxFile::isFile(result_file.c_str())) CwxFile::rmFile(result_file.c_str());
   GetTaskOutputFile(output_file, cmd->cmd_.subtask_id());
   if (CwxFile::isFile(output_file.c_str())) CwxFile::rmFile(output_file.c_str());
-  GetTaskAppEnvFile(cmd->cmd_.app_name(), cmd->cmd_.task_type(), env_file);
+  GetTaskAppEnvFile(cmd->cmd_.app_name(), cmd->cmd_.task_cmd(), env_file);
   if (CwxFile::isFile(env_file.c_str())) CwxFile::rmFile(env_file.c_str());
-  GetTaskRunScriptFile(cmd->cmd_.app_name(), cmd->cmd_.task_type(), script_file);
+  GetTaskRunScriptFile(cmd->cmd_.app_name(), cmd->cmd_.task_cmd(), script_file);
   if (CwxFile::isFile(script_file.c_str())) CwxFile::rmFile(script_file.c_str());
-  GetTaskRunScriptShellFile(cmd->cmd_.app_name(), cmd->cmd_.task_type(), script_sh_file);
+  GetTaskRunScriptShellFile(cmd->cmd_.app_name(), cmd->cmd_.task_cmd(), script_sh_file);
   if (CwxFile::isFile(script_sh_file.c_str())) CwxFile::rmFile(script_sh_file.c_str());
 
   // 准备环境文件
@@ -1209,7 +1209,7 @@ void DcmdAgentApp::FillTaskResult(AgentTaskCmd const& cmd, AgentTaskResult& resu
 bool DcmdAgentApp::ExecSubTaskCmd(AgentTaskCmd* cmd, string& err_msg,
   DcmdProcess*& process) {
   string script_file;
-  GetTaskRunScriptFile(cmd->cmd_.app_name(), cmd->cmd_.task_type(), script_file);
+  GetTaskRunScriptFile(cmd->cmd_.app_name(), cmd->cmd_.task_cmd(), script_file);
   process = new DcmdProcess(script_file);
   if (!process->Run(cmd->cmd_.has_app_user() && cmd->cmd_.app_user().length()?cmd->cmd_.app_user().c_str():NULL,
     NULL,
@@ -1714,14 +1714,14 @@ int DcmdAgentApp::GetRunTaskRecieved(CwxMsgBlock*& msg, AgentCenter* center) {
   dcmd_api::SubTaskInfo* subtask = NULL;
 
   if (recv.app_name().length()){
-    map<string, AgentAppObj*>::iterator iter = app_map_.find(recv.app_name());
-    if (iter != app_map_.end()){
+    map<string, AgentSvrObj*>::iterator iter = svr_map_.find(recv.app_name());
+    if (iter != svr_map_.end()){
       list<AgentTaskCmd*>::iterator subtask_iter;
       if (iter->second->running_cmd_) {
         subtask = reply.add_result();
         if (subtask) {
           subtask->set_app_name(iter->first);
-          subtask->set_task_type(iter->second->running_cmd_->cmd_.task_type());
+          subtask->set_task_type(iter->second->running_cmd_->cmd_.task_cmd());
           subtask->set_task_id(iter->second->running_cmd_->cmd_.task_id());
           subtask->set_subtask_id(iter->second->running_cmd_->cmd_.subtask_id());
           subtask->set_cmd_id(iter->second->running_cmd_->cmd_.cmd());
@@ -1732,7 +1732,7 @@ int DcmdAgentApp::GetRunTaskRecieved(CwxMsgBlock*& msg, AgentCenter* center) {
         subtask = reply.add_result();
         if (subtask) {
           subtask->set_app_name(iter->first);
-          subtask->set_task_type((*subtask_iter)->cmd_.task_type());
+          subtask->set_task_type((*subtask_iter)->cmd_.task_cmd());
           subtask->set_task_id((*subtask_iter)->cmd_.task_id());
           subtask->set_subtask_id((*subtask_iter)->cmd_.subtask_id());
           subtask->set_cmd_id((*subtask_iter)->cmd_.cmd());
@@ -1741,14 +1741,14 @@ int DcmdAgentApp::GetRunTaskRecieved(CwxMsgBlock*& msg, AgentCenter* center) {
       }
     }
   }else{
-    map<string, AgentAppObj*>::iterator iter = app_map_.begin();
+    map<string, AgentSvrObj*>::iterator iter = svr_map_.begin();
     list<AgentTaskCmd*>::iterator subtask_iter;
-    while(iter != app_map_.end()){
+    while(iter != svr_map_.end()){
       if (iter->second->running_cmd_) {
         subtask = reply.add_result();
         if (subtask) {
           subtask->set_app_name(iter->first);
-          subtask->set_task_type(iter->second->running_cmd_->cmd_.task_type());
+          subtask->set_task_type(iter->second->running_cmd_->cmd_.task_cmd());
           subtask->set_task_id(iter->second->running_cmd_->cmd_.task_id());
           subtask->set_subtask_id(iter->second->running_cmd_->cmd_.subtask_id());
           subtask->set_cmd_id(iter->second->running_cmd_->cmd_.cmd());
@@ -1759,7 +1759,7 @@ int DcmdAgentApp::GetRunTaskRecieved(CwxMsgBlock*& msg, AgentCenter* center) {
         subtask = reply.add_result();
         if (subtask) {
           subtask->set_app_name(iter->first);
-          subtask->set_task_type((*subtask_iter)->cmd_.task_type());
+          subtask->set_task_type((*subtask_iter)->cmd_.task_cmd());
           subtask->set_task_id((*subtask_iter)->cmd_.task_id());
           subtask->set_subtask_id((*subtask_iter)->cmd_.subtask_id());
           subtask->set_cmd_id((*subtask_iter)->cmd_.cmd());
@@ -1857,26 +1857,26 @@ int DcmdAgentApp::GetRunOprRecieved(CwxMsgBlock*& msg, AgentCenter* center) {
   return 0;
 }
 
-void DcmdAgentApp::CheckSubTaskProcess(AgentAppObj* app_obj) {
+void DcmdAgentApp::CheckSubTaskProcess(AgentSvrObj* svr_obj) {
   bool is_success = false;
   string out_process;
   string err_msg;
   if (!master_) return ;
-  if (app_obj->running_cmd_->last_check_process_time_ + 1 < (uint32_t)time(NULL)) return;
+  if (svr_obj->running_cmd_->last_check_process_time_ + 1 < (uint32_t)time(NULL)) return;
   // 获取进度信息
-  LoadSubTaskResult(app_obj->app_name_,
-    app_obj->running_cmd_->cmd_.task_type(),
+  LoadSubTaskResult(svr_obj->app_name_,
+    svr_obj->running_cmd_->cmd_.task_cmd(),
     out_process,
     is_success,
     err_msg,
     true);
-  if (!out_process.length() || (out_process == app_obj->running_cmd_->last_check_process_))
+  if (!out_process.length() || (out_process == svr_obj->running_cmd_->last_check_process_))
     return;
   // report process
   CwxMsgBlock* block = NULL;
   dcmd_api::AgentSubTaskProcess reply;
-  reply.set_task_id(app_obj->running_cmd_->cmd_.task_id());
-  reply.set_subtask_id(app_obj->running_cmd_->cmd_.subtask_id());
+  reply.set_task_id(svr_obj->running_cmd_->cmd_.task_id());
+  reply.set_subtask_id(svr_obj->running_cmd_->cmd_.subtask_id());
   reply.set_process(out_process);
   if (!reply.SerializeToString(&proto_str_)) {
     CWX_ERROR(("Failure to pack process reply message."));
@@ -1901,12 +1901,12 @@ void DcmdAgentApp::CheckSubTaskProcess(AgentAppObj* app_obj) {
     return;
   }
   // 修改app的process
-  app_obj->running_cmd_->last_check_process_ = out_process;
-  app_obj->running_cmd_->last_check_process_time_ = time(NULL);
+  svr_obj->running_cmd_->last_check_process_ = out_process;
+  svr_obj->running_cmd_->last_check_process_time_ = time(NULL);
 }
 
 void DcmdAgentApp::LoadSubTaskResult(string const& app_name,
-  string const& task_type,
+  string const& task_cmd,
   string& out_process,
   bool& is_success,
   string& err_msg,
@@ -1918,7 +1918,7 @@ void DcmdAgentApp::LoadSubTaskResult(string const& app_name,
   is_success = false;
   err_msg.erase();
   // 获取文件
-  GetTaskResultFile(app_name, task_type, out_filename);
+  GetTaskResultFile(app_name, task_cmd, out_filename);
   if (!CwxFile::isFile(out_filename.c_str())){
     err_msg = "No subtask-result file:";
     err_msg += out_filename;

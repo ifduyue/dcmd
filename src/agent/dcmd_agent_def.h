@@ -28,6 +28,10 @@ class AgentCenter{
   uint32_t        last_heatbeat_time_;
   // center的心跳间隔
   uint32_t        heatbeat_internal_;
+  // queue的opr的threshold
+  uint32_t        opr_queue_threshold_;
+  // overflow的opr的数量
+  uint32_t        opr_overflow_threshold_;
   // center的通信数据包大小
   uint32_t        max_package_size_;
   // 是否与center建立了连接
@@ -93,7 +97,7 @@ class AgentOprCmd {
    // 操作当前执行的进程
    DcmdProcess*                 processor_;
    // 发送操作的控制中心对象
-   AgentCenter*                  center_;
+   AgentCenter*                 center_;
    // 操作的id
    uint64_t                     opr_id_;
    // agent自增操作id
@@ -101,26 +105,25 @@ class AgentOprCmd {
    // 运行时间
    uint32_t                     begin_time_;
 };
-class AgentAppObj{
+
+class AgentSvrObj{
  public:
-  AgentAppObj(){
+  AgentSvrObj(){
     processor_ = NULL;
     running_cmd_ = NULL;
   }
-  ~AgentAppObj() {
+  ~AgentSvrObj() {
     if (processor_) delete processor_;
   }
  public:
-  // 应用的名字
-  string			                      app_name_;
-  // 应用的命令
+  // service的名字
+  string			                      svr_name_;
+  // service的命令
   list<AgentTaskCmd*>	              cmds_;
-  // 应用当前执行的进程
+  // service当前执行的进程
   DcmdProcess*                      processor_;
   // 当前正在运行的任务名字
   AgentTaskCmd*                     running_cmd_;
-  // 上次此app当前任务的process
-  string                            running_cmd_process_;
 };
 
 }  // dcmd

@@ -25,8 +25,19 @@ const uint32_t kDefOprCmdTimeoutSecond = 30;
 // 操作指令的最小超时时间
 const uint32_t kMinOprCmdTimeoutSecond = 2;
 // 操作指令最大的超时时间
-const uint32_t kMaxOprCmdTimeoutSecond = 3600;  
-
+const uint32_t kMaxOprCmdTimeoutSecond = 3600;
+// opr开始排队的缺省门限
+const uint32_t kDefOprQueueThreshold = 20;
+// opr开始排队的门限最小值
+const uint32_t kMinOprQueueThreshold = 1;
+// opr开始排队的门限最大值
+const uint32_t kMaxOprQueueThreshold = 100;
+// opr overflow的缺省门限
+const uint32_t kDefOprOverflowThreshold = 100;
+// opr overflow的最小门限
+const uint32_t kMinOprOverflowThreshold = 1;
+// opr overflow的最大门限
+const uint32_t KMaxOprOverflowThreshold = 1000;
 // 缺省的设备ip表的刷新间隔
 const uint32_t kDefIpTableRefreshSecond = 300;
 // 最大的设备ip表的刷新间隔
@@ -124,7 +135,7 @@ const char* const kAgentTaskResultKeyProcess = "process";
 const char* const kAgentTaskResultKeyErr = "err";
 // agent的subtask结果的state的success
 const char* const kAgentTaskResultKeyStateSuccess = "success";
-// agent的cancel cmd的task_type的名字
+// agent的cancel cmd的task_cmd的名字
 const char* const kDcmdSysCmdCancel = "cancel";
 }  // dcmd
 #endif

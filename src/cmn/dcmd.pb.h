@@ -4453,16 +4453,16 @@ class UiTaskScriptInfo : public ::google::protobuf::Message {
   
   // accessors -------------------------------------------------------
   
-  // required string task_type = 1;
-  inline bool has_task_type() const;
-  inline void clear_task_type();
-  static const int kTaskTypeFieldNumber = 1;
-  inline const ::std::string& task_type() const;
-  inline void set_task_type(const ::std::string& value);
-  inline void set_task_type(const char* value);
-  inline void set_task_type(const char* value, size_t size);
-  inline ::std::string* mutable_task_type();
-  inline ::std::string* release_task_type();
+  // required string task_cmd = 1;
+  inline bool has_task_cmd() const;
+  inline void clear_task_cmd();
+  static const int kTaskCmdFieldNumber = 1;
+  inline const ::std::string& task_cmd() const;
+  inline void set_task_cmd(const ::std::string& value);
+  inline void set_task_cmd(const char* value);
+  inline void set_task_cmd(const char* value, size_t size);
+  inline ::std::string* mutable_task_cmd();
+  inline ::std::string* release_task_cmd();
   
   // required string user = 2;
   inline bool has_user() const;
@@ -4488,8 +4488,8 @@ class UiTaskScriptInfo : public ::google::protobuf::Message {
   
   // @@protoc_insertion_point(class_scope:dcmd_api.UiTaskScriptInfo)
  private:
-  inline void set_has_task_type();
-  inline void clear_has_task_type();
+  inline void set_has_task_cmd();
+  inline void clear_has_task_cmd();
   inline void set_has_user();
   inline void clear_has_user();
   inline void set_has_passwd();
@@ -4497,7 +4497,7 @@ class UiTaskScriptInfo : public ::google::protobuf::Message {
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
-  ::std::string* task_type_;
+  ::std::string* task_cmd_;
   ::std::string* user_;
   ::std::string* passwd_;
   
@@ -11691,60 +11691,60 @@ inline ::std::string* UiInvalidAgentInfoReply::release_err() {
 
 // UiTaskScriptInfo
 
-// required string task_type = 1;
-inline bool UiTaskScriptInfo::has_task_type() const {
+// required string task_cmd = 1;
+inline bool UiTaskScriptInfo::has_task_cmd() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void UiTaskScriptInfo::set_has_task_type() {
+inline void UiTaskScriptInfo::set_has_task_cmd() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void UiTaskScriptInfo::clear_has_task_type() {
+inline void UiTaskScriptInfo::clear_has_task_cmd() {
   _has_bits_[0] &= ~0x00000001u;
 }
-inline void UiTaskScriptInfo::clear_task_type() {
-  if (task_type_ != &::google::protobuf::internal::kEmptyString) {
-    task_type_->clear();
+inline void UiTaskScriptInfo::clear_task_cmd() {
+  if (task_cmd_ != &::google::protobuf::internal::kEmptyString) {
+    task_cmd_->clear();
   }
-  clear_has_task_type();
+  clear_has_task_cmd();
 }
-inline const ::std::string& UiTaskScriptInfo::task_type() const {
-  return *task_type_;
+inline const ::std::string& UiTaskScriptInfo::task_cmd() const {
+  return *task_cmd_;
 }
-inline void UiTaskScriptInfo::set_task_type(const ::std::string& value) {
-  set_has_task_type();
-  if (task_type_ == &::google::protobuf::internal::kEmptyString) {
-    task_type_ = new ::std::string;
+inline void UiTaskScriptInfo::set_task_cmd(const ::std::string& value) {
+  set_has_task_cmd();
+  if (task_cmd_ == &::google::protobuf::internal::kEmptyString) {
+    task_cmd_ = new ::std::string;
   }
-  task_type_->assign(value);
+  task_cmd_->assign(value);
 }
-inline void UiTaskScriptInfo::set_task_type(const char* value) {
-  set_has_task_type();
-  if (task_type_ == &::google::protobuf::internal::kEmptyString) {
-    task_type_ = new ::std::string;
+inline void UiTaskScriptInfo::set_task_cmd(const char* value) {
+  set_has_task_cmd();
+  if (task_cmd_ == &::google::protobuf::internal::kEmptyString) {
+    task_cmd_ = new ::std::string;
   }
-  task_type_->assign(value);
+  task_cmd_->assign(value);
 }
-inline void UiTaskScriptInfo::set_task_type(const char* value, size_t size) {
-  set_has_task_type();
-  if (task_type_ == &::google::protobuf::internal::kEmptyString) {
-    task_type_ = new ::std::string;
+inline void UiTaskScriptInfo::set_task_cmd(const char* value, size_t size) {
+  set_has_task_cmd();
+  if (task_cmd_ == &::google::protobuf::internal::kEmptyString) {
+    task_cmd_ = new ::std::string;
   }
-  task_type_->assign(reinterpret_cast<const char*>(value), size);
+  task_cmd_->assign(reinterpret_cast<const char*>(value), size);
 }
-inline ::std::string* UiTaskScriptInfo::mutable_task_type() {
-  set_has_task_type();
-  if (task_type_ == &::google::protobuf::internal::kEmptyString) {
-    task_type_ = new ::std::string;
+inline ::std::string* UiTaskScriptInfo::mutable_task_cmd() {
+  set_has_task_cmd();
+  if (task_cmd_ == &::google::protobuf::internal::kEmptyString) {
+    task_cmd_ = new ::std::string;
   }
-  return task_type_;
+  return task_cmd_;
 }
-inline ::std::string* UiTaskScriptInfo::release_task_type() {
-  clear_has_task_type();
-  if (task_type_ == &::google::protobuf::internal::kEmptyString) {
+inline ::std::string* UiTaskScriptInfo::release_task_cmd() {
+  clear_has_task_cmd();
+  if (task_cmd_ == &::google::protobuf::internal::kEmptyString) {
     return NULL;
   } else {
-    ::std::string* temp = task_type_;
-    task_type_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    ::std::string* temp = task_cmd_;
+    task_cmd_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
     return temp;
   }
 }
