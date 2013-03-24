@@ -782,14 +782,14 @@ int DcmdAgentApp::RecvMsg(CwxMsgBlock*& msg){
   }else if (dcmd_api::MTYPE_CENTER_OPR_CMD == msg->event().getMsgHeader().getMsgType()){
     CWX_INFO(("Receive MTYPE_CENTER_OPR_CMD, center:%s", center->host_name_.c_str()));
     return OprCmdRecieved(msg, center);
-  }else if (dcmd_api::MTYPE_CENTER_SUBTASK_CMD_OUTPUT == msg->event().getMsgHeader().getMsgType()){
-    CWX_INFO(("Receive MTYPE_CENTER_SUBTASK_CMD_OUTPUT, center:%s", center->host_name_.c_str()));
+  }else if (dcmd_api::MTYPE_CENTER_AGENT_SUBTASK_OUTPUT == msg->event().getMsgHeader().getMsgType()){
+    CWX_INFO(("Receive MTYPE_CENTER_AGENT_SUBTASK_OUTPUT, center:%s", center->host_name_.c_str()));
     return FetchTaskOutputResultRecieved(msg, center);
-  }else if (dcmd_api::MTYPE_CENTER_RUNNING_TASK == msg->event().getMsgHeader().getMsgType()){
-    CWX_INFO(("Receive MTYPE_CENTER_RUNNING_TASK, center:%s", center->host_name_.c_str()));
+  }else if (dcmd_api::MTYPE_CENTER_AGENT_RUNNING_TASK == msg->event().getMsgHeader().getMsgType()){
+    CWX_INFO(("Receive MTYPE_CENTER_AGENT_RUNNING_TASK, center:%s", center->host_name_.c_str()));
     return GetRunTaskRecieved(msg, center);
-  }else if (dcmd_api::MTYPE_CENTER_RUNNING_OPR == msg->event().getMsgHeader().getMsgType()){
-    CWX_INFO(("Receive MTYPE_CENTER_RUNNING_OPR, center:%s", center->host_name_.c_str()));
+  }else if (dcmd_api::MTYPE_CENTER_AGENT_RUNNING_OPR == msg->event().getMsgHeader().getMsgType()){
+    CWX_INFO(("Receive MTYPE_CENTER_AGENT_RUNNING_OPR, center:%s", center->host_name_.c_str()));
     return GetRunOprRecieved(msg, center);
   }
   CWX_INFO(("Receive invalid msg type from center:%s, msg-type=%d, reconnect it.\n",
@@ -1102,10 +1102,6 @@ bool DcmdAgentApp::PrepareSubtaskRunEnv(AgentTaskCmd* cmd, string& err_msg) {
       break;
     }
     if (!OutputShellEnv(fd, "DCMD_SVR_REPO", cmd->cmd_.svr_repo(), err_2k_, script_sh_file.c_str())){
-      err_msg = err_2k_;
-      break;
-    }
-    if (!OutputShellEnv(fd, "DCMD_SVR_PATH", cmd->cmd_.svr_path(), err_2k_, script_sh_file.c_str())){
       err_msg = err_2k_;
       break;
     }
@@ -1678,7 +1674,7 @@ int DcmdAgentApp::FetchTaskOutputResultRecieved(CwxMsgBlock*& msg, AgentCenter* 
     CWX_ERROR(("Failure to pack subtask output reply message."));
     return -1; // 关闭连接
   }
-  CwxMsgHead head(0, 0, dcmd_api::MTYPE_CENTER_SUBTASK_CMD_OUTPUT_R,
+  CwxMsgHead head(0, 0, dcmd_api::MTYPE_CENTER_AGENT_SUBTASK_OUTPUT_R,
     msg->event().getMsgHeader().getTaskId(), proto_str_.length());
   block = CwxMsgBlockAlloc::pack(head, proto_str_.c_str(), proto_str_.length());
   if (!block){
@@ -1776,7 +1772,7 @@ int DcmdAgentApp::GetRunTaskRecieved(CwxMsgBlock*& msg, AgentCenter* center) {
     CWX_ERROR(("Failure to pack fetch subtask list reply message."));
     return -1; // 关闭连接
   }
-  CwxMsgHead head(0, 0, dcmd_api::MTYPE_CENTER_RUNNING_TASK_R,
+  CwxMsgHead head(0, 0, dcmd_api::MTYPE_CENTER_AGENT_RUNNING_TASK_R,
     msg->event().getMsgHeader().getTaskId(), proto_str_.length());
   block = CwxMsgBlockAlloc::pack(head, proto_str_.c_str(), proto_str_.length());
 
@@ -1834,7 +1830,7 @@ int DcmdAgentApp::GetRunOprRecieved(CwxMsgBlock*& msg, AgentCenter* center) {
     CWX_ERROR(("Failure to pack fetch opr cmd list reply message."));
     return -1; // 关闭连接
   }
-  CwxMsgHead head(0, 0, dcmd_api::MTYPE_CENTER_RUNNING_OPR_R,
+  CwxMsgHead head(0, 0, dcmd_api::MTYPE_CENTER_AGENT_RUNNING_OPR_R,
     msg->event().getMsgHeader().getTaskId(), proto_str_.length());
   block = CwxMsgBlockAlloc::pack(head, proto_str_.c_str(), proto_str_.length());
   if (!block) {
