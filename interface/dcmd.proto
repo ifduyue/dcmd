@@ -315,7 +315,7 @@ message UiInvalidAgentInfoReply{
 }
 
 message UiTaskScriptInfo {
-  required  string  task_type=1;
+  required  string  task_cmd=1;
   required  string  user=2;
   required  string  passwd=3;
 }
