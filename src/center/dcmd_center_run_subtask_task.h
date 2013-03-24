@@ -93,8 +93,8 @@ class DcmdCenterRunSubtaskTask : public CwxTaskBoardTask{
   uint32_t              msg_taskid_;
   // 查询的agent的ip
   string                agent_ip_;
-  // 查询的app的名字
-  string                app_name_;
+  // 查询的svr的名字
+  string                svr_name_;
  
  private:
   // app对象

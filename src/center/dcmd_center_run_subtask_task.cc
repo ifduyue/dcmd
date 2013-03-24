@@ -9,7 +9,7 @@ void DcmdCenterRunSubtaskTask::noticeTimeout(CwxTss* ) {
   CWX_DEBUG(("Run-subtask Task is timeout , task_id=%u, ip=%s, service=%s",
     getTaskId(),
     agent_ip_.c_str(),
-    app_name_.length()?app_name_.c_str():""));
+    svr_name_.length()?svr_name_.c_str():""));
 }
 
 void DcmdCenterRunSubtaskTask::noticeRecvMsg(CwxMsgBlock*& msg, CwxTss* , bool&) {
@@ -37,7 +37,7 @@ int DcmdCenterRunSubtaskTask::noticeActive(CwxTss* ThrEnv) {
   CwxMsgBlock* msg=NULL;
   dcmd_api::AgentRunningTask query;
   query.set_ip(agent_ip_);
-  query.set_app_name(app_name_);
+  query.set_svr_name(svr_name_);
   if (!query.SerializeToString(&tss->proto_str_)) {
     err_msg_ = "Failure to package run subtask package";
     CWX_ERROR((err_msg_.c_str()));

@@ -152,7 +152,7 @@ class DcmdAgentApp : public CwxAppFramework{
   // 心跳检测
 	void CheckHeatbeat();
   // 检查app的task指令
-  void CheckAppTask(AgentSvrObj* svr_obj);
+  void CheckSvrTask(AgentSvrObj* svr_obj);
   // 执行操作整理。true：已经完成；false：正在执行
   bool CheckOprCmd(AgentOprCmd* opr_cmd, bool is_cancel=false);
 	// 处理收到的消息。 -1：失败并关闭连接；0：成功
@@ -201,7 +201,7 @@ class DcmdAgentApp : public CwxAppFramework{
   // 检查service当前命令的进度信息
   void CheckSubTaskProcess(AgentSvrObj* svr_obj);
   // 获取app任务执行的输出文件内容
-  void LoadSubTaskResult(string const& app_name,
+  void LoadSubTaskResult(string const& svr_name,
     string const& task_cmd,
     string& out_process,
     bool& is_success,
