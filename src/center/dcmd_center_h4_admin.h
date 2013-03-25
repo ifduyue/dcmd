@@ -31,7 +31,7 @@ class DcmdCenterH4Admin: public CwxCmdOp {
     uint32_t msg_task_id,
     dcmd_api::UiExecOprCmdReply* result);
   // 回复agent的subtask的output查询
-  static void ReplySubTaskResult(DcmdCenterApp* app,
+  static void ReplySubTaskOutput(DcmdCenterApp* app,
     DcmdTss* tss,
     uint32_t conn_id,
     uint32_t msg_task_id,
@@ -66,8 +66,8 @@ class DcmdCenterH4Admin: public CwxCmdOp {
     uint32_t conn_id,
     uint32_t msg_task_id,
     dcmd_api::UiOprScriptInfoReply* result);
-  // 回复查询task-type的script的内容
-  static void ReplyTaskTypeScriptContent(DcmdCenterApp* app,
+  // 回复查询task-cmd的script的内容
+  static void ReplyTaskCmdScriptContent(DcmdCenterApp* app,
     DcmdTss* tss,
     uint32_t conn_id,
     uint32_t msg_task_id,
@@ -94,8 +94,8 @@ class DcmdCenterH4Admin: public CwxCmdOp {
   void QueryIllegalAgent(CwxMsgBlock*& msg, DcmdTss* tss);
   // 获取opr script的content
   void QueryOprCmdScriptContent(CwxMsgBlock*& msg, DcmdTss* tss);
-  // 获取task-type的content
-  void QueryTaskTypeScriptContent(CwxMsgBlock*& msg, DcmdTss* tss);
+  // 获取task-cmd的content
+  void QueryTaskCmdScriptContent(CwxMsgBlock*& msg, DcmdTss* tss);
   // 任务进度查询
   void QuerySubTaskProcess(CwxMsgBlock*& msg, DcmdTss* tss);
   // 回复管理系统

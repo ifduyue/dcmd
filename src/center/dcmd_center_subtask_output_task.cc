@@ -107,7 +107,7 @@ void DcmdCenterSubtaskOutputTask::Reply(CwxTss* pThrEnv){
       reply.set_err(agent_reply.err());
     }
   }
-  DcmdCenterH4Admin::ReplySubTaskResult(app_,
+  DcmdCenterH4Admin::ReplySubTaskOutput(app_,
     tss,
     reply_conn_id_,
     msg_taskid_,
