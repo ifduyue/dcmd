@@ -15,6 +15,8 @@ class DcmdCenterConfCmn{
   DcmdCenterConfCmn(){
     heatbeat_internal_ = kDefHeatbeatSecond;
     agent_package_size_ = kDefMaxPackageMSize;
+    opr_queue_threshold_ = kDefOprQueueThreshold;
+    opr_overflow_threshold_ = kDefOprOverflowThreshold;
     ip_refresh_interanl_ = kDefIpTableRefreshSecond;
     illegal_agent_block_second_ = kDefIlegalAgentBlockSecond; 
     is_allow_opr_cmd_ = true;
@@ -37,6 +39,10 @@ class DcmdCenterConfCmn{
   uint32_t            heatbeat_internal_;
   // agent通信的package大小
   uint32_t            agent_package_size_;
+  // agent opr操作的queue门限
+  uint32_t            opr_queue_threshold_;
+  // agent opr操作的overflow门限
+  uint32_t            opr_overflow_threshold_;
   // node ip的刷新间隔
   uint32_t            ip_refresh_interanl_;
   // 操作的用户名
