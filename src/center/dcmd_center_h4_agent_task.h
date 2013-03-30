@@ -55,13 +55,18 @@ class DcmdCenterH4AgentTask: public CwxCmdOp{
   // agent报告自己的任务处理状态
   void  AgentMasterReply(CwxMsgBlock*& msg, DcmdTss* tss);
   // agent报告自己已经接受子任务
-  void  AgentTaskAcccept(CwxMsgBlock*& msg, DcmdTss* tss);
+  void  AgentSubtaskAccept(CwxMsgBlock*& msg, DcmdTss* tss);
   // agent回复任务的处理结果
-  void  AgentTaskResult(CwxMsgBlock*& msg, DcmdTss* tss);
+  void  AgentSubtaskResult(CwxMsgBlock*& msg, DcmdTss* tss);
   // agent报告任务的处理进度
-  void  AgentTaskProcess(CwxMsgBlock*& msg, DcmdTss* tss);
+  void  AgentSubtaskProcess(CwxMsgBlock*& msg, DcmdTss* tss);
+  // 接收到UI命令
+  void  UiExecTaskCmd(CwxMsgBlock*& msg, DcmdTss* tss);
+  // Watch命令
+  void  UiWatchTaskCmd(CwxMsgBlock*& msg, DcmdTss* tss);
   // 通知所有连接，自己是master
   void  NoticeMaster(DcmdTss* tss, string const* agent_ip=NULL);
+
  private:
   // app对象
   DcmdCenterApp*             app_;

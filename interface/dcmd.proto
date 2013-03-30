@@ -238,118 +238,136 @@ message InvalidMsg {
 }
 
 message UiTaskOutput {
-  required  string  subtask_id=1;
-  required  string  ip = 2; 
-  required  int32   offset=3; 
-  required  string  user=4;
-  required  string  passwd=5;
+  required  int32     client_msg_id=1;
+  required  string    subtask_id=2;
+  required  string    ip = 3; 
+  required  int32     offset=4; 
+  required  string    user=5;
+  required  string    passwd=6;
 }
 
 message UiTaskOutputReply {
-  required  DcmdState   state = 1;
-  required  string      result= 2;
-  required  int32       offset=3;
-  optional  string      err=4;
+  required  int32       client_msg_id=1;
+  required  DcmdState   state = 2;
+  required  string      result= 3;
+  required  int32       offset=4;
+  optional  string      err=5;
 }
 
 message UiAgentRunningTask {
-  optional  string  ip=1;
-  optional  string  svr_name=2;
-  required  string  user=3;
-  required  string  passwd=4;
+  required  int32     client_msg_id=1;
+  optional  string    ip=2;
+  optional  string    svr_name=3;
+  required  string    user=4;
+  required  string    passwd=5;
 }
 
 message UiAgentRunningTaskReply {
-  required  DcmdState   state=1;
-  repeated  SubTaskInfo result=2;
-  optional  string      err=3;
+  required  int32       client_msg_id=1;
+  required  DcmdState   state=2;
+  repeated  SubTaskInfo result=3;
+  optional  string      err=4;
 }
 
 message UiAgentRunningOpr {
-  optional  string  ip=1;
+  required  int32     client_msg_id=1;
+  optional  string    ip=2;
+  required  string    user=3;
+  required  string    passwd=4;
+}
+
+message UiAgentRunningOprReply {
+  required  int32     client_msg_id=1;
+  required  DcmdState state=2;
+  repeated  OprInfo   result=3;
+  optional  string    err=4;
+}
+
+message UiExecOprCmd {
+  required  int32     client_msg_id=1;
+  optional  string   opr_id=2;
+  repeated  KeyValue args=3;
+  required  string   user=4;
+  required  string   passwd=5;
+}
+
+message UiExecOprCmdReply{
+  required  int32            client_msg_id=1;
+  required  DcmdState        state=2;
+  repeated  AgentOprCmdReply result=3;
+  optional  string           err=4;
+}
+
+message UiAgentInfo {
+  required  int32     client_msg_id=1;
+  repeated  string    ips=2;
+  required  bool      version=3;
+  required  string    user=4;
+  required  string    passwd=5;
+}
+
+message UiAgentInfoReply{
+  required  int32      client_msg_id=1;
+  required  DcmdState  state=2;
+  repeated  AgentInfo  agentinfo=3;
+  optional  string     err=4;
+}
+
+message UiInvalidAgentInfo {
+  required  int32   client_msg_id=1;
   required  string  user=2;
   required  string  passwd=3;
 }
 
-message UiAgentRunningOprReply {
-  required  DcmdState state=1;
-  repeated  OprInfo  result=2;
-  optional  string  err=3;
+message UiInvalidAgentInfoReply{
+  required  int32      client_msg_id=1;
+  required  DcmdState  state=2;
+  required  AgentInfo  agentinfo=3;
+  optional  string     err=4;
 }
 
-message UiExecOprCmd {
-  optional  string   opr_id=1;
-  repeated  KeyValue args=2;
-  required  string   user=3;
-  required  string   passwd=4;
-}
-
-message UiExecOprCmdReply{
-  required  DcmdState        state=1;
-  repeated  AgentOprCmdReply result=2;
-  optional  string           err=3;
-}
-
-message UiAgentInfo {
-  repeated  string  ips=1;
-  required  bool    version=2;
+message UiTaskScriptInfo {
+  required  int32   client_msg_id=1;
+  required  string  task_cmd=2;
   required  string  user=3;
   required  string  passwd=4;
 }
 
-message UiAgentInfoReply{
-  required  DcmdState  state=1;
-  repeated  AgentInfo  agentinfo=2;
-  optional  string     err=3;
-}
-
-message UiInvalidAgentInfo {
-  required  string  user=1;
-  required  string  passwd=2;
-}
-
-message UiInvalidAgentInfoReply{
-  required  DcmdState  state=1;
-  required  AgentInfo  agentinfo=2;
-  optional  string     err=3;
-}
-
-message UiTaskScriptInfo {
-  required  string  task_cmd=1;
-  required  string  user=2;
-  required  string  passwd=3;
-}
-
 message UiTaskScriptInfoReply{
-  required  DcmdState state=1;
-  optional  string    script=2;
-  optional  string    err=3;
-  optional  string    md5=4;
+  required  int32     client_msg_id=1;
+  required  DcmdState state=2;
+  optional  string    script=3;
+  optional  string    err=4;
+  optional  string    md5=5;
 }
 
 message UiOprScriptInfo {
-  required  string  opr_file=1;
-  required  string  user=2;
-  required  string  passwd=3;
+  required  int32   client_msg_id=1;
+  required  string  opr_file=2;
+  required  string  user=3;
+  required  string  passwd=4;
 }
 
 message UiOprScriptInfoReply{
-  required  DcmdState state=1;
-  optional  string    script=2;
-  optional  string    err=3;
-  optional  string    md5=4;
+  required  int32     client_msg_id=1;
+  required  DcmdState state=2;
+  optional  string    script=3;
+  optional  string    err=4;
+  optional  string    md5=5;
 }
 
 message UiAgentTaskProcess {
-  repeated  string  subtask_id =1;
-  required  string  user=2;
-  required  string  passwd=3;
+  required  int32   client_msg_id=1;
+  repeated  string  subtask_id =2;
+  required  string  user=3;
+  required  string  passwd=4;
 }
 
 message UiAgentTaskProcessReply{
-  required  DcmdState state=1;
-  repeated  string  process=2;
-  optional  string  err=3;
+  required  int32     client_msg_id=1;
+  required  DcmdState state=2;
+  repeated  string    process=3;
+  optional  string    err=4;
 }
 
 enum  CmdType {
@@ -369,36 +387,35 @@ enum  CmdType {
    UPDATE_TASK=14;
 }
 message UiTaskCmd {
-  required  string  task_id =1;
-  optional  string  subtask_id=2;
-  optional  string  ip=3;
-  optional  string  svr_pool=4;
-  required  CmdType cmd_type = 5;
-  required  string  user=6;
-  required  string  passwd=7;
+  required  int32   client_msg_id=1;
+  required  string  task_id =2;
+  optional  string  subtask_id=3;
+  optional  string  ip=4;
+  optional  string  svr_pool=5;
+  required  CmdType cmd_type = 6;
+  required  string  user=7;
+  required  string  passwd=8;
 }
 
 message UiTaskCmdReply{
-  required  DcmdState state=1;
-  optional  string    cmd_id=2;
-  optional  string    err=3;
+  required  int32     client_msg_id=1;
+  required  DcmdState state=2;
+  optional  string    cmd_id=3;
+  optional  string    err=4;
 }
 
 message UiTaskWatch {
-  required  string  task_id =1;
-  required  bool    last_state=2;
-  required  string  user=3;
-  required  string  passwd=4;
+  required  int32   client_msg_id=1;
+  required  string  task_id =2;
+  required  bool    last_state=3;
+  required  string  user=4;
+  required  string  passwd=5;
 }
 
 message UiTaskWatchReply{
-  required  DcmdState   watch_state=1;
-  optional  string      err=2;
-  required  TaskInfo    task_info=3;
-  repeated  TaskInfo    child_tasks=4;
+  required  int32       client_msg_id=1;
+  required  DcmdState   watch_state=2;
+  optional  string      err=3;
+  required  TaskInfo    task_info=4;
+  repeated  TaskInfo    child_tasks=5;
 }
-
-
-
-
-

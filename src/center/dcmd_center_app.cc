@@ -343,8 +343,8 @@ int DcmdCenterApp::onConnClosed(CwxAppHandler4Msg& conn) {
     if (agent_ip.length()) {
       CwxMsgBlock* agent_block = CwxMsgBlockAlloc::clone(block);
       agent_block->event().setSvrId(conn.getConnInfo().getSvrId());
-      char* szAgentIp = strdup(agent_ip.c_str());
-      agent_block->event().setConnUserData(szAgentIp);
+      char* ip = strdup(agent_ip.c_str());
+      agent_block->event().setConnUserData(ip);
       task_thread_pool_->append(agent_block);
     }
     // 放到admin的队列中，防止task_thread_pool_阻塞而影响opr指令的执行
