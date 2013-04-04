@@ -69,6 +69,11 @@ message OprInfo {
   required  int32      running_second=3;
 }
 
+message SubTaskProcess {
+  required  string     subtask_id = 1;
+  optional  string     process = 2;
+}
+
 enum AgentState {
   AGENT_UN_CONNECTED=0;
   AGENT_UN_AUTH=1;
@@ -138,6 +143,7 @@ message AgentReportReply {
 
 message AgentMasterNoticeReply {
   repeated string  cmd = 1;
+  repeated SubTaskProcess subtask_process = 2;
 }
 
 message AgentTaskCmd {
@@ -367,7 +373,7 @@ message UiAgentTaskProcess {
 message UiAgentTaskProcessReply{
   required  int32     client_msg_id=1;
   required  DcmdState state=2;
-  repeated  string    process=3;
+  repeated SubTaskProcess process = 2;
   optional  string    err=4;
 }
 
