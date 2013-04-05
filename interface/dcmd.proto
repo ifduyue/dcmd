@@ -115,8 +115,9 @@ message TaskInfo {
   optional  int32       success_subtask=6;
   optional  int32       failed_subtask=7;
   optional  int32       doing_subtask=8;
-  optional  int32       cancel_subtask=9;
-  optional  int32       undo_subtask=10;
+  optional  int32       undo_subtask=9;
+  optional  int32       ignore_doing_subtask=10;
+  optional  int32       ignore_failed_subtask=11;
 }
 
 message AgentInfo {
