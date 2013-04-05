@@ -97,7 +97,6 @@ enum SubTaskState{
    SUBTASK_DOING = 1;
    SUBTASK_FINISHED = 2;
    SUBTASK_FAILED = 3;
-   SUBTASK_CANCELED = 4;
 }
 
 enum CommandState {
