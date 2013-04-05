@@ -216,7 +216,6 @@ public:
   map<uint64_t, DcmdCenterSubtask*>      ignored_doing_subtasks_;
 };
 
-
 // 任务对象，对应数据库的task表
 class DcmdCenterTask {
  public:
@@ -249,7 +248,7 @@ class DcmdCenterTask {
  public:
   // 往task中添加service池子；true 成功；false：存在
   bool AddSvrPool(DcmdCenterSvrPool* pool);
-  ///获取task的池子
+  // 获取task的池子
   DcmdCenterSvrPool* GetSvrPool(string const& pool_name);
   // 添加新subtask，true 成功；false：失败。失败或者subtask存在，或者pool不存在
   bool AddSubtask(DcmdCenterSubtask* subtask);

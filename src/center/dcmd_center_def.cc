@@ -82,5 +82,33 @@ bool DcmdCenterSvrPool::ChangeSubtaskState(uint64_t subtask_id,
   return AddSubtask(subtask);
 }
 
+bool DcmdCenterTask::AddSvrPool(DcmdCenterSvrPool* pool) {
+  if (pools_.find(pool->svr_pool_) != pools_.end()) return false;
+  pools_[pool->svr_pool_] = pool;
+  return true;
+}
+
+DcmdCenterSvrPool* DcmdCenterTask::GetSvrPool(string const& pool_name) {
+  map<string, DcmdCenterSvrPool*>::iterator iter = pools_.find(pool_name);
+  if ( iter == pools_.end()) return NULL;
+  return iter->second;
+}
+
+bool DcmdCenterTask::AddSubtask(DcmdCenterSubtask* subtask) {
+  map<string, DcmdCenterSvrPool*>::iterator iter = pools_.find(subtask->svr_pool_);
+  if ( iter == pools_.end()) return false;
+  subtask->task_ = this;
+  return iter->second->AddSubtask(subtask);
+}
+
+bool DcmdCenterTask::ChangeSubtaskState(DcmdCenterSubtask const* subtask,
+  dcmd_api::SubTaskState state,
+  bool is_ignored)
+{
+  map<string, DcmdCenterSvrPool*>::iterator iter = pools_.find(subtask->svr_pool_);
+  if ( iter == pools_.end()) return false;
+  return iter->second->ChangeSubtaskState(subtask->subtask_id_, state, is_ignored);
+}
+
 
 }  // dcmd
