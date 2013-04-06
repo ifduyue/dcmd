@@ -427,3 +427,16 @@ message UiTaskWatchReply{
   required  TaskInfo    task_info=4;
   repeated  TaskInfo    child_tasks=5;
 }
+
+message UiTaskCancelWatch {
+  required  int32   client_msg_id=1;
+  required  string  task_id =2;
+  required  string  user=3;
+  required  string  passwd=4;
+}
+
+message UiTaskCancelatchReply{
+  required  int32       client_msg_id=1;
+  required  DcmdState   state=2;
+  optional  string      err=3;
+}
