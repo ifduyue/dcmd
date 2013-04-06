@@ -77,6 +77,8 @@ class UiTaskCmd;
 class UiTaskCmdReply;
 class UiTaskWatch;
 class UiTaskWatchReply;
+class UiTaskCancelWatch;
+class UiTaskCancelatchReply;
 
 enum DcmdMsgType {
   MTYPE_AGENT_REPORT = 1,
@@ -119,6 +121,8 @@ enum DcmdMsgType {
   MTYPE_UI_EXEC_TASK_R = 70,
   MTYPE_UI_WATCH_TASK = 71,
   MTYPE_UI_WATCH_TASK_R = 72,
+  MTYPE_UI_CANCEL_WATCH_TASK = 73,
+  MTYPE_UI_CANCEL_WATCH_TASK_R = 74,
   MTYPE_INVALID_MTYPE = 101
 };
 bool DcmdMsgType_IsValid(int value);
@@ -204,12 +208,11 @@ enum SubTaskState {
   SUBTASK_INIT = 0,
   SUBTASK_DOING = 1,
   SUBTASK_FINISHED = 2,
-  SUBTASK_FAILED = 3,
-  SUBTASK_CANCELED = 4
+  SUBTASK_FAILED = 3
 };
 bool SubTaskState_IsValid(int value);
 const SubTaskState SubTaskState_MIN = SUBTASK_INIT;
-const SubTaskState SubTaskState_MAX = SUBTASK_CANCELED;
+const SubTaskState SubTaskState_MAX = SUBTASK_FAILED;
 const int SubTaskState_ARRAYSIZE = SubTaskState_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* SubTaskState_descriptor();
@@ -850,19 +853,26 @@ class TaskInfo : public ::google::protobuf::Message {
   inline ::google::protobuf::int32 doing_subtask() const;
   inline void set_doing_subtask(::google::protobuf::int32 value);
   
-  // optional int32 cancel_subtask = 9;
-  inline bool has_cancel_subtask() const;
-  inline void clear_cancel_subtask();
-  static const int kCancelSubtaskFieldNumber = 9;
-  inline ::google::protobuf::int32 cancel_subtask() const;
-  inline void set_cancel_subtask(::google::protobuf::int32 value);
-  
-  // optional int32 undo_subtask = 10;
+  // optional int32 undo_subtask = 9;
   inline bool has_undo_subtask() const;
   inline void clear_undo_subtask();
-  static const int kUndoSubtaskFieldNumber = 10;
+  static const int kUndoSubtaskFieldNumber = 9;
   inline ::google::protobuf::int32 undo_subtask() const;
   inline void set_undo_subtask(::google::protobuf::int32 value);
+  
+  // optional int32 ignore_doing_subtask = 10;
+  inline bool has_ignore_doing_subtask() const;
+  inline void clear_ignore_doing_subtask();
+  static const int kIgnoreDoingSubtaskFieldNumber = 10;
+  inline ::google::protobuf::int32 ignore_doing_subtask() const;
+  inline void set_ignore_doing_subtask(::google::protobuf::int32 value);
+  
+  // optional int32 ignore_failed_subtask = 11;
+  inline bool has_ignore_failed_subtask() const;
+  inline void clear_ignore_failed_subtask();
+  static const int kIgnoreFailedSubtaskFieldNumber = 11;
+  inline ::google::protobuf::int32 ignore_failed_subtask() const;
+  inline void set_ignore_failed_subtask(::google::protobuf::int32 value);
   
   // @@protoc_insertion_point(class_scope:dcmd_api.TaskInfo)
  private:
@@ -882,10 +892,12 @@ class TaskInfo : public ::google::protobuf::Message {
   inline void clear_has_failed_subtask();
   inline void set_has_doing_subtask();
   inline void clear_has_doing_subtask();
-  inline void set_has_cancel_subtask();
-  inline void clear_has_cancel_subtask();
   inline void set_has_undo_subtask();
   inline void clear_has_undo_subtask();
+  inline void set_has_ignore_doing_subtask();
+  inline void clear_has_ignore_doing_subtask();
+  inline void set_has_ignore_failed_subtask();
+  inline void clear_has_ignore_failed_subtask();
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
@@ -897,11 +909,12 @@ class TaskInfo : public ::google::protobuf::Message {
   ::google::protobuf::int32 success_subtask_;
   ::google::protobuf::int32 failed_subtask_;
   ::google::protobuf::int32 doing_subtask_;
-  ::google::protobuf::int32 cancel_subtask_;
   ::google::protobuf::int32 undo_subtask_;
+  ::google::protobuf::int32 ignore_doing_subtask_;
+  ::google::protobuf::int32 ignore_failed_subtask_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(10 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(11 + 31) / 32];
   
   friend void  protobuf_AddDesc_dcmd_2eproto();
   friend void protobuf_AssignDesc_dcmd_2eproto();
@@ -5960,6 +5973,236 @@ class UiTaskWatchReply : public ::google::protobuf::Message {
   void InitAsDefaultInstance();
   static UiTaskWatchReply* default_instance_;
 };
+// -------------------------------------------------------------------
+
+class UiTaskCancelWatch : public ::google::protobuf::Message {
+ public:
+  UiTaskCancelWatch();
+  virtual ~UiTaskCancelWatch();
+  
+  UiTaskCancelWatch(const UiTaskCancelWatch& from);
+  
+  inline UiTaskCancelWatch& operator=(const UiTaskCancelWatch& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const UiTaskCancelWatch& default_instance();
+  
+  void Swap(UiTaskCancelWatch* other);
+  
+  // implements Message ----------------------------------------------
+  
+  UiTaskCancelWatch* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const UiTaskCancelWatch& from);
+  void MergeFrom(const UiTaskCancelWatch& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required int32 client_msg_id = 1;
+  inline bool has_client_msg_id() const;
+  inline void clear_client_msg_id();
+  static const int kClientMsgIdFieldNumber = 1;
+  inline ::google::protobuf::int32 client_msg_id() const;
+  inline void set_client_msg_id(::google::protobuf::int32 value);
+  
+  // required string task_id = 2;
+  inline bool has_task_id() const;
+  inline void clear_task_id();
+  static const int kTaskIdFieldNumber = 2;
+  inline const ::std::string& task_id() const;
+  inline void set_task_id(const ::std::string& value);
+  inline void set_task_id(const char* value);
+  inline void set_task_id(const char* value, size_t size);
+  inline ::std::string* mutable_task_id();
+  inline ::std::string* release_task_id();
+  
+  // required string user = 3;
+  inline bool has_user() const;
+  inline void clear_user();
+  static const int kUserFieldNumber = 3;
+  inline const ::std::string& user() const;
+  inline void set_user(const ::std::string& value);
+  inline void set_user(const char* value);
+  inline void set_user(const char* value, size_t size);
+  inline ::std::string* mutable_user();
+  inline ::std::string* release_user();
+  
+  // required string passwd = 4;
+  inline bool has_passwd() const;
+  inline void clear_passwd();
+  static const int kPasswdFieldNumber = 4;
+  inline const ::std::string& passwd() const;
+  inline void set_passwd(const ::std::string& value);
+  inline void set_passwd(const char* value);
+  inline void set_passwd(const char* value, size_t size);
+  inline ::std::string* mutable_passwd();
+  inline ::std::string* release_passwd();
+  
+  // @@protoc_insertion_point(class_scope:dcmd_api.UiTaskCancelWatch)
+ private:
+  inline void set_has_client_msg_id();
+  inline void clear_has_client_msg_id();
+  inline void set_has_task_id();
+  inline void clear_has_task_id();
+  inline void set_has_user();
+  inline void clear_has_user();
+  inline void set_has_passwd();
+  inline void clear_has_passwd();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::std::string* task_id_;
+  ::std::string* user_;
+  ::std::string* passwd_;
+  ::google::protobuf::int32 client_msg_id_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(4 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_dcmd_2eproto();
+  friend void protobuf_AssignDesc_dcmd_2eproto();
+  friend void protobuf_ShutdownFile_dcmd_2eproto();
+  
+  void InitAsDefaultInstance();
+  static UiTaskCancelWatch* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class UiTaskCancelatchReply : public ::google::protobuf::Message {
+ public:
+  UiTaskCancelatchReply();
+  virtual ~UiTaskCancelatchReply();
+  
+  UiTaskCancelatchReply(const UiTaskCancelatchReply& from);
+  
+  inline UiTaskCancelatchReply& operator=(const UiTaskCancelatchReply& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const UiTaskCancelatchReply& default_instance();
+  
+  void Swap(UiTaskCancelatchReply* other);
+  
+  // implements Message ----------------------------------------------
+  
+  UiTaskCancelatchReply* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const UiTaskCancelatchReply& from);
+  void MergeFrom(const UiTaskCancelatchReply& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required int32 client_msg_id = 1;
+  inline bool has_client_msg_id() const;
+  inline void clear_client_msg_id();
+  static const int kClientMsgIdFieldNumber = 1;
+  inline ::google::protobuf::int32 client_msg_id() const;
+  inline void set_client_msg_id(::google::protobuf::int32 value);
+  
+  // required .dcmd_api.DcmdState state = 2;
+  inline bool has_state() const;
+  inline void clear_state();
+  static const int kStateFieldNumber = 2;
+  inline dcmd_api::DcmdState state() const;
+  inline void set_state(dcmd_api::DcmdState value);
+  
+  // optional string err = 3;
+  inline bool has_err() const;
+  inline void clear_err();
+  static const int kErrFieldNumber = 3;
+  inline const ::std::string& err() const;
+  inline void set_err(const ::std::string& value);
+  inline void set_err(const char* value);
+  inline void set_err(const char* value, size_t size);
+  inline ::std::string* mutable_err();
+  inline ::std::string* release_err();
+  
+  // @@protoc_insertion_point(class_scope:dcmd_api.UiTaskCancelatchReply)
+ private:
+  inline void set_has_client_msg_id();
+  inline void clear_has_client_msg_id();
+  inline void set_has_state();
+  inline void clear_has_state();
+  inline void set_has_err();
+  inline void clear_has_err();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::int32 client_msg_id_;
+  int state_;
+  ::std::string* err_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(3 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_dcmd_2eproto();
+  friend void protobuf_AssignDesc_dcmd_2eproto();
+  friend void protobuf_ShutdownFile_dcmd_2eproto();
+  
+  void InitAsDefaultInstance();
+  static UiTaskCancelatchReply* default_instance_;
+};
 // ===================================================================
 
 
@@ -6928,37 +7171,15 @@ inline void TaskInfo::set_doing_subtask(::google::protobuf::int32 value) {
   doing_subtask_ = value;
 }
 
-// optional int32 cancel_subtask = 9;
-inline bool TaskInfo::has_cancel_subtask() const {
+// optional int32 undo_subtask = 9;
+inline bool TaskInfo::has_undo_subtask() const {
   return (_has_bits_[0] & 0x00000100u) != 0;
 }
-inline void TaskInfo::set_has_cancel_subtask() {
+inline void TaskInfo::set_has_undo_subtask() {
   _has_bits_[0] |= 0x00000100u;
 }
-inline void TaskInfo::clear_has_cancel_subtask() {
-  _has_bits_[0] &= ~0x00000100u;
-}
-inline void TaskInfo::clear_cancel_subtask() {
-  cancel_subtask_ = 0;
-  clear_has_cancel_subtask();
-}
-inline ::google::protobuf::int32 TaskInfo::cancel_subtask() const {
-  return cancel_subtask_;
-}
-inline void TaskInfo::set_cancel_subtask(::google::protobuf::int32 value) {
-  set_has_cancel_subtask();
-  cancel_subtask_ = value;
-}
-
-// optional int32 undo_subtask = 10;
-inline bool TaskInfo::has_undo_subtask() const {
-  return (_has_bits_[0] & 0x00000200u) != 0;
-}
-inline void TaskInfo::set_has_undo_subtask() {
-  _has_bits_[0] |= 0x00000200u;
-}
 inline void TaskInfo::clear_has_undo_subtask() {
-  _has_bits_[0] &= ~0x00000200u;
+  _has_bits_[0] &= ~0x00000100u;
 }
 inline void TaskInfo::clear_undo_subtask() {
   undo_subtask_ = 0;
@@ -6970,6 +7191,50 @@ inline ::google::protobuf::int32 TaskInfo::undo_subtask() const {
 inline void TaskInfo::set_undo_subtask(::google::protobuf::int32 value) {
   set_has_undo_subtask();
   undo_subtask_ = value;
+}
+
+// optional int32 ignore_doing_subtask = 10;
+inline bool TaskInfo::has_ignore_doing_subtask() const {
+  return (_has_bits_[0] & 0x00000200u) != 0;
+}
+inline void TaskInfo::set_has_ignore_doing_subtask() {
+  _has_bits_[0] |= 0x00000200u;
+}
+inline void TaskInfo::clear_has_ignore_doing_subtask() {
+  _has_bits_[0] &= ~0x00000200u;
+}
+inline void TaskInfo::clear_ignore_doing_subtask() {
+  ignore_doing_subtask_ = 0;
+  clear_has_ignore_doing_subtask();
+}
+inline ::google::protobuf::int32 TaskInfo::ignore_doing_subtask() const {
+  return ignore_doing_subtask_;
+}
+inline void TaskInfo::set_ignore_doing_subtask(::google::protobuf::int32 value) {
+  set_has_ignore_doing_subtask();
+  ignore_doing_subtask_ = value;
+}
+
+// optional int32 ignore_failed_subtask = 11;
+inline bool TaskInfo::has_ignore_failed_subtask() const {
+  return (_has_bits_[0] & 0x00000400u) != 0;
+}
+inline void TaskInfo::set_has_ignore_failed_subtask() {
+  _has_bits_[0] |= 0x00000400u;
+}
+inline void TaskInfo::clear_has_ignore_failed_subtask() {
+  _has_bits_[0] &= ~0x00000400u;
+}
+inline void TaskInfo::clear_ignore_failed_subtask() {
+  ignore_failed_subtask_ = 0;
+  clear_has_ignore_failed_subtask();
+}
+inline ::google::protobuf::int32 TaskInfo::ignore_failed_subtask() const {
+  return ignore_failed_subtask_;
+}
+inline void TaskInfo::set_ignore_failed_subtask(::google::protobuf::int32 value) {
+  set_has_ignore_failed_subtask();
+  ignore_failed_subtask_ = value;
 }
 
 // -------------------------------------------------------------------
@@ -14526,6 +14791,313 @@ UiTaskWatchReply::child_tasks() const {
 inline ::google::protobuf::RepeatedPtrField< ::dcmd_api::TaskInfo >*
 UiTaskWatchReply::mutable_child_tasks() {
   return &child_tasks_;
+}
+
+// -------------------------------------------------------------------
+
+// UiTaskCancelWatch
+
+// required int32 client_msg_id = 1;
+inline bool UiTaskCancelWatch::has_client_msg_id() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void UiTaskCancelWatch::set_has_client_msg_id() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void UiTaskCancelWatch::clear_has_client_msg_id() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void UiTaskCancelWatch::clear_client_msg_id() {
+  client_msg_id_ = 0;
+  clear_has_client_msg_id();
+}
+inline ::google::protobuf::int32 UiTaskCancelWatch::client_msg_id() const {
+  return client_msg_id_;
+}
+inline void UiTaskCancelWatch::set_client_msg_id(::google::protobuf::int32 value) {
+  set_has_client_msg_id();
+  client_msg_id_ = value;
+}
+
+// required string task_id = 2;
+inline bool UiTaskCancelWatch::has_task_id() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void UiTaskCancelWatch::set_has_task_id() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void UiTaskCancelWatch::clear_has_task_id() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void UiTaskCancelWatch::clear_task_id() {
+  if (task_id_ != &::google::protobuf::internal::kEmptyString) {
+    task_id_->clear();
+  }
+  clear_has_task_id();
+}
+inline const ::std::string& UiTaskCancelWatch::task_id() const {
+  return *task_id_;
+}
+inline void UiTaskCancelWatch::set_task_id(const ::std::string& value) {
+  set_has_task_id();
+  if (task_id_ == &::google::protobuf::internal::kEmptyString) {
+    task_id_ = new ::std::string;
+  }
+  task_id_->assign(value);
+}
+inline void UiTaskCancelWatch::set_task_id(const char* value) {
+  set_has_task_id();
+  if (task_id_ == &::google::protobuf::internal::kEmptyString) {
+    task_id_ = new ::std::string;
+  }
+  task_id_->assign(value);
+}
+inline void UiTaskCancelWatch::set_task_id(const char* value, size_t size) {
+  set_has_task_id();
+  if (task_id_ == &::google::protobuf::internal::kEmptyString) {
+    task_id_ = new ::std::string;
+  }
+  task_id_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* UiTaskCancelWatch::mutable_task_id() {
+  set_has_task_id();
+  if (task_id_ == &::google::protobuf::internal::kEmptyString) {
+    task_id_ = new ::std::string;
+  }
+  return task_id_;
+}
+inline ::std::string* UiTaskCancelWatch::release_task_id() {
+  clear_has_task_id();
+  if (task_id_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = task_id_;
+    task_id_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+
+// required string user = 3;
+inline bool UiTaskCancelWatch::has_user() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void UiTaskCancelWatch::set_has_user() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void UiTaskCancelWatch::clear_has_user() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void UiTaskCancelWatch::clear_user() {
+  if (user_ != &::google::protobuf::internal::kEmptyString) {
+    user_->clear();
+  }
+  clear_has_user();
+}
+inline const ::std::string& UiTaskCancelWatch::user() const {
+  return *user_;
+}
+inline void UiTaskCancelWatch::set_user(const ::std::string& value) {
+  set_has_user();
+  if (user_ == &::google::protobuf::internal::kEmptyString) {
+    user_ = new ::std::string;
+  }
+  user_->assign(value);
+}
+inline void UiTaskCancelWatch::set_user(const char* value) {
+  set_has_user();
+  if (user_ == &::google::protobuf::internal::kEmptyString) {
+    user_ = new ::std::string;
+  }
+  user_->assign(value);
+}
+inline void UiTaskCancelWatch::set_user(const char* value, size_t size) {
+  set_has_user();
+  if (user_ == &::google::protobuf::internal::kEmptyString) {
+    user_ = new ::std::string;
+  }
+  user_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* UiTaskCancelWatch::mutable_user() {
+  set_has_user();
+  if (user_ == &::google::protobuf::internal::kEmptyString) {
+    user_ = new ::std::string;
+  }
+  return user_;
+}
+inline ::std::string* UiTaskCancelWatch::release_user() {
+  clear_has_user();
+  if (user_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = user_;
+    user_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+
+// required string passwd = 4;
+inline bool UiTaskCancelWatch::has_passwd() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void UiTaskCancelWatch::set_has_passwd() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void UiTaskCancelWatch::clear_has_passwd() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void UiTaskCancelWatch::clear_passwd() {
+  if (passwd_ != &::google::protobuf::internal::kEmptyString) {
+    passwd_->clear();
+  }
+  clear_has_passwd();
+}
+inline const ::std::string& UiTaskCancelWatch::passwd() const {
+  return *passwd_;
+}
+inline void UiTaskCancelWatch::set_passwd(const ::std::string& value) {
+  set_has_passwd();
+  if (passwd_ == &::google::protobuf::internal::kEmptyString) {
+    passwd_ = new ::std::string;
+  }
+  passwd_->assign(value);
+}
+inline void UiTaskCancelWatch::set_passwd(const char* value) {
+  set_has_passwd();
+  if (passwd_ == &::google::protobuf::internal::kEmptyString) {
+    passwd_ = new ::std::string;
+  }
+  passwd_->assign(value);
+}
+inline void UiTaskCancelWatch::set_passwd(const char* value, size_t size) {
+  set_has_passwd();
+  if (passwd_ == &::google::protobuf::internal::kEmptyString) {
+    passwd_ = new ::std::string;
+  }
+  passwd_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* UiTaskCancelWatch::mutable_passwd() {
+  set_has_passwd();
+  if (passwd_ == &::google::protobuf::internal::kEmptyString) {
+    passwd_ = new ::std::string;
+  }
+  return passwd_;
+}
+inline ::std::string* UiTaskCancelWatch::release_passwd() {
+  clear_has_passwd();
+  if (passwd_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = passwd_;
+    passwd_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+
+// -------------------------------------------------------------------
+
+// UiTaskCancelatchReply
+
+// required int32 client_msg_id = 1;
+inline bool UiTaskCancelatchReply::has_client_msg_id() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void UiTaskCancelatchReply::set_has_client_msg_id() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void UiTaskCancelatchReply::clear_has_client_msg_id() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void UiTaskCancelatchReply::clear_client_msg_id() {
+  client_msg_id_ = 0;
+  clear_has_client_msg_id();
+}
+inline ::google::protobuf::int32 UiTaskCancelatchReply::client_msg_id() const {
+  return client_msg_id_;
+}
+inline void UiTaskCancelatchReply::set_client_msg_id(::google::protobuf::int32 value) {
+  set_has_client_msg_id();
+  client_msg_id_ = value;
+}
+
+// required .dcmd_api.DcmdState state = 2;
+inline bool UiTaskCancelatchReply::has_state() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void UiTaskCancelatchReply::set_has_state() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void UiTaskCancelatchReply::clear_has_state() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void UiTaskCancelatchReply::clear_state() {
+  state_ = 0;
+  clear_has_state();
+}
+inline dcmd_api::DcmdState UiTaskCancelatchReply::state() const {
+  return static_cast< dcmd_api::DcmdState >(state_);
+}
+inline void UiTaskCancelatchReply::set_state(dcmd_api::DcmdState value) {
+  GOOGLE_DCHECK(dcmd_api::DcmdState_IsValid(value));
+  set_has_state();
+  state_ = value;
+}
+
+// optional string err = 3;
+inline bool UiTaskCancelatchReply::has_err() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void UiTaskCancelatchReply::set_has_err() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void UiTaskCancelatchReply::clear_has_err() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void UiTaskCancelatchReply::clear_err() {
+  if (err_ != &::google::protobuf::internal::kEmptyString) {
+    err_->clear();
+  }
+  clear_has_err();
+}
+inline const ::std::string& UiTaskCancelatchReply::err() const {
+  return *err_;
+}
+inline void UiTaskCancelatchReply::set_err(const ::std::string& value) {
+  set_has_err();
+  if (err_ == &::google::protobuf::internal::kEmptyString) {
+    err_ = new ::std::string;
+  }
+  err_->assign(value);
+}
+inline void UiTaskCancelatchReply::set_err(const char* value) {
+  set_has_err();
+  if (err_ == &::google::protobuf::internal::kEmptyString) {
+    err_ = new ::std::string;
+  }
+  err_->assign(value);
+}
+inline void UiTaskCancelatchReply::set_err(const char* value, size_t size) {
+  set_has_err();
+  if (err_ == &::google::protobuf::internal::kEmptyString) {
+    err_ = new ::std::string;
+  }
+  err_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* UiTaskCancelatchReply::mutable_err() {
+  set_has_err();
+  if (err_ == &::google::protobuf::internal::kEmptyString) {
+    err_ = new ::std::string;
+  }
+  return err_;
+}
+inline ::std::string* UiTaskCancelatchReply::release_err() {
+  clear_has_err();
+  if (err_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = err_;
+    err_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
 }
 
 
