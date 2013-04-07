@@ -50,8 +50,10 @@ enum DcmdMsgType {
 }
 
 enum DcmdState {
-  SUCCESS = 0;
-  FAILED = 1;
+  DCMD_STATE_SUCCESS = 0;
+  DCMD_STATE_NO_MASTER = 1;
+  DCMD_STATE_WRONG_MASTER = 2;
+  DCMD_STATE_FAILED = 3;
 }
 
 message KeyValue {
