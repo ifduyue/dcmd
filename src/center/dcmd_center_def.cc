@@ -79,6 +79,8 @@ bool DcmdCenterSvrPool::ChangeSubtaskState(uint64_t subtask_id,
   default:
     CWX_ASSERT(0);
   }
+  subtask->is_ignored_ = is_ignored;
+  subtask->state_ = state;
   return AddSubtask(subtask);
 }
 

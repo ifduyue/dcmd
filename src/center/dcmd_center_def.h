@@ -28,7 +28,7 @@ class DcmdCenterCmd{
    DCMD_CMD_STATE_FAIL = 2
   };
  public:
-  DcmdCenterAgent() {
+  DcmdCenterCmd() {
     cmd_id_ = 0;
     task_id_ = 0;
     subtask_id_ = 0;
@@ -38,7 +38,7 @@ class DcmdCenterCmd{
     subtask_ = NULL;
     agent_ = NULL;
   }
-  ~DcmdCenterAgent() {
+  ~DcmdCenterCmd() {
    }
  public:
   // cmd的id
