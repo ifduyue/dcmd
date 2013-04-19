@@ -88,9 +88,9 @@ const uint32_t kAgentMaxConcurrentOprNum = 50;
 // 在Agent最多并行运行的操作指令脚本数量
 const uint32_t kMaxAgentOprNum = 30;
 // Center的master切换时间间隔
-const uint32_t kCenterMasterSwitchTimeoutSecond = 120;
+const uint32_t kCenterMasterSwitchTimeoutSecond = 10;
 // Center的master检查时间间隔
-const uint32_t kCenterMasterCheckSecond = 5;
+const uint32_t kCenterMasterCheckSecond = 1;
 
 // 缺省的日志文件数量
 const uint32_t kDefLogFileNum = 7;

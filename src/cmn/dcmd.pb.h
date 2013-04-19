@@ -123,11 +123,13 @@ enum DcmdMsgType {
   MTYPE_UI_WATCH_TASK_R = 72,
   MTYPE_UI_CANCEL_WATCH_TASK = 73,
   MTYPE_UI_CANCEL_WATCH_TASK_R = 74,
-  MTYPE_INVALID_MTYPE = 101
+  MTYPE_INVALID_MTYPE = 101,
+  MTYPE_CENTER_INTERNAL_CONN = 103,
+  MTYPE_CENTER_INTERNAL_CONN_R = 104
 };
 bool DcmdMsgType_IsValid(int value);
 const DcmdMsgType DcmdMsgType_MIN = MTYPE_AGENT_REPORT;
-const DcmdMsgType DcmdMsgType_MAX = MTYPE_INVALID_MTYPE;
+const DcmdMsgType DcmdMsgType_MAX = MTYPE_CENTER_INTERNAL_CONN_R;
 const int DcmdMsgType_ARRAYSIZE = DcmdMsgType_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* DcmdMsgType_descriptor();
