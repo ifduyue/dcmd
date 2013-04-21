@@ -93,22 +93,67 @@ void DcmdCenterWatchMgr::CancelWatch(uint32_t ui_client_id,
 }
 
 void DcmdCenterWatchMgr::CancelWatch(uint32_t conn_id) {
-
+  map<uint32_t, DcmdWatchSet* >::iterator iter = conn_index_.find(conn_id);
+  if (iter == conn_index_.end()) return;
+  DcmdWatchSet* watch_set = iter->second;
+  uint32_t count = watch_set->size();
+  DcmdWatchObj* obj;
+  while(count) {
+    // if count==0, watch_set is deleted.
+    obj = *watch_set->begin();
+    CancelWatch(obj->ui_client_id_, obj->conn_id_, obj->watched_task_id_);
+    count--;
+  }
 }
 
-void DcmdCenterWatchMgr:GetWatchesByConn(list<DcmdWatchObj>& watches) {
-
+void DcmdCenterWatchMgr:GetWatchesByConn(list<DcmdWatchObj>& watches, uint32_t conn_id) {
+  watches.clear();
+  map<uint32_t, DcmdWatchSet* >::iterator iter = conn_index_.find(conn_id);
+  if (iter == conn_index_.end()) return;
+  DcmdWatchSet* watch_set = iter->second;
+  DcmdWatchSet_Iter watch_iter = watch_set->begin();
+  while( watch_iter != watch_set->end()) {
+    watches.push_front(**watch_iter);
+    ++watch_iter;
+  }
 }
 
 void DcmdCenterWatchMgr::GetWatches(list<DcmdWatchObj>& watches) {
-
+  watches.clear();
+  map<uint32_t, DcmdWatchObj*>::iterator iter = watches_.begin();
+  while( iter != watches_->end()) {
+    watches.push_front(*(iter->second));
+    ++iter;
+  }
 }
 
 void DcmdCenterWatchMgr::NoticeTaskChange(DcmdCenterTask const& task) {
-
+  // 基于task id的索引, key为task id
+  map<uint32_t, DcmdWatchSet* >::iterator iter = task_index_.find(task.task_id_);
+  if (iter == task_index_.end()) return;
+  //TODO
 }
 
 void DcmdCenterWatchMgr::Clear(bool is_close_conn) {
+  map<uint32_t, DcmdWatchSet* >::iterator iter = task_index_.begin();
+  while (iter != task_index_.end()) {
+    delete iter->second;
+    ++iter;
+  }
+  task_index_.clear();
+  iter = conn_index_.begin();
+  while (iter != conn_index_.end()) {
+    delete iter->second;
+    ++iter;
+  }
+  conn_index_.clear();
+  map<uint32_t, DcmdWatchObj*>::iterator watch_iter = watches_.begin();
+  while (watch_iter != watches_.end()) {
+    delete watch_iter->second;
+    ++watch_iter;
+  }
+  watches_.clear();
+
 
 }
 

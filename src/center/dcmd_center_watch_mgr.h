@@ -85,7 +85,7 @@ class DcmdCenterWatchMgr {
   void CancelWatch(uint32_t conn_id);
 
   // 获取一条连接上的所有watch
-  void GetWatchesByConn(list<DcmdWatchObj>& watches);
+  void GetWatchesByConn(list<DcmdWatchObj>& watches, uint32_t conn_id);
 
   // 获取所有的watch
   void GetWatches(list<DcmdWatchObj>& watches);
