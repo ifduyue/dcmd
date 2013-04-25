@@ -143,12 +143,17 @@ inline bool DcmdMsgType_Parse(
     DcmdMsgType_descriptor(), name, value);
 }
 enum DcmdState {
-  SUCCESS = 0,
-  FAILED = 1
+  DCMD_STATE_SUCCESS = 0,
+  DCMD_STATE_NO_MASTER = 1,
+  DCMD_STATE_WRONG_MASTER = 2,
+  DCMD_STATE_NO_TASK = 3,
+  DCMD_STATE_NO_SUBTASK = 4,
+  DCMD_STATE_HOST_LOST = 5,
+  DCMD_STATE_FAILED = 6
 };
 bool DcmdState_IsValid(int value);
-const DcmdState DcmdState_MIN = SUCCESS;
-const DcmdState DcmdState_MAX = FAILED;
+const DcmdState DcmdState_MIN = DCMD_STATE_SUCCESS;
+const DcmdState DcmdState_MAX = DCMD_STATE_FAILED;
 const int DcmdState_ARRAYSIZE = DcmdState_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* DcmdState_descriptor();
@@ -251,18 +256,19 @@ enum CmdType {
   CMD_UNKNOWN = 0,
   CMD_START_TASK = 1,
   CMD_PAUSE_TASK = 2,
-  CMD_FINISH_TASK = 3,
-  CMD_CANCEL_SUBTASK = 4,
-  CMD_CANCEL_SVR_SUBTASK = 5,
-  CMD_REDO_TASK = 6,
-  CMD_REDO_SVR_POOL = 7,
-  CMD_REDO_SUBTASK = 8,
-  CMD_REDO_FAILED_SUBTASK = 9,
-  CMD_REDO_FAILED_SVR_POOL_SUBTASK = 10,
-  CMD_IGNORE_SUBTASK = 11,
-  CMD_FREEZE_TASK = 12,
-  CMD_UNFREEZE_TASK = 13,
-  CMD_UPDATE_TASK = 14
+  CMD_RESUME_TASK = 3,
+  CMD_FINISH_TASK = 4,
+  CMD_CANCEL_SUBTASK = 5,
+  CMD_CANCEL_SVR_SUBTASK = 6,
+  CMD_REDO_TASK = 7,
+  CMD_REDO_SVR_POOL = 8,
+  CMD_REDO_SUBTASK = 9,
+  CMD_REDO_FAILED_SUBTASK = 10,
+  CMD_REDO_FAILED_SVR_POOL_SUBTASK = 11,
+  CMD_IGNORE_SUBTASK = 12,
+  CMD_FREEZE_TASK = 13,
+  CMD_UNFREEZE_TASK = 14,
+  CMD_UPDATE_TASK = 15
 };
 bool CmdType_IsValid(int value);
 const CmdType CmdType_MIN = CMD_UNKNOWN;
