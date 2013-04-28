@@ -35,12 +35,12 @@ class DcmdCenterH4AgentTask: public CwxCmdOp{
     uint32_t      msg_taskid,
     dcmd_api::AgentReportReply const* reply
     );
-  // 向agent发送subtask命令。返回值，false：发送失败；true：发送成功。
-  static bool SendAgentSubTask(DcmdCenterApp* app,
+  // 向agent发送命令。返回值，false：发送失败；true：发送成功。
+  static bool SendAgentCmd(DcmdCenterApp* app,
     DcmdTss* tss,
     string const& agent_ip,
     uint32_t msg_taskid,
-    dcmd_api::AgentTaskCmd const* subtask);
+    DcmdCenterCmd const* cmd);
   // 回复agent的subtask的结果。返回值，false：发送失败；true：发送成功
   static bool ReplyAgentSubTaskResult(DcmdCenterApp* app,
     DcmdTss* tss,
