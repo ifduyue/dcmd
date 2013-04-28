@@ -1,0 +1,201 @@
+package dcmd_api;
+option java_package = "com.cwinux.dcmd";
+import "dcmd_cmn.proto";
+
+message UiTaskOutput {
+  required  int32     client_msg_id=1;
+  required  string    subtask_id=2;
+  required  string    ip = 3; 
+  required  int32     offset=4; 
+  required  string    user=5;
+  required  string    passwd=6;
+}
+
+message UiTaskOutputReply {
+  required  int32       client_msg_id=1;
+  required  DcmdState   state = 2;
+  required  string      result= 3;
+  required  int32       offset=4;
+  optional  string      err=5;
+}
+
+message UiAgentRunningTask {
+  required  int32     client_msg_id=1;
+  optional  string    ip=2;
+  optional  string    svr_name=3;
+  required  string    user=4;
+  required  string    passwd=5;
+}
+
+message UiAgentRunningTaskReply {
+  required  int32       client_msg_id=1;
+  required  DcmdState   state=2;
+  repeated  SubTaskInfo result=3;
+  optional  string      err=4;
+}
+
+message UiAgentRunningOpr {
+  required  int32     client_msg_id=1;
+  optional  string    ip=2;
+  required  string    user=3;
+  required  string    passwd=4;
+}
+
+message UiAgentRunningOprReply {
+  required  int32     client_msg_id=1;
+  required  DcmdState state=2;
+  repeated  OprInfo   result=3;
+  optional  string    err=4;
+}
+
+message UiExecOprCmd {
+  required  int32     client_msg_id=1;
+  optional  string   opr_id=2;
+  repeated  KeyValue args=3;
+  required  string   user=4;
+  required  string   passwd=5;
+}
+
+message UiExecOprCmdReply{
+  required  int32            client_msg_id=1;
+  required  DcmdState        state=2;
+  repeated  AgentOprCmdReply result=3;
+  optional  string           err=4;
+}
+
+message UiAgentInfo {
+  required  int32     client_msg_id=1;
+  repeated  string    ips=2;
+  required  bool      version=3;
+  required  string    user=4;
+  required  string    passwd=5;
+}
+
+message UiAgentInfoReply{
+  required  int32      client_msg_id=1;
+  required  DcmdState  state=2;
+  repeated  AgentInfo  agentinfo=3;
+  optional  string     err=4;
+}
+
+message UiInvalidAgentInfo {
+  required  int32   client_msg_id=1;
+  required  string  user=2;
+  required  string  passwd=3;
+}
+
+message UiInvalidAgentInfoReply{
+  required  int32      client_msg_id=1;
+  required  DcmdState  state=2;
+  required  AgentInfo  agentinfo=3;
+  optional  string     err=4;
+}
+
+message UiTaskScriptInfo {
+  required  int32   client_msg_id=1;
+  required  string  task_cmd=2;
+  required  string  user=3;
+  required  string  passwd=4;
+}
+
+message UiTaskScriptInfoReply{
+  required  int32     client_msg_id=1;
+  required  DcmdState state=2;
+  optional  string    script=3;
+  optional  string    err=4;
+  optional  string    md5=5;
+}
+
+message UiOprScriptInfo {
+  required  int32   client_msg_id=1;
+  required  string  opr_file=2;
+  required  string  user=3;
+  required  string  passwd=4;
+}
+
+message UiOprScriptInfoReply{
+  required  int32     client_msg_id=1;
+  required  DcmdState state=2;
+  optional  string    script=3;
+  optional  string    err=4;
+  optional  string    md5=5;
+}
+
+message UiAgentTaskProcess {
+  required  int32   client_msg_id=1;
+  repeated  string  subtask_id =2;
+  required  string  user=3;
+  required  string  passwd=4;
+}
+
+message UiAgentTaskProcessReply{
+  required  int32     client_msg_id=1;
+  required  DcmdState state=2;
+  repeated SubTaskProcess process = 3;
+  optional  string    err=4;
+}
+
+enum  CmdType {
+   CMD_UNKNOWN = 0;
+   CMD_START_TASK = 1;
+   CMD_PAUSE_TASK = 2;
+   CMD_RESUME_TASK = 3;
+   CMD_FINISH_TASK = 4;
+   CMD_CANCEL_SUBTASK=5;
+   CMD_CANCEL_SVR_SUBTASK=6;
+   CMD_REDO_TASK = 7;
+   CMD_REDO_SVR_POOL = 8;
+   CMD_REDO_SUBTASK = 9;
+   CMD_REDO_FAILED_SUBTASK=10;
+   CMD_REDO_FAILED_SVR_POOL_SUBTASK=11;
+   CMD_IGNORE_SUBTASK=12;
+   CMD_FREEZE_TASK=13;
+   CMD_UNFREEZE_TASK=14;
+   CMD_UPDATE_TASK=15;
+}
+message UiTaskCmd {
+  required  int32   client_msg_id=1;
+  required  string  task_id =2;
+  optional  string  subtask_id=3;
+  optional  string  ip=4;
+  optional  string  svr_pool=5;
+  required  CmdType cmd_type = 6;
+  required  string  user=7;
+  required  string  passwd=8;
+}
+
+message UiTaskCmdReply{
+  required  int32     client_msg_id=1;
+  required  DcmdState state=2;
+  optional  string    cmd_id=3;
+  optional  string    err=4;
+}
+
+message UiTaskWatch {
+  required  int32   client_msg_id=1;
+  required  string  task_id =2;
+  required  bool    last_state=3;
+  required  string  user=4;
+  required  string  passwd=5;
+}
+
+message UiTaskWatchReply{
+  required  int32       client_msg_id=1;
+  required  DcmdState   watch_state=2;
+  optional  string      err=3;
+  required  TaskInfo    task_info=4;
+  repeated  TaskInfo    child_tasks=5;
+}
+
+message UiTaskCancelWatch {
+  required  int32   client_msg_id=1;
+  required  string  task_id =2;
+  required  string  user=3;
+  required  string  passwd=4;
+}
+
+message UiTaskCancelWatchReply{
+  required  int32       client_msg_id=1;
+  required  DcmdState   state=2;
+  optional  string      err=3;
+}

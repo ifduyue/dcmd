@@ -1,0 +1,109 @@
+package dcmd_api;
+option java_package = "com.cwinux.dcmd";
+import "dcmd_cmn.proto";
+
+message AgentReportReply {
+  required DcmdState   state = 1; 
+  optional string      err = 2; 
+  optional int32       heatbeat=3;
+  optional int32       package_size=4;
+  optional int32       opr_queue_threshold=5;
+  optional int32       opr_overflow_threshold=6;
+}
+
+message AgentMasterNoticeReply {
+  repeated string  cmd = 1;
+  repeated SubTaskProcess subtask_process = 2;
+}
+
+message AgentTaskCmd {
+required  string   cmd=1;
+required  string   task_cmd=2;
+required  bool     ctrl=3;
+optional  string   task_id=4;
+optional  string   subtask_id=5;
+optional  string   ip=6;
+optional  string   svr_name=7;
+optional  string   svr_pool=8;
+optional  string   svr_ver=9;
+optional  string   svr_repo=10;
+optional  string   svr_user=11;
+optional  string   svr_env_ver=12;
+optional  bool     update_env=13;
+optional  bool     update_ver=14;
+optional  bool     output_process=15;
+optional  string   script=16;
+repeated  KeyValue task_arg=17;
+}
+
+message AgentTaskCmdReply {
+  required  string  cmd = 1;
+}
+
+message AgentSubTaskProcess {
+  required  string  task_id = 1; 
+  required  string  subtask_id = 2;
+  required  string  process=3;
+}
+
+message AgentTaskResult {
+  required  string  cmd = 1;
+  required  string  task_id = 2;
+  required  string  subtask_id = 3;
+  required  bool    success = 4;
+  optional  string  err= 5;
+  optional  string  process=6;
+}
+
+message AgentTaskResultReply {
+  required  string  cmd = 1;
+}
+
+message AgentOprCmd {
+  required  string   opr_id = 1; 
+  required  string   name = 2;
+  required  int32    priority=3;
+  required  string   run_user = 4;
+  required  int32    timeout= 5;
+  required  string   script = 6;
+  repeated  KeyValue args= 7;
+}
+
+
+message AgentTaskOutput {
+  required  string  subtask_id = 1;
+  required  int32   offset= 2;
+  optional  string  ip=3;
+}
+
+message AgentTaskOutputReply {
+  required  DcmdState   state = 1;
+  required  string      result= 2;
+  required  int32       offset=3;
+  optional  string      err=4;
+}
+
+message AgentRunningTask {
+  optional  string  ip=1;
+  optional  string  svr_name=2;
+}
+
+message AgentRunningTaskReply {
+  required  DcmdState   state=1;
+  repeated  SubTaskInfo result=2;
+  optional  string      err=3;
+}
+
+message AgentRunningOpr {
+  optional  string  ip=1; 
+}
+
+message AgentRunningOprReply {
+  required  DcmdState state=1; 
+  repeated  OprInfo  result=2; 
+  optional  string  err=3;
+}
+
+message InvalidMsg {
+  required  int32  msg_type=1;
+}
