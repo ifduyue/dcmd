@@ -159,15 +159,18 @@ message UiTaskCmd {
   optional  string  subtask_id=3;
   optional  string  ip=4;
   optional  string  svr_pool=5;
-  required  CmdType cmd_type = 6;
-  required  string  user=7;
-  required  string  passwd=8;
+  optional  int32   concurrent_num=6;
+  optional  int32   concurrent_rate=7;
+  optional  int32   task_timeout=8;
+  optional  bool    auto=9;
+  required  CmdType cmd_type = 10;
+  required  string  user=11;
+  required  string  passwd=12;
 }
 
 message UiTaskCmdReply{
   required  int32     client_msg_id=1;
   required  DcmdState state=2;
-  optional  string    cmd_id=3;
   optional  string    err=4;
 }
 
