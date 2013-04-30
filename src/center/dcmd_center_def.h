@@ -321,7 +321,7 @@ class DcmdCenterAgent{
   // 设备的ip地址
   string      ip_;  ///设备的ip地址
   // 节点上待发送的命令, key为cmd的id
-  map<uint64_t, DcmdCenterAgent*>  cmds_;
+  map<uint64_t, DcmdCenterCmd*>  cmds_;
 };
 
 }  // dcmd

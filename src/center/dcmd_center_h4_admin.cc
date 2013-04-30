@@ -695,6 +695,30 @@ void DcmdCenterH4Admin::ReplyAgentSubTaskProcess(DcmdCenterApp* app,
   ReplyAdmin(app, conn_id, block);
 }
 
+void DcmdCenterH4Admin::ReplyUiTaskCmd(DcmdCenterApp* app,
+  DcmdTss* tss,
+  uint32_t  conn_id,
+  uint32_t  msg_task_id,
+  dcmd_api::UiTaskCmdReply* result) 
+{
+  CwxMsgBlock* block = NULL;
+  if (!result->SerializeToString(&tss->proto_str_)) {
+    CWX_ERROR(("Failure to pack ui task cmd msg."));
+    app->noticeCloseConn(conn_id);
+    return;
+  }
+  CwxMsgHead head(0, 0, dcmd_api::MTYPE_UI_EXEC_TASK_R, msg_task_id,
+    tss->proto_str_.length());
+  msg = CwxMsgBlockAlloc::pack(head, tss->proto_str_.c_str(),
+    tss->proto_str_.length());
+  if (!msg) {
+    CWX_ERROR(("Failure to pack ui task cmd msg for no memory"));
+    exit(1);
+  }
+  ReplyAdmin(app, conn_id, block);
+}
+
+
 void DcmdCenterH4Admin::ReplyAdmin(DcmdCenterApp* app, uint32_t conn_id, CwxMsgBlock* msg)
 {
   msg->send_ctrl().setSvrId(DcmdCenterApp::SVR_TYPE_ADMIN);

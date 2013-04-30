@@ -88,11 +88,23 @@ class DcmdCenterApp : public CwxAppFramework {
   }
   // 获取自己是否为master
   inline bool is_master() const {
+    CwxMutexGuard<CwxMutexLock> lock(&lock_);
     return is_master_;
   }
   // 设置是否为master
   inline void SetMaster(bool is_master=true) {
+    CwxMutexGuard<CwxMutexLock> lock(&lock_);
     is_master_ = is_master;
+  }
+  // 获取master主机
+  inline void master_host(string & master) {
+    CwxMutexGuard<CwxMutexLock> lock(&lock_);
+    master = master_host_;
+  }
+  // 设置master主机
+  inline void SetMasterHost(char const* master_host) {
+    CwxMutexGuard<CwxMutexLock> lock(&lock_);
+    master_host_ = master_host;
   }
   ///获取任务管理对象
   inline DcmdCenterTaskMgr* GetTaskMgr() {
@@ -122,8 +134,12 @@ class DcmdCenterApp : public CwxAppFramework {
   Mysql                        *task_mysql_;
   // 主线程的数据库句柄
   Mysql                        *check_mysql_;
+  // 保护is_master_ 和 master_host_
+  CwxMutexLock                 lock_;
   // 自己是否为master
-  volatile bool                is_master_;
+  bool                         is_master_;
+  // master主机
+  string                        master_host_;
   // 来自agent事件的处理handler，由task线程处理
   DcmdCenterH4AgentTask        *agent_task_handler_;
   // 对agent进行操作的事件处理handler，由admin线程处理

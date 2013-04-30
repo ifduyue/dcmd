@@ -41,8 +41,8 @@ class DcmdCenterH4AgentTask: public CwxCmdOp{
     string const& agent_ip,
     uint32_t msg_taskid,
     DcmdCenterCmd const* cmd);
-  // 回复agent的subtask的结果。返回值，false：发送失败；true：发送成功
-  static bool ReplyAgentSubTaskResult(DcmdCenterApp* app,
+  // 回复agent的cmd的结果。返回值，false：发送失败；true：发送成功
+  static bool ReplyAgentCmdResult(DcmdCenterApp* app,
     DcmdTss* tss,
     string const& agent_ip,
     uint32_t msg_taskid,

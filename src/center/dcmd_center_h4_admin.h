@@ -78,6 +78,12 @@ class DcmdCenterH4Admin: public CwxCmdOp {
     uint32_t conn_id,
     uint32_t msg_task_id,
     dcmd_api::UiAgentTaskProcessReply* result);
+  // 回复命令的执行结果
+  static void ReplyUiTaskCmd(DcmdCenterApp* app,
+    DcmdTss* tss,
+    uint32_t  conn_id,
+    uint32_t  msg_task_id,
+    dcmd_api::UiTaskCmdReply* result);
 
  private:
   // 执行操作指令

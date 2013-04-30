@@ -120,6 +120,7 @@ void DcmdCenterH4Check::CheckMasterCenter(DcmdTss* tss) {
   if (my->IsConnected())  UnlockCenterTable->disconnect();
   if (is_master != app_->is_master()) {
     app_->SetMaster(is_master);
+    app_->SetMasterHost(host);
     CwxMsgBlock* msg = CwxMsgBlockAlloc::malloc(0);
     msg->event().setSvrId(DcmdCenterApp::SVR_TYPE_AGENT);
     msg->event().setConnId(is_master?1:0);

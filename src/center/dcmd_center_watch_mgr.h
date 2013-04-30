@@ -93,6 +93,9 @@ class DcmdCenterWatchMgr {
   // 通知任务信息改变
   void NoticeTaskChange(DcmdCenterTask const& task);
 
+  // 通知master改变
+  void NoticeMasterChange(bool is_close_conn);
+
   // 清空watch
   void Clear(bool is_close_conn);
  private:
