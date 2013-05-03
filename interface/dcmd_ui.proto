@@ -152,7 +152,6 @@ enum  CmdType {
    CMD_IGNORE_SUBTASK=13;
    CMD_FREEZE_TASK=14;
    CMD_UNFREEZE_TASK=15;
-   CMD_UPDATE_TASK=16;
 }
 message UiTaskCmd {
   required  int32   client_msg_id=1;
