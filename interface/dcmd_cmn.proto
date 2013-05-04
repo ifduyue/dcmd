@@ -119,13 +119,14 @@ message TaskInfo {
   required  TaskState   task_state=2;
   required  int32       order = 3;
   optional  string      parent_task_id = 4;
-  optional  string      err=5;
-  optional  int32       success_subtask=6;
-  optional  int32       failed_subtask=7;
-  optional  int32       doing_subtask=8;
-  optional  int32       undo_subtask=9;
-  optional  int32       ignore_doing_subtask=10;
-  optional  int32       ignore_failed_subtask=11;
+  optional  bool        valid=5;
+  optional  string      err=6;
+  optional  int32       success_subtask=7;
+  optional  int32       failed_subtask=8;
+  optional  int32       doing_subtask=9;
+  optional  int32       undo_subtask=10;
+  optional  int32       ignore_doing_subtask=11;
+  optional  int32       ignore_failed_subtask=12;
 }
 
 message AgentInfo {
