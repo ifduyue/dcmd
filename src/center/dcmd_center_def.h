@@ -222,6 +222,7 @@ class DcmdCenterTask {
   DcmdCenterTask() {
     task_id_ = 0;
     parent_task_id_ = 0;
+    is_cluster_ = false;
     parent_task_ = NULL;
     doing_order_ = 0;
     order_ = 0;
@@ -230,6 +231,7 @@ class DcmdCenterTask {
     update_env_ = false;
     update_tag_ = false;
     state_ = dcmd_api::TASK_INIT;
+    is_valid_ = true;
     max_current_num_ = 0;
     max_current_rate_ = 0;
     timeout_ = 0;
@@ -237,11 +239,21 @@ class DcmdCenterTask {
     is_output_process_ = false;
   }
   ~DcmdCenterTask(){
-    // 需要释放池子对象
-    map<string, DcmdCenterSvrPool*>::iterator iter= pools_.begin();
-    while(iter != pools_.end()){
-      delete iter->second;
-      iter++;
+    {
+      // 释放池子对象
+      map<string, DcmdCenterSvrPool*>::iterator iter= pools_.begin();
+      while(iter != pools_.end()){
+        delete iter->second;
+        ++iter;
+      }
+    }
+    {
+      //是否child task
+      map<uint32_t, map<uint32_t, DcmdCenterTask*>* >::iterator iter = child_tasks_.begin();
+      while(iter != child_tasks_.end()) {
+        delete iter->second;
+        ++iter;
+      }
     }
   }
 
@@ -255,7 +267,8 @@ class DcmdCenterTask {
   // 改变任务的状态，true 成功；false：失败。失败或者subtask不存在，或者pool不存在
   bool ChangeSubtaskState(DcmdCenterSubtask const* subtask,
     dcmd_api::SubTaskState state,
-    bool is_ignored)
+    bool is_ignored);
+  void AddChildTask(DcmdCenterTask* child_task);
  public:
   // 任务的id
   uint32_t                    task_id_;
@@ -265,10 +278,12 @@ class DcmdCenterTask {
   string                      task_cmd_;
   // 父任务的id
   uint32_t                    parent_task_id_;
+  // 是否是cluster 任务
+  bool                        is_cluster_;
   // 父任务
   DcmdCenterTask*             parent_task_;
   // 子任务的列表，按照顺序排序
-  vector<list<DcmdCenterTask*> >  child_tasks_;
+  map<uint32_t, map<uint32_t, DcmdCenterTask*> >  child_tasks_;
   // 当前任务执行到的index
   uint32_t                    doing_order_;
   // 执行顺序
@@ -289,6 +304,8 @@ class DcmdCenterTask {
   bool                        update_tag_;
   // 任务的状态
   dcmd_api::TaskState         state_;
+  // 任务是否有效
+  bool                        is_valid_;
   // 并行执行的最大数量
   uint32_t                    max_current_num_;
   // 并行执行的最大比率
@@ -299,12 +316,16 @@ class DcmdCenterTask {
   bool                        is_auto_;
   // 是否输出进度信息
   bool                        is_output_process_;
+  // 参数的xml脚本
+  string                      arg_xml_;
   // 任务的参数
   list<string, string>        args_;
   // 任务的脚本
   string                      task_cmd_script_;
   // 任务脚本的md5值
   string                      task_cmd_script_md5_;
+  // 错误信息
+  string                      err_msg_;
   // 任务的池子
   map<string, DcmdCenterSvrPool*>   pools_;
 };

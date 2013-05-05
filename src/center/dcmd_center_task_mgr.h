@@ -103,7 +103,18 @@ class DcmdCenterTaskMgr{
   // 加载所有的数据
   bool LoadAllDataFromDb(DcmdTss* tss);
   // 从数据库中获取新task
-  bool LoadNewTask(DcmdTss* tss);
+  bool LoadNewTask(DcmdTss* tss, bool is_first);
+  // 初始化时，从数据库加载subtask
+
+  // 加载任务的service pool
+  bool LoadTaskSvrPool(DcmdTss* tss, DcmdCenterTask* task);
+  // Parse任务的信息。返回值，1：成功；0：非数据库失败；-1：db操作失败
+  int ParseTask(DcmdTss* tss, DcmdCenterTask* task);
+  // 读取task cmd的内容
+  bool ReadTaskCmdContent(DcmdTss* tss, char const* task_cmd, string& content);
+  // 获取task cmd的数据库md5签名。返回值，1：成功；0：不存在；-1：失败
+  int FetchTaskCmdInfoFromDb(DcmdTss* tss, char const* task_cmd, string& md5,
+    bool& is_cluster);
 
   // 对所有的任务进行调度，若返回false，是数据库操作失败。
   bool Schedule(DcmdTss* tss);
@@ -116,6 +127,17 @@ class DcmdCenterTaskMgr{
     string& agent_ip,
     DcmdCenterTask*& task
     );
+ private:
+   // 根据task id从map中获取task对象
+   inline DcmdCenterTask* GetTask(uint32_t task_id);
+   // 更新任务无效状态
+   inline bool UpdateTaskValid(DcmdTss* tss, bool is_commit, 
+     uint32_t task_id, bool is_valid, char const* err_msg);
+   // 更新cluster任务的当前执行到的order
+   inline bool UpdateTaskState(DcmdTss* tss, bool is_commit,
+     uint32_t task_id, dcmd_api::TaskState state);
+
+
  private:
   // app对象
   DcmdCenterApp*                               app_;
@@ -146,4 +168,6 @@ class DcmdCenterTaskMgr{
 };
 
 }  // dcmd
+
+#include "dcmd_center_task_mgr.inl"
 #endif

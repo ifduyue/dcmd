@@ -63,22 +63,22 @@ enum CmdType {
   CMD_START_TASK = 1,
   CMD_PAUSE_TASK = 2,
   CMD_RESUME_TASK = 3,
-  CMD_FINISH_TASK = 4,
-  CMD_CANCEL_SUBTASK = 5,
-  CMD_CANCEL_SVR_SUBTASK = 6,
-  CMD_REDO_TASK = 7,
-  CMD_REDO_SVR_POOL = 8,
-  CMD_REDO_SUBTASK = 9,
-  CMD_REDO_FAILED_SUBTASK = 10,
-  CMD_REDO_FAILED_SVR_POOL_SUBTASK = 11,
-  CMD_IGNORE_SUBTASK = 12,
-  CMD_FREEZE_TASK = 13,
-  CMD_UNFREEZE_TASK = 14,
-  CMD_UPDATE_TASK = 15
+  CMD_RETRY_TASK = 4,
+  CMD_FINISH_TASK = 5,
+  CMD_CANCEL_SUBTASK = 6,
+  CMD_CANCEL_SVR_SUBTASK = 7,
+  CMD_REDO_TASK = 8,
+  CMD_REDO_SVR_POOL = 9,
+  CMD_REDO_SUBTASK = 10,
+  CMD_REDO_FAILED_SUBTASK = 11,
+  CMD_REDO_FAILED_SVR_POOL_SUBTASK = 12,
+  CMD_IGNORE_SUBTASK = 13,
+  CMD_FREEZE_TASK = 14,
+  CMD_UNFREEZE_TASK = 15
 };
 bool CmdType_IsValid(int value);
 const CmdType CmdType_MIN = CMD_UNKNOWN;
-const CmdType CmdType_MAX = CMD_UPDATE_TASK;
+const CmdType CmdType_MAX = CMD_UNFREEZE_TASK;
 const int CmdType_ARRAYSIZE = CmdType_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* CmdType_descriptor();
@@ -2477,17 +2477,45 @@ class UiTaskCmd : public ::google::protobuf::Message {
   inline ::std::string* mutable_svr_pool();
   inline ::std::string* release_svr_pool();
   
-  // required .dcmd_api.CmdType cmd_type = 6;
+  // optional int32 concurrent_num = 6;
+  inline bool has_concurrent_num() const;
+  inline void clear_concurrent_num();
+  static const int kConcurrentNumFieldNumber = 6;
+  inline ::google::protobuf::int32 concurrent_num() const;
+  inline void set_concurrent_num(::google::protobuf::int32 value);
+  
+  // optional int32 concurrent_rate = 7;
+  inline bool has_concurrent_rate() const;
+  inline void clear_concurrent_rate();
+  static const int kConcurrentRateFieldNumber = 7;
+  inline ::google::protobuf::int32 concurrent_rate() const;
+  inline void set_concurrent_rate(::google::protobuf::int32 value);
+  
+  // optional int32 task_timeout = 8;
+  inline bool has_task_timeout() const;
+  inline void clear_task_timeout();
+  static const int kTaskTimeoutFieldNumber = 8;
+  inline ::google::protobuf::int32 task_timeout() const;
+  inline void set_task_timeout(::google::protobuf::int32 value);
+  
+  // optional bool auto = 9;
+  inline bool has_auto_() const;
+  inline void clear_auto_();
+  static const int kAutoFieldNumber = 9;
+  inline bool auto_() const;
+  inline void set_auto_(bool value);
+  
+  // required .dcmd_api.CmdType cmd_type = 10;
   inline bool has_cmd_type() const;
   inline void clear_cmd_type();
-  static const int kCmdTypeFieldNumber = 6;
+  static const int kCmdTypeFieldNumber = 10;
   inline dcmd_api::CmdType cmd_type() const;
   inline void set_cmd_type(dcmd_api::CmdType value);
   
-  // required string user = 7;
+  // required string user = 11;
   inline bool has_user() const;
   inline void clear_user();
-  static const int kUserFieldNumber = 7;
+  static const int kUserFieldNumber = 11;
   inline const ::std::string& user() const;
   inline void set_user(const ::std::string& value);
   inline void set_user(const char* value);
@@ -2495,10 +2523,10 @@ class UiTaskCmd : public ::google::protobuf::Message {
   inline ::std::string* mutable_user();
   inline ::std::string* release_user();
   
-  // required string passwd = 8;
+  // required string passwd = 12;
   inline bool has_passwd() const;
   inline void clear_passwd();
-  static const int kPasswdFieldNumber = 8;
+  static const int kPasswdFieldNumber = 12;
   inline const ::std::string& passwd() const;
   inline void set_passwd(const ::std::string& value);
   inline void set_passwd(const char* value);
@@ -2518,6 +2546,14 @@ class UiTaskCmd : public ::google::protobuf::Message {
   inline void clear_has_ip();
   inline void set_has_svr_pool();
   inline void clear_has_svr_pool();
+  inline void set_has_concurrent_num();
+  inline void clear_has_concurrent_num();
+  inline void set_has_concurrent_rate();
+  inline void clear_has_concurrent_rate();
+  inline void set_has_task_timeout();
+  inline void clear_has_task_timeout();
+  inline void set_has_auto_();
+  inline void clear_has_auto_();
   inline void set_has_cmd_type();
   inline void clear_has_cmd_type();
   inline void set_has_user();
@@ -2530,14 +2566,18 @@ class UiTaskCmd : public ::google::protobuf::Message {
   ::std::string* task_id_;
   ::std::string* subtask_id_;
   ::google::protobuf::int32 client_msg_id_;
-  int cmd_type_;
+  ::google::protobuf::int32 concurrent_num_;
   ::std::string* ip_;
   ::std::string* svr_pool_;
+  ::google::protobuf::int32 concurrent_rate_;
+  ::google::protobuf::int32 task_timeout_;
+  bool auto__;
+  int cmd_type_;
   ::std::string* user_;
   ::std::string* passwd_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(8 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(12 + 31) / 32];
   
   friend void  protobuf_AddDesc_dcmd_5fui_2eproto();
   friend void protobuf_AssignDesc_dcmd_5fui_2eproto();
@@ -2616,17 +2656,6 @@ class UiTaskCmdReply : public ::google::protobuf::Message {
   inline dcmd_api::DcmdState state() const;
   inline void set_state(dcmd_api::DcmdState value);
   
-  // optional string cmd_id = 3;
-  inline bool has_cmd_id() const;
-  inline void clear_cmd_id();
-  static const int kCmdIdFieldNumber = 3;
-  inline const ::std::string& cmd_id() const;
-  inline void set_cmd_id(const ::std::string& value);
-  inline void set_cmd_id(const char* value);
-  inline void set_cmd_id(const char* value, size_t size);
-  inline ::std::string* mutable_cmd_id();
-  inline ::std::string* release_cmd_id();
-  
   // optional string err = 4;
   inline bool has_err() const;
   inline void clear_err();
@@ -2644,8 +2673,6 @@ class UiTaskCmdReply : public ::google::protobuf::Message {
   inline void clear_has_client_msg_id();
   inline void set_has_state();
   inline void clear_has_state();
-  inline void set_has_cmd_id();
-  inline void clear_has_cmd_id();
   inline void set_has_err();
   inline void clear_has_err();
   
@@ -2653,11 +2680,10 @@ class UiTaskCmdReply : public ::google::protobuf::Message {
   
   ::google::protobuf::int32 client_msg_id_;
   int state_;
-  ::std::string* cmd_id_;
   ::std::string* err_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(4 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(3 + 31) / 32];
   
   friend void  protobuf_AddDesc_dcmd_5fui_2eproto();
   friend void protobuf_AssignDesc_dcmd_5fui_2eproto();
@@ -6749,15 +6775,103 @@ inline ::std::string* UiTaskCmd::release_svr_pool() {
   }
 }
 
-// required .dcmd_api.CmdType cmd_type = 6;
-inline bool UiTaskCmd::has_cmd_type() const {
+// optional int32 concurrent_num = 6;
+inline bool UiTaskCmd::has_concurrent_num() const {
   return (_has_bits_[0] & 0x00000020u) != 0;
 }
-inline void UiTaskCmd::set_has_cmd_type() {
+inline void UiTaskCmd::set_has_concurrent_num() {
   _has_bits_[0] |= 0x00000020u;
 }
-inline void UiTaskCmd::clear_has_cmd_type() {
+inline void UiTaskCmd::clear_has_concurrent_num() {
   _has_bits_[0] &= ~0x00000020u;
+}
+inline void UiTaskCmd::clear_concurrent_num() {
+  concurrent_num_ = 0;
+  clear_has_concurrent_num();
+}
+inline ::google::protobuf::int32 UiTaskCmd::concurrent_num() const {
+  return concurrent_num_;
+}
+inline void UiTaskCmd::set_concurrent_num(::google::protobuf::int32 value) {
+  set_has_concurrent_num();
+  concurrent_num_ = value;
+}
+
+// optional int32 concurrent_rate = 7;
+inline bool UiTaskCmd::has_concurrent_rate() const {
+  return (_has_bits_[0] & 0x00000040u) != 0;
+}
+inline void UiTaskCmd::set_has_concurrent_rate() {
+  _has_bits_[0] |= 0x00000040u;
+}
+inline void UiTaskCmd::clear_has_concurrent_rate() {
+  _has_bits_[0] &= ~0x00000040u;
+}
+inline void UiTaskCmd::clear_concurrent_rate() {
+  concurrent_rate_ = 0;
+  clear_has_concurrent_rate();
+}
+inline ::google::protobuf::int32 UiTaskCmd::concurrent_rate() const {
+  return concurrent_rate_;
+}
+inline void UiTaskCmd::set_concurrent_rate(::google::protobuf::int32 value) {
+  set_has_concurrent_rate();
+  concurrent_rate_ = value;
+}
+
+// optional int32 task_timeout = 8;
+inline bool UiTaskCmd::has_task_timeout() const {
+  return (_has_bits_[0] & 0x00000080u) != 0;
+}
+inline void UiTaskCmd::set_has_task_timeout() {
+  _has_bits_[0] |= 0x00000080u;
+}
+inline void UiTaskCmd::clear_has_task_timeout() {
+  _has_bits_[0] &= ~0x00000080u;
+}
+inline void UiTaskCmd::clear_task_timeout() {
+  task_timeout_ = 0;
+  clear_has_task_timeout();
+}
+inline ::google::protobuf::int32 UiTaskCmd::task_timeout() const {
+  return task_timeout_;
+}
+inline void UiTaskCmd::set_task_timeout(::google::protobuf::int32 value) {
+  set_has_task_timeout();
+  task_timeout_ = value;
+}
+
+// optional bool auto = 9;
+inline bool UiTaskCmd::has_auto_() const {
+  return (_has_bits_[0] & 0x00000100u) != 0;
+}
+inline void UiTaskCmd::set_has_auto_() {
+  _has_bits_[0] |= 0x00000100u;
+}
+inline void UiTaskCmd::clear_has_auto_() {
+  _has_bits_[0] &= ~0x00000100u;
+}
+inline void UiTaskCmd::clear_auto_() {
+  auto__ = false;
+  clear_has_auto_();
+}
+inline bool UiTaskCmd::auto_() const {
+  return auto__;
+}
+inline void UiTaskCmd::set_auto_(bool value) {
+  set_has_auto_();
+  auto__ = value;
+}
+
+// required .dcmd_api.CmdType cmd_type = 10;
+inline bool UiTaskCmd::has_cmd_type() const {
+  return (_has_bits_[0] & 0x00000200u) != 0;
+}
+inline void UiTaskCmd::set_has_cmd_type() {
+  _has_bits_[0] |= 0x00000200u;
+}
+inline void UiTaskCmd::clear_has_cmd_type() {
+  _has_bits_[0] &= ~0x00000200u;
 }
 inline void UiTaskCmd::clear_cmd_type() {
   cmd_type_ = 0;
@@ -6772,15 +6886,15 @@ inline void UiTaskCmd::set_cmd_type(dcmd_api::CmdType value) {
   cmd_type_ = value;
 }
 
-// required string user = 7;
+// required string user = 11;
 inline bool UiTaskCmd::has_user() const {
-  return (_has_bits_[0] & 0x00000040u) != 0;
+  return (_has_bits_[0] & 0x00000400u) != 0;
 }
 inline void UiTaskCmd::set_has_user() {
-  _has_bits_[0] |= 0x00000040u;
+  _has_bits_[0] |= 0x00000400u;
 }
 inline void UiTaskCmd::clear_has_user() {
-  _has_bits_[0] &= ~0x00000040u;
+  _has_bits_[0] &= ~0x00000400u;
 }
 inline void UiTaskCmd::clear_user() {
   if (user_ != &::google::protobuf::internal::kEmptyString) {
@@ -6830,15 +6944,15 @@ inline ::std::string* UiTaskCmd::release_user() {
   }
 }
 
-// required string passwd = 8;
+// required string passwd = 12;
 inline bool UiTaskCmd::has_passwd() const {
-  return (_has_bits_[0] & 0x00000080u) != 0;
+  return (_has_bits_[0] & 0x00000800u) != 0;
 }
 inline void UiTaskCmd::set_has_passwd() {
-  _has_bits_[0] |= 0x00000080u;
+  _has_bits_[0] |= 0x00000800u;
 }
 inline void UiTaskCmd::clear_has_passwd() {
-  _has_bits_[0] &= ~0x00000080u;
+  _has_bits_[0] &= ~0x00000800u;
 }
 inline void UiTaskCmd::clear_passwd() {
   if (passwd_ != &::google::protobuf::internal::kEmptyString) {
@@ -6937,73 +7051,15 @@ inline void UiTaskCmdReply::set_state(dcmd_api::DcmdState value) {
   state_ = value;
 }
 
-// optional string cmd_id = 3;
-inline bool UiTaskCmdReply::has_cmd_id() const {
-  return (_has_bits_[0] & 0x00000004u) != 0;
-}
-inline void UiTaskCmdReply::set_has_cmd_id() {
-  _has_bits_[0] |= 0x00000004u;
-}
-inline void UiTaskCmdReply::clear_has_cmd_id() {
-  _has_bits_[0] &= ~0x00000004u;
-}
-inline void UiTaskCmdReply::clear_cmd_id() {
-  if (cmd_id_ != &::google::protobuf::internal::kEmptyString) {
-    cmd_id_->clear();
-  }
-  clear_has_cmd_id();
-}
-inline const ::std::string& UiTaskCmdReply::cmd_id() const {
-  return *cmd_id_;
-}
-inline void UiTaskCmdReply::set_cmd_id(const ::std::string& value) {
-  set_has_cmd_id();
-  if (cmd_id_ == &::google::protobuf::internal::kEmptyString) {
-    cmd_id_ = new ::std::string;
-  }
-  cmd_id_->assign(value);
-}
-inline void UiTaskCmdReply::set_cmd_id(const char* value) {
-  set_has_cmd_id();
-  if (cmd_id_ == &::google::protobuf::internal::kEmptyString) {
-    cmd_id_ = new ::std::string;
-  }
-  cmd_id_->assign(value);
-}
-inline void UiTaskCmdReply::set_cmd_id(const char* value, size_t size) {
-  set_has_cmd_id();
-  if (cmd_id_ == &::google::protobuf::internal::kEmptyString) {
-    cmd_id_ = new ::std::string;
-  }
-  cmd_id_->assign(reinterpret_cast<const char*>(value), size);
-}
-inline ::std::string* UiTaskCmdReply::mutable_cmd_id() {
-  set_has_cmd_id();
-  if (cmd_id_ == &::google::protobuf::internal::kEmptyString) {
-    cmd_id_ = new ::std::string;
-  }
-  return cmd_id_;
-}
-inline ::std::string* UiTaskCmdReply::release_cmd_id() {
-  clear_has_cmd_id();
-  if (cmd_id_ == &::google::protobuf::internal::kEmptyString) {
-    return NULL;
-  } else {
-    ::std::string* temp = cmd_id_;
-    cmd_id_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
-    return temp;
-  }
-}
-
 // optional string err = 4;
 inline bool UiTaskCmdReply::has_err() const {
-  return (_has_bits_[0] & 0x00000008u) != 0;
+  return (_has_bits_[0] & 0x00000004u) != 0;
 }
 inline void UiTaskCmdReply::set_has_err() {
-  _has_bits_[0] |= 0x00000008u;
+  _has_bits_[0] |= 0x00000004u;
 }
 inline void UiTaskCmdReply::clear_has_err() {
-  _has_bits_[0] &= ~0x00000008u;
+  _has_bits_[0] &= ~0x00000004u;
 }
 inline void UiTaskCmdReply::clear_err() {
   if (err_ != &::google::protobuf::internal::kEmptyString) {

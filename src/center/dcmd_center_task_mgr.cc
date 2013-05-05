@@ -279,7 +279,7 @@ void DcmdCenterTaskMgr::Reset() {
     }
     waiting_cmds_.clear();
   }
-  next_subtask_id_ = 0;
+  next_task_id_ = 0;
   next_subtask_id_ = 0;
   next_cmd_id_ = 0;
   // 关闭watch
@@ -291,11 +291,291 @@ void DcmdCenterTaskMgr::Reset() {
 }
 
 bool DcmdCenterTaskMgr::LoadAllDataFromDb(DcmdTss* tss) {
-  // 加载所有的任务数据
+  // 加载所有新的任务数据
+  if (!LoadNewTask(tss, true)) return false;
+
 
   // 加载所有的subtask数据
   // 加载所有未处理的命令数据
 }
+
+
+// 从数据库中获取新task
+bool DcmdCenterTaskMgr::LoadNewTask(DcmdTss* tss, bool is_first) {
+  list<DcmdCenterTask*> tasks;
+  CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, "select task_id, task_name, task_cmd, parent_task_id,"\
+    "order, svr_id, service, gid, group_name, tag, update_env, update_tag, state,"\
+    "valid, concurrent_num, concurrent_rate, timeout, auto, process, task_arg, "\
+    "errmsg from task order by task_id asc where task_id > %d", next_task_id_);
+  if (!mysql_->query(tss->sql_)){
+    mysql_->freeResult();
+    CWX_ERROR(("Failure to fetch new tasks. err:%s; sql:%s", mysql_->getErrMsg(),
+      tss->sql_));
+    return false;
+  }
+  bool is_null = false;
+  DcmdCenterTask* task = NULL;
+  while(mysql_->next()){
+    task = new DcmdCenterTask();
+    task->task_id_ = strtoul(mysql_->fetch(0, is_null, NULL, 10);
+    task->task_name_ = mysql_->fetch(1, is_null);
+    task->task_cmd_ = mysql_->fetch(2, is_null);
+    task->parent_task_id_ = strtoul(mysql_->fetch(3, is_null), NULL, 10);
+    task->doing_order_ = strtoul(mysql_->fetch(4, is_null)), NULL, 10);
+    task->svr_id_ = strtoul(mysql_->fetch(5, is_null), NULL, 10);
+    task->service_ = mysql_->fetch(6, is_null);
+    task->group_id_ = strtoul(mysql_->fetch(7, is_null), NULL, 10);
+    task->group_name_ = mysql_->fetch(8, is_null);
+    task->tag_ = mysql_->fetch(9, is_null);
+    task->update_env_ = strtoul(mysql_->fetch(10, is_null), NULL, 10)?true:false;
+    task->update_tag_ = strtoul(mysql_->fetch(11, is_null), NULL, 10)?true:false;
+    task->state_ = strtoul(mysql_->fetch(12, is_null), NULL, 10);
+    task->is_valid_ = strtoul(mysql_->fetch(13, is_null), NULL, 10)?true:false;
+    task->max_current_num_ = strtoul(mysql_->fetch(14, is_null), NULL, 10);
+    task->max_current_rate_ = strtoul(mysql_->fetch(15, is_null), NULL, 10);
+    task->timeout_ = strtoul(mysql_->fetch(16, is_null), NULL, 10);
+    task->is_auto_ = strtoul(mysql_->fetch(17, is_null), NULL, 10)?true:false;
+    task->is_output_process_ = strtoul(mysql_->fetch(18, is_null), NULL, 10)?true:false;
+    task->arg_xml_ = mysql_->fetch(19, is_null);
+    task->err_msg_ = mysql_->fetch(20, is_null);
+    next_task_id_ = task->task_id_;
+    // 将任务添加到任务列表中
+    tasks.push_back(task);
+    // 将任务添加到task的map中
+    all_tasks_[task->task_id_] = task;
+    break;
+  }
+  m_mysql->freeResult();
+  // 解析任务数据
+  int ret = 0;
+  list<DcmdCenterTask*>::iterator iter = tasks.begin();
+  while( iter != tasks.end()) {
+    task = *iter;
+    // 无条件的加载task的任务池子
+    if (!task->is_cluster_ && !LoadTaskSvrPool(tss, task)) return false;
+    // 检查任务的各种信息
+    if (task->is_valid_) {
+      // 只有valid的task，才进行任务的parse处理，否则只能redo task的时候再处理
+      ret = ParseTask(tss, task);
+      if (-1 == ret) return false;
+      if (0 == ret) {
+        task->is_valid_ = false;
+        task->err_msg_ = tss->m_szBuf2K;
+        if (!UpdateTaskValid(tss, true, task->task_id_, false, task->err_msg_.c_str()))
+          return false;
+      }
+      // 检查任务的状态
+      if (!is_first) {
+        // 如果不是第一次加载，则需要child 任务的state必须为
+        if (task->state_ != dcmd_api::TASK_INIT) {
+          if (!UpdateTaskState(tss, true, task->task_id_, dcmd_api::TASK_INIT))
+            return false;
+          task->state_ = dcmd_api::TASK_INIT;
+        }
+      }
+    }
+    // 建立cluster的任务关系
+    if (task->parent_task_id_) {
+      if (task->parent_task_id_ == task->task_id_) {
+        CwxCommon::snprintf(tss->m_szBuf2K, 2047, "Task's parent[%u] is self", task->task_id_);
+        task->is_valid_ = false;
+        task->err_msg_ = tss->m_szBuf2K;
+        if (!UpdateTaskValid(tss, true, task->task_id_, false, task->err_msg_.c_str()))
+          return false;
+      } else if (task->is_cluster_) {
+        task->is_valid_ = false;
+        task->err_msg_ = "Cluster task can't be child task.";
+        if (!UpdateTaskValid(tss, true, task->task_id_, false, task->err_msg_.c_str()))
+          return false;
+      } else {
+        task->parent_task_ = GetTask(task->parent_task_id_);
+        if (!task->parent_task_) {
+          task->is_valid_ = false;
+          task->err_msg_ = "Parent task is missing.";
+          if (!UpdateTaskValid(tss, true, task->task_id_, false, task->err_msg_.c_str()))
+            return false;
+        } else {
+          if (!task->parent_task_->is_cluster_) {
+            CwxCommon::snprintf(tss->m_szBuf2K, 2047, "Task's parent[%u] is not cluster task", task->parent_task_->task_id_);
+            task->is_valid_ = false;
+            task->err_msg_ = tss->m_szBuf2K;
+            if (!UpdateTaskValid(tss, true, task->task_id_, false, task->err_msg_.c_str()))
+              return false;
+          }
+          // 更新cluster task的状态
+          if (task->parent_task_->is_valid_) {
+            if (!task->is_valid_) {
+              task->parent_task_->is_valid_ = false;
+              task->parent_task_->err_msg_ = task->err_msg_;
+              if (!UpdateTaskValid(tss, true, task->parent_task_->task_id_, false, task->err_msg_.c_str()))
+                return false;
+            }
+          }
+          task->parent_task_->AddChildTask(task);
+        }
+      }
+    }
+    ++iter;
+  }
+  return true;
+}
+
+bool DcmdCenterTaskMgr::LoadTaskSvrPool(DcmdTss* tss, DcmdCenterTask* task) {
+  list<DcmdCenterTask*> tasks;
+  CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, "select task_id, task_name, task_cmd, parent_task_id,"\
+    "order, svr_id, service, gid, group_name, tag, update_env, update_tag, state,"\
+    "valid, concurrent_num, concurrent_rate, timeout, auto, process, task_arg, "\
+    "errmsg from task order by task_id asc where task_id > %d", next_task_id_);
+  if (!mysql_->query(tss->sql_)){
+    mysql_->freeResult();
+    CWX_ERROR(("Failure to fetch new tasks. err:%s; sql:%s", mysql_->getErrMsg(),
+      tss->sql_));
+    return false;
+  }
+  bool is_null = false;
+  DcmdCenterTask* task = NULL;
+  while(mysql_->next()){
+    task = new DcmdCenterTask();
+    task->task_id_ = strtoul(mysql_->fetch(0, is_null, NULL, 10);
+    task->task_name_ = mysql_->fetch(1, is_null);
+    task->task_cmd_ = mysql_->fetch(2, is_null);
+    task->parent_task_id_ = strtoul(mysql_->fetch(3, is_null), NULL, 10);
+    task->doing_order_ = strtoul(mysql_->fetch(4, is_null)), NULL, 10);
+    task->svr_id_ = strtoul(mysql_->fetch(5, is_null), NULL, 10);
+    task->service_ = mysql_->fetch(6, is_null);
+    task->group_id_ = strtoul(mysql_->fetch(7, is_null), NULL, 10);
+    task->group_name_ = mysql_->fetch(8, is_null);
+    task->tag_ = mysql_->fetch(9, is_null);
+    task->update_env_ = strtoul(mysql_->fetch(10, is_null), NULL, 10)?true:false;
+    task->update_tag_ = strtoul(mysql_->fetch(11, is_null), NULL, 10)?true:false;
+    task->state_ = strtoul(mysql_->fetch(12, is_null), NULL, 10);
+    task->is_valid_ = strtoul(mysql_->fetch(13, is_null), NULL, 10)?true:false;
+    task->max_current_num_ = strtoul(mysql_->fetch(14, is_null), NULL, 10);
+    task->max_current_rate_ = strtoul(mysql_->fetch(15, is_null), NULL, 10);
+    task->timeout_ = strtoul(mysql_->fetch(16, is_null), NULL, 10);
+    task->is_auto_ = strtoul(mysql_->fetch(17, is_null), NULL, 10)?true:false;
+    task->is_output_process_ = strtoul(mysql_->fetch(18, is_null), NULL, 10)?true:false;
+    task->arg_xml_ = mysql_->fetch(19, is_null);
+    task->err_msg_ = mysql_->fetch(20, is_null);
+    next_task_id_ = task->task_id_;
+    // 将任务添加到任务列表中
+    tasks.push_back(task);
+    // 将任务添加到task的map中
+    all_tasks_[task->task_id_] = task;
+    break;
+  }
+  m_mysql->freeResult();
+}
+
+int DcmdCenterTaskMgr::ParseTask(DcmdTss* tss, DcmdCenterTask* task) {
+  // 解析xml的参数
+  task->args_.clear();
+  if (task->arg_xml_.length()) {
+    XmlConfigParser xml;
+    if (!xml.parse(task->arg_xml_.c_str())){
+      CwxCommon::snprintf(tss->m_szBuf2K, 2047, "Failure to parse task's xml.");
+      return 0;
+    }
+    XmlTreeNode const* xmlnode = xml.getRoot();
+    if(xmlnode && xmlnode->m_pChildHead){
+      xmlnode = xmlnode->m_pChildHead;
+      string arg_name;
+      string arg_value;
+      list<char*>::const_iterator iter;
+      while(xmlnode){
+        arg_name = xmlnode->m_szElement;
+        dcmd_remove_spam(arg_name);
+        iter = xmlnode->m_listData.begin();
+        arg_value = "";
+        while(iter != xmlnode->m_listData.end()){
+          arg_value += *iter;
+          iter++;
+        }
+        dcmd_remove_spam(arg_value);
+        task->args_[arg_name] = arg_value;                    
+        xmlnode=xmlnode->m_next;
+      }
+    }
+  }
+  // load task_cmd文件
+  string md5;
+  int ret = FetchTaskCmdInfoFromDb(tss, task->task_cmd_.c_str(), md5, task->is_cluster_);
+  if (1 != ret) return ret;
+  if (task->is_cluster_) {
+    if (task->parent_task_id_) { // cluster任务不应该有parent task id
+      CwxCommon::snprintf(tss->m_szBuf2K, 2047, "Task cmd[%s] is cluster task, parent_task_id should be zero.");
+      return 0;
+    }
+    // cluster task没有task_cmd的script
+    return 1;
+  } else {
+    if (task->task_id_ == task->parent_task_id_) {
+      task->parent_task_id_ = 0;
+      CwxCommon::snprintf(tss->m_szBuf2K, 2047, "Task's parent-task-id is self.");
+      return 0;
+    }
+  }
+  // load task_cmd文件
+  if (!ReadTaskCmdContent(tss, task->task_cmd_.c_str(), task->task_cmd_script_))
+    return 0;
+  // 形成文件的md5签名
+  dcmd_md5(task->task_cmd_script_.c_str(), task->task_cmd_script_.length(),
+    task->task_cmd_script_md5_);
+  if (strcasecmp(md5, task->task_cmd_script_md5_.c_str()) != 0) {
+    CwxCommon::snprintf(tss->m_szBuf2K, 2047, "task-cmd[%s]'s md5 is wrong,"\
+      "task_cmd table's md5 is:%s, but file's md5:%s",
+      md5.c_str(), task->task_cmd_script_md5_.c_str());
+    return 0;
+  }
+  return 1;
+}
+
+bool DcmdCenterTaskMgr::ReadTaskCmdContent(DcmdTss* tss, char const* task_cmd, string& content) {
+  string script_file;
+  script_file = DcmdCenterConf::task_cmd_file(task_cmd, script_file);
+  script_file = app_->config().common().task_script_path_ + "/" + script_file;
+  bool ret =  CwxFile::readTxtFile(script_file, content);
+  if (!ret){
+    CwxCommon::snprintf(tss->m_szBuf2K, 2047, 
+      "Failure to read task-cmd[%s]'s script[%s], errno=%d",
+      task_cmd, script_file.c_str(), errno);
+    return false;
+  }
+  if (!content.length()){
+    CwxCommon::snprintf(tss->m_szBuf2K, 2047, "task-cmd[%s]'s script is empty,script:%s",
+      task_cmd, script_file.c_str());
+    return false;
+  }
+  return true;
+}
+
+int DcmdCenterTaskMgr::FetchTaskCmdInfoFromDb(DcmdTss* tss, , char const* task_cmd,
+  string& md5, bool& is_cluster) {
+  string task_cmd_str = task_cmd;
+  dcmd_escape_mysql_string(task_cmd_str);
+  CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
+    "select script_md5, cluster from task_cmd where task_cmd ='%s'", task_cmd_str.c_str());
+  if (!mysql_->query(tss->sql_)) {
+    CwxCommon::snprintf(tss->m_szBuf2K, 2047, "Failure to fetch task_cmd[%s]. err:%s; sql:%s",
+      task_cmd, mysql_->getErrMsg(), tss->sql_);
+    m_mysql->freeResult();
+    return -1;
+  }
+  bool is_null = true;
+  while(m_mysql->next()){
+    md5 = m_mysql->fetch(0, bNull);
+    is_cluster = strtoul(m_mysql->fetch(1, bNull))?true:false;
+    m_mysql->freeResult();
+    return 1;
+  }
+  m_mysql->freeResult();
+  CwxCommon::snprintf(tss->m_szBuf2K, 2047, "task-cmd[%s] doesn't exist in task_cmd table",
+    task_cmd);
+  return 0;
+}
+
+
+
 
 dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdStartTask(DcmdTss* tss,
   dcmd_api::UiTaskCmd const& cmd)
@@ -386,10 +666,4 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdUpdateTask(DcmdTss* tss,
 {
 
 }
-
-// 从数据库中获取新task
-bool DcmdCenterTaskMgr::LoadNewTask() {
-  CwxCommon::snprintf(tss)
-}
-
 }  // dcmd

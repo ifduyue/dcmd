@@ -39,7 +39,10 @@ class DcmdTss:public CwxTss{
  public:
   // sql的buf
   char                                  sql_[kMaxSqlBufSize];
+  // proto的buf
   string                                proto_str_;
+  // 中间处理的错误信息
+  string                                err_msg_;
  private:
   // 数据buf
   char*                                 data_buf_;
