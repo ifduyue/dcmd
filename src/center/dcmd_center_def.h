@@ -54,7 +54,7 @@ class DcmdCenterCmd{
   // cmd对应的agent的ip地址
   string                  agent_ip_;
   // 命令类型
-  dcmd_api::CmdType       cmd_type_;
+  uint8_t                 cmd_type_;
   // 命令的状态
   uint8_t                 state_;
   // 命令对应的任务对象
@@ -92,7 +92,7 @@ public:
   // subtask的ip
   string                   ip_;
   // 子任务的状态
-  dcmd_api::SubTaskState   state_;
+  uint8_t                  state_;
   // 是否被ignore
   bool                     is_ignored_;
   // 子任务的开始时间
@@ -101,6 +101,8 @@ public:
   uint32_t                 finish_time_;
   // 子任务的进度
   string                   process_;
+  // 错误信息
+  string                   err_msg_;
   // 子任务对应的agent对象
   DcmdCenterAgent*         agent_;
   // 子任务对应的task对象
@@ -231,6 +233,7 @@ class DcmdCenterTask {
     update_env_ = false;
     update_tag_ = false;
     state_ = dcmd_api::TASK_INIT;
+    is_freezed_ = false;
     is_valid_ = true;
     max_current_num_ = 0;
     max_current_rate_ = 0;
@@ -303,7 +306,9 @@ class DcmdCenterTask {
   // 是否重新取版本
   bool                        update_tag_;
   // 任务的状态
-  dcmd_api::TaskState         state_;
+  uint8_t                     state_;
+  // 任务是否被冻结
+  bool                        is_freezed_;
   // 任务是否有效
   bool                        is_valid_;
   // 并行执行的最大数量

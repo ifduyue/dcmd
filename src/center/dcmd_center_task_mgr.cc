@@ -305,7 +305,7 @@ bool DcmdCenterTaskMgr::LoadNewTask(DcmdTss* tss, bool is_first) {
   list<DcmdCenterTask*> tasks;
   CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, "select task_id, task_name, task_cmd, parent_task_id,"\
     "order, svr_id, service, gid, group_name, tag, update_env, update_tag, state,"\
-    "valid, concurrent_num, concurrent_rate, timeout, auto, process, task_arg, "\
+    "freeze, valid, concurrent_num, concurrent_rate, timeout, auto, process, task_arg, "\
     "errmsg from task order by task_id asc where task_id > %d", next_task_id_);
   if (!mysql_->query(tss->sql_)){
     mysql_->freeResult();
@@ -317,11 +317,11 @@ bool DcmdCenterTaskMgr::LoadNewTask(DcmdTss* tss, bool is_first) {
   DcmdCenterTask* task = NULL;
   while(mysql_->next()){
     task = new DcmdCenterTask();
-    task->task_id_ = strtoul(mysql_->fetch(0, is_null, NULL, 10);
+    task->task_id_ = strtoul(mysql_->fetch(0, is_null), NULL, 10);
     task->task_name_ = mysql_->fetch(1, is_null);
     task->task_cmd_ = mysql_->fetch(2, is_null);
     task->parent_task_id_ = strtoul(mysql_->fetch(3, is_null), NULL, 10);
-    task->doing_order_ = strtoul(mysql_->fetch(4, is_null)), NULL, 10);
+    task->doing_order_ = strtoul(mysql_->fetch(4, is_null), NULL, 10);
     task->svr_id_ = strtoul(mysql_->fetch(5, is_null), NULL, 10);
     task->service_ = mysql_->fetch(6, is_null);
     task->group_id_ = strtoul(mysql_->fetch(7, is_null), NULL, 10);
@@ -330,20 +330,20 @@ bool DcmdCenterTaskMgr::LoadNewTask(DcmdTss* tss, bool is_first) {
     task->update_env_ = strtoul(mysql_->fetch(10, is_null), NULL, 10)?true:false;
     task->update_tag_ = strtoul(mysql_->fetch(11, is_null), NULL, 10)?true:false;
     task->state_ = strtoul(mysql_->fetch(12, is_null), NULL, 10);
-    task->is_valid_ = strtoul(mysql_->fetch(13, is_null), NULL, 10)?true:false;
-    task->max_current_num_ = strtoul(mysql_->fetch(14, is_null), NULL, 10);
-    task->max_current_rate_ = strtoul(mysql_->fetch(15, is_null), NULL, 10);
-    task->timeout_ = strtoul(mysql_->fetch(16, is_null), NULL, 10);
-    task->is_auto_ = strtoul(mysql_->fetch(17, is_null), NULL, 10)?true:false;
-    task->is_output_process_ = strtoul(mysql_->fetch(18, is_null), NULL, 10)?true:false;
-    task->arg_xml_ = mysql_->fetch(19, is_null);
-    task->err_msg_ = mysql_->fetch(20, is_null);
+    task->is_freezed_ = strtoul(mysql_->fetch(13, is_null), NULL, 10);
+    task->is_valid_ = strtoul(mysql_->fetch(14, is_null), NULL, 10)?true:false;
+    task->max_current_num_ = strtoul(mysql_->fetch(15, is_null), NULL, 10);
+    task->max_current_rate_ = strtoul(mysql_->fetch(16, is_null), NULL, 10);
+    task->timeout_ = strtoul(mysql_->fetch(17, is_null), NULL, 10);
+    task->is_auto_ = strtoul(mysql_->fetch(18, is_null), NULL, 10)?true:false;
+    task->is_output_process_ = strtoul(mysql_->fetch(19, is_null), NULL, 10)?true:false;
+    task->arg_xml_ = mysql_->fetch(20, is_null);
+    task->err_msg_ = mysql_->fetch(21, is_null);
     next_task_id_ = task->task_id_;
     // 将任务添加到任务列表中
     tasks.push_back(task);
     // 将任务添加到task的map中
     all_tasks_[task->task_id_] = task;
-    break;
   }
   m_mysql->freeResult();
   // 解析任务数据
@@ -420,51 +420,74 @@ bool DcmdCenterTaskMgr::LoadNewTask(DcmdTss* tss, bool is_first) {
   return true;
 }
 
-bool DcmdCenterTaskMgr::LoadTaskSvrPool(DcmdTss* tss, DcmdCenterTask* task) {
-  list<DcmdCenterTask*> tasks;
-  CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, "select task_id, task_name, task_cmd, parent_task_id,"\
-    "order, svr_id, service, gid, group_name, tag, update_env, update_tag, state,"\
-    "valid, concurrent_num, concurrent_rate, timeout, auto, process, task_arg, "\
-    "errmsg from task order by task_id asc where task_id > %d", next_task_id_);
-  if (!mysql_->query(tss->sql_)){
+bool DcmdCenterTaskMgr::LoadAllSubtask(DcmdTss* tss) {
+  CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
+    "select subtask_id, task_id, task_cmd, svr_pool, service, ip, state, ignored,"\
+    "UNIX_TIMESTAMP(start_time), UNIX_TIMESTAMP(finish_time), process, errmsg "\
+    " from task_node order by subtask_id desc ");
+  if (!mysql_->query(tss->sql_)) {
     mysql_->freeResult();
-    CWX_ERROR(("Failure to fetch new tasks. err:%s; sql:%s", mysql_->getErrMsg(),
+    CWX_ERROR(("Failure to fetch task-node. err:%s; sql:%s", mysql_->getErrMsg(),
       tss->sql_));
     return false;
   }
   bool is_null = false;
-  DcmdCenterTask* task = NULL;
+  DcmdCenterSubtask*  subtask = NULL;
+  next_subtask_id_ = 1;
   while(mysql_->next()){
-    task = new DcmdCenterTask();
-    task->task_id_ = strtoul(mysql_->fetch(0, is_null, NULL, 10);
-    task->task_name_ = mysql_->fetch(1, is_null);
-    task->task_cmd_ = mysql_->fetch(2, is_null);
-    task->parent_task_id_ = strtoul(mysql_->fetch(3, is_null), NULL, 10);
-    task->doing_order_ = strtoul(mysql_->fetch(4, is_null)), NULL, 10);
-    task->svr_id_ = strtoul(mysql_->fetch(5, is_null), NULL, 10);
-    task->service_ = mysql_->fetch(6, is_null);
-    task->group_id_ = strtoul(mysql_->fetch(7, is_null), NULL, 10);
-    task->group_name_ = mysql_->fetch(8, is_null);
-    task->tag_ = mysql_->fetch(9, is_null);
-    task->update_env_ = strtoul(mysql_->fetch(10, is_null), NULL, 10)?true:false;
-    task->update_tag_ = strtoul(mysql_->fetch(11, is_null), NULL, 10)?true:false;
-    task->state_ = strtoul(mysql_->fetch(12, is_null), NULL, 10);
-    task->is_valid_ = strtoul(mysql_->fetch(13, is_null), NULL, 10)?true:false;
-    task->max_current_num_ = strtoul(mysql_->fetch(14, is_null), NULL, 10);
-    task->max_current_rate_ = strtoul(mysql_->fetch(15, is_null), NULL, 10);
-    task->timeout_ = strtoul(mysql_->fetch(16, is_null), NULL, 10);
-    task->is_auto_ = strtoul(mysql_->fetch(17, is_null), NULL, 10)?true:false;
-    task->is_output_process_ = strtoul(mysql_->fetch(18, is_null), NULL, 10)?true:false;
-    task->arg_xml_ = mysql_->fetch(19, is_null);
-    task->err_msg_ = mysql_->fetch(20, is_null);
-    next_task_id_ = task->task_id_;
-    // 将任务添加到任务列表中
-    tasks.push_back(task);
-    // 将任务添加到task的map中
-    all_tasks_[task->task_id_] = task;
-    break;
+    subtask = new DcmdCenterSubtask();
+    subtask->subtask_id_ = strtoull(mysql_->fetch(0, is_null), NULL, 0);
+    subtask->task_id_ = strtoull(mysql_->fetch(1, is_null), NULL, 0);
+    subtask->task_cmd_ = mysql_->fetch(2, is_null);
+    subtask->svr_pool_ = mysql_->fetch(3, is_null);
+    subtask->service_ = mysql_->fetch(4, is_null);
+    subtask->ip_ = mysql_->fetch(5, is_null);
+    subtask->state_ = strtoul(mysql_->fetch(6, is_null), NULL, 0);
+    subtask->is_ignored_ = strtoul(mysql_->fetch(6, is_null), NULL, 0)?true:false;
+    subtask->start_time_ = strtoul(mysql_->fetch(7, is_null), NULL, 0);
+    subtask->finish_time_ = strtoul(mysql_->fetch(8, is_null), NULL, 0);
+    subtask->process_ = mysql_->fetch(9, is_null);
+    subtask->err_msg_ = mysql_->fetch(10, is_null);
+    next_subtask_id_ = subtask->subtask_id_ + 1;
+    all_subtasks_[subtask->subtask_id_] = subtask;
   }
   m_mysql->freeResult();
+  // 将subtask加入到task中
+  map<uint64_t, DcmdCenterSubtask*>::iterator iter = all_subtasks_.begin();
+  while (iter != all_subtasks_.end()) {
+    subtask = iter->second;
+    if (subtask->state_)
+    subtask->task_ = GetTask(subtask->subtask_id_);
+    if (!subtask->task_)
+    ++iter;
+  }
+  return true;
+}
+
+bool DcmdCenterTaskMgr::LoadTaskSvrPool(DcmdTss* tss, DcmdCenterTask* task) {
+  CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
+    "select svr_pool, env_ver, repo, run_user from task_service_pool where task_id=%u",
+    task->task_id_);
+  if (!mysql_->query(tss->sql_)) {
+    mysql_->freeResult();
+    CWX_ERROR(("Failure to fetch task[%u]'s service pool. err:%s; sql:%s", mysql_->getErrMsg(),
+      tss->sql_));
+    return false;
+  }
+  bool is_null = false;
+  DcmdCenterSvrPool*  svr_pool = NULL;
+  while(mysql_->next()){
+    svr_pool = new DcmdCenterSvrPool(task->task_id_);
+    svr_pool->task_cmd_ = task->task_cmd_;
+    svr_pool->svr_pool_ = mysql_->fetch(0, is_null);
+    svr_pool->svr_env_ver_ = mysql_->fetch(1, is_null);
+    svr_pool->repo_ = mysql_->fetch(3, is_null);
+    svr_pool->run_user_ = mysql_->fetch(4, is_null);
+    // 将service pool添加到任务中
+    task->AddSvrPool(svr_pool);
+  }
+  m_mysql->freeResult();
+  return true;
 }
 
 int DcmdCenterTaskMgr::ParseTask(DcmdTss* tss, DcmdCenterTask* task) {
