@@ -67,16 +67,19 @@ bool DcmdCenterTaskMgr::ReceiveCmd(DcmdTss* tss,
   } else {
     switch(cmd.cmd_type()) {
     case dcmd_api::CMD_START_TASK:
-      state = TaskCmdStartTask(tss, cmd);
+      state = TaskCmdStartTask(tss, strtoul(cmd.task_id().c_str(), NULL, 10), false);
       break;
     case dcmd_api::CMD_PAUSE_TASK:
-      state =TaskCmdPauseTask(tss, cmd);
+      state =TaskCmdPauseTask(tss, strtoul(cmd.task_id().c_str(), NULL, 10), false);
       break;
     case dcmd_api::CMD_RESUME_TASK:
-      state = TaskCmdResumeTask(tss, cmd);
+      state = TaskCmdResumeTask(tss, strtoul(cmd.task_id().c_str(), NULL, 10), false);
+      break;
+    case dcmd_api::CMD_RETRY_TASK:
+      state = TaskCmdRetryTask(tss, strtoul(cmd.task_id().c_str(), NULL, 10), false);
       break;
     case dcmd_api::CMD_FINISH_TASK:
-      state = TaskCmdFinishTask(tss, cmd);
+      state = TaskCmdFinishTask(tss, strtoul(cmd.task_id().c_str(), NULL, 10), false);
       break;
     case dcmd_api::CMD_CANCEL_SUBTASK:
       state = TaskCmdCancelSubtask(tss, cmd);
@@ -293,10 +296,11 @@ void DcmdCenterTaskMgr::Reset() {
 bool DcmdCenterTaskMgr::LoadAllDataFromDb(DcmdTss* tss) {
   // 加载所有新的任务数据
   if (!LoadNewTask(tss, true)) return false;
-
-
   // 加载所有的subtask数据
+  if (!LoadAllSubtask(tss)) return false;
   // 加载所有未处理的命令数据
+  if (!LoadAllCmd(tss)) return false;
+  return true;
 }
 
 
@@ -443,11 +447,11 @@ bool DcmdCenterTaskMgr::LoadAllSubtask(DcmdTss* tss) {
     subtask->service_ = mysql_->fetch(4, is_null);
     subtask->ip_ = mysql_->fetch(5, is_null);
     subtask->state_ = strtoul(mysql_->fetch(6, is_null), NULL, 0);
-    subtask->is_ignored_ = strtoul(mysql_->fetch(6, is_null), NULL, 0)?true:false;
-    subtask->start_time_ = strtoul(mysql_->fetch(7, is_null), NULL, 0);
-    subtask->finish_time_ = strtoul(mysql_->fetch(8, is_null), NULL, 0);
-    subtask->process_ = mysql_->fetch(9, is_null);
-    subtask->err_msg_ = mysql_->fetch(10, is_null);
+    subtask->is_ignored_ = strtoul(mysql_->fetch(7, is_null), NULL, 0)?true:false;
+    subtask->start_time_ = strtoul(mysql_->fetch(8, is_null), NULL, 0);
+    subtask->finish_time_ = strtoul(mysql_->fetch(9, is_null), NULL, 0);
+    subtask->process_ = mysql_->fetch(10, is_null);
+    subtask->err_msg_ = mysql_->fetch(11, is_null);
     next_subtask_id_ = subtask->subtask_id_ + 1;
     all_subtasks_[subtask->subtask_id_] = subtask;
   }
@@ -456,9 +460,120 @@ bool DcmdCenterTaskMgr::LoadAllSubtask(DcmdTss* tss) {
   map<uint64_t, DcmdCenterSubtask*>::iterator iter = all_subtasks_.begin();
   while (iter != all_subtasks_.end()) {
     subtask = iter->second;
-    if (subtask->state_)
     subtask->task_ = GetTask(subtask->subtask_id_);
-    if (!subtask->task_)
+    if (!subtask->task_) {
+      UpdateSubtaskState(tss, true, subtask->subtask_id_, dcmd_api::SUBTASK_FAILED, "No task.");
+      all_subtasks_.erase(subtask->subtask_id_);
+      iter = all_subtasks_.upper(subtask->subtask_id_);
+      continue;
+    }
+    if (subtask->state_ > dcmd_api::SUBTASK_FAILED) {
+      CwxCommon::snprintf(tss->m_szBuf2K, 2047, "Invalid state[%d]", subtask->state_);
+      subtask->state_ = dcmd_api::SUBTASK_FAILED;
+      subtask->err_msg_ = tss->m_szBuf2K;
+      UpdateSubtaskState(tss, true, subtask->subtask_id_, subtask->state_, tss->m_szBuf2K);
+    }
+    subtask->task_->AddSubtask(subtask);
+    ++iter;
+  }
+  return true;
+}
+
+bool DcmdCenterTaskMgr::LoadAllCmd(DcmdTss* tss) {
+  CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
+    "select cmd_id, task_id, subtask_id, svr_pool, service, ip, state, cmd_type "\
+    " from command where state = 0 order by cmd_id desc ");
+  if (!mysql_->query(tss->sql_)) {
+    mysql_->freeResult();
+    CWX_ERROR(("Failure to fetch command. err:%s; sql:%s", mysql_->getErrMsg(),
+      tss->sql_));
+    return false;
+  }
+  bool is_null = false;
+  DcmdCenterCmd*  cmd = NULL;
+  next_cmd_id_ = 1;
+  while(mysql_->next()){
+    cmd = new DcmdCenterCmd();
+    cmd->cmd_id_ = strtoull(mysql_->fetch(0, is_null), NULL, 0);
+    cmd->task_id_ = strtoull(mysql_->fetch(1, is_null), NULL, 0);
+    cmd->subtask_id_ = mysql_->fetch(2, is_null);
+    cmd->svr_pool_ = mysql_->fetch(3, is_null);
+    cmd->service_ = mysql_->fetch(4, is_null);
+    cmd->agent_ip_ = mysql_->fetch(5, is_null);
+    cmd->state_ = strtoul(mysql_->fetch(6, is_null), NULL, 0);
+    cmd->cmd_type_ = strtoul(mysql_->fetch(7, is_null), NULL, 0);
+    next_cmd_id_ = cmd->cmd_id_ + 1;
+    waiting_cmds_[cmd->cmd_id_] = cmd;
+  }
+  m_mysql->freeResult();
+  // 处理命令
+  map<uint64_t, DcmdCenterCmd*>::iterator iter = waiting_cmds_.begin();
+  while (iter != waiting_cmds_.end()) {
+    cmd = iter->second;
+    switch (cmd->cmd_type_) {
+    case dcmd_api::CMD_START_TASK:
+      state = TaskCmdStartTask(tss, cmd);
+      break;
+    case dcmd_api::CMD_PAUSE_TASK:
+      state =TaskCmdPauseTask(tss, cmd);
+      break;
+    case dcmd_api::CMD_RESUME_TASK:
+      state = TaskCmdResumeTask(tss, cmd);
+      break;
+    case dcmd_api::CMD_FINISH_TASK:
+      state = TaskCmdFinishTask(tss, cmd);
+      break;
+    case dcmd_api::CMD_CANCEL_SUBTASK:
+      state = TaskCmdCancelSubtask(tss, cmd);
+      break;
+    case dcmd_api::CMD_CANCEL_SVR_SUBTASK:
+      state = TaskCmdCancelSvrSubtask(tss, cmd);
+      break;
+    case dcmd_api::CMD_REDO_TASK:
+      state = TaskCmdRedoTask(tss, cmd);
+      break;
+    case dcmd_api::CMD_REDO_SVR_POOL:
+      state = TaskCmdRedoSvrPool(tss, cmd);
+      break;
+    case dcmd_api::CMD_REDO_SUBTASK:
+      state = TaskCmdRedoSubtask(tss, cmd);
+      break;
+    case dcmd_api::CMD_REDO_FAILED_SUBTASK:
+      state = TaskCmdRedoFailedSubtask(task, cmd);
+      break;
+    case dcmd_api::CMD_REDO_FAILED_SVR_POOL_SUBTASK:
+      state = TaskCmdRedoFailedSvrPoolSubtask(task, cmd);
+      break;
+    case dcmd_api::CMD_IGNORE_SUBTASK:
+      state = TaskCmdIgnoreSubtask(task, cmd);
+      break;
+    case dcmd_api::CMD_FREEZE_TASK:
+      state = TaskCmdFreezeTask(task, cmd);
+      break;
+    case dcmd_api::CMD_UNFREEZE_TASK:
+      state = TaskCmdUnfreezeTask(task, cmd);
+      break;
+    case dcmd_api::CMD_UPDATE_TASK:
+      state = TaskCmdUpdateTask(task, cmd);
+      break;
+    default:
+      state = dcmd_api::DCMD_STATE_FAILED;
+      CwxCommon::snprintf(tss->m_szBuf2K, 2047, "Unknown task cmd type:%d", cmd.cmd_type());
+    }
+    subtask->task_ = GetTask(subtask->subtask_id_);
+    if (!subtask->task_) {
+      UpdateSubtaskState(tss, true, subtask->subtask_id_, dcmd_api::SUBTASK_FAILED, "No task.");
+      all_subtasks_.erase(subtask->subtask_id_);
+      iter = all_subtasks_.upper(subtask->subtask_id_);
+      continue;
+    }
+    if (subtask->state_ > dcmd_api::SUBTASK_FAILED) {
+      CwxCommon::snprintf(tss->m_szBuf2K, 2047, "Invalid state[%d]", subtask->state_);
+      subtask->state_ = dcmd_api::SUBTASK_FAILED;
+      subtask->err_msg_ = tss->m_szBuf2K;
+      UpdateSubtaskState(tss, true, subtask->subtask_id_, subtask->state_, tss->m_szBuf2K);
+    }
+    subtask->task_->AddSubtask(subtask);
     ++iter;
   }
   return true;

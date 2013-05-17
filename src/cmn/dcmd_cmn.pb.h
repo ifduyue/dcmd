@@ -152,9 +152,8 @@ enum TaskState {
   TASK_DOING = 1,
   TASK_PAUSED = 2,
   TASK_FAILED = 3,
-  TASK_FREEZED = 4,
-  TASK_FINISHED = 5,
-  TASK_FINISHED_WITH_FAILED = 6
+  TASK_FINISHED = 4,
+  TASK_FINISHED_WITH_FAILED = 5
 };
 bool TaskState_IsValid(int value);
 const TaskState TaskState_MIN = TASK_INIT;
@@ -756,10 +755,24 @@ class TaskInfo : public ::google::protobuf::Message {
   inline ::std::string* mutable_parent_task_id();
   inline ::std::string* release_parent_task_id();
   
-  // optional string err = 5;
+  // optional bool freezed = 5;
+  inline bool has_freezed() const;
+  inline void clear_freezed();
+  static const int kFreezedFieldNumber = 5;
+  inline bool freezed() const;
+  inline void set_freezed(bool value);
+  
+  // optional bool valid = 6;
+  inline bool has_valid() const;
+  inline void clear_valid();
+  static const int kValidFieldNumber = 6;
+  inline bool valid() const;
+  inline void set_valid(bool value);
+  
+  // optional string err = 7;
   inline bool has_err() const;
   inline void clear_err();
-  static const int kErrFieldNumber = 5;
+  static const int kErrFieldNumber = 7;
   inline const ::std::string& err() const;
   inline void set_err(const ::std::string& value);
   inline void set_err(const char* value);
@@ -767,45 +780,45 @@ class TaskInfo : public ::google::protobuf::Message {
   inline ::std::string* mutable_err();
   inline ::std::string* release_err();
   
-  // optional int32 success_subtask = 6;
+  // optional int32 success_subtask = 8;
   inline bool has_success_subtask() const;
   inline void clear_success_subtask();
-  static const int kSuccessSubtaskFieldNumber = 6;
+  static const int kSuccessSubtaskFieldNumber = 8;
   inline ::google::protobuf::int32 success_subtask() const;
   inline void set_success_subtask(::google::protobuf::int32 value);
   
-  // optional int32 failed_subtask = 7;
+  // optional int32 failed_subtask = 9;
   inline bool has_failed_subtask() const;
   inline void clear_failed_subtask();
-  static const int kFailedSubtaskFieldNumber = 7;
+  static const int kFailedSubtaskFieldNumber = 9;
   inline ::google::protobuf::int32 failed_subtask() const;
   inline void set_failed_subtask(::google::protobuf::int32 value);
   
-  // optional int32 doing_subtask = 8;
+  // optional int32 doing_subtask = 10;
   inline bool has_doing_subtask() const;
   inline void clear_doing_subtask();
-  static const int kDoingSubtaskFieldNumber = 8;
+  static const int kDoingSubtaskFieldNumber = 10;
   inline ::google::protobuf::int32 doing_subtask() const;
   inline void set_doing_subtask(::google::protobuf::int32 value);
   
-  // optional int32 undo_subtask = 9;
+  // optional int32 undo_subtask = 11;
   inline bool has_undo_subtask() const;
   inline void clear_undo_subtask();
-  static const int kUndoSubtaskFieldNumber = 9;
+  static const int kUndoSubtaskFieldNumber = 11;
   inline ::google::protobuf::int32 undo_subtask() const;
   inline void set_undo_subtask(::google::protobuf::int32 value);
   
-  // optional int32 ignore_doing_subtask = 10;
+  // optional int32 ignore_doing_subtask = 12;
   inline bool has_ignore_doing_subtask() const;
   inline void clear_ignore_doing_subtask();
-  static const int kIgnoreDoingSubtaskFieldNumber = 10;
+  static const int kIgnoreDoingSubtaskFieldNumber = 12;
   inline ::google::protobuf::int32 ignore_doing_subtask() const;
   inline void set_ignore_doing_subtask(::google::protobuf::int32 value);
   
-  // optional int32 ignore_failed_subtask = 11;
+  // optional int32 ignore_failed_subtask = 13;
   inline bool has_ignore_failed_subtask() const;
   inline void clear_ignore_failed_subtask();
-  static const int kIgnoreFailedSubtaskFieldNumber = 11;
+  static const int kIgnoreFailedSubtaskFieldNumber = 13;
   inline ::google::protobuf::int32 ignore_failed_subtask() const;
   inline void set_ignore_failed_subtask(::google::protobuf::int32 value);
   
@@ -819,6 +832,10 @@ class TaskInfo : public ::google::protobuf::Message {
   inline void clear_has_order();
   inline void set_has_parent_task_id();
   inline void clear_has_parent_task_id();
+  inline void set_has_freezed();
+  inline void clear_has_freezed();
+  inline void set_has_valid();
+  inline void clear_has_valid();
   inline void set_has_err();
   inline void clear_has_err();
   inline void set_has_success_subtask();
@@ -840,8 +857,10 @@ class TaskInfo : public ::google::protobuf::Message {
   int task_state_;
   ::google::protobuf::int32 order_;
   ::std::string* parent_task_id_;
-  ::std::string* err_;
+  bool freezed_;
+  bool valid_;
   ::google::protobuf::int32 success_subtask_;
+  ::std::string* err_;
   ::google::protobuf::int32 failed_subtask_;
   ::google::protobuf::int32 doing_subtask_;
   ::google::protobuf::int32 undo_subtask_;
@@ -849,7 +868,7 @@ class TaskInfo : public ::google::protobuf::Message {
   ::google::protobuf::int32 ignore_failed_subtask_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(11 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(13 + 31) / 32];
   
   friend void  protobuf_AddDesc_dcmd_5fcmn_2eproto();
   friend void protobuf_AssignDesc_dcmd_5fcmn_2eproto();
@@ -1964,15 +1983,59 @@ inline ::std::string* TaskInfo::release_parent_task_id() {
   }
 }
 
-// optional string err = 5;
-inline bool TaskInfo::has_err() const {
+// optional bool freezed = 5;
+inline bool TaskInfo::has_freezed() const {
   return (_has_bits_[0] & 0x00000010u) != 0;
 }
-inline void TaskInfo::set_has_err() {
+inline void TaskInfo::set_has_freezed() {
   _has_bits_[0] |= 0x00000010u;
 }
-inline void TaskInfo::clear_has_err() {
+inline void TaskInfo::clear_has_freezed() {
   _has_bits_[0] &= ~0x00000010u;
+}
+inline void TaskInfo::clear_freezed() {
+  freezed_ = false;
+  clear_has_freezed();
+}
+inline bool TaskInfo::freezed() const {
+  return freezed_;
+}
+inline void TaskInfo::set_freezed(bool value) {
+  set_has_freezed();
+  freezed_ = value;
+}
+
+// optional bool valid = 6;
+inline bool TaskInfo::has_valid() const {
+  return (_has_bits_[0] & 0x00000020u) != 0;
+}
+inline void TaskInfo::set_has_valid() {
+  _has_bits_[0] |= 0x00000020u;
+}
+inline void TaskInfo::clear_has_valid() {
+  _has_bits_[0] &= ~0x00000020u;
+}
+inline void TaskInfo::clear_valid() {
+  valid_ = false;
+  clear_has_valid();
+}
+inline bool TaskInfo::valid() const {
+  return valid_;
+}
+inline void TaskInfo::set_valid(bool value) {
+  set_has_valid();
+  valid_ = value;
+}
+
+// optional string err = 7;
+inline bool TaskInfo::has_err() const {
+  return (_has_bits_[0] & 0x00000040u) != 0;
+}
+inline void TaskInfo::set_has_err() {
+  _has_bits_[0] |= 0x00000040u;
+}
+inline void TaskInfo::clear_has_err() {
+  _has_bits_[0] &= ~0x00000040u;
 }
 inline void TaskInfo::clear_err() {
   if (err_ != &::google::protobuf::internal::kEmptyString) {
@@ -2022,15 +2085,15 @@ inline ::std::string* TaskInfo::release_err() {
   }
 }
 
-// optional int32 success_subtask = 6;
+// optional int32 success_subtask = 8;
 inline bool TaskInfo::has_success_subtask() const {
-  return (_has_bits_[0] & 0x00000020u) != 0;
+  return (_has_bits_[0] & 0x00000080u) != 0;
 }
 inline void TaskInfo::set_has_success_subtask() {
-  _has_bits_[0] |= 0x00000020u;
+  _has_bits_[0] |= 0x00000080u;
 }
 inline void TaskInfo::clear_has_success_subtask() {
-  _has_bits_[0] &= ~0x00000020u;
+  _has_bits_[0] &= ~0x00000080u;
 }
 inline void TaskInfo::clear_success_subtask() {
   success_subtask_ = 0;
@@ -2044,15 +2107,15 @@ inline void TaskInfo::set_success_subtask(::google::protobuf::int32 value) {
   success_subtask_ = value;
 }
 
-// optional int32 failed_subtask = 7;
+// optional int32 failed_subtask = 9;
 inline bool TaskInfo::has_failed_subtask() const {
-  return (_has_bits_[0] & 0x00000040u) != 0;
+  return (_has_bits_[0] & 0x00000100u) != 0;
 }
 inline void TaskInfo::set_has_failed_subtask() {
-  _has_bits_[0] |= 0x00000040u;
+  _has_bits_[0] |= 0x00000100u;
 }
 inline void TaskInfo::clear_has_failed_subtask() {
-  _has_bits_[0] &= ~0x00000040u;
+  _has_bits_[0] &= ~0x00000100u;
 }
 inline void TaskInfo::clear_failed_subtask() {
   failed_subtask_ = 0;
@@ -2066,15 +2129,15 @@ inline void TaskInfo::set_failed_subtask(::google::protobuf::int32 value) {
   failed_subtask_ = value;
 }
 
-// optional int32 doing_subtask = 8;
+// optional int32 doing_subtask = 10;
 inline bool TaskInfo::has_doing_subtask() const {
-  return (_has_bits_[0] & 0x00000080u) != 0;
+  return (_has_bits_[0] & 0x00000200u) != 0;
 }
 inline void TaskInfo::set_has_doing_subtask() {
-  _has_bits_[0] |= 0x00000080u;
+  _has_bits_[0] |= 0x00000200u;
 }
 inline void TaskInfo::clear_has_doing_subtask() {
-  _has_bits_[0] &= ~0x00000080u;
+  _has_bits_[0] &= ~0x00000200u;
 }
 inline void TaskInfo::clear_doing_subtask() {
   doing_subtask_ = 0;
@@ -2088,15 +2151,15 @@ inline void TaskInfo::set_doing_subtask(::google::protobuf::int32 value) {
   doing_subtask_ = value;
 }
 
-// optional int32 undo_subtask = 9;
+// optional int32 undo_subtask = 11;
 inline bool TaskInfo::has_undo_subtask() const {
-  return (_has_bits_[0] & 0x00000100u) != 0;
+  return (_has_bits_[0] & 0x00000400u) != 0;
 }
 inline void TaskInfo::set_has_undo_subtask() {
-  _has_bits_[0] |= 0x00000100u;
+  _has_bits_[0] |= 0x00000400u;
 }
 inline void TaskInfo::clear_has_undo_subtask() {
-  _has_bits_[0] &= ~0x00000100u;
+  _has_bits_[0] &= ~0x00000400u;
 }
 inline void TaskInfo::clear_undo_subtask() {
   undo_subtask_ = 0;
@@ -2110,15 +2173,15 @@ inline void TaskInfo::set_undo_subtask(::google::protobuf::int32 value) {
   undo_subtask_ = value;
 }
 
-// optional int32 ignore_doing_subtask = 10;
+// optional int32 ignore_doing_subtask = 12;
 inline bool TaskInfo::has_ignore_doing_subtask() const {
-  return (_has_bits_[0] & 0x00000200u) != 0;
+  return (_has_bits_[0] & 0x00000800u) != 0;
 }
 inline void TaskInfo::set_has_ignore_doing_subtask() {
-  _has_bits_[0] |= 0x00000200u;
+  _has_bits_[0] |= 0x00000800u;
 }
 inline void TaskInfo::clear_has_ignore_doing_subtask() {
-  _has_bits_[0] &= ~0x00000200u;
+  _has_bits_[0] &= ~0x00000800u;
 }
 inline void TaskInfo::clear_ignore_doing_subtask() {
   ignore_doing_subtask_ = 0;
@@ -2132,15 +2195,15 @@ inline void TaskInfo::set_ignore_doing_subtask(::google::protobuf::int32 value) 
   ignore_doing_subtask_ = value;
 }
 
-// optional int32 ignore_failed_subtask = 11;
+// optional int32 ignore_failed_subtask = 13;
 inline bool TaskInfo::has_ignore_failed_subtask() const {
-  return (_has_bits_[0] & 0x00000400u) != 0;
+  return (_has_bits_[0] & 0x00001000u) != 0;
 }
 inline void TaskInfo::set_has_ignore_failed_subtask() {
-  _has_bits_[0] |= 0x00000400u;
+  _has_bits_[0] |= 0x00001000u;
 }
 inline void TaskInfo::clear_has_ignore_failed_subtask() {
-  _has_bits_[0] &= ~0x00000400u;
+  _has_bits_[0] &= ~0x00001000u;
 }
 inline void TaskInfo::clear_ignore_failed_subtask() {
   ignore_failed_subtask_ = 0;
