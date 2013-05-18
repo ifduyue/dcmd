@@ -432,12 +432,13 @@ void protobuf_AssignDesc_dcmd_5fui_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(UiAgentTaskProcessReply));
   UiTaskCmd_descriptor_ = file->message_type(18);
-  static const int UiTaskCmd_offsets_[13] = {
+  static const int UiTaskCmd_offsets_[14] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UiTaskCmd, client_msg_id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UiTaskCmd, task_id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UiTaskCmd, uid_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UiTaskCmd, subtask_id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UiTaskCmd, ip_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UiTaskCmd, svr_name_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UiTaskCmd, svr_pool_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UiTaskCmd, concurrent_num_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UiTaskCmd, concurrent_rate_),
@@ -725,38 +726,38 @@ void protobuf_AddDesc_dcmd_5fui_2eproto() {
     "Reply\022\025\n\rclient_msg_id\030\001 \002(\005\022\"\n\005state\030\002 "
     "\002(\0162\023.dcmd_api.DcmdState\022)\n\007process\030\003 \003("
     "\0132\030.dcmd_api.SubTaskProcess\022\013\n\003err\030\004 \001(\t"
-    "\"\212\002\n\tUiTaskCmd\022\025\n\rclient_msg_id\030\001 \002(\005\022\017\n"
+    "\"\234\002\n\tUiTaskCmd\022\025\n\rclient_msg_id\030\001 \002(\005\022\017\n"
     "\007task_id\030\002 \002(\t\022\013\n\003uid\030\003 \002(\005\022\022\n\nsubtask_i"
-    "d\030\004 \001(\t\022\n\n\002ip\030\005 \001(\t\022\020\n\010svr_pool\030\006 \001(\t\022\026\n"
-    "\016concurrent_num\030\007 \001(\005\022\027\n\017concurrent_rate"
-    "\030\010 \001(\005\022\024\n\014task_timeout\030\t \001(\005\022\014\n\004auto\030\n \001"
-    "(\010\022#\n\010cmd_type\030\013 \002(\0162\021.dcmd_api.CmdType\022"
-    "\014\n\004user\030\014 \002(\t\022\016\n\006passwd\030\r \002(\t\"X\n\016UiTaskC"
-    "mdReply\022\025\n\rclient_msg_id\030\001 \002(\005\022\"\n\005state\030"
-    "\002 \002(\0162\023.dcmd_api.DcmdState\022\013\n\003err\030\004 \001(\t\""
-    "g\n\013UiTaskWatch\022\025\n\rclient_msg_id\030\001 \002(\005\022\017\n"
-    "\007task_id\030\002 \002(\t\022\022\n\nlast_state\030\003 \002(\010\022\014\n\004us"
-    "er\030\004 \002(\t\022\016\n\006passwd\030\005 \002(\t\"\260\001\n\020UiTaskWatch"
-    "Reply\022\025\n\rclient_msg_id\030\001 \002(\005\022(\n\013watch_st"
-    "ate\030\002 \002(\0162\023.dcmd_api.DcmdState\022\013\n\003err\030\003 "
-    "\001(\t\022%\n\ttask_info\030\004 \002(\0132\022.dcmd_api.TaskIn"
-    "fo\022\'\n\013child_tasks\030\005 \003(\0132\022.dcmd_api.TaskI"
-    "nfo\"Y\n\021UiTaskCancelWatch\022\025\n\rclient_msg_i"
-    "d\030\001 \002(\005\022\017\n\007task_id\030\002 \002(\t\022\014\n\004user\030\003 \002(\t\022\016"
-    "\n\006passwd\030\004 \002(\t\"`\n\026UiTaskCancelWatchReply"
-    "\022\025\n\rclient_msg_id\030\001 \002(\005\022\"\n\005state\030\002 \002(\0162\023"
-    ".dcmd_api.DcmdState\022\013\n\003err\030\003 \001(\t*\220\003\n\007Cmd"
-    "Type\022\017\n\013CMD_UNKNOWN\020\000\022\022\n\016CMD_START_TASK\020"
-    "\001\022\022\n\016CMD_PAUSE_TASK\020\002\022\023\n\017CMD_RESUME_TASK"
-    "\020\003\022\022\n\016CMD_RETRY_TASK\020\004\022\023\n\017CMD_FINISH_TAS"
-    "K\020\005\022\026\n\022CMD_CANCEL_SUBTASK\020\006\022\032\n\026CMD_CANCE"
-    "L_SVR_SUBTASK\020\007\022\021\n\rCMD_REDO_TASK\020\010\022\025\n\021CM"
-    "D_REDO_SVR_POOL\020\t\022\024\n\020CMD_REDO_SUBTASK\020\n\022"
-    "\033\n\027CMD_REDO_FAILED_SUBTASK\020\013\022$\n CMD_REDO"
-    "_FAILED_SVR_POOL_SUBTASK\020\014\022\026\n\022CMD_IGNORE"
-    "_SUBTASK\020\r\022\023\n\017CMD_FREEZE_TASK\020\016\022\025\n\021CMD_U"
-    "NFREEZE_TASK\020\017\022\023\n\017CMD_UPDATE_TASK\020\020B\021\n\017c"
-    "om.cwinux.dcmd", 3374);
+    "d\030\004 \001(\t\022\n\n\002ip\030\005 \001(\t\022\020\n\010svr_name\030\006 \001(\t\022\020\n"
+    "\010svr_pool\030\007 \001(\t\022\026\n\016concurrent_num\030\010 \001(\005\022"
+    "\027\n\017concurrent_rate\030\t \001(\005\022\024\n\014task_timeout"
+    "\030\n \001(\005\022\014\n\004auto\030\013 \001(\010\022#\n\010cmd_type\030\014 \002(\0162\021"
+    ".dcmd_api.CmdType\022\014\n\004user\030\r \002(\t\022\016\n\006passw"
+    "d\030\016 \002(\t\"X\n\016UiTaskCmdReply\022\025\n\rclient_msg_"
+    "id\030\001 \002(\005\022\"\n\005state\030\002 \002(\0162\023.dcmd_api.DcmdS"
+    "tate\022\013\n\003err\030\004 \001(\t\"g\n\013UiTaskWatch\022\025\n\rclie"
+    "nt_msg_id\030\001 \002(\005\022\017\n\007task_id\030\002 \002(\t\022\022\n\nlast"
+    "_state\030\003 \002(\010\022\014\n\004user\030\004 \002(\t\022\016\n\006passwd\030\005 \002"
+    "(\t\"\260\001\n\020UiTaskWatchReply\022\025\n\rclient_msg_id"
+    "\030\001 \002(\005\022(\n\013watch_state\030\002 \002(\0162\023.dcmd_api.D"
+    "cmdState\022\013\n\003err\030\003 \001(\t\022%\n\ttask_info\030\004 \002(\013"
+    "2\022.dcmd_api.TaskInfo\022\'\n\013child_tasks\030\005 \003("
+    "\0132\022.dcmd_api.TaskInfo\"Y\n\021UiTaskCancelWat"
+    "ch\022\025\n\rclient_msg_id\030\001 \002(\005\022\017\n\007task_id\030\002 \002"
+    "(\t\022\014\n\004user\030\003 \002(\t\022\016\n\006passwd\030\004 \002(\t\"`\n\026UiTa"
+    "skCancelWatchReply\022\025\n\rclient_msg_id\030\001 \002("
+    "\005\022\"\n\005state\030\002 \002(\0162\023.dcmd_api.DcmdState\022\013\n"
+    "\003err\030\003 \001(\t*\220\003\n\007CmdType\022\017\n\013CMD_UNKNOWN\020\000\022"
+    "\022\n\016CMD_START_TASK\020\001\022\022\n\016CMD_PAUSE_TASK\020\002\022"
+    "\023\n\017CMD_RESUME_TASK\020\003\022\022\n\016CMD_RETRY_TASK\020\004"
+    "\022\023\n\017CMD_FINISH_TASK\020\005\022\026\n\022CMD_CANCEL_SUBT"
+    "ASK\020\006\022\032\n\026CMD_CANCEL_SVR_SUBTASK\020\007\022\021\n\rCMD"
+    "_REDO_TASK\020\010\022\025\n\021CMD_REDO_SVR_POOL\020\t\022\024\n\020C"
+    "MD_REDO_SUBTASK\020\n\022\033\n\027CMD_REDO_FAILED_SUB"
+    "TASK\020\013\022$\n CMD_REDO_FAILED_SVR_POOL_SUBTA"
+    "SK\020\014\022\026\n\022CMD_IGNORE_SUBTASK\020\r\022\023\n\017CMD_FREE"
+    "ZE_TASK\020\016\022\025\n\021CMD_UNFREEZE_TASK\020\017\022\023\n\017CMD_"
+    "UPDATE_TASK\020\020B\021\n\017com.cwinux.dcmd", 3392);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "dcmd_ui.proto", &protobuf_RegisterTypes);
   UiTaskOutput::default_instance_ = new UiTaskOutput();
@@ -7811,6 +7812,7 @@ const int UiTaskCmd::kTaskIdFieldNumber;
 const int UiTaskCmd::kUidFieldNumber;
 const int UiTaskCmd::kSubtaskIdFieldNumber;
 const int UiTaskCmd::kIpFieldNumber;
+const int UiTaskCmd::kSvrNameFieldNumber;
 const int UiTaskCmd::kSvrPoolFieldNumber;
 const int UiTaskCmd::kConcurrentNumFieldNumber;
 const int UiTaskCmd::kConcurrentRateFieldNumber;
@@ -7842,6 +7844,7 @@ void UiTaskCmd::SharedCtor() {
   uid_ = 0;
   subtask_id_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   ip_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  svr_name_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   svr_pool_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   concurrent_num_ = 0;
   concurrent_rate_ = 0;
@@ -7866,6 +7869,9 @@ void UiTaskCmd::SharedDtor() {
   }
   if (ip_ != &::google::protobuf::internal::kEmptyString) {
     delete ip_;
+  }
+  if (svr_name_ != &::google::protobuf::internal::kEmptyString) {
+    delete svr_name_;
   }
   if (svr_pool_ != &::google::protobuf::internal::kEmptyString) {
     delete svr_pool_;
@@ -7919,15 +7925,20 @@ void UiTaskCmd::Clear() {
         ip_->clear();
       }
     }
+    if (has_svr_name()) {
+      if (svr_name_ != &::google::protobuf::internal::kEmptyString) {
+        svr_name_->clear();
+      }
+    }
     if (has_svr_pool()) {
       if (svr_pool_ != &::google::protobuf::internal::kEmptyString) {
         svr_pool_->clear();
       }
     }
     concurrent_num_ = 0;
-    concurrent_rate_ = 0;
   }
   if (_has_bits_[8 / 32] & (0xffu << (8 % 32))) {
+    concurrent_rate_ = 0;
     task_timeout_ = 0;
     auto__ = false;
     cmd_type_ = 0;
@@ -8030,12 +8041,29 @@ bool UiTaskCmd::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(50)) goto parse_svr_pool;
+        if (input->ExpectTag(50)) goto parse_svr_name;
         break;
       }
       
-      // optional string svr_pool = 6;
+      // optional string svr_name = 6;
       case 6: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_svr_name:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_svr_name()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+            this->svr_name().data(), this->svr_name().length(),
+            ::google::protobuf::internal::WireFormat::PARSE);
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(58)) goto parse_svr_pool;
+        break;
+      }
+      
+      // optional string svr_pool = 7;
+      case 7: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
          parse_svr_pool:
@@ -8047,12 +8075,12 @@ bool UiTaskCmd::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(56)) goto parse_concurrent_num;
+        if (input->ExpectTag(64)) goto parse_concurrent_num;
         break;
       }
       
-      // optional int32 concurrent_num = 7;
-      case 7: {
+      // optional int32 concurrent_num = 8;
+      case 8: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
          parse_concurrent_num:
@@ -8063,12 +8091,12 @@ bool UiTaskCmd::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(64)) goto parse_concurrent_rate;
+        if (input->ExpectTag(72)) goto parse_concurrent_rate;
         break;
       }
       
-      // optional int32 concurrent_rate = 8;
-      case 8: {
+      // optional int32 concurrent_rate = 9;
+      case 9: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
          parse_concurrent_rate:
@@ -8079,12 +8107,12 @@ bool UiTaskCmd::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(72)) goto parse_task_timeout;
+        if (input->ExpectTag(80)) goto parse_task_timeout;
         break;
       }
       
-      // optional int32 task_timeout = 9;
-      case 9: {
+      // optional int32 task_timeout = 10;
+      case 10: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
          parse_task_timeout:
@@ -8095,12 +8123,12 @@ bool UiTaskCmd::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(80)) goto parse_auto;
+        if (input->ExpectTag(88)) goto parse_auto;
         break;
       }
       
-      // optional bool auto = 10;
-      case 10: {
+      // optional bool auto = 11;
+      case 11: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
          parse_auto:
@@ -8111,12 +8139,12 @@ bool UiTaskCmd::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(88)) goto parse_cmd_type;
+        if (input->ExpectTag(96)) goto parse_cmd_type;
         break;
       }
       
-      // required .dcmd_api.CmdType cmd_type = 11;
-      case 11: {
+      // required .dcmd_api.CmdType cmd_type = 12;
+      case 12: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
          parse_cmd_type:
@@ -8127,17 +8155,17 @@ bool UiTaskCmd::MergePartialFromCodedStream(
           if (dcmd_api::CmdType_IsValid(value)) {
             set_cmd_type(static_cast< dcmd_api::CmdType >(value));
           } else {
-            mutable_unknown_fields()->AddVarint(11, value);
+            mutable_unknown_fields()->AddVarint(12, value);
           }
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(98)) goto parse_user;
+        if (input->ExpectTag(106)) goto parse_user;
         break;
       }
       
-      // required string user = 12;
-      case 12: {
+      // required string user = 13;
+      case 13: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
          parse_user:
@@ -8149,12 +8177,12 @@ bool UiTaskCmd::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(106)) goto parse_passwd;
+        if (input->ExpectTag(114)) goto parse_passwd;
         break;
       }
       
-      // required string passwd = 13;
-      case 13: {
+      // required string passwd = 14;
+      case 14: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
          parse_passwd:
@@ -8225,57 +8253,66 @@ void UiTaskCmd::SerializeWithCachedSizes(
       5, this->ip(), output);
   }
   
-  // optional string svr_pool = 6;
+  // optional string svr_name = 6;
+  if (has_svr_name()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->svr_name().data(), this->svr_name().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    ::google::protobuf::internal::WireFormatLite::WriteString(
+      6, this->svr_name(), output);
+  }
+  
+  // optional string svr_pool = 7;
   if (has_svr_pool()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->svr_pool().data(), this->svr_pool().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     ::google::protobuf::internal::WireFormatLite::WriteString(
-      6, this->svr_pool(), output);
+      7, this->svr_pool(), output);
   }
   
-  // optional int32 concurrent_num = 7;
+  // optional int32 concurrent_num = 8;
   if (has_concurrent_num()) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(7, this->concurrent_num(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(8, this->concurrent_num(), output);
   }
   
-  // optional int32 concurrent_rate = 8;
+  // optional int32 concurrent_rate = 9;
   if (has_concurrent_rate()) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(8, this->concurrent_rate(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(9, this->concurrent_rate(), output);
   }
   
-  // optional int32 task_timeout = 9;
+  // optional int32 task_timeout = 10;
   if (has_task_timeout()) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(9, this->task_timeout(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(10, this->task_timeout(), output);
   }
   
-  // optional bool auto = 10;
+  // optional bool auto = 11;
   if (has_auto_()) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(10, this->auto_(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteBool(11, this->auto_(), output);
   }
   
-  // required .dcmd_api.CmdType cmd_type = 11;
+  // required .dcmd_api.CmdType cmd_type = 12;
   if (has_cmd_type()) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
-      11, this->cmd_type(), output);
+      12, this->cmd_type(), output);
   }
   
-  // required string user = 12;
+  // required string user = 13;
   if (has_user()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->user().data(), this->user().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     ::google::protobuf::internal::WireFormatLite::WriteString(
-      12, this->user(), output);
+      13, this->user(), output);
   }
   
-  // required string passwd = 13;
+  // required string passwd = 14;
   if (has_passwd()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->passwd().data(), this->passwd().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     ::google::protobuf::internal::WireFormatLite::WriteString(
-      13, this->passwd(), output);
+      14, this->passwd(), output);
   }
   
   if (!unknown_fields().empty()) {
@@ -8326,60 +8363,70 @@ void UiTaskCmd::SerializeWithCachedSizes(
         5, this->ip(), target);
   }
   
-  // optional string svr_pool = 6;
+  // optional string svr_name = 6;
+  if (has_svr_name()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->svr_name().data(), this->svr_name().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        6, this->svr_name(), target);
+  }
+  
+  // optional string svr_pool = 7;
   if (has_svr_pool()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->svr_pool().data(), this->svr_pool().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        6, this->svr_pool(), target);
+        7, this->svr_pool(), target);
   }
   
-  // optional int32 concurrent_num = 7;
+  // optional int32 concurrent_num = 8;
   if (has_concurrent_num()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(7, this->concurrent_num(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(8, this->concurrent_num(), target);
   }
   
-  // optional int32 concurrent_rate = 8;
+  // optional int32 concurrent_rate = 9;
   if (has_concurrent_rate()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(8, this->concurrent_rate(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(9, this->concurrent_rate(), target);
   }
   
-  // optional int32 task_timeout = 9;
+  // optional int32 task_timeout = 10;
   if (has_task_timeout()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(9, this->task_timeout(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(10, this->task_timeout(), target);
   }
   
-  // optional bool auto = 10;
+  // optional bool auto = 11;
   if (has_auto_()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(10, this->auto_(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(11, this->auto_(), target);
   }
   
-  // required .dcmd_api.CmdType cmd_type = 11;
+  // required .dcmd_api.CmdType cmd_type = 12;
   if (has_cmd_type()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
-      11, this->cmd_type(), target);
+      12, this->cmd_type(), target);
   }
   
-  // required string user = 12;
+  // required string user = 13;
   if (has_user()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->user().data(), this->user().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        12, this->user(), target);
+        13, this->user(), target);
   }
   
-  // required string passwd = 13;
+  // required string passwd = 14;
   if (has_passwd()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->passwd().data(), this->passwd().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        13, this->passwd(), target);
+        14, this->passwd(), target);
   }
   
   if (!unknown_fields().empty()) {
@@ -8428,55 +8475,62 @@ int UiTaskCmd::ByteSize() const {
           this->ip());
     }
     
-    // optional string svr_pool = 6;
+    // optional string svr_name = 6;
+    if (has_svr_name()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->svr_name());
+    }
+    
+    // optional string svr_pool = 7;
     if (has_svr_pool()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::StringSize(
           this->svr_pool());
     }
     
-    // optional int32 concurrent_num = 7;
+    // optional int32 concurrent_num = 8;
     if (has_concurrent_num()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::Int32Size(
           this->concurrent_num());
     }
     
-    // optional int32 concurrent_rate = 8;
+  }
+  if (_has_bits_[8 / 32] & (0xffu << (8 % 32))) {
+    // optional int32 concurrent_rate = 9;
     if (has_concurrent_rate()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::Int32Size(
           this->concurrent_rate());
     }
     
-  }
-  if (_has_bits_[8 / 32] & (0xffu << (8 % 32))) {
-    // optional int32 task_timeout = 9;
+    // optional int32 task_timeout = 10;
     if (has_task_timeout()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::Int32Size(
           this->task_timeout());
     }
     
-    // optional bool auto = 10;
+    // optional bool auto = 11;
     if (has_auto_()) {
       total_size += 1 + 1;
     }
     
-    // required .dcmd_api.CmdType cmd_type = 11;
+    // required .dcmd_api.CmdType cmd_type = 12;
     if (has_cmd_type()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::EnumSize(this->cmd_type());
     }
     
-    // required string user = 12;
+    // required string user = 13;
     if (has_user()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::StringSize(
           this->user());
     }
     
-    // required string passwd = 13;
+    // required string passwd = 14;
     if (has_passwd()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::StringSize(
@@ -8525,17 +8579,20 @@ void UiTaskCmd::MergeFrom(const UiTaskCmd& from) {
     if (from.has_ip()) {
       set_ip(from.ip());
     }
+    if (from.has_svr_name()) {
+      set_svr_name(from.svr_name());
+    }
     if (from.has_svr_pool()) {
       set_svr_pool(from.svr_pool());
     }
     if (from.has_concurrent_num()) {
       set_concurrent_num(from.concurrent_num());
     }
+  }
+  if (from._has_bits_[8 / 32] & (0xffu << (8 % 32))) {
     if (from.has_concurrent_rate()) {
       set_concurrent_rate(from.concurrent_rate());
     }
-  }
-  if (from._has_bits_[8 / 32] & (0xffu << (8 % 32))) {
     if (from.has_task_timeout()) {
       set_task_timeout(from.task_timeout());
     }
@@ -8568,7 +8625,7 @@ void UiTaskCmd::CopyFrom(const UiTaskCmd& from) {
 }
 
 bool UiTaskCmd::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00001c07) != 0x00001c07) return false;
+  if ((_has_bits_[0] & 0x00003807) != 0x00003807) return false;
   
   return true;
 }
@@ -8580,6 +8637,7 @@ void UiTaskCmd::Swap(UiTaskCmd* other) {
     std::swap(uid_, other->uid_);
     std::swap(subtask_id_, other->subtask_id_);
     std::swap(ip_, other->ip_);
+    std::swap(svr_name_, other->svr_name_);
     std::swap(svr_pool_, other->svr_pool_);
     std::swap(concurrent_num_, other->concurrent_num_);
     std::swap(concurrent_rate_, other->concurrent_rate_);
