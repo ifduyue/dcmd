@@ -160,14 +160,15 @@ message UiTaskCmd {
   required  int32   uid = 3;
   optional  string  subtask_id=4;
   optional  string  ip=5;
-  optional  string  svr_pool=6;
-  optional  int32   concurrent_num=7;
-  optional  int32   concurrent_rate=8;
-  optional  int32   task_timeout=9;
-  optional  bool    auto=10;
-  required  CmdType cmd_type = 11;
-  required  string  user=12;
-  required  string  passwd=13;
+  optional  string  svr_name=6;
+  optional  string  svr_pool=7;
+  optional  int32   concurrent_num=8;
+  optional  int32   concurrent_rate=9;
+  optional  int32   task_timeout=10;
+  optional  bool    auto=11;
+  required  CmdType cmd_type = 12;
+  required  string  user=13;
+  required  string  passwd=14;
 }
 
 message UiTaskCmdReply{
