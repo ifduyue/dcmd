@@ -57,53 +57,53 @@ class DcmdCenterTaskMgr{
   void Reset();
   // 启动任务
   dcmd_api::DcmdState TaskCmdStartTask(DcmdTss* tss, uint32_t task_id,
-    uint32_t uid, bool restore);
+    uint32_t uid, DcmdCenterCmd** cmd);
   // 暂停任务
   dcmd_api::DcmdState TaskCmdPauseTask(DcmdTss* tss, uint32_t task_id,
-    uint32_t uid, bool restore);
+    uint32_t uid, DcmdCenterCmd** cmd);
   // 继续任务
   dcmd_api::DcmdState TaskCmdResumeTask(DcmdTss* tss, uint32_t task_id,
-    uint32_t uid, bool restore);
+    uint32_t uid, DcmdCenterCmd** cmd);
   // 重试任务
   dcmd_api::DcmdState TaskCmdRetryTask(DcmdTss* tss, uint32_t task_id,
-    uint32_t uid, bool restore);
+    uint32_t uid, DcmdCenterCmd** cmd);
   // 完成任务
   dcmd_api::DcmdState TaskCmdFinishTask(DcmdTss* tss, uint32_t task_id,
-    uint32_t uid, bool restore);
+    uint32_t uid, DcmdCenterCmd** cmd);
   // cancel具体subtask的执行
   dcmd_api::DcmdState TaskCmdCancelSubtask(DcmdTss* tss, uint64_t subtask_id,
-    uint32_t uid, bool restore);
+    uint32_t uid, DcmdCenterCmd** cmd);
   // cancel一个服务的所有任务的执行
   dcmd_api::DcmdState TaskCmdCancelSvrSubtask(DcmdTss* tss, char const* serivce, 
-    char const* agent_ip, uint32_t uid, bool restore);
+    char const* agent_ip, uint32_t uid, DcmdCenterCmd** cmd);
   // 重做整个任务
   dcmd_api::DcmdState TaskCmdRedoTask(DcmdTss* tss, uint32_t task_id,
-    uint32_t uid, bool restore);
+    uint32_t uid, DcmdCenterCmd** cmd);
   // 重做一个服务池子
   dcmd_api::DcmdState TaskCmdRedoSvrPool(DcmdTss* tss, uint32_t task_id,
-    char const* svr_pool, uint32_t uid, bool restore);
+    char const* svr_pool, uint32_t uid, DcmdCenterCmd** cmd);
   // 重做一个subtask
   dcmd_api::DcmdState TaskCmdRedoSubtask(DcmdTss* tss, uint64_t subtask_id,
-    uint32_t uid, bool restore);
+    uint32_t uid, DcmdCenterCmd** cmd);
   // 重做失败的subtask
   dcmd_api::DcmdState TaskCmdRedoFailedSubtask(DcmdTss* tss, uint32_t task_id,
-    uint32_t uid, bool restore);
+    uint32_t uid, DcmdCenterCmd** cmd);
   // 重做一个服务池子中的失败subtask
   dcmd_api::DcmdState TaskCmdRedoFailedSvrPoolSubtask(DcmdTss* tss, uint32_t task_id,
-    char const* svr_pool, uint32_t uid, bool restore);
+    char const* svr_pool, uint32_t uid, DcmdCenterCmd** cmd);
   // ignore某个subtask的结果
   dcmd_api::DcmdState TaskCmdIgnoreSubtask(DcmdTss* tss, uint64_t subtask_id,
-    uint32_t uid, bool restore);
+    uint32_t uid, DcmdCenterCmd** cmd);
   // 冻结任务的执行
   dcmd_api::DcmdState TaskCmdFreezeTask(DcmdTss* tss,  uint32_t task_id,
-   uint32_t uid, bool restore);
+   uint32_t uid, DcmdCenterCmd** cmd);
   // 解除对一个任务的冻结
   dcmd_api::DcmdState TaskCmdUnfreezeTask(DcmdTss* tss, uint32_t task_id,
-    uint32_t uid, bool restore);
+    uint32_t uid, DcmdCenterCmd** cmd);
   // 通知任务信息改变
   dcmd_api::DcmdState TaskCmdUpdateTask(DcmdTss* tss, uint32_t task_id,
     uint32_t con_num, uint32_t con_rate, uint32_t timeout, bool is_auto,
-    uint32_t uid, bool restore);
+    uint32_t uid, DcmdCenterCmd** cmd);
   // 加载所有的数据
   bool LoadAllDataFromDb(DcmdTss* tss);
   // 从数据库中获取新task
@@ -146,6 +146,9 @@ class DcmdCenterTaskMgr{
    // 更新子任务的状态
    inline bool UpdateSubtaskState(DcmdTss* tss, bool is_commit,
      uint64_t subtask_id, uint8_t state, char const* err_msg);
+   // 更新命令的状态
+   inline bool UpdateCmdState(DcmdTss* tss, bool is_commit,
+     uint64_t cmd_id, uint8_t state, char const* err_msg);
 
 
  private:
