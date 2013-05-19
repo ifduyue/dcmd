@@ -113,6 +113,7 @@ public:
 class DcmdCenterSvrPool{
  public:
    DcmdCenterSvrPool(uint32_t task_id): task_id_(task_id) {
+     svr_pool_id_ = 0;
    }
    ~DcmdCenterSvrPool(){
    }
@@ -200,6 +201,8 @@ public:
   string                            task_cmd_;
   // 服务池子的名字
   string                            svr_pool_;
+  // 服务池子的id
+  uint32_t                          svr_pool_id_;
   // 服务池子的环境版本
   string                            svr_env_ver_;
   // 服务池子的版本库地址
@@ -286,7 +289,7 @@ class DcmdCenterTask {
   // 父任务
   DcmdCenterTask*             parent_task_;
   // 子任务的列表，按照顺序排序
-  map<uint32_t, map<uint32_t, DcmdCenterTask*> >  child_tasks_;
+  map<uint32_t, map<uint32_t, DcmdCenterTask*>* >  child_tasks_;
   // 当前任务执行到的index
   uint32_t                    doing_order_;
   // 执行顺序

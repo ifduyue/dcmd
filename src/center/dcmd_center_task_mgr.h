@@ -108,10 +108,11 @@ class DcmdCenterTaskMgr{
   bool LoadAllDataFromDb(DcmdTss* tss);
   // 从数据库中获取新task
   bool LoadNewTask(DcmdTss* tss, bool is_first);
-  // 初始化时，从数据库加载subtask
-  bool LoadAllSubtask(DcmdTss* tss);
+  // 从数据库中获取新的subtask
+  bool LoadNewSubtask(DcmdTss* tss);
   // 初始化时，从数据库加载command
-  bool LoadAllCmd(tss);
+  bool LoadAllCmd(DcmdTss* tss);
+  
 
   // 加载任务的service pool
   bool LoadTaskSvrPool(DcmdTss* tss, DcmdCenterTask* task);
@@ -149,6 +150,14 @@ class DcmdCenterTaskMgr{
    // 更新命令的状态
    inline bool UpdateCmdState(DcmdTss* tss, bool is_commit,
      uint64_t cmd_id, uint8_t state, char const* err_msg);
+   // 创建任务的子任务
+   inline bool CreateSubtasksForTask(DcmdTss* tss, DcmdCenterTask* task,
+     bool is_commit, uint32_t uid);
+   // 创建cmd
+   inline bool InsertCommand(DcmdTss* tss, bool is_commit, uint32_t uid,
+     uint64_t cmd_id, uint32_t task_id, uint64_t subtask_id, char const* svr_pool,
+     uint32_t svr_pool_id, char const* service, char const* ip,
+     uint8_t cmt_type, uint8_t state, char const* err_msg);
 
 
  private:

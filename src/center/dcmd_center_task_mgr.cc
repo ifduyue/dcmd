@@ -314,7 +314,7 @@ bool DcmdCenterTaskMgr::LoadAllDataFromDb(DcmdTss* tss) {
   // 加载所有新的任务数据
   if (!LoadNewTask(tss, true)) return false;
   // 加载所有的subtask数据
-  if (!LoadAllSubtask(tss)) return false;
+  if (!LoadNewSubtask(tss)) return false;
   // 加载所有未处理的命令数据
   if (!LoadAllCmd(tss)) return false;
   return true;
@@ -329,9 +329,9 @@ bool DcmdCenterTaskMgr::LoadNewTask(DcmdTss* tss, bool is_first) {
     "freeze, valid, concurrent_num, concurrent_rate, timeout, auto, process, task_arg, "\
     "errmsg from task order by task_id asc where task_id > %d", next_task_id_);
   if (!mysql_->query(tss->sql_)){
+    CwxCommon::snprintf(tss->m_szBuf2K, 2047, "Failure to fetch new tasks. err:%s; sql:%s", mysql_->getErrMsg(), tss->sql_);
+    CWX_ERROR((tss->m_szBuf2K));
     mysql_->freeResult();
-    CWX_ERROR(("Failure to fetch new tasks. err:%s; sql:%s", mysql_->getErrMsg(),
-      tss->sql_));
     return false;
   }
   bool is_null = false;
@@ -441,11 +441,12 @@ bool DcmdCenterTaskMgr::LoadNewTask(DcmdTss* tss, bool is_first) {
   return true;
 }
 
-bool DcmdCenterTaskMgr::LoadAllSubtask(DcmdTss* tss) {
+bool DcmdCenterTaskMgr::LoadNewSubtask(DcmdTss* tss) {
   CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
     "select subtask_id, task_id, task_cmd, svr_pool, service, ip, state, ignored,"\
     "UNIX_TIMESTAMP(start_time), UNIX_TIMESTAMP(finish_time), process, errmsg "\
-    " from task_node order by subtask_id desc ");
+    " from task_node where subtask_id >= %s order by subtask_id desc ",
+    CwxCommon::toString(next_subtask_id_, tss->m_szBuf2K, 10));
   if (!mysql_->query(tss->sql_)) {
     mysql_->freeResult();
     CWX_ERROR(("Failure to fetch task-node. err:%s; sql:%s", mysql_->getErrMsg(),
@@ -454,7 +455,6 @@ bool DcmdCenterTaskMgr::LoadAllSubtask(DcmdTss* tss) {
   }
   bool is_null = false;
   DcmdCenterSubtask*  subtask = NULL;
-  next_subtask_id_ = 1;
   while(mysql_->next()){
     subtask = new DcmdCenterSubtask();
     subtask->subtask_id_ = strtoull(mysql_->fetch(0, is_null), NULL, 0);
@@ -469,7 +469,7 @@ bool DcmdCenterTaskMgr::LoadAllSubtask(DcmdTss* tss) {
     subtask->finish_time_ = strtoul(mysql_->fetch(9, is_null), NULL, 0);
     subtask->process_ = mysql_->fetch(10, is_null);
     subtask->err_msg_ = mysql_->fetch(11, is_null);
-    next_subtask_id_ = subtask->subtask_id_ + 1;
+    next_subtask_id_ = subtask->subtask_id_;
     all_subtasks_[subtask->subtask_id_] = subtask;
   }
   mysql_->freeResult();
@@ -610,7 +610,7 @@ bool DcmdCenterTaskMgr::LoadAllCmd(DcmdTss* tss) {
 
 bool DcmdCenterTaskMgr::LoadTaskSvrPool(DcmdTss* tss, DcmdCenterTask* task) {
   CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
-    "select svr_pool, env_ver, repo, run_user from task_service_pool where task_id=%u",
+    "select svr_pool, svr_pool_id, env_ver, repo, run_user from task_service_pool where task_id=%u",
     task->task_id_);
   if (!mysql_->query(tss->sql_)) {
     mysql_->freeResult();
@@ -624,7 +624,8 @@ bool DcmdCenterTaskMgr::LoadTaskSvrPool(DcmdTss* tss, DcmdCenterTask* task) {
     svr_pool = new DcmdCenterSvrPool(task->task_id_);
     svr_pool->task_cmd_ = task->task_cmd_;
     svr_pool->svr_pool_ = mysql_->fetch(0, is_null);
-    svr_pool->svr_env_ver_ = mysql_->fetch(1, is_null);
+    svr_pool->svr_pool_id_ = strtoul(mysql_->fetch(1, is_null), NULL, 10);
+    svr_pool->svr_env_ver_ = mysql_->fetch(2, is_null);
     svr_pool->repo_ = mysql_->fetch(3, is_null);
     svr_pool->run_user_ = mysql_->fetch(4, is_null);
     // 将service pool添加到任务中
@@ -743,7 +744,85 @@ int DcmdCenterTaskMgr::FetchTaskCmdInfoFromDb(DcmdTss* tss, , char const* task_c
 
 dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdStartTask(DcmdTss* tss, uint32_t task_id,
   uint32_t uid, DcmdCenterCmd** cmd) {
-
+    DcmdCenterTask* task = NULL;
+    // 加载任务
+    if (!LoadNewTask(tss)) {
+      mysql_->disconnect();
+      return dcmd_api::DCMD_STATE_FAILED;
+    }
+    task = GetTask(task_id);
+    if (!task) {
+      tss->err_msg_ = "No task.";
+      return dcmd_api::DCMD_STATE_NO_TASK;
+    }
+    if (!task->is_valid_) {
+      tss->err_msg_ = "Task is invalid.";
+      return dcmd_api::DCMD_STATE_FAILED;
+    }
+    if (task->parent_task_) {
+      tss->err_msg_ = "Can't start child task.";
+      return dcmd_api::DCMD_STATE_FAILED;
+    }
+    if (dcmd_api::TASK_INIT != task->state_) {
+      tss->err_msg_ = "Task is started.";
+      return dcmd_api::DCMD_STATE_FAILED;
+    }
+    bool is_success = true;
+    do {
+      // 初始化任务
+      if (task->is_cluster_) { // cluster任务
+        map<uint32_t, map<uint32_t, DcmdCenterTask*> >::iterator iter = task->child_tasks_.begin();
+        map<uint32_t, DcmdCenterTask*>::iterator level_iter;
+        while(iter != task->child_tasks_.end()) {
+          level_iter = iter->second->begin();
+          while(level_iter != iter->second->end) {
+            if (!CreateSubtasksForTask(tss, task, false, uid)) {
+              mysql_->disconnect();
+              is_success = false;
+              break;
+            }
+            ++level_iter;
+          }
+          if (!is_success) break;
+          ++iter;
+        }
+        if (!is_success) break;
+      } else {
+        if (!CreateSubtasksForTask(tss, task, false, uid)){
+          mysql_->disconnect();
+          is_success = false;
+          break;
+        }
+      }
+      if (!cmd) {
+        // 插入start的命令
+        if (!InsertCommand(tss, false, uid, next_cmd_id_++, task->task_id_,
+          0, "", 0, task->service_.c_str(), "", dcmd_api::CMD_START_TASK, 
+          dcmd_api::COMMAND_SUCCESS, ""))
+        {
+          mysql_->disconnect();
+          is_success = false;
+          break;
+        }
+      } else {
+        if (!UpdateCmdState(tss, false, cmd->cmd_id_, dcmd_api::COMMAND_SUCCESS, "")) {
+          mysql_->disconnect();
+          is_success = false;
+          break;
+        }
+      }
+      // 更新任务状态
+      if (!UpdateTaskState(tss, true, task->task_id_, dcmd_api::TASK_DOING)) {
+        is_success = false;
+        break;
+      }
+    } while(0);
+    if (!is_success) return dcmd_api::DCMD_STATE_FAILED;
+    if (!LoadNewSubtask(tss)) {
+      mysql_->disconnect();
+      return dcmd_api::DCMD_STATE_FAILED;
+    }
+    return dcmd_api::DCMD_STATE_SUCCESS;
 }
 
 dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdPauseTask(DcmdTss* tss, uint32_t task_id,
