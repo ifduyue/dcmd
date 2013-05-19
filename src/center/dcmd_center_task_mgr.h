@@ -158,6 +158,8 @@ class DcmdCenterTaskMgr{
      uint64_t cmd_id, uint32_t task_id, uint64_t subtask_id, char const* svr_pool,
      uint32_t svr_pool_id, char const* service, char const* ip,
      uint8_t cmt_type, uint8_t state, char const* err_msg);
+   // 执行sql
+   inline bool ExecSql(DcmdTss* tss, bool is_commit);
 
 
  private:

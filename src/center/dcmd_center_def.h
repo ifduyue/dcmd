@@ -238,6 +238,7 @@ class DcmdCenterTask {
     state_ = dcmd_api::TASK_INIT;
     is_freezed_ = false;
     is_valid_ = true;
+    is_pause_ = false;
     max_current_num_ = 0;
     max_current_rate_ = 0;
     timeout_ = 0;
@@ -314,6 +315,8 @@ class DcmdCenterTask {
   bool                        is_freezed_;
   // 任务是否有效
   bool                        is_valid_;
+  // 任务是否暂停
+  bool                        is_pause_;
   // 并行执行的最大数量
   uint32_t                    max_current_num_;
   // 并行执行的最大比率

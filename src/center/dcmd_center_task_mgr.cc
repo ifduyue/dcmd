@@ -326,7 +326,7 @@ bool DcmdCenterTaskMgr::LoadNewTask(DcmdTss* tss, bool is_first) {
   list<DcmdCenterTask*> tasks;
   CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, "select task_id, task_name, task_cmd, parent_task_id,"\
     "order, svr_id, service, gid, group_name, tag, update_env, update_tag, state,"\
-    "freeze, valid, concurrent_num, concurrent_rate, timeout, auto, process, task_arg, "\
+    "freeze, valid, pause, concurrent_num, concurrent_rate, timeout, auto, process, task_arg, "\
     "errmsg from task order by task_id asc where task_id > %d", next_task_id_);
   if (!mysql_->query(tss->sql_)){
     CwxCommon::snprintf(tss->m_szBuf2K, 2047, "Failure to fetch new tasks. err:%s; sql:%s", mysql_->getErrMsg(), tss->sql_);
@@ -351,8 +351,9 @@ bool DcmdCenterTaskMgr::LoadNewTask(DcmdTss* tss, bool is_first) {
     task->update_env_ = strtoul(mysql_->fetch(10, is_null), NULL, 10)?true:false;
     task->update_tag_ = strtoul(mysql_->fetch(11, is_null), NULL, 10)?true:false;
     task->state_ = strtoul(mysql_->fetch(12, is_null), NULL, 10);
-    task->is_freezed_ = strtoul(mysql_->fetch(13, is_null), NULL, 10);
+    task->is_freezed_ = strtoul(mysql_->fetch(13, is_null), NULL, 10)?true:false;
     task->is_valid_ = strtoul(mysql_->fetch(14, is_null), NULL, 10)?true:false;
+    task->is_pause_ = strtoul(mysql_->fetch(15, is_null), NULL, 10)?true:false;
     task->max_current_num_ = strtoul(mysql_->fetch(15, is_null), NULL, 10);
     task->max_current_rate_ = strtoul(mysql_->fetch(16, is_null), NULL, 10);
     task->timeout_ = strtoul(mysql_->fetch(17, is_null), NULL, 10);
@@ -813,11 +814,13 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdStartTask(DcmdTss* tss, uint32_t t
       }
       // 更新任务状态
       if (!UpdateTaskState(tss, true, task->task_id_, dcmd_api::TASK_DOING)) {
+        mysql_->disconnect();
         is_success = false;
         break;
       }
     } while(0);
     if (!is_success) return dcmd_api::DCMD_STATE_FAILED;
+    task->state_ = dcmd_api::TASK_DOING;
     if (!LoadNewSubtask(tss)) {
       mysql_->disconnect();
       return dcmd_api::DCMD_STATE_FAILED;
@@ -826,7 +829,57 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdStartTask(DcmdTss* tss, uint32_t t
 }
 
 dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdPauseTask(DcmdTss* tss, uint32_t task_id,
-  uint32_t uid, DcmdCenterCmd** cmd);
+  uint32_t uid, DcmdCenterCmd** cmd)
+{
+  DcmdCenterTask* task = NULL;
+  // 加载任务
+  if (!LoadNewTask(tss)) {
+    mysql_->disconnect();
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
+  task = GetTask(task_id);
+  if (!task) {
+    tss->err_msg_ = "No task.";
+    return dcmd_api::DCMD_STATE_NO_TASK;
+  }
+  if (task->parent_task_) {
+    tss->err_msg_ = "Can't pause child task.";
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
+  if (task->is_pause_) return dcmd_api::DCMD_STATE_SUCCESS;
+  bool is_success = true;
+  do {
+    if (!cmd) {
+      // 插入start的命令
+      if (!InsertCommand(tss, false, uid, next_cmd_id_++, task->task_id_,
+        0, "", 0, task->service_.c_str(), "", dcmd_api::CMD_PAUSE_TASK,
+        dcmd_api::COMMAND_SUCCESS, ""))
+      {
+        mysql_->disconnect();
+        is_success = false;
+        break;
+      }
+    } else {
+      if (!UpdateCmdState(tss, false, cmd->cmd_id_, dcmd_api::COMMAND_SUCCESS, "")) {
+        mysql_->disconnect();
+        is_success = false;
+        break;
+      }
+    }
+    // 更新任务状态
+    CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
+      "update task set pause=1 where task_id = %u", task->task_id_);
+    if (!ExecSql(tss, true)) {
+      mysql_->disconnect();
+      is_success = false;
+      break;
+    }
+  }while(0)
+  if (!is_success) return dcmd_api::DCMD_STATE_FAILED;
+  task->is_pause_ = true;
+  return dcmd_api::DCMD_STATE_SUCCESS;
+
+}
 
 dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdResumeTask(DcmdTss* tss, uint32_t task_id,
   uint32_t uid, DcmdCenterCmd** cmd);

@@ -184,5 +184,23 @@ inline bool DcmdCenterTaskMgr::InsertCommand(DcmdTss* tss, bool is_commit, uint3
   return true;
 }
 
+inline bool DcmdCenterTaskMgr::ExecSql(DcmdTss* tss, bool is_commit) {
+  if (-1 == mysql_->execute(tss->sql_)) {
+    tss->err_msg_ = string("Failure to exec sql, err:") + mysql_->getErrMsg(),
+      + ". sql:" + tss->sql_;
+    CWX_ERROR((tss->err_msg_.c_str());
+    mysql_->rollback();
+    return false;
+  }
+  if (is_commit && !mysql_->commit()) {
+    tss->err_msg_ = string("Failure to commit sql, err:") + mysql_->getErrMsg(),
+      + ". sql:" + tss->sql_;
+    CWX_ERROR(tss->err_msg.c_str());
+    mysql_->rollback();
+    return false;
+  }
+  return true;
+}
+
 
 }  // dcmd
