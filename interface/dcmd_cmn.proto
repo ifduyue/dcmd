@@ -93,10 +93,9 @@ enum AgentState {
 enum TaskState {
    TASK_INIT = 0;
    TASK_DOING = 1;
-   TASK_PAUSED = 2;
-   TASK_FAILED = 3;
-   TASK_FINISHED = 4;
-   TASK_FINISHED_WITH_FAILED = 5;
+   TASK_FAILED = 2;
+   TASK_FINISHED = 3;
+   TASK_FINISHED_WITH_FAILED = 4;
 }
 
 
@@ -120,13 +119,14 @@ message TaskInfo {
   optional  string      parent_task_id = 4;
   optional  bool        freezed=5;
   optional  bool        valid=6;
-  optional  string      err=7;
-  optional  int32       success_subtask=8;
-  optional  int32       failed_subtask=9;
-  optional  int32       doing_subtask=10;
-  optional  int32       undo_subtask=11;
-  optional  int32       ignore_doing_subtask=12;
-  optional  int32       ignore_failed_subtask=13;
+  optional  bool        pause=7;
+  optional  string      err=8;
+  optional  int32       success_subtask=9;
+  optional  int32       failed_subtask=10;
+  optional  int32       doing_subtask=11;
+  optional  int32       undo_subtask=12;
+  optional  int32       ignore_doing_subtask=13;
+  optional  int32       ignore_failed_subtask=14;
 }
 
 message AgentInfo {
