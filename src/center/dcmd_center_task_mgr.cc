@@ -1010,7 +1010,114 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdRetryTask(DcmdTss* tss, uint32_t t
 dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdFinishTask(DcmdTss* tss, uint32_t task_id,
   uint32_t uid, DcmdCenterCmd** cmd)
 {
+  DcmdCenterTask* task =  GetTask(task_id);
+  // 加载任务
+  if (!task) {
+    if (!LoadNewTask(tss)) {
+      mysql_->disconnect();
+      return dcmd_api::DCMD_STATE_FAILED;
+    }
+    task = GetTask(task_id);
+  }
+  if (!task) {
+    tss->err_msg_ = "No task.";
+    return dcmd_api::DCMD_STATE_NO_TASK;
+  }
+  if (task->parent_task_) {
+    tss->err_msg_ = "Can't finish child task.";
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
+  if (!task->is_freezed_) {
+    tss->err_msg_ = "Task is not in freezed state.";
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
+  // 获取task id
+  string task_ids;
+  if (task->is_cluster_) {
+    CwxCommon::sprintf(tss->m_szBuf2K, "%u", task->task_id_);
+    task_ids = tss->m_szBuf2K;
+    map<uint32_t, map<uint32_t, DcmdCenterTask*>* >::iterator iter = task->child_tasks_.begin();
+    map<uint32_t, DcmdCenterTask*>::iterator level_iter;
+    while(iter != task->child_tasks_.end()) {
+      level_iter = iter->second->begin();
+      while( level_iter != iter->second->end()) {
+        CwxCommon::sprintf(tss->m_szBuf2K, ",%u", level_iter->second->task_id_);
+        task_ids += tss->m_szBuf2K;
+        level_iter++;
+      }
+      ++iter;
+    }
+  } else {
+    CwxCommon::sprintf(tss->m_szBuf2K, "%u", task->task_id_);
+    task_ids = tss->m_szBuf2K;
+  }
+  bool is_success = false;
+  do {
+    CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
+      "delete from task_history where task_id in (%s)", task_ids.c_str());
+    if (-1 == mysql_->execute(tss->sql_)) break;
+    
+    CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
+      "insert into task_history select * from task where task_id in (%s)", task_ids.c_str());
+    if (-1 == m_mysql->execute(tss->sql_)) break;
+    
+    CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
+      "delete from task where task_id in (%s)", task_ids.c_str());
+    if (-1 == m_mysql->execute(tss->sql_)) break;
 
+    CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
+      "delete from task_service_pool_history where task_id in (%s)", task_ids.c_str());
+    if (-1 == m_mysql->execute(tss->sql_)) break;
+
+    CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
+      "insert into task_service_pool_history select * from  task_service_pool where task_id in (%s)", task_ids.c_str());
+    if (-1 == m_mysql->execute(tss->sql_)) break;
+
+    CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
+      "delete from task_service_pool where task_id in (%s)", task_ids.c_str());
+    if (-1 == m_mysql->execute(tss->sql_)) break;
+
+    CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
+      "delete from task_node_history where task_id in (%s)", task_ids.c_str());
+    if (-1 == m_mysql->execute(tss->sql_)) break;
+
+    CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
+      "insert into task_node_history select * from task_node where task_id in (%s)", task_ids.c_str());
+    if (-1 == m_mysql->execute(tss->sql_)) break;
+
+    CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
+      "delete from task_node where task_id in (%s)", task_ids.c_str());
+    if (-1 == m_mysql->execute(tss->sql_)) break;
+
+    CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
+      "delete from command_history where task_id in (%s)", task_ids.c_str());
+    if (-1 == m_mysql->execute(tss->sql_)) break;
+
+    CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
+      "insert into command_history select * from command where task_id in (%s)", task_ids.c_str());
+    if (-1 == m_mysql->execute(tss->sql_)) break;
+
+    CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
+      "delete from command where task_id in (%s)", task_ids.c_str());
+    if (-1 == m_mysql->execute(tss->sql_)) break;
+
+    is_success = true;
+  }while(0);
+  if (!is_success) {
+    tss->err_msg_ = string("Failure to exec sql, err:") + mysql_->getErrMsg() +
+      string("; sql:") + tss->sql_;
+    mysql_->rollback();
+    mysql_->disconnect();
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
+  if (!mysql_->commit()) {
+    tss->err_msg_ = string("Failure to commit, err:") + mysql_->getErrMsg();
+    mysql_->rollback();
+    mysql_->disconnect();
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
+  // 将task从内存中删除
+  return dcmd_api::DCMD_STATE_SUCCESS;
 }
 
 dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdCancelSubtask(DcmdTss* tss, uint64_t subtask_id,
