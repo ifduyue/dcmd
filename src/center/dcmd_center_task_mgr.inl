@@ -145,7 +145,7 @@ inline bool DcmdCenterTaskMgr::CreateSubtasksForTask(DcmdTss* tss, DcmdCenterTas
 }
 
 inline bool DcmdCenterTaskMgr::InsertCommand(DcmdTss* tss, bool is_commit, uint32_t uid,
-  uint64_t cmd_id, uint32_t task_id, uint64_t subtask_id, char const* svr_pool,
+  uint32_t task_id, uint64_t subtask_id, char const* svr_pool,
   uint32_t svr_pool_id, char const* service, char const* ip,
   uint8_t cmt_type, uint8_t state, char const* err_msg)
 {
@@ -163,7 +163,7 @@ inline bool DcmdCenterTaskMgr::InsertCommand(DcmdTss* tss, bool is_commit, uint3
     "insert into command(cmd_id, task_id, subtask_id, svr_pool, svr_pool_id, service, ip,"\
     "cmd_type, state, errmsg, utime, ctime, opr_uid) "\
     " values (%s, %u, %s, '%s', %u, '%s', %u, %u, '%s', now(), now(), %u)",
-    CwxCommon::snprintf(cmd_id, cmd_id_sz,10), task_id,
+    CwxCommon::snprintf(++next_cmd_id_, cmd_id_sz,10), task_id,
     CwxCommon::snprintf(subtask_id, subtask_id_sz, 10),svr_pool_str.c_str(),
     svr_pool_id, service_str.c_str(), ip_str.c_str(), cmt_type, state,
     err_msg_str.c_str(), uid);
@@ -202,5 +202,47 @@ inline bool DcmdCenterTaskMgr::ExecSql(DcmdTss* tss, bool is_commit) {
   return true;
 }
 
+inline void DcmdCenterTaskMgr::RemoveTaskFromMem(DcmdCenterTask* task) {
+  all_tasks_.erase(task->task_id_);
+  map<uint64_t, DcmdCenterSubtask*>* subtasks;
+  map<uint64_t, DcmdCenterSubtask*>::iterator subtasks_iter;
+  map<string, DcmdCenterSvrPool*>::iterator pool_iter = task->pools_.begin();
+  while(pool_iter != task->pools_.end()){
+    subtasks = (map<uint64_t, DcmdCenterSubtask*>*)pool_iter->second->all_subtasks();
+    subtasks_iter = subtasks->begin();
+    while(subtasks_iter != subtasks->end()){
+      if (subtasks_iter->second->exec_cmd_){
+        RemoveCmd(subtasks_iter->second->exec_cmd_);
+      }
+      if (subtasks_iter->second->cancel_cmd_){
+        RemoveCmd(subtasks_iter->second->cancel_cmd_);
+      }
+      all_subtasks_.erase(subtasks_iter->second->subtask_id_);
+      delete subtasks_iter->second;
+      subtasks_iter++;
+    }
+    pool_iter++;
+  }
+  delete task;
+}
+
+inline void DcmdCenterTaskMgr::RemoveCmd(DcmdCenterCmd* cmd) {
+  waiting_cmds_.erase(cmd->cmd_id_);
+  if (cmd->agent_) {
+    cmd->agent_->cmds_.erase(cmd->cmd_id_);
+    if (!cmd->agent_->cmds_.size()){
+      agents_.erase(cmd->agent_->ip_);
+      delete cmd->agent_;
+    }
+  }
+  if (cmd->subtask_) {
+    if (cmd->subtask_->exec_cmd_ == cmd) {
+      cmd->subtask_->exec_cmd_ = NULL;
+    } else if ( cmd->subtask_->cancel_cmd_ == cmd) {
+      cmd->subtask_->cancel_cmd_ = NULL;
+    }
+  }
+  delete cmd;
+}
 
 }  // dcmd

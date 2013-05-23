@@ -809,7 +809,7 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdStartTask(DcmdTss* tss, uint32_t t
       }
       if (!cmd) {
         // 插入start的命令
-        if (!InsertCommand(tss, false, uid, next_cmd_id_++, task->task_id_,
+        if (!InsertCommand(tss, false, uid, task->task_id_,
           0, "", 0, task->service_.c_str(), "", dcmd_api::CMD_START_TASK, 
           dcmd_api::COMMAND_SUCCESS, ""))
         {
@@ -865,7 +865,7 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdPauseTask(DcmdTss* tss, uint32_t t
   do {
     if (!cmd) {
       // 插入start的命令
-      if (!InsertCommand(tss, false, uid, next_cmd_id_++, task->task_id_,
+      if (!InsertCommand(tss, false, uid, task->task_id_,
         0, "", 0, task->service_.c_str(), "", dcmd_api::CMD_PAUSE_TASK,
         dcmd_api::COMMAND_SUCCESS, ""))
       {
@@ -919,7 +919,7 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdResumeTask(DcmdTss* tss, uint32_t 
   do {
     if (!cmd) {
       // 插入start的命令
-      if (!InsertCommand(tss, false, uid, next_cmd_id_++, task->task_id_,
+      if (!InsertCommand(tss, false, uid, task->task_id_,
         0, "", 0, task->service_.c_str(), "", dcmd_api::CMD_RESUME_TASK,
         dcmd_api::COMMAND_SUCCESS, ""))
       {
@@ -987,7 +987,7 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdRetryTask(DcmdTss* tss, uint32_t t
     }
     if (!cmd) {
       // 插入start的命令
-      if (!InsertCommand(tss, false, uid, next_cmd_id_++, task->task_id_,
+      if (!InsertCommand(tss, false, uid, task->task_id_,
         0, "", 0, task->service_.c_str(), "", dcmd_api::CMD_RETRY_TASK,
         dcmd_api::COMMAND_SUCCESS, ""))
       {
@@ -1088,7 +1088,16 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdFinishTask(DcmdTss* tss, uint32_t 
     CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
       "delete from task_node where task_id in (%s)", task_ids.c_str());
     if (-1 == m_mysql->execute(tss->sql_)) break;
-
+    
+    if (!cmd) {
+      // 插入start的命令
+      if (!InsertCommand(tss, false, uid, task->task_id_,
+        0, "", 0, task->service_.c_str(), "", dcmd_api::CMD_RETRY_TASK,
+        dcmd_api::COMMAND_SUCCESS, "")) break;
+    } else {
+      if (!UpdateCmdState(tss, false, cmd->cmd_id_, dcmd_api::COMMAND_SUCCESS, ""))
+        break;
+    }
     CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
       "delete from command_history where task_id in (%s)", task_ids.c_str());
     if (-1 == m_mysql->execute(tss->sql_)) break;
@@ -1117,6 +1126,7 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdFinishTask(DcmdTss* tss, uint32_t 
     return dcmd_api::DCMD_STATE_FAILED;
   }
   // 将task从内存中删除
+  RemoveTaskFromMem(task);
   return dcmd_api::DCMD_STATE_SUCCESS;
 }
 

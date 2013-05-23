@@ -34,6 +34,7 @@ class DcmdCenterCmd{
     subtask_id_ = 0;
     cmd_type_ = dcmd_api::CMD_UNKNOWN;
     state_ = DCMD_CMD_STATE_UNDO;
+    begin_time_ = 0;
     task_ = NULL;
     subtask_ = NULL;
     agent_ = NULL;
@@ -55,6 +56,8 @@ class DcmdCenterCmd{
   string                  agent_ip_;
   // 命令类型
   uint8_t                 cmd_type_;
+  // 开始做的时间
+  uint32_t                begin_time_;
   // 命令的状态
   uint8_t                 state_;
   // 命令对应的任务对象
@@ -75,6 +78,8 @@ class DcmdCenterSubtask{
     is_ignored_ = false;
     start_time_ = 0;
     finish_time_ = 0;
+    exec_cmd_ = NULL;
+    cancel_cmd_ = NULL;
     agent_ = NULL;
     task_ = NULL;
   }
@@ -103,6 +108,10 @@ public:
   string                   process_;
   // 错误信息
   string                   err_msg_;
+  // 等着执行的任务
+  DcmdCenterCmd*           exec_cmd_;
+  // 等待执行的cancel
+  DcmdCenterCmd*           cancel_cmd_;
   // 子任务对应的agent对象
   DcmdCenterAgent*         agent_;
   // 子任务对应的task对象
