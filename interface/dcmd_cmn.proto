@@ -115,8 +115,8 @@ enum CommandState {
 message TaskInfo {
   required  string      task_id=1;
   required  TaskState   task_state=2;
-  required  int32       order = 3;
-  optional  string      parent_task_id = 4;
+  required  string      depand_task_id = 3;
+  optional  string      depand_task_name = 4;
   optional  bool        freezed=5;
   optional  bool        valid=6;
   optional  bool        pause=7;
