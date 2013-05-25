@@ -190,7 +190,7 @@ message UiTaskWatchReply{
   required  DcmdState   watch_state=2;
   optional  string      err=3;
   required  TaskInfo    task_info=4;
-  repeated  TaskInfo    child_tasks=5;
+  optional  TaskInfo    depend_tasks=5;
 }
 
 message UiTaskCancelWatch {
