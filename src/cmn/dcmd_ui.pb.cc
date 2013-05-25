@@ -501,7 +501,7 @@ void protobuf_AssignDesc_dcmd_5fui_2eproto() {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UiTaskWatchReply, watch_state_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UiTaskWatchReply, err_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UiTaskWatchReply, task_info_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UiTaskWatchReply, child_tasks_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UiTaskWatchReply, depend_tasks_),
   };
   UiTaskWatchReply_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -738,26 +738,26 @@ void protobuf_AddDesc_dcmd_5fui_2eproto() {
     "tate\022\013\n\003err\030\004 \001(\t\"g\n\013UiTaskWatch\022\025\n\rclie"
     "nt_msg_id\030\001 \002(\005\022\017\n\007task_id\030\002 \002(\t\022\022\n\nlast"
     "_state\030\003 \002(\010\022\014\n\004user\030\004 \002(\t\022\016\n\006passwd\030\005 \002"
-    "(\t\"\260\001\n\020UiTaskWatchReply\022\025\n\rclient_msg_id"
+    "(\t\"\261\001\n\020UiTaskWatchReply\022\025\n\rclient_msg_id"
     "\030\001 \002(\005\022(\n\013watch_state\030\002 \002(\0162\023.dcmd_api.D"
     "cmdState\022\013\n\003err\030\003 \001(\t\022%\n\ttask_info\030\004 \002(\013"
-    "2\022.dcmd_api.TaskInfo\022\'\n\013child_tasks\030\005 \003("
-    "\0132\022.dcmd_api.TaskInfo\"Y\n\021UiTaskCancelWat"
-    "ch\022\025\n\rclient_msg_id\030\001 \002(\005\022\017\n\007task_id\030\002 \002"
-    "(\t\022\014\n\004user\030\003 \002(\t\022\016\n\006passwd\030\004 \002(\t\"`\n\026UiTa"
-    "skCancelWatchReply\022\025\n\rclient_msg_id\030\001 \002("
-    "\005\022\"\n\005state\030\002 \002(\0162\023.dcmd_api.DcmdState\022\013\n"
-    "\003err\030\003 \001(\t*\220\003\n\007CmdType\022\017\n\013CMD_UNKNOWN\020\000\022"
-    "\022\n\016CMD_START_TASK\020\001\022\022\n\016CMD_PAUSE_TASK\020\002\022"
-    "\023\n\017CMD_RESUME_TASK\020\003\022\022\n\016CMD_RETRY_TASK\020\004"
-    "\022\023\n\017CMD_FINISH_TASK\020\005\022\026\n\022CMD_CANCEL_SUBT"
-    "ASK\020\006\022\032\n\026CMD_CANCEL_SVR_SUBTASK\020\007\022\021\n\rCMD"
-    "_REDO_TASK\020\010\022\025\n\021CMD_REDO_SVR_POOL\020\t\022\024\n\020C"
-    "MD_REDO_SUBTASK\020\n\022\033\n\027CMD_REDO_FAILED_SUB"
-    "TASK\020\013\022$\n CMD_REDO_FAILED_SVR_POOL_SUBTA"
-    "SK\020\014\022\026\n\022CMD_IGNORE_SUBTASK\020\r\022\023\n\017CMD_FREE"
-    "ZE_TASK\020\016\022\025\n\021CMD_UNFREEZE_TASK\020\017\022\023\n\017CMD_"
-    "UPDATE_TASK\020\020B\021\n\017com.cwinux.dcmd", 3392);
+    "2\022.dcmd_api.TaskInfo\022(\n\014depend_tasks\030\005 \001"
+    "(\0132\022.dcmd_api.TaskInfo\"Y\n\021UiTaskCancelWa"
+    "tch\022\025\n\rclient_msg_id\030\001 \002(\005\022\017\n\007task_id\030\002 "
+    "\002(\t\022\014\n\004user\030\003 \002(\t\022\016\n\006passwd\030\004 \002(\t\"`\n\026UiT"
+    "askCancelWatchReply\022\025\n\rclient_msg_id\030\001 \002"
+    "(\005\022\"\n\005state\030\002 \002(\0162\023.dcmd_api.DcmdState\022\013"
+    "\n\003err\030\003 \001(\t*\220\003\n\007CmdType\022\017\n\013CMD_UNKNOWN\020\000"
+    "\022\022\n\016CMD_START_TASK\020\001\022\022\n\016CMD_PAUSE_TASK\020\002"
+    "\022\023\n\017CMD_RESUME_TASK\020\003\022\022\n\016CMD_RETRY_TASK\020"
+    "\004\022\023\n\017CMD_FINISH_TASK\020\005\022\026\n\022CMD_CANCEL_SUB"
+    "TASK\020\006\022\032\n\026CMD_CANCEL_SVR_SUBTASK\020\007\022\021\n\rCM"
+    "D_REDO_TASK\020\010\022\025\n\021CMD_REDO_SVR_POOL\020\t\022\024\n\020"
+    "CMD_REDO_SUBTASK\020\n\022\033\n\027CMD_REDO_FAILED_SU"
+    "BTASK\020\013\022$\n CMD_REDO_FAILED_SVR_POOL_SUBT"
+    "ASK\020\014\022\026\n\022CMD_IGNORE_SUBTASK\020\r\022\023\n\017CMD_FRE"
+    "EZE_TASK\020\016\022\025\n\021CMD_UNFREEZE_TASK\020\017\022\023\n\017CMD"
+    "_UPDATE_TASK\020\020B\021\n\017com.cwinux.dcmd", 3393);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "dcmd_ui.proto", &protobuf_RegisterTypes);
   UiTaskOutput::default_instance_ = new UiTaskOutput();
@@ -9396,7 +9396,7 @@ const int UiTaskWatchReply::kClientMsgIdFieldNumber;
 const int UiTaskWatchReply::kWatchStateFieldNumber;
 const int UiTaskWatchReply::kErrFieldNumber;
 const int UiTaskWatchReply::kTaskInfoFieldNumber;
-const int UiTaskWatchReply::kChildTasksFieldNumber;
+const int UiTaskWatchReply::kDependTasksFieldNumber;
 #endif  // !_MSC_VER
 
 UiTaskWatchReply::UiTaskWatchReply()
@@ -9406,6 +9406,7 @@ UiTaskWatchReply::UiTaskWatchReply()
 
 void UiTaskWatchReply::InitAsDefaultInstance() {
   task_info_ = const_cast< ::dcmd_api::TaskInfo*>(&::dcmd_api::TaskInfo::default_instance());
+  depend_tasks_ = const_cast< ::dcmd_api::TaskInfo*>(&::dcmd_api::TaskInfo::default_instance());
 }
 
 UiTaskWatchReply::UiTaskWatchReply(const UiTaskWatchReply& from)
@@ -9420,6 +9421,7 @@ void UiTaskWatchReply::SharedCtor() {
   watch_state_ = 0;
   err_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   task_info_ = NULL;
+  depend_tasks_ = NULL;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -9433,6 +9435,7 @@ void UiTaskWatchReply::SharedDtor() {
   }
   if (this != default_instance_) {
     delete task_info_;
+    delete depend_tasks_;
   }
 }
 
@@ -9468,8 +9471,10 @@ void UiTaskWatchReply::Clear() {
     if (has_task_info()) {
       if (task_info_ != NULL) task_info_->::dcmd_api::TaskInfo::Clear();
     }
+    if (has_depend_tasks()) {
+      if (depend_tasks_ != NULL) depend_tasks_->::dcmd_api::TaskInfo::Clear();
+    }
   }
-  child_tasks_.Clear();
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
 }
@@ -9543,21 +9548,20 @@ bool UiTaskWatchReply::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(42)) goto parse_child_tasks;
+        if (input->ExpectTag(42)) goto parse_depend_tasks;
         break;
       }
       
-      // repeated .dcmd_api.TaskInfo child_tasks = 5;
+      // optional .dcmd_api.TaskInfo depend_tasks = 5;
       case 5: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
-         parse_child_tasks:
+         parse_depend_tasks:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-                input, add_child_tasks()));
+               input, mutable_depend_tasks()));
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(42)) goto parse_child_tasks;
         if (input->ExpectAtEnd()) return true;
         break;
       }
@@ -9606,10 +9610,10 @@ void UiTaskWatchReply::SerializeWithCachedSizes(
       4, this->task_info(), output);
   }
   
-  // repeated .dcmd_api.TaskInfo child_tasks = 5;
-  for (int i = 0; i < this->child_tasks_size(); i++) {
+  // optional .dcmd_api.TaskInfo depend_tasks = 5;
+  if (has_depend_tasks()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      5, this->child_tasks(i), output);
+      5, this->depend_tasks(), output);
   }
   
   if (!unknown_fields().empty()) {
@@ -9648,11 +9652,11 @@ void UiTaskWatchReply::SerializeWithCachedSizes(
         4, this->task_info(), target);
   }
   
-  // repeated .dcmd_api.TaskInfo child_tasks = 5;
-  for (int i = 0; i < this->child_tasks_size(); i++) {
+  // optional .dcmd_api.TaskInfo depend_tasks = 5;
+  if (has_depend_tasks()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
-        5, this->child_tasks(i), target);
+        5, this->depend_tasks(), target);
   }
   
   if (!unknown_fields().empty()) {
@@ -9693,15 +9697,14 @@ int UiTaskWatchReply::ByteSize() const {
           this->task_info());
     }
     
+    // optional .dcmd_api.TaskInfo depend_tasks = 5;
+    if (has_depend_tasks()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          this->depend_tasks());
+    }
+    
   }
-  // repeated .dcmd_api.TaskInfo child_tasks = 5;
-  total_size += 1 * this->child_tasks_size();
-  for (int i = 0; i < this->child_tasks_size(); i++) {
-    total_size +=
-      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-        this->child_tasks(i));
-  }
-  
   if (!unknown_fields().empty()) {
     total_size +=
       ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
@@ -9727,7 +9730,6 @@ void UiTaskWatchReply::MergeFrom(const ::google::protobuf::Message& from) {
 
 void UiTaskWatchReply::MergeFrom(const UiTaskWatchReply& from) {
   GOOGLE_CHECK_NE(&from, this);
-  child_tasks_.MergeFrom(from.child_tasks_);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     if (from.has_client_msg_id()) {
       set_client_msg_id(from.client_msg_id());
@@ -9740,6 +9742,9 @@ void UiTaskWatchReply::MergeFrom(const UiTaskWatchReply& from) {
     }
     if (from.has_task_info()) {
       mutable_task_info()->::dcmd_api::TaskInfo::MergeFrom(from.task_info());
+    }
+    if (from.has_depend_tasks()) {
+      mutable_depend_tasks()->::dcmd_api::TaskInfo::MergeFrom(from.depend_tasks());
     }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
@@ -9763,8 +9768,8 @@ bool UiTaskWatchReply::IsInitialized() const {
   if (has_task_info()) {
     if (!this->task_info().IsInitialized()) return false;
   }
-  for (int i = 0; i < child_tasks_size(); i++) {
-    if (!this->child_tasks(i).IsInitialized()) return false;
+  if (has_depend_tasks()) {
+    if (!this->depend_tasks().IsInitialized()) return false;
   }
   return true;
 }
@@ -9775,7 +9780,7 @@ void UiTaskWatchReply::Swap(UiTaskWatchReply* other) {
     std::swap(watch_state_, other->watch_state_);
     std::swap(err_, other->err_);
     std::swap(task_info_, other->task_info_);
-    child_tasks_.Swap(&other->child_tasks_);
+    std::swap(depend_tasks_, other->depend_tasks_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);

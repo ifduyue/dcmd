@@ -2940,17 +2940,13 @@ class UiTaskWatchReply : public ::google::protobuf::Message {
   inline ::dcmd_api::TaskInfo* mutable_task_info();
   inline ::dcmd_api::TaskInfo* release_task_info();
   
-  // repeated .dcmd_api.TaskInfo child_tasks = 5;
-  inline int child_tasks_size() const;
-  inline void clear_child_tasks();
-  static const int kChildTasksFieldNumber = 5;
-  inline const ::dcmd_api::TaskInfo& child_tasks(int index) const;
-  inline ::dcmd_api::TaskInfo* mutable_child_tasks(int index);
-  inline ::dcmd_api::TaskInfo* add_child_tasks();
-  inline const ::google::protobuf::RepeatedPtrField< ::dcmd_api::TaskInfo >&
-      child_tasks() const;
-  inline ::google::protobuf::RepeatedPtrField< ::dcmd_api::TaskInfo >*
-      mutable_child_tasks();
+  // optional .dcmd_api.TaskInfo depend_tasks = 5;
+  inline bool has_depend_tasks() const;
+  inline void clear_depend_tasks();
+  static const int kDependTasksFieldNumber = 5;
+  inline const ::dcmd_api::TaskInfo& depend_tasks() const;
+  inline ::dcmd_api::TaskInfo* mutable_depend_tasks();
+  inline ::dcmd_api::TaskInfo* release_depend_tasks();
   
   // @@protoc_insertion_point(class_scope:dcmd_api.UiTaskWatchReply)
  private:
@@ -2962,6 +2958,8 @@ class UiTaskWatchReply : public ::google::protobuf::Message {
   inline void clear_has_err();
   inline void set_has_task_info();
   inline void clear_has_task_info();
+  inline void set_has_depend_tasks();
+  inline void clear_has_depend_tasks();
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
@@ -2969,7 +2967,7 @@ class UiTaskWatchReply : public ::google::protobuf::Message {
   int watch_state_;
   ::std::string* err_;
   ::dcmd_api::TaskInfo* task_info_;
-  ::google::protobuf::RepeatedPtrField< ::dcmd_api::TaskInfo > child_tasks_;
+  ::dcmd_api::TaskInfo* depend_tasks_;
   
   mutable int _cached_size_;
   ::google::protobuf::uint32 _has_bits_[(5 + 31) / 32];
@@ -7572,29 +7570,33 @@ inline ::dcmd_api::TaskInfo* UiTaskWatchReply::release_task_info() {
   return temp;
 }
 
-// repeated .dcmd_api.TaskInfo child_tasks = 5;
-inline int UiTaskWatchReply::child_tasks_size() const {
-  return child_tasks_.size();
+// optional .dcmd_api.TaskInfo depend_tasks = 5;
+inline bool UiTaskWatchReply::has_depend_tasks() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
 }
-inline void UiTaskWatchReply::clear_child_tasks() {
-  child_tasks_.Clear();
+inline void UiTaskWatchReply::set_has_depend_tasks() {
+  _has_bits_[0] |= 0x00000010u;
 }
-inline const ::dcmd_api::TaskInfo& UiTaskWatchReply::child_tasks(int index) const {
-  return child_tasks_.Get(index);
+inline void UiTaskWatchReply::clear_has_depend_tasks() {
+  _has_bits_[0] &= ~0x00000010u;
 }
-inline ::dcmd_api::TaskInfo* UiTaskWatchReply::mutable_child_tasks(int index) {
-  return child_tasks_.Mutable(index);
+inline void UiTaskWatchReply::clear_depend_tasks() {
+  if (depend_tasks_ != NULL) depend_tasks_->::dcmd_api::TaskInfo::Clear();
+  clear_has_depend_tasks();
 }
-inline ::dcmd_api::TaskInfo* UiTaskWatchReply::add_child_tasks() {
-  return child_tasks_.Add();
+inline const ::dcmd_api::TaskInfo& UiTaskWatchReply::depend_tasks() const {
+  return depend_tasks_ != NULL ? *depend_tasks_ : *default_instance_->depend_tasks_;
 }
-inline const ::google::protobuf::RepeatedPtrField< ::dcmd_api::TaskInfo >&
-UiTaskWatchReply::child_tasks() const {
-  return child_tasks_;
+inline ::dcmd_api::TaskInfo* UiTaskWatchReply::mutable_depend_tasks() {
+  set_has_depend_tasks();
+  if (depend_tasks_ == NULL) depend_tasks_ = new ::dcmd_api::TaskInfo;
+  return depend_tasks_;
 }
-inline ::google::protobuf::RepeatedPtrField< ::dcmd_api::TaskInfo >*
-UiTaskWatchReply::mutable_child_tasks() {
-  return &child_tasks_;
+inline ::dcmd_api::TaskInfo* UiTaskWatchReply::release_depend_tasks() {
+  clear_has_depend_tasks();
+  ::dcmd_api::TaskInfo* temp = depend_tasks_;
+  depend_tasks_ = NULL;
+  return temp;
 }
 
 // -------------------------------------------------------------------

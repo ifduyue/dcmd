@@ -123,13 +123,14 @@ void protobuf_AssignDesc_dcmd_5fcmn_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(SubTaskProcess));
   TaskInfo_descriptor_ = file->message_type(4);
-  static const int TaskInfo_offsets_[13] = {
+  static const int TaskInfo_offsets_[14] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TaskInfo, task_id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TaskInfo, task_state_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TaskInfo, order_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TaskInfo, parent_task_id_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TaskInfo, depand_task_id_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TaskInfo, depand_task_name_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TaskInfo, freezed_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TaskInfo, valid_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TaskInfo, pause_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TaskInfo, err_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TaskInfo, success_subtask_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TaskInfo, failed_subtask_),
@@ -253,71 +254,71 @@ void protobuf_AddDesc_dcmd_5fcmn_2eproto() {
     "d_id\030\005 \002(\t\"C\n\007OprInfo\022\014\n\004name\030\001 \002(\t\022\022\n\ns"
     "tart_time\030\002 \002(\t\022\026\n\016running_second\030\003 \002(\005\""
     "5\n\016SubTaskProcess\022\022\n\nsubtask_id\030\001 \002(\t\022\017\n"
-    "\007process\030\002 \001(\t\"\263\002\n\010TaskInfo\022\017\n\007task_id\030\001"
+    "\007process\030\002 \001(\t\"\315\002\n\010TaskInfo\022\017\n\007task_id\030\001"
     " \002(\t\022\'\n\ntask_state\030\002 \002(\0162\023.dcmd_api.Task"
-    "State\022\r\n\005order\030\003 \002(\005\022\026\n\016parent_task_id\030\004"
-    " \001(\t\022\017\n\007freezed\030\005 \001(\010\022\r\n\005valid\030\006 \001(\010\022\013\n\003"
-    "err\030\007 \001(\t\022\027\n\017success_subtask\030\010 \001(\005\022\026\n\016fa"
-    "iled_subtask\030\t \001(\005\022\025\n\rdoing_subtask\030\n \001("
-    "\005\022\024\n\014undo_subtask\030\013 \001(\005\022\034\n\024ignore_doing_"
-    "subtask\030\014 \001(\005\022\035\n\025ignore_failed_subtask\030\r"
-    " \001(\005\"w\n\tAgentInfo\022\n\n\002ip\030\001 \002(\t\022#\n\005state\030\002"
-    " \002(\0162\024.dcmd_api.AgentState\022\017\n\007version\030\003 "
-    "\001(\t\022\024\n\014connected_ip\030\004 \001(\t\022\022\n\nrepored_ip\030"
-    "\005 \001(\t\"_\n\020AgentOprCmdReply\022\"\n\005state\030\001 \002(\016"
-    "2\023.dcmd_api.DcmdState\022\016\n\006result\030\002 \002(\t\022\013\n"
-    "\003err\030\003 \002(\t\022\n\n\002ip\030\004 \001(\t*\205\013\n\013DcmdMsgType\022\026"
-    "\n\022MTYPE_AGENT_REPORT\020\001\022\030\n\024MTYPE_AGENT_RE"
-    "PORT_R\020\002\022\030\n\024MTYPE_AGENT_HEATBEAT\020\003\022\036\n\032MT"
-    "YPE_CENTER_MASTER_NOTICE\020\005\022 \n\034MTYPE_CENT"
-    "ER_MASTER_NOTICE_R\020\006\022\034\n\030MTYPE_CENTER_SUB"
-    "TASK_CMD\020\007\022\036\n\032MTYPE_CENTER_SUBTASK_CMD_R"
-    "\020\010\022\037\n\033MTYPE_AGENT_SUBTASK_PROCESS\020\t\022\"\n\036M"
-    "TYPE_AGENT_SUBTASK_CMD_RESULT\020\013\022$\n MTYPE"
-    "_AGENT_SUBTASK_CMD_RESULT_R\020\014\022\030\n\024MTYPE_C"
-    "ENTER_OPR_CMD\020\r\022\032\n\026MTYPE_CENTER_OPR_CMD_"
-    "R\020\016\022%\n!MTYPE_CENTER_AGENT_SUBTASK_OUTPUT"
-    "\020\017\022\'\n#MTYPE_CENTER_AGENT_SUBTASK_OUTPUT_"
-    "R\020\020\022#\n\037MTYPE_CENTER_AGENT_RUNNING_TASK\020\021"
-    "\022%\n!MTYPE_CENTER_AGENT_RUNNING_TASK_R\020\022\022"
-    "\"\n\036MTYPE_CENTER_AGENT_RUNNING_OPR\020\023\022$\n M"
-    "TYPE_CENTER_AGENT_RUNNING_OPR_R\020\024\022!\n\035MTY"
-    "PE_UI_AGENT_SUBTASK_OUTPUT\0203\022#\n\037MTYPE_UI"
-    "_AGENT_SUBTASK_OUTPUT_R\0204\022\"\n\036MTYPE_UI_AG"
-    "ENT_RUNNING_SUBTASK\0205\022$\n MTYPE_UI_AGENT_"
-    "RUNNING_SUBTASK_R\0206\022\036\n\032MTYPE_UI_AGENT_RU"
-    "NNING_OPR\0207\022 \n\034MTYPE_UI_AGENT_RUNNING_OP"
-    "R_R\0208\022\025\n\021MTYPE_UI_EXEC_OPR\0209\022\027\n\023MTYPE_UI"
-    "_EXEC_OPR_R\020:\022\027\n\023MTYPE_UI_AGENT_INFO\020;\022\031"
-    "\n\025MTYPE_UI_AGENT_INFO_R\020<\022\032\n\026MTYPE_UI_IN"
-    "VALID_AGENT\020=\022\034\n\030MTYPE_UI_INVALID_AGENT_"
-    "R\020>\022\032\n\026MTYPE_UI_TASK_CMD_INFO\020\?\022\034\n\030MTYPE"
-    "_UI_TASK_CMD_INFO_R\020@\022\031\n\025MTYPE_UI_OPR_CM"
-    "D_INFO\020A\022\033\n\027MTYPE_UI_OPR_CMD_INFO_R\020B\022\034\n"
-    "\030MTYPE_UI_SUBTASK_PROCESS\020C\022\036\n\032MTYPE_UI_"
-    "SUBTASK_PROCESS_R\020D\022\026\n\022MTYPE_UI_EXEC_TAS"
-    "K\020E\022\030\n\024MTYPE_UI_EXEC_TASK_R\020F\022\027\n\023MTYPE_U"
-    "I_WATCH_TASK\020G\022\031\n\025MTYPE_UI_WATCH_TASK_R\020"
-    "H\022\036\n\032MTYPE_UI_CANCEL_WATCH_TASK\020I\022 \n\034MTY"
-    "PE_UI_CANCEL_WATCH_TASK_R\020J\022\027\n\023MTYPE_INV"
-    "ALID_MTYPE\020e\022\036\n\032MTYPE_CENTER_INTERNAL_CO"
-    "NN\020g\022 \n\034MTYPE_CENTER_INTERNAL_CONN_R\020h*\276"
-    "\001\n\tDcmdState\022\026\n\022DCMD_STATE_SUCCESS\020\000\022\030\n\024"
-    "DCMD_STATE_NO_MASTER\020\001\022\033\n\027DCMD_STATE_WRO"
-    "NG_MASTER\020\002\022\026\n\022DCMD_STATE_NO_TASK\020\003\022\031\n\025D"
-    "CMD_STATE_NO_SUBTASK\020\004\022\030\n\024DCMD_STATE_HOS"
-    "T_LOST\020\005\022\025\n\021DCMD_STATE_FAILED\020\006*c\n\nAgent"
-    "State\022\026\n\022AGENT_UN_CONNECTED\020\000\022\021\n\rAGENT_U"
-    "N_AUTH\020\001\022\025\n\021AGENT_UN_REPORTED\020\002\022\023\n\017AGENT"
-    "_CONNECTED\020\003*~\n\tTaskState\022\r\n\tTASK_INIT\020\000"
-    "\022\016\n\nTASK_DOING\020\001\022\017\n\013TASK_PAUSED\020\002\022\017\n\013TAS"
-    "K_FAILED\020\003\022\021\n\rTASK_FINISHED\020\004\022\035\n\031TASK_FI"
-    "NISHED_WITH_FAILED\020\005*]\n\014SubTaskState\022\020\n\014"
-    "SUBTASK_INIT\020\000\022\021\n\rSUBTASK_DOING\020\001\022\024\n\020SUB"
-    "TASK_FINISHED\020\002\022\022\n\016SUBTASK_FAILED\020\003*J\n\014C"
-    "ommandState\022\021\n\rCOMMAND_DOING\020\000\022\023\n\017COMMAN"
-    "D_SUCCESS\020\001\022\022\n\016COMMAND_FAILED\020\002B\021\n\017com.c"
-    "winux.dcmd", 2850);
+    "State\022\026\n\016depand_task_id\030\003 \002(\t\022\030\n\020depand_"
+    "task_name\030\004 \001(\t\022\017\n\007freezed\030\005 \001(\010\022\r\n\005vali"
+    "d\030\006 \001(\010\022\r\n\005pause\030\007 \001(\010\022\013\n\003err\030\010 \001(\t\022\027\n\017s"
+    "uccess_subtask\030\t \001(\005\022\026\n\016failed_subtask\030\n"
+    " \001(\005\022\025\n\rdoing_subtask\030\013 \001(\005\022\024\n\014undo_subt"
+    "ask\030\014 \001(\005\022\034\n\024ignore_doing_subtask\030\r \001(\005\022"
+    "\035\n\025ignore_failed_subtask\030\016 \001(\005\"w\n\tAgentI"
+    "nfo\022\n\n\002ip\030\001 \002(\t\022#\n\005state\030\002 \002(\0162\024.dcmd_ap"
+    "i.AgentState\022\017\n\007version\030\003 \001(\t\022\024\n\014connect"
+    "ed_ip\030\004 \001(\t\022\022\n\nrepored_ip\030\005 \001(\t\"_\n\020Agent"
+    "OprCmdReply\022\"\n\005state\030\001 \002(\0162\023.dcmd_api.Dc"
+    "mdState\022\016\n\006result\030\002 \002(\t\022\013\n\003err\030\003 \002(\t\022\n\n\002"
+    "ip\030\004 \001(\t*\205\013\n\013DcmdMsgType\022\026\n\022MTYPE_AGENT_"
+    "REPORT\020\001\022\030\n\024MTYPE_AGENT_REPORT_R\020\002\022\030\n\024MT"
+    "YPE_AGENT_HEATBEAT\020\003\022\036\n\032MTYPE_CENTER_MAS"
+    "TER_NOTICE\020\005\022 \n\034MTYPE_CENTER_MASTER_NOTI"
+    "CE_R\020\006\022\034\n\030MTYPE_CENTER_SUBTASK_CMD\020\007\022\036\n\032"
+    "MTYPE_CENTER_SUBTASK_CMD_R\020\010\022\037\n\033MTYPE_AG"
+    "ENT_SUBTASK_PROCESS\020\t\022\"\n\036MTYPE_AGENT_SUB"
+    "TASK_CMD_RESULT\020\013\022$\n MTYPE_AGENT_SUBTASK"
+    "_CMD_RESULT_R\020\014\022\030\n\024MTYPE_CENTER_OPR_CMD\020"
+    "\r\022\032\n\026MTYPE_CENTER_OPR_CMD_R\020\016\022%\n!MTYPE_C"
+    "ENTER_AGENT_SUBTASK_OUTPUT\020\017\022\'\n#MTYPE_CE"
+    "NTER_AGENT_SUBTASK_OUTPUT_R\020\020\022#\n\037MTYPE_C"
+    "ENTER_AGENT_RUNNING_TASK\020\021\022%\n!MTYPE_CENT"
+    "ER_AGENT_RUNNING_TASK_R\020\022\022\"\n\036MTYPE_CENTE"
+    "R_AGENT_RUNNING_OPR\020\023\022$\n MTYPE_CENTER_AG"
+    "ENT_RUNNING_OPR_R\020\024\022!\n\035MTYPE_UI_AGENT_SU"
+    "BTASK_OUTPUT\0203\022#\n\037MTYPE_UI_AGENT_SUBTASK"
+    "_OUTPUT_R\0204\022\"\n\036MTYPE_UI_AGENT_RUNNING_SU"
+    "BTASK\0205\022$\n MTYPE_UI_AGENT_RUNNING_SUBTAS"
+    "K_R\0206\022\036\n\032MTYPE_UI_AGENT_RUNNING_OPR\0207\022 \n"
+    "\034MTYPE_UI_AGENT_RUNNING_OPR_R\0208\022\025\n\021MTYPE"
+    "_UI_EXEC_OPR\0209\022\027\n\023MTYPE_UI_EXEC_OPR_R\020:\022"
+    "\027\n\023MTYPE_UI_AGENT_INFO\020;\022\031\n\025MTYPE_UI_AGE"
+    "NT_INFO_R\020<\022\032\n\026MTYPE_UI_INVALID_AGENT\020=\022"
+    "\034\n\030MTYPE_UI_INVALID_AGENT_R\020>\022\032\n\026MTYPE_U"
+    "I_TASK_CMD_INFO\020\?\022\034\n\030MTYPE_UI_TASK_CMD_I"
+    "NFO_R\020@\022\031\n\025MTYPE_UI_OPR_CMD_INFO\020A\022\033\n\027MT"
+    "YPE_UI_OPR_CMD_INFO_R\020B\022\034\n\030MTYPE_UI_SUBT"
+    "ASK_PROCESS\020C\022\036\n\032MTYPE_UI_SUBTASK_PROCES"
+    "S_R\020D\022\026\n\022MTYPE_UI_EXEC_TASK\020E\022\030\n\024MTYPE_U"
+    "I_EXEC_TASK_R\020F\022\027\n\023MTYPE_UI_WATCH_TASK\020G"
+    "\022\031\n\025MTYPE_UI_WATCH_TASK_R\020H\022\036\n\032MTYPE_UI_"
+    "CANCEL_WATCH_TASK\020I\022 \n\034MTYPE_UI_CANCEL_W"
+    "ATCH_TASK_R\020J\022\027\n\023MTYPE_INVALID_MTYPE\020e\022\036"
+    "\n\032MTYPE_CENTER_INTERNAL_CONN\020g\022 \n\034MTYPE_"
+    "CENTER_INTERNAL_CONN_R\020h*\276\001\n\tDcmdState\022\026"
+    "\n\022DCMD_STATE_SUCCESS\020\000\022\030\n\024DCMD_STATE_NO_"
+    "MASTER\020\001\022\033\n\027DCMD_STATE_WRONG_MASTER\020\002\022\026\n"
+    "\022DCMD_STATE_NO_TASK\020\003\022\031\n\025DCMD_STATE_NO_S"
+    "UBTASK\020\004\022\030\n\024DCMD_STATE_HOST_LOST\020\005\022\025\n\021DC"
+    "MD_STATE_FAILED\020\006*c\n\nAgentState\022\026\n\022AGENT"
+    "_UN_CONNECTED\020\000\022\021\n\rAGENT_UN_AUTH\020\001\022\025\n\021AG"
+    "ENT_UN_REPORTED\020\002\022\023\n\017AGENT_CONNECTED\020\003*m"
+    "\n\tTaskState\022\r\n\tTASK_INIT\020\000\022\016\n\nTASK_DOING"
+    "\020\001\022\017\n\013TASK_FAILED\020\002\022\021\n\rTASK_FINISHED\020\003\022\035"
+    "\n\031TASK_FINISHED_WITH_FAILED\020\004*]\n\014SubTask"
+    "State\022\020\n\014SUBTASK_INIT\020\000\022\021\n\rSUBTASK_DOING"
+    "\020\001\022\024\n\020SUBTASK_FINISHED\020\002\022\022\n\016SUBTASK_FAIL"
+    "ED\020\003*J\n\014CommandState\022\021\n\rCOMMAND_DOING\020\000\022"
+    "\023\n\017COMMAND_SUCCESS\020\001\022\022\n\016COMMAND_FAILED\020\002"
+    "B\021\n\017com.cwinux.dcmd", 2859);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "dcmd_cmn.proto", &protobuf_RegisterTypes);
   KeyValue::default_instance_ = new KeyValue();
@@ -447,7 +448,6 @@ bool TaskState_IsValid(int value) {
     case 2:
     case 3:
     case 4:
-    case 5:
       return true;
     default:
       return false;
@@ -1830,10 +1830,11 @@ void SubTaskProcess::Swap(SubTaskProcess* other) {
 #ifndef _MSC_VER
 const int TaskInfo::kTaskIdFieldNumber;
 const int TaskInfo::kTaskStateFieldNumber;
-const int TaskInfo::kOrderFieldNumber;
-const int TaskInfo::kParentTaskIdFieldNumber;
+const int TaskInfo::kDepandTaskIdFieldNumber;
+const int TaskInfo::kDepandTaskNameFieldNumber;
 const int TaskInfo::kFreezedFieldNumber;
 const int TaskInfo::kValidFieldNumber;
+const int TaskInfo::kPauseFieldNumber;
 const int TaskInfo::kErrFieldNumber;
 const int TaskInfo::kSuccessSubtaskFieldNumber;
 const int TaskInfo::kFailedSubtaskFieldNumber;
@@ -1861,10 +1862,11 @@ void TaskInfo::SharedCtor() {
   _cached_size_ = 0;
   task_id_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   task_state_ = 0;
-  order_ = 0;
-  parent_task_id_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  depand_task_id_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  depand_task_name_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   freezed_ = false;
   valid_ = false;
+  pause_ = false;
   err_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   success_subtask_ = 0;
   failed_subtask_ = 0;
@@ -1883,8 +1885,11 @@ void TaskInfo::SharedDtor() {
   if (task_id_ != &::google::protobuf::internal::kEmptyString) {
     delete task_id_;
   }
-  if (parent_task_id_ != &::google::protobuf::internal::kEmptyString) {
-    delete parent_task_id_;
+  if (depand_task_id_ != &::google::protobuf::internal::kEmptyString) {
+    delete depand_task_id_;
+  }
+  if (depand_task_name_ != &::google::protobuf::internal::kEmptyString) {
+    delete depand_task_name_;
   }
   if (err_ != &::google::protobuf::internal::kEmptyString) {
     delete err_;
@@ -1921,22 +1926,27 @@ void TaskInfo::Clear() {
       }
     }
     task_state_ = 0;
-    order_ = 0;
-    if (has_parent_task_id()) {
-      if (parent_task_id_ != &::google::protobuf::internal::kEmptyString) {
-        parent_task_id_->clear();
+    if (has_depand_task_id()) {
+      if (depand_task_id_ != &::google::protobuf::internal::kEmptyString) {
+        depand_task_id_->clear();
+      }
+    }
+    if (has_depand_task_name()) {
+      if (depand_task_name_ != &::google::protobuf::internal::kEmptyString) {
+        depand_task_name_->clear();
       }
     }
     freezed_ = false;
     valid_ = false;
+    pause_ = false;
     if (has_err()) {
       if (err_ != &::google::protobuf::internal::kEmptyString) {
         err_->clear();
       }
     }
-    success_subtask_ = 0;
   }
   if (_has_bits_[8 / 32] & (0xffu << (8 % 32))) {
+    success_subtask_ = 0;
     failed_subtask_ = 0;
     doing_subtask_ = 0;
     undo_subtask_ = 0;
@@ -1986,35 +1996,36 @@ bool TaskInfo::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(24)) goto parse_order;
+        if (input->ExpectTag(26)) goto parse_depand_task_id;
         break;
       }
       
-      // required int32 order = 3;
+      // required string depand_task_id = 3;
       case 3: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
-         parse_order:
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
-                 input, &order_)));
-          set_has_order();
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_depand_task_id:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_depand_task_id()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+            this->depand_task_id().data(), this->depand_task_id().length(),
+            ::google::protobuf::internal::WireFormat::PARSE);
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(34)) goto parse_parent_task_id;
+        if (input->ExpectTag(34)) goto parse_depand_task_name;
         break;
       }
       
-      // optional string parent_task_id = 4;
+      // optional string depand_task_name = 4;
       case 4: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
-         parse_parent_task_id:
+         parse_depand_task_name:
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_parent_task_id()));
+                input, this->mutable_depand_task_name()));
           ::google::protobuf::internal::WireFormat::VerifyUTF8String(
-            this->parent_task_id().data(), this->parent_task_id().length(),
+            this->depand_task_name().data(), this->depand_task_name().length(),
             ::google::protobuf::internal::WireFormat::PARSE);
         } else {
           goto handle_uninterpreted;
@@ -2051,12 +2062,28 @@ bool TaskInfo::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(58)) goto parse_err;
+        if (input->ExpectTag(56)) goto parse_pause;
         break;
       }
       
-      // optional string err = 7;
+      // optional bool pause = 7;
       case 7: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_pause:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &pause_)));
+          set_has_pause();
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(66)) goto parse_err;
+        break;
+      }
+      
+      // optional string err = 8;
+      case 8: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
          parse_err:
@@ -2068,12 +2095,12 @@ bool TaskInfo::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(64)) goto parse_success_subtask;
+        if (input->ExpectTag(72)) goto parse_success_subtask;
         break;
       }
       
-      // optional int32 success_subtask = 8;
-      case 8: {
+      // optional int32 success_subtask = 9;
+      case 9: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
          parse_success_subtask:
@@ -2084,12 +2111,12 @@ bool TaskInfo::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(72)) goto parse_failed_subtask;
+        if (input->ExpectTag(80)) goto parse_failed_subtask;
         break;
       }
       
-      // optional int32 failed_subtask = 9;
-      case 9: {
+      // optional int32 failed_subtask = 10;
+      case 10: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
          parse_failed_subtask:
@@ -2100,12 +2127,12 @@ bool TaskInfo::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(80)) goto parse_doing_subtask;
+        if (input->ExpectTag(88)) goto parse_doing_subtask;
         break;
       }
       
-      // optional int32 doing_subtask = 10;
-      case 10: {
+      // optional int32 doing_subtask = 11;
+      case 11: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
          parse_doing_subtask:
@@ -2116,12 +2143,12 @@ bool TaskInfo::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(88)) goto parse_undo_subtask;
+        if (input->ExpectTag(96)) goto parse_undo_subtask;
         break;
       }
       
-      // optional int32 undo_subtask = 11;
-      case 11: {
+      // optional int32 undo_subtask = 12;
+      case 12: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
          parse_undo_subtask:
@@ -2132,12 +2159,12 @@ bool TaskInfo::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(96)) goto parse_ignore_doing_subtask;
+        if (input->ExpectTag(104)) goto parse_ignore_doing_subtask;
         break;
       }
       
-      // optional int32 ignore_doing_subtask = 12;
-      case 12: {
+      // optional int32 ignore_doing_subtask = 13;
+      case 13: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
          parse_ignore_doing_subtask:
@@ -2148,12 +2175,12 @@ bool TaskInfo::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(104)) goto parse_ignore_failed_subtask;
+        if (input->ExpectTag(112)) goto parse_ignore_failed_subtask;
         break;
       }
       
-      // optional int32 ignore_failed_subtask = 13;
-      case 13: {
+      // optional int32 ignore_failed_subtask = 14;
+      case 14: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
          parse_ignore_failed_subtask:
@@ -2201,18 +2228,22 @@ void TaskInfo::SerializeWithCachedSizes(
       2, this->task_state(), output);
   }
   
-  // required int32 order = 3;
-  if (has_order()) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(3, this->order(), output);
-  }
-  
-  // optional string parent_task_id = 4;
-  if (has_parent_task_id()) {
+  // required string depand_task_id = 3;
+  if (has_depand_task_id()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
-      this->parent_task_id().data(), this->parent_task_id().length(),
+      this->depand_task_id().data(), this->depand_task_id().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     ::google::protobuf::internal::WireFormatLite::WriteString(
-      4, this->parent_task_id(), output);
+      3, this->depand_task_id(), output);
+  }
+  
+  // optional string depand_task_name = 4;
+  if (has_depand_task_name()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->depand_task_name().data(), this->depand_task_name().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    ::google::protobuf::internal::WireFormatLite::WriteString(
+      4, this->depand_task_name(), output);
   }
   
   // optional bool freezed = 5;
@@ -2225,43 +2256,48 @@ void TaskInfo::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteBool(6, this->valid(), output);
   }
   
-  // optional string err = 7;
+  // optional bool pause = 7;
+  if (has_pause()) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(7, this->pause(), output);
+  }
+  
+  // optional string err = 8;
   if (has_err()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->err().data(), this->err().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     ::google::protobuf::internal::WireFormatLite::WriteString(
-      7, this->err(), output);
+      8, this->err(), output);
   }
   
-  // optional int32 success_subtask = 8;
+  // optional int32 success_subtask = 9;
   if (has_success_subtask()) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(8, this->success_subtask(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(9, this->success_subtask(), output);
   }
   
-  // optional int32 failed_subtask = 9;
+  // optional int32 failed_subtask = 10;
   if (has_failed_subtask()) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(9, this->failed_subtask(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(10, this->failed_subtask(), output);
   }
   
-  // optional int32 doing_subtask = 10;
+  // optional int32 doing_subtask = 11;
   if (has_doing_subtask()) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(10, this->doing_subtask(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(11, this->doing_subtask(), output);
   }
   
-  // optional int32 undo_subtask = 11;
+  // optional int32 undo_subtask = 12;
   if (has_undo_subtask()) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(11, this->undo_subtask(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(12, this->undo_subtask(), output);
   }
   
-  // optional int32 ignore_doing_subtask = 12;
+  // optional int32 ignore_doing_subtask = 13;
   if (has_ignore_doing_subtask()) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(12, this->ignore_doing_subtask(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(13, this->ignore_doing_subtask(), output);
   }
   
-  // optional int32 ignore_failed_subtask = 13;
+  // optional int32 ignore_failed_subtask = 14;
   if (has_ignore_failed_subtask()) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(13, this->ignore_failed_subtask(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(14, this->ignore_failed_subtask(), output);
   }
   
   if (!unknown_fields().empty()) {
@@ -2288,19 +2324,24 @@ void TaskInfo::SerializeWithCachedSizes(
       2, this->task_state(), target);
   }
   
-  // required int32 order = 3;
-  if (has_order()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(3, this->order(), target);
-  }
-  
-  // optional string parent_task_id = 4;
-  if (has_parent_task_id()) {
+  // required string depand_task_id = 3;
+  if (has_depand_task_id()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
-      this->parent_task_id().data(), this->parent_task_id().length(),
+      this->depand_task_id().data(), this->depand_task_id().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        4, this->parent_task_id(), target);
+        3, this->depand_task_id(), target);
+  }
+  
+  // optional string depand_task_name = 4;
+  if (has_depand_task_name()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->depand_task_name().data(), this->depand_task_name().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        4, this->depand_task_name(), target);
   }
   
   // optional bool freezed = 5;
@@ -2313,44 +2354,49 @@ void TaskInfo::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(6, this->valid(), target);
   }
   
-  // optional string err = 7;
+  // optional bool pause = 7;
+  if (has_pause()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(7, this->pause(), target);
+  }
+  
+  // optional string err = 8;
   if (has_err()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->err().data(), this->err().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        7, this->err(), target);
+        8, this->err(), target);
   }
   
-  // optional int32 success_subtask = 8;
+  // optional int32 success_subtask = 9;
   if (has_success_subtask()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(8, this->success_subtask(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(9, this->success_subtask(), target);
   }
   
-  // optional int32 failed_subtask = 9;
+  // optional int32 failed_subtask = 10;
   if (has_failed_subtask()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(9, this->failed_subtask(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(10, this->failed_subtask(), target);
   }
   
-  // optional int32 doing_subtask = 10;
+  // optional int32 doing_subtask = 11;
   if (has_doing_subtask()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(10, this->doing_subtask(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(11, this->doing_subtask(), target);
   }
   
-  // optional int32 undo_subtask = 11;
+  // optional int32 undo_subtask = 12;
   if (has_undo_subtask()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(11, this->undo_subtask(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(12, this->undo_subtask(), target);
   }
   
-  // optional int32 ignore_doing_subtask = 12;
+  // optional int32 ignore_doing_subtask = 13;
   if (has_ignore_doing_subtask()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(12, this->ignore_doing_subtask(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(13, this->ignore_doing_subtask(), target);
   }
   
-  // optional int32 ignore_failed_subtask = 13;
+  // optional int32 ignore_failed_subtask = 14;
   if (has_ignore_failed_subtask()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(13, this->ignore_failed_subtask(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(14, this->ignore_failed_subtask(), target);
   }
   
   if (!unknown_fields().empty()) {
@@ -2377,18 +2423,18 @@ int TaskInfo::ByteSize() const {
         ::google::protobuf::internal::WireFormatLite::EnumSize(this->task_state());
     }
     
-    // required int32 order = 3;
-    if (has_order()) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::Int32Size(
-          this->order());
-    }
-    
-    // optional string parent_task_id = 4;
-    if (has_parent_task_id()) {
+    // required string depand_task_id = 3;
+    if (has_depand_task_id()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::StringSize(
-          this->parent_task_id());
+          this->depand_task_id());
+    }
+    
+    // optional string depand_task_name = 4;
+    if (has_depand_task_name()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->depand_task_name());
     }
     
     // optional bool freezed = 5;
@@ -2401,51 +2447,56 @@ int TaskInfo::ByteSize() const {
       total_size += 1 + 1;
     }
     
-    // optional string err = 7;
+    // optional bool pause = 7;
+    if (has_pause()) {
+      total_size += 1 + 1;
+    }
+    
+    // optional string err = 8;
     if (has_err()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::StringSize(
           this->err());
     }
     
-    // optional int32 success_subtask = 8;
+  }
+  if (_has_bits_[8 / 32] & (0xffu << (8 % 32))) {
+    // optional int32 success_subtask = 9;
     if (has_success_subtask()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::Int32Size(
           this->success_subtask());
     }
     
-  }
-  if (_has_bits_[8 / 32] & (0xffu << (8 % 32))) {
-    // optional int32 failed_subtask = 9;
+    // optional int32 failed_subtask = 10;
     if (has_failed_subtask()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::Int32Size(
           this->failed_subtask());
     }
     
-    // optional int32 doing_subtask = 10;
+    // optional int32 doing_subtask = 11;
     if (has_doing_subtask()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::Int32Size(
           this->doing_subtask());
     }
     
-    // optional int32 undo_subtask = 11;
+    // optional int32 undo_subtask = 12;
     if (has_undo_subtask()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::Int32Size(
           this->undo_subtask());
     }
     
-    // optional int32 ignore_doing_subtask = 12;
+    // optional int32 ignore_doing_subtask = 13;
     if (has_ignore_doing_subtask()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::Int32Size(
           this->ignore_doing_subtask());
     }
     
-    // optional int32 ignore_failed_subtask = 13;
+    // optional int32 ignore_failed_subtask = 14;
     if (has_ignore_failed_subtask()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::Int32Size(
@@ -2485,11 +2536,11 @@ void TaskInfo::MergeFrom(const TaskInfo& from) {
     if (from.has_task_state()) {
       set_task_state(from.task_state());
     }
-    if (from.has_order()) {
-      set_order(from.order());
+    if (from.has_depand_task_id()) {
+      set_depand_task_id(from.depand_task_id());
     }
-    if (from.has_parent_task_id()) {
-      set_parent_task_id(from.parent_task_id());
+    if (from.has_depand_task_name()) {
+      set_depand_task_name(from.depand_task_name());
     }
     if (from.has_freezed()) {
       set_freezed(from.freezed());
@@ -2497,14 +2548,17 @@ void TaskInfo::MergeFrom(const TaskInfo& from) {
     if (from.has_valid()) {
       set_valid(from.valid());
     }
+    if (from.has_pause()) {
+      set_pause(from.pause());
+    }
     if (from.has_err()) {
       set_err(from.err());
     }
+  }
+  if (from._has_bits_[8 / 32] & (0xffu << (8 % 32))) {
     if (from.has_success_subtask()) {
       set_success_subtask(from.success_subtask());
     }
-  }
-  if (from._has_bits_[8 / 32] & (0xffu << (8 % 32))) {
     if (from.has_failed_subtask()) {
       set_failed_subtask(from.failed_subtask());
     }
@@ -2546,10 +2600,11 @@ void TaskInfo::Swap(TaskInfo* other) {
   if (other != this) {
     std::swap(task_id_, other->task_id_);
     std::swap(task_state_, other->task_state_);
-    std::swap(order_, other->order_);
-    std::swap(parent_task_id_, other->parent_task_id_);
+    std::swap(depand_task_id_, other->depand_task_id_);
+    std::swap(depand_task_name_, other->depand_task_name_);
     std::swap(freezed_, other->freezed_);
     std::swap(valid_, other->valid_);
+    std::swap(pause_, other->pause_);
     std::swap(err_, other->err_);
     std::swap(success_subtask_, other->success_subtask_);
     std::swap(failed_subtask_, other->failed_subtask_);
