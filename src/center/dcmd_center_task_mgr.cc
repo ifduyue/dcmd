@@ -1133,6 +1133,25 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdFinishTask(DcmdTss* tss, uint32_t 
 dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdCancelSubtask(DcmdTss* tss, uint64_t subtask_id,
   uint32_t uid, DcmdCenterCmd** cmd)
 {
+  DcmdCenterSubtask* subtask =  GetSubTask(subtask_id);
+  if (!subtask) {
+    tss->err_msg_ = "No subtask.";
+    return dcmd_api::DCMD_STATE_NO_SUBTASK;
+  }
+  if (!subtask->task_) {
+    tss->err_msg_ = "No task";
+    return dcmd_api::DCMD_STATE_NO_TASK;
+  }
+  if (!subtask->task_->is_freezed_) {
+    tss->err_msg_ = "Task is not in freezed state.";
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
+  if (!subtask->task_->parent_task_) {
+    if (!subtask->task_->state_ == dcmd_api::TASK_INIT) {
+      tss->err_msg_ = "Task is not in freezed state.";
+      return dcmd_api::DCMD_STATE_FAILED;
+    }
+  }
 
 }
 

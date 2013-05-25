@@ -138,6 +138,10 @@ class DcmdCenterTaskMgr{
  private:
    // 根据task id从map中获取task对象
    inline DcmdCenterTask* GetTask(uint32_t task_id);
+   // 根据subtask id从map中获取subtask
+   inline DcmdCenterSubtask* GetSubTask(uint64_t subtak_id);
+   // 任务是否freeze
+   inline bool IsTaskFreezed(DcmdCenterTask* task);
    // 更新任务无效状态
    inline bool UpdateTaskValid(DcmdTss* tss, bool is_commit, 
      uint32_t task_id, bool is_valid, char const* err_msg);
@@ -170,8 +174,10 @@ class DcmdCenterTaskMgr{
  private:
   // app对象
   DcmdCenterApp*                               app_;
-  // 保护all_subtasks_的访问，并发访问process
+  // 保护subtask_processes_的访问，并发访问process
   CwxMutexLock                                 lock_;
+  // 子任务的进度信息
+  map<uint64_t, string>                        subtask_processes_;
   
   /****** 一下的变量全部是多线程不安全的  *****/
   // 是否已经启动

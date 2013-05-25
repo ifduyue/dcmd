@@ -235,11 +235,9 @@ class DcmdCenterTask {
  public:
   DcmdCenterTask() {
     task_id_ = 0;
-    parent_task_id_ = 0;
+    depend_task_id_ = 0;
     is_cluster_ = false;
-    parent_task_ = NULL;
-    doing_order_ = 0;
-    order_ = 0;
+    depend_task_ = NULL;
     svr_id_ = 0;
     group_id_ = 0;
     update_env_ = false;
@@ -263,14 +261,6 @@ class DcmdCenterTask {
         ++iter;
       }
     }
-    {
-      //是否child task
-      map<uint32_t, map<uint32_t, DcmdCenterTask*>* >::iterator iter = child_tasks_.begin();
-      while(iter != child_tasks_.end()) {
-        delete iter->second;
-        ++iter;
-      }
-    }
   }
 
  public:
@@ -284,7 +274,6 @@ class DcmdCenterTask {
   bool ChangeSubtaskState(DcmdCenterSubtask const* subtask,
     dcmd_api::SubTaskState state,
     bool is_ignored);
-  void AddChildTask(DcmdCenterTask* child_task);
  public:
   // 任务的id
   uint32_t                    task_id_;
@@ -292,18 +281,12 @@ class DcmdCenterTask {
   string                      task_name_;
   // 任务的命令
   string                      task_cmd_;
-  // 父任务的id
-  uint32_t                    parent_task_id_;
-  // 是否是cluster 任务
-  bool                        is_cluster_;
-  // 父任务
-  DcmdCenterTask*             parent_task_;
-  // 子任务的列表，按照顺序排序
-  map<uint32_t, map<uint32_t, DcmdCenterTask*>* >  child_tasks_;
-  // 当前任务执行到的index
-  uint32_t                    doing_order_;
-  // 执行顺序
-  uint32_t                    order_;
+  // 依赖任务的id
+  uint32_t                    depend_task_id_;
+  // 依赖的任务
+  DcmdCenterTask*             depend_task_;
+  // 被依赖的任务
+  map<uint32_t,DcmdCenterTask*> depended_tasks_; 
   // service的id
   uint32_t                    svr_id_;
   // service的名字
@@ -339,7 +322,7 @@ class DcmdCenterTask {
   // 参数的xml脚本
   string                      arg_xml_;
   // 任务的参数
-  list<string, string>        args_;
+  map<string, string>         args_;
   // 任务的脚本
   string                      task_cmd_script_;
   // 任务脚本的md5值

@@ -6,6 +6,18 @@ inline DcmdCenterTask* DcmdCenterTaskMgr::GetTask(uint32_t task_id) {
   return iter->second;
 }
 
+inline DcmdCenterSubtask* DcmdCenterTaskMgr::GetSubTask(uint64_t subtak_id) {
+  map<uint64_t, DcmdCenterSubtask*>::iterator iter =  all_subtasks_.find(subtask_id);
+  if (iter == all_subtasks_.end()) return NULL;
+  return iter->second;
+}
+
+inline bool DcmdCenterTaskMgr::IsTaskFreezed(DcmdCenterTask* task) {
+  if (task->parent_task_) return task->parent_task_->is_freezed_;
+  return task->is_freezed_;
+}
+
+
 inline bool DcmdCenterTaskMgr::UpdateTaskValid(DcmdTss* tss, bool is_commit, 
   uint32_t task_id, bool is_valid, char const* err_msg)
 {
