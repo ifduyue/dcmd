@@ -37,14 +37,14 @@ inline bool DcmdCenterTaskMgr::UpdateTaskValid(DcmdTss* tss, bool is_commit,
   if (-1 == mysql_->execute(tss->sql_)) {
     tss->err_msg_ = string("Failure to exec sql, err:") + mysql_->getErrMsg(),
       + ". sql:" + tss->sql_;
-    CWX_ERROR(tss->err_msg.c_str());
+    CWX_ERROR((tss->err_msg.c_str()));
     mysql_->rollback();
     return false;
   }
   if (is_commit && !mysql_->commit()) {
     tss->err_msg_ = string("Failure to commit sql, err:") + mysql_->getErrMsg(),
       + ". sql:" + tss->sql_;
-    CWX_ERROR(tss->err_msg.c_str());
+    CWX_ERROR((tss->err_msg.c_str()));
     mysql_->rollback();
     return false;
   }
@@ -58,14 +58,14 @@ inline bool DcmdCenterTaskMgr::UpdateTaskState(DcmdTss* tss, bool is_commit,
     if (-1 == mysql_->execute(tss->sql_)) {
       tss->err_msg_ = string("Failure to exec sql, err:") + mysql_->getErrMsg(),
         + ". sql:" + tss->sql_;
-      CWX_ERROR((tss->err_msg_.c_str());
+      CWX_ERROR((tss->err_msg_.c_str()));
       mysql_->rollback();
       return false;
     }
     if (is_commit && !mysql_->commit()) {
       tss->err_msg_ = string("Failure to commit sql, err:") + mysql_->getErrMsg(),
         + ". sql:" + tss->sql_;
-      CWX_ERROR(tss->err_msg.c_str());
+      CWX_ERROR((tss->err_msg.c_str()));
       mysql_->rollback();
       return false;
     }
@@ -84,14 +84,14 @@ inline bool DcmdCenterTaskMgr::UpdateSubtaskState(DcmdTss* tss, bool is_commit,
   if (-1 == mysql_->execute(tss->sql_)) {
     tss->err_msg_ = string("Failure to exec sql, err:") + mysql_->getErrMsg(),
       + ". sql:" + tss->sql_;
-    CWX_ERROR((tss->err_msg_.c_str());
+    CWX_ERROR((tss->err_msg_.c_str()));
     mysql_->rollback();
     return false;
   }
   if (is_commit && !mysql_->commit()) {
     tss->err_msg_ = string("Failure to commit sql, err:") + mysql_->getErrMsg(),
       + ". sql:" + tss->sql_;
-    CWX_ERROR(tss->err_msg.c_str());
+    CWX_ERROR((tss->err_msg.c_str()));
     mysql_->rollback();
     return false;
   }
@@ -111,14 +111,14 @@ inline bool DcmdCenterTaskMgr::UpdateCmdState(DcmdTss* tss, bool is_commit,
   if (-1 == mysql_->execute(tss->sql_)) {
     tss->err_msg_ = string("Failure to exec sql, err:") + mysql_->getErrMsg(),
       + ". sql:" + tss->sql_;
-    CWX_ERROR((tss->err_msg_.c_str());
+    CWX_ERROR((tss->err_msg_.c_str()));
     mysql_->rollback();
     return false;
   }
   if (is_commit && !mysql_->commit()) {
     tss->err_msg_ = string("Failure to commit sql, err:") + mysql_->getErrMsg(),
       + ". sql:" + tss->sql_;
-    CWX_ERROR(tss->err_msg.c_str());
+    CWX_ERROR((tss->err_msg.c_str()));
     mysql_->rollback();
     return false;
   }
@@ -135,7 +135,7 @@ inline bool DcmdCenterTaskMgr::CreateSubtasksForTask(DcmdTss* tss, DcmdCenterTas
   if (-1 == mysql_->execute(tss->sql_)) {
     tss->err_msg_ = string("Failure to exec sql, err:") + mysql_->getErrMsg(),
       + ". sql:" + tss->sql_;
-    CWX_ERROR((tss->err_msg_.c_str());
+    CWX_ERROR((tss->err_msg_.c_str()));
     mysql_->rollback();
     return false;
   }
@@ -150,14 +150,14 @@ inline bool DcmdCenterTaskMgr::CreateSubtasksForTask(DcmdTss* tss, DcmdCenterTas
   if (-1 == mysql_->execute(tss->sql_)) {
     tss->err_msg_ = string("Failure to exec sql, err:") + mysql_->getErrMsg(),
       + ". sql:" + tss->sql_;
-    CWX_ERROR((tss->err_msg_.c_str());
+    CWX_ERROR((tss->err_msg_.c_str()));
     mysql_->rollback();
     return false;
   }
   if (is_commit && !mysql_->commit()) {
     tss->err_msg_ = string("Failure to commit sql, err:") + mysql_->getErrMsg(),
       + ". sql:" + tss->sql_;
-    CWX_ERROR(tss->err_msg.c_str());
+    CWX_ERROR((tss->err_msg.c_str()));
     mysql_->rollback();
     return false;
   }
@@ -190,14 +190,14 @@ inline bool DcmdCenterTaskMgr::InsertCommand(DcmdTss* tss, bool is_commit, uint3
   if (-1 == mysql_->execute(tss->sql_)) {
     tss->err_msg_ = string("Failure to exec sql, err:") + mysql_->getErrMsg(),
       + ". sql:" + tss->sql_;
-    CWX_ERROR((tss->err_msg_.c_str());
+    CWX_ERROR((tss->err_msg_.c_str()));
     mysql_->rollback();
     return false;
   }
   if (is_commit && !mysql_->commit()) {
     tss->err_msg_ = string("Failure to commit sql, err:") + mysql_->getErrMsg(),
       + ". sql:" + tss->sql_;
-    CWX_ERROR(tss->err_msg.c_str());
+    CWX_ERROR((tss->err_msg.c_str()));
     mysql_->rollback();
     return false;
   }
@@ -208,14 +208,14 @@ inline bool DcmdCenterTaskMgr::ExecSql(DcmdTss* tss, bool is_commit) {
   if (-1 == mysql_->execute(tss->sql_)) {
     tss->err_msg_ = string("Failure to exec sql, err:") + mysql_->getErrMsg(),
       + ". sql:" + tss->sql_;
-    CWX_ERROR((tss->err_msg_.c_str());
+    CWX_ERROR((tss->err_msg_.c_str()));
     mysql_->rollback();
     return false;
   }
   if (is_commit && !mysql_->commit()) {
     tss->err_msg_ = string("Failure to commit sql, err:") + mysql_->getErrMsg(),
       + ". sql:" + tss->sql_;
-    CWX_ERROR(tss->err_msg.c_str());
+    CWX_ERROR((tss->err_msg.c_str()));
     mysql_->rollback();
     return false;
   }

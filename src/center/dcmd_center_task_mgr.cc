@@ -88,10 +88,7 @@ bool DcmdCenterTaskMgr::ReceiveCmd(DcmdTss* tss,
       break;
     case dcmd_api::CMD_ADD_NODE:
       state = TaskCmdAddTaskNode(tss, strtoul(cmd.task_id().c_str(), NULL, 10),
-        cmd.ip().c_str(), cmd.uid(), NULL);
-    case dcmd_api::CMD_REMOVE_NODE:
-      state = TaskCmdRemoveTaskNode(tss, strtoul(cmd.task_id().c_str(), NULL, 10),
-        cmd.ip().c_str(), cmd.uid(), NULL);
+        cmd.ip().c_str(), cmd.svr_pool().c_str(), cmd.uid(), NULL);
     case dcmd_api::CMD_CANCEL_SUBTASK:
       state = TaskCmdCancelSubtask(tss, strtoull(cmd.subtask_id().c_str(), NULL, 10),
         cmd.uid(), NULL);
@@ -507,10 +504,7 @@ bool DcmdCenterTaskMgr::LoadAllCmd(DcmdTss* tss) {
       state = TaskCmdFinishTask(tss, cmd->task_id_, 0, &cmd);
       break;
     case dcmd_api::CMD_ADD_NODE:
-      state = TaskCmdAddTaskNode(tss, cmd->task_id_, cmd->agent_ip_.c_str(), 0, &cmd);
-      break;
-    case dcmd_api::CMD_REMOVE_NODE:
-      state = TaskCmdRemoveTaskNode(tss, cmd->task_id_, cmd->agent_ip_.c_str(), 0, &cmd);
+      state = TaskCmdAddTaskNode(tss, cmd->task_id_, cmd->agent_ip_.c_str(), cmd->svr_pool_.c_str(), 0, &cmd);
       break;
     case dcmd_api::CMD_CANCEL_SUBTASK:
       state = TaskCmdCancelSubtask(tss, cmd->subtask_id_, 0, &cmd);
@@ -1047,16 +1041,64 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdFinishTask(DcmdTss* tss, uint32_t 
 }
 
 dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdAddTaskNode(DcmdTss* tss, uint32_t task_id,
-  char const* ip, uint32_t uid, DcmdCenterCmd** cmd)
+  char const* ip, char const* svr_pool, uint32_t uid, DcmdCenterCmd** cmd)
 {
-
-  return dcmd_api::DCMD_STATE_SUCCESS;
-}
-
-dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdRemoveTaskNode(DcmdTss* tss, uint32_t task_id,
-  char const* ip, uint32_t uid, DcmdCenterCmd** cmd)
-{
-
+  DcmdCenterTask* task =  GetTask(task_id);
+  // 加载任务
+  if (!task) {
+    if (!LoadNewTask(tss)) {
+      mysql_->disconnect();
+      return dcmd_api::DCMD_STATE_FAILED;
+    }
+    task = GetTask(task_id);
+  }
+  if (!task) {
+    tss->err_msg_ = "No task.";
+    return dcmd_api::DCMD_STATE_NO_TASK;
+  }
+  if (task->is_freezed_) {
+    tss->err_msg_ = "Task is freezed."
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
+  if (task->pools_.find(string(svr_pool) == task->pools_.end())) {
+    tss->err_msg_ = string("service-pool[") + svr_pool + string("] doesn't exist.");
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
+  // 添加subtask
+  string str_task_cmd(task->task_cmd_);
+  string str_svr_pool(svr_pool);
+  string str_service(task->service_);
+  string str_ip(ip);
+  dcmd_escape_mysql_string(str_task_cmd);
+  dcmd_escape_mysql_string(str_svr_pool);
+  dcmd_escape_mysql_string(str_service);
+  dcmd_escape_mysql_string(str_ip);
+  CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
+    "insert into task_node(task_id, task_cmd, svr_pool, service, ip,"\
+    "state, ignored, start_time, finish_time, process, errmsg, utime, ctime, opr_uid) "\
+    "values(%s, %u, '%s', '%s', '%s', '%s', %u, 0, now(), now(), '', '', now(), now(), %u)",
+    task_id, str_task_cmd.c_str(), str_svr_pool.c_str(), str_service.c_str(), str_ip.c_str(),
+    dcmd_api::SUBTASK_INIT, uid);
+  if (-1 == mysql_->execute(tss->sql_)) {
+    tss->err_msg_ = string("Failure to exec sql, err:") + mysql_->getErrMsg(),
+      + ". sql:" + tss->sql_;
+    CWX_ERROR((tss->err_msg_.c_str()));
+    mysql_->rollback();
+    mysql_->disconnect();
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
+  if (!mysql_->commit()) {
+    tss->err_msg_ = string("Failure to commit sql, err:") + mysql_->getErrMsg(),
+      + ". sql:" + tss->sql_;
+    CWX_ERROR((tss->err_msg.c_str()));
+    mysql_->rollback();
+    mysql_->disconnect();
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
+  if (!LoadNewSubtask(tss)) {
+    mysql_->disconnect();
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
   return dcmd_api::DCMD_STATE_SUCCESS;
 }
 
