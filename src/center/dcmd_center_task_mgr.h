@@ -122,8 +122,8 @@ class DcmdCenterTaskMgr{
 
   // 加载任务的service pool
   bool LoadTaskSvrPool(DcmdTss* tss, DcmdCenterTask* task);
-  // Parse任务的信息。返回值，true：成功；false：db操作失败
-  bool ParseTask(DcmdTss* tss, DcmdCenterTask* task);
+  // 分析任务的信息。返回值，true：成功；false：db操作失败
+  bool AnalizeTask(DcmdTss* tss, DcmdCenterTask* task);
   // 读取task cmd的内容
   bool ReadTaskCmdContent(DcmdTss* tss, char const* task_cmd, string& content);
   // 获取task cmd的数据库md5签名。返回值，1：成功；0：不存在；-1：失败

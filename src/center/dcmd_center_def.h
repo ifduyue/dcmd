@@ -274,6 +274,16 @@ class DcmdCenterTask {
   bool ChangeSubtaskState(DcmdCenterSubtask const* subtask,
     dcmd_api::SubTaskState state,
     bool is_ignored);
+  // 返回值，false：不存在；true：存在
+  bool GetArgValue(char const* arg_name, string& value) {
+    map<string, string>::iterator iter = args_.find(string(arg_name));
+    if (iter == args_.end()) return false;
+    value = iter->second;
+  }
+  // 任务是否完成
+  inline bool IsFinished() const {
+    return (dcmd_api::TASK_FINISHED == state_) || (dcmd_api::TASK_FINISHED_WITH_FAILED == state_);
+  }
  public:
   // 任务的id
   uint32_t                    task_id_;

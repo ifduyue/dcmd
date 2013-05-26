@@ -383,7 +383,7 @@ bool DcmdCenterTaskMgr::LoadNewTask(DcmdTss* tss, bool is_first) {
     // 检查任务的各种信息
     if (task->is_valid_) {
       // 只有valid的task，才进行任务的parse处理，否则只能redo task的时候再处理
-      if (!ParseTask(tss, task)) return false;
+      if (!AnalizeTask(tss, task, false)) return false;
       // 检查任务的状态
       if (!is_first) {
         // 如果不是第一次加载，则需要child 任务的state必须为
@@ -605,13 +605,29 @@ bool DcmdCenterTaskMgr::LoadTaskSvrPool(DcmdTss* tss, DcmdCenterTask* task) {
   return true;
 }
 
-bool DcmdCenterTaskMgr::ParseTask(DcmdTss* tss, DcmdCenterTask* task) {
+bool DcmdCenterTaskMgr::AnalizeTask(DcmdTss* tss, DcmdCenterTask* task) {
   // 解析xml的参数
   task->args_.clear();
   bool old_valid_state = task->is_valid_;
   do {
     task->is_valid_ = true;
     task->err_msg_ = "";
+    if (task->depend_task_id_) {
+      task->depend_task_ = GetTask(task->depend_task_id_);
+      if (!task->depend_task_) {
+        CwxCommon::snprintf(tss->m_szBuf2K, 2047, "Task's dependence task[%u] doesn't exist.", task->depend_task_id_);
+        task->is_valid_ = false;
+        task->err_msg_ = tss->err_msg_ = tss->m_szBuf2K;
+        break;
+      }
+      if (task->depend_task_ == task) {
+        CwxCommon::snprintf(tss->m_szBuf2K, 2047, "Task's dependence task[%u] is self.");
+        task->is_valid_ = false;
+        task->err_msg_ = tss->err_msg_ = tss->m_szBuf2K;
+        break;
+      }
+      task->depend_task_->depended_tasks_[task->task_id_] = task;
+    }
     if (task->arg_xml_.length()) {
       XmlConfigParser xml;
       if (!xml.parse(task->arg_xml_.c_str())){
@@ -648,15 +664,6 @@ bool DcmdCenterTaskMgr::ParseTask(DcmdTss* tss, DcmdCenterTask* task) {
       task->is_valid_ = false;
       task->err_msg_ = tss->err_msg_;
       break;
-    }
-    if (task->depend_task_id_) {
-      task->depend_task_ = GetTask(task->depend_task_id_);
-      if (!task->depend_task_) {
-        CwxCommon::snprintf(tss->m_szBuf2K, 2047, "Task's dependence task[%u] doesn't exist.", task->depend_task_id_);
-        task->is_valid_ = false;
-        task->err_msg_ = tss->err_msg_ = tss->m_szBuf2K;
-        break;
-      }
     }
     // load task_cmd文件
     if (!ReadTaskCmdContent(tss, task->task_cmd_.c_str(), task->task_cmd_script_)) {
@@ -748,40 +755,16 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdStartTask(DcmdTss* tss, uint32_t t
       tss->err_msg_ = "Task is invalid.";
       return dcmd_api::DCMD_STATE_FAILED;
     }
-    if (task->parent_task_) {
-      tss->err_msg_ = "Can't start child task.";
-      return dcmd_api::DCMD_STATE_FAILED;
-    }
     if (dcmd_api::TASK_INIT != task->state_) {
       tss->err_msg_ = "Task is started.";
       return dcmd_api::DCMD_STATE_FAILED;
     }
     bool is_success = true;
     do {
-      // 初始化任务
-      if (task->is_cluster_) { // cluster任务
-        map<uint32_t, map<uint32_t, DcmdCenterTask*> >::iterator iter = task->child_tasks_.begin();
-        map<uint32_t, DcmdCenterTask*>::iterator level_iter;
-        while(iter != task->child_tasks_.end()) {
-          level_iter = iter->second->begin();
-          while(level_iter != iter->second->end) {
-            if (!CreateSubtasksForTask(tss, task, false, uid)) {
-              mysql_->disconnect();
-              is_success = false;
-              break;
-            }
-            ++level_iter;
-          }
-          if (!is_success) break;
-          ++iter;
-        }
-        if (!is_success) break;
-      } else {
-        if (!CreateSubtasksForTask(tss, task, false, uid)){
-          mysql_->disconnect();
-          is_success = false;
-          break;
-        }
+      if (!CreateSubtasksForTask(tss, task, false, uid)){
+        mysql_->disconnect();
+        is_success = false;
+        break;
       }
       if (!cmd) {
         // 插入start的命令
@@ -831,10 +814,6 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdPauseTask(DcmdTss* tss, uint32_t t
   if (!task) {
     tss->err_msg_ = "No task.";
     return dcmd_api::DCMD_STATE_NO_TASK;
-  }
-  if (task->parent_task_) {
-    tss->err_msg_ = "Can't pause child task.";
-    return dcmd_api::DCMD_STATE_FAILED;
   }
   if (task->is_pause_) return dcmd_api::DCMD_STATE_SUCCESS;
   bool is_success = true;
@@ -886,10 +865,6 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdResumeTask(DcmdTss* tss, uint32_t 
     tss->err_msg_ = "No task.";
     return dcmd_api::DCMD_STATE_NO_TASK;
   }
-  if (task->parent_task_) {
-    tss->err_msg_ = "Can't resume child task.";
-    return dcmd_api::DCMD_STATE_FAILED;
-  }
   if (!task->is_pause_) return dcmd_api::DCMD_STATE_SUCCESS;
   bool is_success = true;
   do {
@@ -940,27 +915,11 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdRetryTask(DcmdTss* tss, uint32_t t
     tss->err_msg_ = "No task.";
     return dcmd_api::DCMD_STATE_NO_TASK;
   }
-  if (task->parent_task_) {
-    tss->err_msg_ = "Can't retry child task.";
-    return dcmd_api::DCMD_STATE_FAILED;
-  }
   if (task->is_valid_) return dcmd_api::DCMD_STATE_SUCCESS;
   bool is_success = true;
   string err_msg;
   do {
-    if (!ParseTask(tss, task)) return false;
-    if (task->is_cluster_) {
-      map<uint32_t, map<uint32_t, DcmdCenterTask*>* >::iterator iter = task->child_tasks_.begin();
-      map<uint32_t, DcmdCenterTask*>::iterator level_iter;
-      while(iter != task->child_tasks_.end()) {
-        level_iter = iter->second->begin();
-        while(level_iter != iter->second->end()) {
-          if (!ParseTask(tss, level_iter->second)) return false;
-          ++level_iter;
-        }
-        ++iter;
-      }
-    }
+    if (!AnalizeTask(tss, task)) return false;
     if (!cmd) {
       // 插入start的命令
       if (!InsertCommand(tss, false, uid, task->task_id_,
@@ -999,72 +958,52 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdFinishTask(DcmdTss* tss, uint32_t 
     tss->err_msg_ = "No task.";
     return dcmd_api::DCMD_STATE_NO_TASK;
   }
-  if (task->parent_task_) {
-    tss->err_msg_ = "Can't finish child task.";
-    return dcmd_api::DCMD_STATE_FAILED;
-  }
   if (!task->is_freezed_) {
     tss->err_msg_ = "Task is not in freezed state.";
     return dcmd_api::DCMD_STATE_FAILED;
   }
-  // 获取task id
-  string task_ids;
-  if (task->is_cluster_) {
-    CwxCommon::sprintf(tss->m_szBuf2K, "%u", task->task_id_);
-    task_ids = tss->m_szBuf2K;
-    map<uint32_t, map<uint32_t, DcmdCenterTask*>* >::iterator iter = task->child_tasks_.begin();
-    map<uint32_t, DcmdCenterTask*>::iterator level_iter;
-    while(iter != task->child_tasks_.end()) {
-      level_iter = iter->second->begin();
-      while( level_iter != iter->second->end()) {
-        CwxCommon::sprintf(tss->m_szBuf2K, ",%u", level_iter->second->task_id_);
-        task_ids += tss->m_szBuf2K;
-        level_iter++;
-      }
-      ++iter;
-    }
-  } else {
-    CwxCommon::sprintf(tss->m_szBuf2K, "%u", task->task_id_);
-    task_ids = tss->m_szBuf2K;
+  if (task->depended_tasks_.size()) {
+    tss->err_msg_ = "Task is depend by other task.";
+    return dcmd_api::DCMD_STATE_FAILED;
   }
   bool is_success = false;
   do {
     CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
-      "delete from task_history where task_id in (%s)", task_ids.c_str());
+      "delete from task_history where task_id = %u", task_id);
     if (-1 == mysql_->execute(tss->sql_)) break;
-    
+
     CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
-      "insert into task_history select * from task where task_id in (%s)", task_ids.c_str());
-    if (-1 == m_mysql->execute(tss->sql_)) break;
-    
+      "insert into task_history select * from task where task_id = %u", task_id);
+    if (-1 == mysql_->execute(tss->sql_)) break;
+
     CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
-      "delete from task where task_id in (%s)", task_ids.c_str());
-    if (-1 == m_mysql->execute(tss->sql_)) break;
+      "delete from task where task_id = %u", task_id);
+    if (-1 == mysql_->execute(tss->sql_)) break;
 
     CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
-      "delete from task_service_pool_history where task_id in (%s)", task_ids.c_str());
-    if (-1 == m_mysql->execute(tss->sql_)) break;
+      "delete from task_service_pool_history where task_id = %u", task_id);
+    if (-1 == mysql_->execute(tss->sql_)) break;
 
     CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
-      "insert into task_service_pool_history select * from  task_service_pool where task_id in (%s)", task_ids.c_str());
-    if (-1 == m_mysql->execute(tss->sql_)) break;
+      "insert into task_service_pool_history select * from  task_service_pool where task_id = %u", task_id);
+    if (-1 == mysql_->execute(tss->sql_)) break;
 
     CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
-      "delete from task_service_pool where task_id in (%s)", task_ids.c_str());
-    if (-1 == m_mysql->execute(tss->sql_)) break;
+      "delete from task_service_pool where task_id = %u", task_id));
+    if (-1 == mysql_->execute(tss->sql_)) break;
 
     CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
-      "delete from task_node_history where task_id in (%s)", task_ids.c_str());
-    if (-1 == m_mysql->execute(tss->sql_)) break;
+      "delete from task_node_history where task_id = %u", task_id);
+    if (-1 == mysql_->execute(tss->sql_)) break;
 
     CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
-      "insert into task_node_history select * from task_node where task_id in (%s)", task_ids.c_str());
-    if (-1 == m_mysql->execute(tss->sql_)) break;
+      "insert into task_node_history select * from task_node where task_id = %u", task_id);
+    if (-1 == mysql_->execute(tss->sql_)) break;
 
     CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
-      "delete from task_node where task_id in (%s)", task_ids.c_str());
-    if (-1 == m_mysql->execute(tss->sql_)) break;
-    
+      "delete from task_node where task_id = %u", task_id);
+    if (-1 == mysql_->execute(tss->sql_)) break;
+
     if (!cmd) {
       // 插入start的命令
       if (!InsertCommand(tss, false, uid, task->task_id_,
@@ -1075,16 +1014,16 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdFinishTask(DcmdTss* tss, uint32_t 
         break;
     }
     CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
-      "delete from command_history where task_id in (%s)", task_ids.c_str());
-    if (-1 == m_mysql->execute(tss->sql_)) break;
+      "delete from command_history where task_id = %u", task_id);
+    if (-1 == mysql_->execute(tss->sql_)) break;
 
     CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
-      "insert into command_history select * from command where task_id in (%s)", task_ids.c_str());
-    if (-1 == m_mysql->execute(tss->sql_)) break;
+      "insert into command_history select * from command where task_id = %u", task_id));
+    if (-1 == mysql_->execute(tss->sql_)) break;
 
     CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
-      "delete from command where task_id in (%s)", task_ids.c_str());
-    if (-1 == m_mysql->execute(tss->sql_)) break;
+      "delete from command where task_id = %u", task_id);
+    if (-1 == mysql_->execute(tss->sql_)) break;
 
     is_success = true;
   }while(0);
@@ -1101,6 +1040,7 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdFinishTask(DcmdTss* tss, uint32_t 
     mysql_->disconnect();
     return dcmd_api::DCMD_STATE_FAILED;
   }
+  if(task->depend_task_) task->depend_task_.depended_tasks_.erase(task->task_id_);
   // 将task从内存中删除
   RemoveTaskFromMem(task);
   return dcmd_api::DCMD_STATE_SUCCESS;
