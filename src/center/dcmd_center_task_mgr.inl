@@ -12,6 +12,14 @@ inline DcmdCenterSubtask* DcmdCenterTaskMgr::GetSubTask(uint64_t subtak_id) {
   return iter->second;
 }
 
+// 获取agent
+inline DcmdCenterAgent* DcmdCenterTaskMgr::GetAgent(string const& agent_ip) {
+  map<string, DcmdCenterAgent*>::iterator iter = agents_.find(agent_ip);
+  if (iter == agents_.end()) return NULL;
+  return iter->second;
+}
+
+
 inline bool DcmdCenterTaskMgr::IsTaskFreezed(DcmdCenterTask* task) {
   if (task->parent_task_) return task->parent_task_->is_freezed_;
   return task->is_freezed_;

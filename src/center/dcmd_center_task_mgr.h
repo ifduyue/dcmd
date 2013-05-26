@@ -70,6 +70,12 @@ class DcmdCenterTaskMgr{
   // 完成任务
   dcmd_api::DcmdState TaskCmdFinishTask(DcmdTss* tss, uint32_t task_id,
     uint32_t uid, DcmdCenterCmd** cmd);
+  // 添加新任务节点
+  dcmd_api::DcmdState TaskCmdAddTaskNode(DcmdTss* tss, uint32_t task_id,
+    char const* ip, uint32_t uid, DcmdCenterCmd** cmd);
+  // 删除任务节点
+  dcmd_api::DcmdState TaskCmdRemoveTaskNode(DcmdTss* tss, uint32_t task_id,
+    char const* ip, uint32_t uid, DcmdCenterCmd** cmd);
   // cancel具体subtask的执行
   dcmd_api::DcmdState TaskCmdCancelSubtask(DcmdTss* tss, uint64_t subtask_id,
     uint32_t uid, DcmdCenterCmd** cmd);
@@ -140,6 +146,8 @@ class DcmdCenterTaskMgr{
    inline DcmdCenterTask* GetTask(uint32_t task_id);
    // 根据subtask id从map中获取subtask
    inline DcmdCenterSubtask* GetSubTask(uint64_t subtak_id);
+   // 获取agent
+   inline DcmdCenterAgent* GetAgent(string const& agent_ip);
    // 任务是否freeze
    inline bool IsTaskFreezed(DcmdCenterTask* task);
    // 更新任务无效状态
@@ -174,10 +182,8 @@ class DcmdCenterTaskMgr{
  private:
   // app对象
   DcmdCenterApp*                               app_;
-  // 保护subtask_processes_的访问，并发访问process
+  // 保护all_subtasks_的访问，并发访问process
   CwxMutexLock                                 lock_;
-  // 子任务的进度信息
-  map<uint64_t, string>                        subtask_processes_;
   
   /****** 一下的变量全部是多线程不安全的  *****/
   // 是否已经启动
