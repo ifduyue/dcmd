@@ -94,8 +94,8 @@ bool DcmdCenterTaskMgr::ReceiveCmd(DcmdTss* tss,
         cmd.uid(), NULL);
       break;
     case dcmd_api::CMD_CANCEL_SVR_SUBTASK:
-      state = TaskCmdCancelSvrSubtask(tss, cmd.svr_name().c_str(), cmd.ip().c_str(),
-        cmd.uid(), NULL);
+      state = TaskCmdCancelSvrSubtask(tss, strtoul(cmd.task_id().c_str(), NULL, 10),
+        cmd.svr_name().c_str(), cmd.ip().c_str(), cmd.uid(), NULL);
       break;
     case dcmd_api::CMD_REDO_TASK:
       state = TaskCmdRedoTask(tss, strtoul(cmd.task_id().c_str(), NULL, 10),
@@ -510,7 +510,7 @@ bool DcmdCenterTaskMgr::LoadAllCmd(DcmdTss* tss) {
       state = TaskCmdCancelSubtask(tss, cmd->subtask_id_, 0, &cmd);
       break;
     case dcmd_api::CMD_CANCEL_SVR_SUBTASK:
-      state = TaskCmdCancelSvrSubtask(tss, cmd->service_.c_str(),
+      state = TaskCmdCancelSvrSubtask(tss, cmd->service_.c_str(), cmd->task_id_,
         cmd->agent_ip_.c_str(), 0, &cmd);
       break;
     case dcmd_api::CMD_REDO_TASK:
@@ -548,7 +548,7 @@ bool DcmdCenterTaskMgr::LoadAllCmd(DcmdTss* tss) {
       break;
     }
     if (cmd) delete cmd;
-    if (!mysql_->IsConnected) break;
+    if (!mysql_->IsConnected()) break;
     if (state != dcmd_api::DCMD_STATE_SUCCESS) {
       if (!UpdateCmdState(tss, true, cmd->cmd_id_, dcmd_api::COMMAND_FAILED, tss->m_szBuf2K))
         break;
@@ -1115,20 +1115,32 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdCancelSubtask(DcmdTss* tss, uint64
     return dcmd_api::DCMD_STATE_NO_TASK;
   }
   if (!subtask->task_->is_freezed_) {
-    tss->err_msg_ = "Task is not in freezed state.";
+    tss->err_msg_ = "Task is in freezed state.";
     return dcmd_api::DCMD_STATE_FAILED;
   }
-  if (!subtask->task_->parent_task_) {
-    if (!subtask->task_->state_ == dcmd_api::TASK_INIT) {
-      tss->err_msg_ = "Task is not in freezed state.";
-      return dcmd_api::DCMD_STATE_FAILED;
-    }
+  if (!subtask->task_->is_valid_) {
+    tss->err_msg_ = "Task is invalid.";
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
+  if (subtask->task_->depend_task_ && subtask->task_->depend_task_->IsFinished()) {
+    tss->err_msg_ = "Depend task is not finished.";
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
+  // 已经有cancel的命令
+  if (subtask->cancel_cmd_) return dcmd_api::DCMD_STATE_SUCCESS;
+  if (cmd) {
+    subtask->cancel_cmd_ = *cmd;
+    cmd = NULL;
+  } else {
+    subtask->cancel_cmd_ = new DcmdCenterCmd;
+    subtask->cancel_cmd_->agent_ip_ = subtask->ip_;
+    subtask->cancel_cmd_->begin_time_ =
   }
 
 }
 
-dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdCancelSvrSubtask(DcmdTss* tss, char const* serivce, 
-  char const* agent_ip, uint32_t uid, DcmdCenterCmd** cmd)
+dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdCancelSvrSubtask(DcmdTss* tss, uint32_t task_id,
+  char const* serivce, char const* agent_ip, uint32_t uid, DcmdCenterCmd** cmd)
 {
 
 }
