@@ -177,32 +177,3 @@ message UiTaskCmdReply{
   required  DcmdState state=2;
   optional  string    err=4;
 }
-
-message UiTaskWatch {
-  required  int32   client_msg_id=1;
-  required  string  task_id =2;
-  required  bool    last_state=3;
-  required  string  user=4;
-  required  string  passwd=5;
-}
-
-message UiTaskWatchReply{
-  required  int32       client_msg_id=1;
-  required  DcmdState   watch_state=2;
-  optional  string      err=3;
-  required  TaskInfo    task_info=4;
-  optional  TaskInfo    depend_tasks=5;
-}
-
-message UiTaskCancelWatch {
-  required  int32   client_msg_id=1;
-  required  string  task_id =2;
-  required  string  user=3;
-  required  string  passwd=4;
-}
-
-message UiTaskCancelWatchReply{
-  required  int32       client_msg_id=1;
-  required  DcmdState   state=2;
-  optional  string      err=3;
-}
