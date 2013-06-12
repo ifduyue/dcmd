@@ -33,6 +33,7 @@ void  protobuf_AddDesc_dcmd_5fagent_2eproto();
 void protobuf_AssignDesc_dcmd_5fagent_2eproto();
 void protobuf_ShutdownFile_dcmd_5fagent_2eproto();
 
+class AgentReport;
 class AgentReportReply;
 class AgentMasterNoticeReply;
 class AgentTaskCmd;
@@ -50,6 +51,109 @@ class AgentRunningOprReply;
 class InvalidMsg;
 
 // ===================================================================
+
+class AgentReport : public ::google::protobuf::Message {
+ public:
+  AgentReport();
+  virtual ~AgentReport();
+  
+  AgentReport(const AgentReport& from);
+  
+  inline AgentReport& operator=(const AgentReport& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const AgentReport& default_instance();
+  
+  void Swap(AgentReport* other);
+  
+  // implements Message ----------------------------------------------
+  
+  AgentReport* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const AgentReport& from);
+  void MergeFrom(const AgentReport& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required string version = 1;
+  inline bool has_version() const;
+  inline void clear_version();
+  static const int kVersionFieldNumber = 1;
+  inline const ::std::string& version() const;
+  inline void set_version(const ::std::string& value);
+  inline void set_version(const char* value);
+  inline void set_version(const char* value, size_t size);
+  inline ::std::string* mutable_version();
+  inline ::std::string* release_version();
+  
+  // repeated string agent_ips = 2;
+  inline int agent_ips_size() const;
+  inline void clear_agent_ips();
+  static const int kAgentIpsFieldNumber = 2;
+  inline const ::std::string& agent_ips(int index) const;
+  inline ::std::string* mutable_agent_ips(int index);
+  inline void set_agent_ips(int index, const ::std::string& value);
+  inline void set_agent_ips(int index, const char* value);
+  inline void set_agent_ips(int index, const char* value, size_t size);
+  inline ::std::string* add_agent_ips();
+  inline void add_agent_ips(const ::std::string& value);
+  inline void add_agent_ips(const char* value);
+  inline void add_agent_ips(const char* value, size_t size);
+  inline const ::google::protobuf::RepeatedPtrField< ::std::string>& agent_ips() const;
+  inline ::google::protobuf::RepeatedPtrField< ::std::string>* mutable_agent_ips();
+  
+  // @@protoc_insertion_point(class_scope:dcmd_api.AgentReport)
+ private:
+  inline void set_has_version();
+  inline void clear_has_version();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::std::string* version_;
+  ::google::protobuf::RepeatedPtrField< ::std::string> agent_ips_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_dcmd_5fagent_2eproto();
+  friend void protobuf_AssignDesc_dcmd_5fagent_2eproto();
+  friend void protobuf_ShutdownFile_dcmd_5fagent_2eproto();
+  
+  void InitAsDefaultInstance();
+  static AgentReport* default_instance_;
+};
+// -------------------------------------------------------------------
 
 class AgentReportReply : public ::google::protobuf::Message {
  public:
@@ -1899,6 +2003,112 @@ class InvalidMsg : public ::google::protobuf::Message {
 
 
 // ===================================================================
+
+// AgentReport
+
+// required string version = 1;
+inline bool AgentReport::has_version() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void AgentReport::set_has_version() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void AgentReport::clear_has_version() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void AgentReport::clear_version() {
+  if (version_ != &::google::protobuf::internal::kEmptyString) {
+    version_->clear();
+  }
+  clear_has_version();
+}
+inline const ::std::string& AgentReport::version() const {
+  return *version_;
+}
+inline void AgentReport::set_version(const ::std::string& value) {
+  set_has_version();
+  if (version_ == &::google::protobuf::internal::kEmptyString) {
+    version_ = new ::std::string;
+  }
+  version_->assign(value);
+}
+inline void AgentReport::set_version(const char* value) {
+  set_has_version();
+  if (version_ == &::google::protobuf::internal::kEmptyString) {
+    version_ = new ::std::string;
+  }
+  version_->assign(value);
+}
+inline void AgentReport::set_version(const char* value, size_t size) {
+  set_has_version();
+  if (version_ == &::google::protobuf::internal::kEmptyString) {
+    version_ = new ::std::string;
+  }
+  version_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* AgentReport::mutable_version() {
+  set_has_version();
+  if (version_ == &::google::protobuf::internal::kEmptyString) {
+    version_ = new ::std::string;
+  }
+  return version_;
+}
+inline ::std::string* AgentReport::release_version() {
+  clear_has_version();
+  if (version_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = version_;
+    version_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+
+// repeated string agent_ips = 2;
+inline int AgentReport::agent_ips_size() const {
+  return agent_ips_.size();
+}
+inline void AgentReport::clear_agent_ips() {
+  agent_ips_.Clear();
+}
+inline const ::std::string& AgentReport::agent_ips(int index) const {
+  return agent_ips_.Get(index);
+}
+inline ::std::string* AgentReport::mutable_agent_ips(int index) {
+  return agent_ips_.Mutable(index);
+}
+inline void AgentReport::set_agent_ips(int index, const ::std::string& value) {
+  agent_ips_.Mutable(index)->assign(value);
+}
+inline void AgentReport::set_agent_ips(int index, const char* value) {
+  agent_ips_.Mutable(index)->assign(value);
+}
+inline void AgentReport::set_agent_ips(int index, const char* value, size_t size) {
+  agent_ips_.Mutable(index)->assign(
+    reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* AgentReport::add_agent_ips() {
+  return agent_ips_.Add();
+}
+inline void AgentReport::add_agent_ips(const ::std::string& value) {
+  agent_ips_.Add()->assign(value);
+}
+inline void AgentReport::add_agent_ips(const char* value) {
+  agent_ips_.Add()->assign(value);
+}
+inline void AgentReport::add_agent_ips(const char* value, size_t size) {
+  agent_ips_.Add()->assign(reinterpret_cast<const char*>(value), size);
+}
+inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
+AgentReport::agent_ips() const {
+  return agent_ips_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::std::string>*
+AgentReport::mutable_agent_ips() {
+  return &agent_ips_;
+}
+
+// -------------------------------------------------------------------
 
 // AgentReportReply
 

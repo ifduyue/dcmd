@@ -17,6 +17,9 @@ namespace dcmd_api {
 
 namespace {
 
+const ::google::protobuf::Descriptor* AgentReport_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  AgentReport_reflection_ = NULL;
 const ::google::protobuf::Descriptor* AgentReportReply_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   AgentReportReply_reflection_ = NULL;
@@ -72,7 +75,23 @@ void protobuf_AssignDesc_dcmd_5fagent_2eproto() {
     ::google::protobuf::DescriptorPool::generated_pool()->FindFileByName(
       "dcmd_agent.proto");
   GOOGLE_CHECK(file != NULL);
-  AgentReportReply_descriptor_ = file->message_type(0);
+  AgentReport_descriptor_ = file->message_type(0);
+  static const int AgentReport_offsets_[2] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentReport, version_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentReport, agent_ips_),
+  };
+  AgentReport_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      AgentReport_descriptor_,
+      AgentReport::default_instance_,
+      AgentReport_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentReport, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentReport, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(AgentReport));
+  AgentReportReply_descriptor_ = file->message_type(1);
   static const int AgentReportReply_offsets_[6] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentReportReply, state_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentReportReply, err_),
@@ -92,7 +111,7 @@ void protobuf_AssignDesc_dcmd_5fagent_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(AgentReportReply));
-  AgentMasterNoticeReply_descriptor_ = file->message_type(1);
+  AgentMasterNoticeReply_descriptor_ = file->message_type(2);
   static const int AgentMasterNoticeReply_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentMasterNoticeReply, cmd_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentMasterNoticeReply, subtask_process_),
@@ -108,7 +127,7 @@ void protobuf_AssignDesc_dcmd_5fagent_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(AgentMasterNoticeReply));
-  AgentTaskCmd_descriptor_ = file->message_type(2);
+  AgentTaskCmd_descriptor_ = file->message_type(3);
   static const int AgentTaskCmd_offsets_[17] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentTaskCmd, cmd_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentTaskCmd, task_cmd_),
@@ -139,7 +158,7 @@ void protobuf_AssignDesc_dcmd_5fagent_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(AgentTaskCmd));
-  AgentTaskCmdReply_descriptor_ = file->message_type(3);
+  AgentTaskCmdReply_descriptor_ = file->message_type(4);
   static const int AgentTaskCmdReply_offsets_[1] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentTaskCmdReply, cmd_),
   };
@@ -154,7 +173,7 @@ void protobuf_AssignDesc_dcmd_5fagent_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(AgentTaskCmdReply));
-  AgentSubTaskProcess_descriptor_ = file->message_type(4);
+  AgentSubTaskProcess_descriptor_ = file->message_type(5);
   static const int AgentSubTaskProcess_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentSubTaskProcess, task_id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentSubTaskProcess, subtask_id_),
@@ -171,7 +190,7 @@ void protobuf_AssignDesc_dcmd_5fagent_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(AgentSubTaskProcess));
-  AgentTaskResult_descriptor_ = file->message_type(5);
+  AgentTaskResult_descriptor_ = file->message_type(6);
   static const int AgentTaskResult_offsets_[6] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentTaskResult, cmd_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentTaskResult, task_id_),
@@ -191,7 +210,7 @@ void protobuf_AssignDesc_dcmd_5fagent_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(AgentTaskResult));
-  AgentTaskResultReply_descriptor_ = file->message_type(6);
+  AgentTaskResultReply_descriptor_ = file->message_type(7);
   static const int AgentTaskResultReply_offsets_[1] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentTaskResultReply, cmd_),
   };
@@ -206,7 +225,7 @@ void protobuf_AssignDesc_dcmd_5fagent_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(AgentTaskResultReply));
-  AgentOprCmd_descriptor_ = file->message_type(7);
+  AgentOprCmd_descriptor_ = file->message_type(8);
   static const int AgentOprCmd_offsets_[7] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentOprCmd, opr_id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentOprCmd, name_),
@@ -227,7 +246,7 @@ void protobuf_AssignDesc_dcmd_5fagent_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(AgentOprCmd));
-  AgentTaskOutput_descriptor_ = file->message_type(8);
+  AgentTaskOutput_descriptor_ = file->message_type(9);
   static const int AgentTaskOutput_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentTaskOutput, subtask_id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentTaskOutput, offset_),
@@ -244,7 +263,7 @@ void protobuf_AssignDesc_dcmd_5fagent_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(AgentTaskOutput));
-  AgentTaskOutputReply_descriptor_ = file->message_type(9);
+  AgentTaskOutputReply_descriptor_ = file->message_type(10);
   static const int AgentTaskOutputReply_offsets_[4] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentTaskOutputReply, state_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentTaskOutputReply, result_),
@@ -262,7 +281,7 @@ void protobuf_AssignDesc_dcmd_5fagent_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(AgentTaskOutputReply));
-  AgentRunningTask_descriptor_ = file->message_type(10);
+  AgentRunningTask_descriptor_ = file->message_type(11);
   static const int AgentRunningTask_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentRunningTask, ip_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentRunningTask, svr_name_),
@@ -278,7 +297,7 @@ void protobuf_AssignDesc_dcmd_5fagent_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(AgentRunningTask));
-  AgentRunningTaskReply_descriptor_ = file->message_type(11);
+  AgentRunningTaskReply_descriptor_ = file->message_type(12);
   static const int AgentRunningTaskReply_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentRunningTaskReply, state_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentRunningTaskReply, result_),
@@ -295,7 +314,7 @@ void protobuf_AssignDesc_dcmd_5fagent_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(AgentRunningTaskReply));
-  AgentRunningOpr_descriptor_ = file->message_type(12);
+  AgentRunningOpr_descriptor_ = file->message_type(13);
   static const int AgentRunningOpr_offsets_[1] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentRunningOpr, ip_),
   };
@@ -310,7 +329,7 @@ void protobuf_AssignDesc_dcmd_5fagent_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(AgentRunningOpr));
-  AgentRunningOprReply_descriptor_ = file->message_type(13);
+  AgentRunningOprReply_descriptor_ = file->message_type(14);
   static const int AgentRunningOprReply_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentRunningOprReply, state_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentRunningOprReply, result_),
@@ -327,7 +346,7 @@ void protobuf_AssignDesc_dcmd_5fagent_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(AgentRunningOprReply));
-  InvalidMsg_descriptor_ = file->message_type(14);
+  InvalidMsg_descriptor_ = file->message_type(15);
   static const int InvalidMsg_offsets_[1] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(InvalidMsg, msg_type_),
   };
@@ -354,6 +373,8 @@ inline void protobuf_AssignDescriptorsOnce() {
 
 void protobuf_RegisterTypes(const ::std::string&) {
   protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    AgentReport_descriptor_, &AgentReport::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     AgentReportReply_descriptor_, &AgentReportReply::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
@@ -389,6 +410,8 @@ void protobuf_RegisterTypes(const ::std::string&) {
 }  // namespace
 
 void protobuf_ShutdownFile_dcmd_5fagent_2eproto() {
+  delete AgentReport::default_instance_;
+  delete AgentReport_reflection_;
   delete AgentReportReply::default_instance_;
   delete AgentReportReply_reflection_;
   delete AgentMasterNoticeReply::default_instance_;
@@ -430,47 +453,49 @@ void protobuf_AddDesc_dcmd_5fagent_2eproto() {
   ::dcmd_api::protobuf_AddDesc_dcmd_5fcmn_2eproto();
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
     "\n\020dcmd_agent.proto\022\010dcmd_api\032\016dcmd_cmn.p"
-    "roto\"\250\001\n\020AgentReportReply\022\"\n\005state\030\001 \002(\016"
-    "2\023.dcmd_api.DcmdState\022\013\n\003err\030\002 \001(\t\022\020\n\010he"
-    "atbeat\030\003 \001(\005\022\024\n\014package_size\030\004 \001(\005\022\033\n\023op"
-    "r_queue_threshold\030\005 \001(\005\022\036\n\026opr_overflow_"
-    "threshold\030\006 \001(\005\"X\n\026AgentMasterNoticeRepl"
-    "y\022\013\n\003cmd\030\001 \003(\t\0221\n\017subtask_process\030\002 \003(\0132"
-    "\030.dcmd_api.SubTaskProcess\"\320\002\n\014AgentTaskC"
-    "md\022\013\n\003cmd\030\001 \002(\t\022\020\n\010task_cmd\030\002 \002(\t\022\014\n\004ctr"
-    "l\030\003 \002(\010\022\017\n\007task_id\030\004 \001(\t\022\022\n\nsubtask_id\030\005"
-    " \001(\t\022\n\n\002ip\030\006 \001(\t\022\020\n\010svr_name\030\007 \001(\t\022\020\n\010sv"
-    "r_pool\030\010 \001(\t\022\017\n\007svr_ver\030\t \001(\t\022\020\n\010svr_rep"
-    "o\030\n \001(\t\022\020\n\010svr_user\030\013 \001(\t\022\023\n\013svr_env_ver"
-    "\030\014 \001(\t\022\022\n\nupdate_env\030\r \001(\010\022\022\n\nupdate_ver"
-    "\030\016 \001(\010\022\026\n\016output_process\030\017 \001(\010\022\016\n\006script"
-    "\030\020 \001(\t\022$\n\010task_arg\030\021 \003(\0132\022.dcmd_api.KeyV"
-    "alue\" \n\021AgentTaskCmdReply\022\013\n\003cmd\030\001 \002(\t\"K"
-    "\n\023AgentSubTaskProcess\022\017\n\007task_id\030\001 \002(\t\022\022"
-    "\n\nsubtask_id\030\002 \002(\t\022\017\n\007process\030\003 \002(\t\"r\n\017A"
-    "gentTaskResult\022\013\n\003cmd\030\001 \002(\t\022\017\n\007task_id\030\002"
-    " \002(\t\022\022\n\nsubtask_id\030\003 \002(\t\022\017\n\007success\030\004 \002("
-    "\010\022\013\n\003err\030\005 \001(\t\022\017\n\007process\030\006 \001(\t\"#\n\024Agent"
-    "TaskResultReply\022\013\n\003cmd\030\001 \002(\t\"\222\001\n\013AgentOp"
-    "rCmd\022\016\n\006opr_id\030\001 \002(\t\022\014\n\004name\030\002 \002(\t\022\020\n\010pr"
-    "iority\030\003 \002(\005\022\020\n\010run_user\030\004 \002(\t\022\017\n\007timeou"
-    "t\030\005 \002(\005\022\016\n\006script\030\006 \002(\t\022 \n\004args\030\007 \003(\0132\022."
-    "dcmd_api.KeyValue\"A\n\017AgentTaskOutput\022\022\n\n"
-    "subtask_id\030\001 \002(\t\022\016\n\006offset\030\002 \002(\005\022\n\n\002ip\030\003"
-    " \001(\t\"g\n\024AgentTaskOutputReply\022\"\n\005state\030\001 "
-    "\002(\0162\023.dcmd_api.DcmdState\022\016\n\006result\030\002 \002(\t"
-    "\022\016\n\006offset\030\003 \002(\005\022\013\n\003err\030\004 \001(\t\"0\n\020AgentRu"
-    "nningTask\022\n\n\002ip\030\001 \001(\t\022\020\n\010svr_name\030\002 \001(\t\""
-    "o\n\025AgentRunningTaskReply\022\"\n\005state\030\001 \002(\0162"
-    "\023.dcmd_api.DcmdState\022%\n\006result\030\002 \003(\0132\025.d"
-    "cmd_api.SubTaskInfo\022\013\n\003err\030\003 \001(\t\"\035\n\017Agen"
-    "tRunningOpr\022\n\n\002ip\030\001 \001(\t\"j\n\024AgentRunningO"
-    "prReply\022\"\n\005state\030\001 \002(\0162\023.dcmd_api.DcmdSt"
-    "ate\022!\n\006result\030\002 \003(\0132\021.dcmd_api.OprInfo\022\013"
-    "\n\003err\030\003 \001(\t\"\036\n\nInvalidMsg\022\020\n\010msg_type\030\001 "
-    "\002(\005B\021\n\017com.cwinux.dcmd", 1582);
+    "roto\"1\n\013AgentReport\022\017\n\007version\030\001 \002(\t\022\021\n\t"
+    "agent_ips\030\002 \003(\t\"\250\001\n\020AgentReportReply\022\"\n\005"
+    "state\030\001 \002(\0162\023.dcmd_api.DcmdState\022\013\n\003err\030"
+    "\002 \001(\t\022\020\n\010heatbeat\030\003 \001(\005\022\024\n\014package_size\030"
+    "\004 \001(\005\022\033\n\023opr_queue_threshold\030\005 \001(\005\022\036\n\026op"
+    "r_overflow_threshold\030\006 \001(\005\"X\n\026AgentMaste"
+    "rNoticeReply\022\013\n\003cmd\030\001 \003(\t\0221\n\017subtask_pro"
+    "cess\030\002 \003(\0132\030.dcmd_api.SubTaskProcess\"\320\002\n"
+    "\014AgentTaskCmd\022\013\n\003cmd\030\001 \002(\t\022\020\n\010task_cmd\030\002"
+    " \002(\t\022\014\n\004ctrl\030\003 \002(\010\022\017\n\007task_id\030\004 \001(\t\022\022\n\ns"
+    "ubtask_id\030\005 \001(\t\022\n\n\002ip\030\006 \001(\t\022\020\n\010svr_name\030"
+    "\007 \001(\t\022\020\n\010svr_pool\030\010 \001(\t\022\017\n\007svr_ver\030\t \001(\t"
+    "\022\020\n\010svr_repo\030\n \001(\t\022\020\n\010svr_user\030\013 \001(\t\022\023\n\013"
+    "svr_env_ver\030\014 \001(\t\022\022\n\nupdate_env\030\r \001(\010\022\022\n"
+    "\nupdate_ver\030\016 \001(\010\022\026\n\016output_process\030\017 \001("
+    "\010\022\016\n\006script\030\020 \001(\t\022$\n\010task_arg\030\021 \003(\0132\022.dc"
+    "md_api.KeyValue\" \n\021AgentTaskCmdReply\022\013\n\003"
+    "cmd\030\001 \002(\t\"K\n\023AgentSubTaskProcess\022\017\n\007task"
+    "_id\030\001 \002(\t\022\022\n\nsubtask_id\030\002 \002(\t\022\017\n\007process"
+    "\030\003 \002(\t\"r\n\017AgentTaskResult\022\013\n\003cmd\030\001 \002(\t\022\017"
+    "\n\007task_id\030\002 \002(\t\022\022\n\nsubtask_id\030\003 \002(\t\022\017\n\007s"
+    "uccess\030\004 \002(\010\022\013\n\003err\030\005 \001(\t\022\017\n\007process\030\006 \001"
+    "(\t\"#\n\024AgentTaskResultReply\022\013\n\003cmd\030\001 \002(\t\""
+    "\222\001\n\013AgentOprCmd\022\016\n\006opr_id\030\001 \002(\t\022\014\n\004name\030"
+    "\002 \002(\t\022\020\n\010priority\030\003 \002(\005\022\020\n\010run_user\030\004 \002("
+    "\t\022\017\n\007timeout\030\005 \002(\005\022\016\n\006script\030\006 \002(\t\022 \n\004ar"
+    "gs\030\007 \003(\0132\022.dcmd_api.KeyValue\"A\n\017AgentTas"
+    "kOutput\022\022\n\nsubtask_id\030\001 \002(\t\022\016\n\006offset\030\002 "
+    "\002(\005\022\n\n\002ip\030\003 \001(\t\"g\n\024AgentTaskOutputReply\022"
+    "\"\n\005state\030\001 \002(\0162\023.dcmd_api.DcmdState\022\016\n\006r"
+    "esult\030\002 \002(\t\022\016\n\006offset\030\003 \002(\005\022\013\n\003err\030\004 \001(\t"
+    "\"0\n\020AgentRunningTask\022\n\n\002ip\030\001 \001(\t\022\020\n\010svr_"
+    "name\030\002 \001(\t\"o\n\025AgentRunningTaskReply\022\"\n\005s"
+    "tate\030\001 \002(\0162\023.dcmd_api.DcmdState\022%\n\006resul"
+    "t\030\002 \003(\0132\025.dcmd_api.SubTaskInfo\022\013\n\003err\030\003 "
+    "\001(\t\"\035\n\017AgentRunningOpr\022\n\n\002ip\030\001 \001(\t\"j\n\024Ag"
+    "entRunningOprReply\022\"\n\005state\030\001 \002(\0162\023.dcmd"
+    "_api.DcmdState\022!\n\006result\030\002 \003(\0132\021.dcmd_ap"
+    "i.OprInfo\022\013\n\003err\030\003 \001(\t\"\036\n\nInvalidMsg\022\020\n\010"
+    "msg_type\030\001 \002(\005B\021\n\017com.cwinux.dcmd", 1633);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "dcmd_agent.proto", &protobuf_RegisterTypes);
+  AgentReport::default_instance_ = new AgentReport();
   AgentReportReply::default_instance_ = new AgentReportReply();
   AgentMasterNoticeReply::default_instance_ = new AgentMasterNoticeReply();
   AgentTaskCmd::default_instance_ = new AgentTaskCmd();
@@ -486,6 +511,7 @@ void protobuf_AddDesc_dcmd_5fagent_2eproto() {
   AgentRunningOpr::default_instance_ = new AgentRunningOpr();
   AgentRunningOprReply::default_instance_ = new AgentRunningOprReply();
   InvalidMsg::default_instance_ = new InvalidMsg();
+  AgentReport::default_instance_->InitAsDefaultInstance();
   AgentReportReply::default_instance_->InitAsDefaultInstance();
   AgentMasterNoticeReply::default_instance_->InitAsDefaultInstance();
   AgentTaskCmd::default_instance_->InitAsDefaultInstance();
@@ -510,6 +536,278 @@ struct StaticDescriptorInitializer_dcmd_5fagent_2eproto {
     protobuf_AddDesc_dcmd_5fagent_2eproto();
   }
 } static_descriptor_initializer_dcmd_5fagent_2eproto_;
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
+const int AgentReport::kVersionFieldNumber;
+const int AgentReport::kAgentIpsFieldNumber;
+#endif  // !_MSC_VER
+
+AgentReport::AgentReport()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+}
+
+void AgentReport::InitAsDefaultInstance() {
+}
+
+AgentReport::AgentReport(const AgentReport& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+}
+
+void AgentReport::SharedCtor() {
+  _cached_size_ = 0;
+  version_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+AgentReport::~AgentReport() {
+  SharedDtor();
+}
+
+void AgentReport::SharedDtor() {
+  if (version_ != &::google::protobuf::internal::kEmptyString) {
+    delete version_;
+  }
+  if (this != default_instance_) {
+  }
+}
+
+void AgentReport::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* AgentReport::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return AgentReport_descriptor_;
+}
+
+const AgentReport& AgentReport::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_dcmd_5fagent_2eproto();  return *default_instance_;
+}
+
+AgentReport* AgentReport::default_instance_ = NULL;
+
+AgentReport* AgentReport::New() const {
+  return new AgentReport;
+}
+
+void AgentReport::Clear() {
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (has_version()) {
+      if (version_ != &::google::protobuf::internal::kEmptyString) {
+        version_->clear();
+      }
+    }
+  }
+  agent_ips_.Clear();
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool AgentReport::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) return false
+  ::google::protobuf::uint32 tag;
+  while ((tag = input->ReadTag()) != 0) {
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // required string version = 1;
+      case 1: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_version()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+            this->version().data(), this->version().length(),
+            ::google::protobuf::internal::WireFormat::PARSE);
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(18)) goto parse_agent_ips;
+        break;
+      }
+      
+      // repeated string agent_ips = 2;
+      case 2: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_agent_ips:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->add_agent_ips()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+            this->agent_ips(0).data(), this->agent_ips(0).length(),
+            ::google::protobuf::internal::WireFormat::PARSE);
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(18)) goto parse_agent_ips;
+        if (input->ExpectAtEnd()) return true;
+        break;
+      }
+      
+      default: {
+      handle_uninterpreted:
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          return true;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+  return true;
+#undef DO_
+}
+
+void AgentReport::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // required string version = 1;
+  if (has_version()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->version().data(), this->version().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    ::google::protobuf::internal::WireFormatLite::WriteString(
+      1, this->version(), output);
+  }
+  
+  // repeated string agent_ips = 2;
+  for (int i = 0; i < this->agent_ips_size(); i++) {
+  ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+    this->agent_ips(i).data(), this->agent_ips(i).length(),
+    ::google::protobuf::internal::WireFormat::SERIALIZE);
+    ::google::protobuf::internal::WireFormatLite::WriteString(
+      2, this->agent_ips(i), output);
+  }
+  
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+}
+
+::google::protobuf::uint8* AgentReport::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // required string version = 1;
+  if (has_version()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->version().data(), this->version().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        1, this->version(), target);
+  }
+  
+  // repeated string agent_ips = 2;
+  for (int i = 0; i < this->agent_ips_size(); i++) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->agent_ips(i).data(), this->agent_ips(i).length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteStringToArray(2, this->agent_ips(i), target);
+  }
+  
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  return target;
+}
+
+int AgentReport::ByteSize() const {
+  int total_size = 0;
+  
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // required string version = 1;
+    if (has_version()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->version());
+    }
+    
+  }
+  // repeated string agent_ips = 2;
+  total_size += 1 * this->agent_ips_size();
+  for (int i = 0; i < this->agent_ips_size(); i++) {
+    total_size += ::google::protobuf::internal::WireFormatLite::StringSize(
+      this->agent_ips(i));
+  }
+  
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void AgentReport::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const AgentReport* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const AgentReport*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void AgentReport::MergeFrom(const AgentReport& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  agent_ips_.MergeFrom(from.agent_ips_);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_version()) {
+      set_version(from.version());
+    }
+  }
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void AgentReport::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void AgentReport::CopyFrom(const AgentReport& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool AgentReport::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
+  
+  return true;
+}
+
+void AgentReport::Swap(AgentReport* other) {
+  if (other != this) {
+    std::swap(version_, other->version_);
+    agent_ips_.Swap(&other->agent_ips_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata AgentReport::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = AgentReport_descriptor_;
+  metadata.reflection = AgentReport_reflection_;
+  return metadata;
+}
 
 
 // ===================================================================
