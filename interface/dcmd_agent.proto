@@ -2,6 +2,11 @@ package dcmd_api;
 option java_package = "com.cwinux.dcmd";
 import "dcmd_cmn.proto";
 
+message AgentReport {
+  required string      version = 1;
+  repeated string      agent_ips = 2;
+}
+
 message AgentReportReply {
   required DcmdState   state = 1; 
   optional string      err = 2; 
