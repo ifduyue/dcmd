@@ -123,16 +123,16 @@ bool DcmdCenterTaskMgr::ReceiveCmd(DcmdTss* tss,
       break;
     case dcmd_api::CMD_FREEZE_TASK:
       state = TaskCmdFreezeTask(task, strtoul(cmd.task_id().c_str(), NULL, 10),
-        cmd.uid(), NULL);
+        cmd.uid());
       break;
     case dcmd_api::CMD_UNFREEZE_TASK:
       state = TaskCmdUnfreezeTask(task, strtoul(cmd.task_id().c_str(), NULL, 10),
-        cmd.uid(), NULL);
+        cmd.uid());
       break;
     case dcmd_api::CMD_UPDATE_TASK:
       state = TaskCmdUpdateTask(task, strtoul(cmd.task_id().c_str(), NULL, 10),
         cmd.concurrent_num(), cmd.concurrent_rate(), cmd.task_timeout(),
-        cmd.auto_(), cmd.uid(), NULL);
+        cmd.auto_(), cmd.uid());
       break;
     default:
       state = dcmd_api::DCMD_STATE_FAILED;
@@ -534,13 +534,13 @@ bool DcmdCenterTaskMgr::LoadAllCmd(DcmdTss* tss) {
       state = TaskCmdIgnoreSubtask(task, cmd->subtask_id_, 0, &cmd);
       break;
     case dcmd_api::CMD_FREEZE_TASK:
-      state = TaskCmdFreezeTask(task, cmd->task_id_, 0, &cmd);
+      CWX_ASSERT(0);
       break;
     case dcmd_api::CMD_UNFREEZE_TASK:
-      state = TaskCmdUnfreezeTask(task, cmd->task_id_, 0, &cmd);
+      CWX_ASSERT(0);
       break;
     case dcmd_api::CMD_UPDATE_TASK:
-      state = dcmd_api::DCMD_STATE_SUCCESS;
+      CWX_ASSERT(0);
       break;
     default:
       state = dcmd_api::DCMD_STATE_FAILED;
@@ -1079,6 +1079,25 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdAddTaskNode(DcmdTss* tss, uint32_t
     "values(%s, %u, '%s', '%s', '%s', '%s', %u, 0, now(), now(), '', '', now(), now(), %u)",
     task_id, str_task_cmd.c_str(), str_svr_pool.c_str(), str_service.c_str(), str_ip.c_str(),
     dcmd_api::SUBTASK_INIT, uid);
+  if (!cmd) {
+    // 插入start的命令
+    if (!InsertCommand(tss, false, uid, task->task_id_,
+      0, "", 0, task->service_.c_str(), "", dcmd_api::CMD_RETRY_TASK,
+      dcmd_api::COMMAND_SUCCESS, ""))
+    {
+      CWX_ERROR((tss->err_msg_.c_str()));
+      mysql_->rollback();
+      mysql_->disconnect();
+      return dcmd_api::DCMD_STATE_FAILED;
+    }
+  } else {
+    if (!UpdateCmdState(tss, false, cmd->cmd_id_, dcmd_api::COMMAND_SUCCESS, "")) {
+      CWX_ERROR((tss->err_msg_.c_str()));
+      mysql_->rollback();
+      mysql_->disconnect();
+      return dcmd_api::DCMD_STATE_FAILED;
+    }
+  }
   if (-1 == mysql_->execute(tss->sql_)) {
     tss->err_msg_ = string("Failure to exec sql, err:") + mysql_->getErrMsg(),
       + ". sql:" + tss->sql_;
@@ -1182,22 +1201,96 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdIgnoreSubtask(DcmdTss* tss, uint64
 }
 
 dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdFreezeTask(DcmdTss* tss,  uint32_t task_id,
-  uint32_t uid, DcmdCenterCmd** cmd)
+  uint32_t uid)
 {
-
+  DcmdCenterTask* task = GetTask(task_id);
+  if (!task) {
+    tss->err_msg_ = "No task.";
+    return dcmd_api::DCMD_STATE_NO_TASK;
+  }
+  if (task->is_freezed_) return dcmd_api::DCMD_STATE_SUCCESS;
+  CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
+    "update task set freeze=1 where task_id = %u", task->task_id_);
+  if (!ExecSql(tss, false)) {
+    CWX_ERROR((tss->err_msg_.c_str()));
+    mysql_->rollback();
+    mysql_->disconnect();
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
+  // 插入start的命令
+  if (!InsertCommand(tss, true, uid, task->task_id_,
+    0, "", 0, task->service_.c_str(), "", dcmd_api::CMD_FREEZE_TASK,
+    dcmd_api::COMMAND_SUCCESS, ""))
+  {
+    CWX_ERROR((tss->err_msg_.c_str()));
+    mysql_->rollback();
+    mysql_->disconnect();
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
+  task->is_freezed_ = false;
+  return dcmd_api::DCMD_STATE_SUCCESS;
 }
 
 dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdUnfreezeTask(DcmdTss* tss, uint32_t task_id,
-  uint32_t uid, DcmdCenterCmd** cmd)
+  uint32_t uid)
 {
-
+  DcmdCenterTask* task = GetTask(task_id);
+  if (!task) {
+    tss->err_msg_ = "No task.";
+    return dcmd_api::DCMD_STATE_NO_TASK;
+  }
+  if (!task->is_freezed_) return dcmd_api::DCMD_STATE_SUCCESS;
+  CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
+    "update task set freeze=0 where task_id = %u", task->task_id_);
+  if (!ExecSql(tss, false)) {
+    CWX_ERROR((tss->err_msg_.c_str()));
+    mysql_->rollback();
+    mysql_->disconnect();
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
+  // 插入start的命令
+  if (!InsertCommand(tss, true, uid, task->task_id_,
+    0, "", 0, task->service_.c_str(), "", dcmd_api::CMD_UNFREEZE_TASK,
+    dcmd_api::COMMAND_SUCCESS, ""))
+  {
+    CWX_ERROR((tss->err_msg_.c_str()));
+    mysql_->rollback();
+    mysql_->disconnect();
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
+  task->is_freezed_ = false;
+  return dcmd_api::DCMD_STATE_SUCCESS;
 }
 
 dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdUpdateTask(DcmdTss* tss, uint32_t task_id,
-  uint32_t con_num, uint32_t con_rate, uint32_t timeout, bool is_auto,
-  uint32_t uid, DcmdCenterCmd** cmd)
+  uint32_t con_num, uint32_t con_rate, uint32_t timeout, bool is_auto, uint32_t uid)
 {
-
+  DcmdCenterTask* task = GetTask(task_id);
+  if (!task) {
+    tss->err_msg_ = "No task.";
+    return dcmd_api::DCMD_STATE_NO_TASK;
+  }
+  if (!UpdateTaskInfo(tss, false, task_id, con_num, con_rate, timeout, is_auto, uid)) {
+    CWX_ERROR((tss->err_msg_.c_str()));
+    mysql_->rollback();
+    mysql_->disconnect();
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
+  // 插入start的命令
+  if (!InsertCommand(tss, true, uid, task->task_id_,
+    0, "", 0, task->service_.c_str(), "", dcmd_api::CMD_UPDATE_TASK,
+    dcmd_api::COMMAND_SUCCESS, ""))
+  {
+    CWX_ERROR((tss->err_msg_.c_str()));
+    mysql_->disconnect();
+    is_success = false;
+    break;
+  }
+  task->max_current_num_ = con_num;
+  task->max_current_rate_ = con_rate;
+  task->timeout_ = timeout;
+  task->is_auto_ = is_auto;
+  return dcmd_api::DCMD_STATE_SUCCESS;
 }
 
 }  // dcmd

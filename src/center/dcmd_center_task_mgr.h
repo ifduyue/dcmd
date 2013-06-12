@@ -99,14 +99,14 @@ class DcmdCenterTaskMgr{
     uint32_t uid, DcmdCenterCmd** cmd);
   // 冻结任务的执行
   dcmd_api::DcmdState TaskCmdFreezeTask(DcmdTss* tss,  uint32_t task_id,
-   uint32_t uid, DcmdCenterCmd** cmd);
+   uint32_t uid);
   // 解除对一个任务的冻结
   dcmd_api::DcmdState TaskCmdUnfreezeTask(DcmdTss* tss, uint32_t task_id,
-    uint32_t uid, DcmdCenterCmd** cmd);
+    uint32_t uid);
   // 通知任务信息改变
   dcmd_api::DcmdState TaskCmdUpdateTask(DcmdTss* tss, uint32_t task_id,
     uint32_t con_num, uint32_t con_rate, uint32_t timeout, bool is_auto,
-    uint32_t uid, DcmdCenterCmd** cmd);
+    uint32_t uid);
   // 加载所有的数据
   bool LoadAllDataFromDb(DcmdTss* tss);
   // 从数据库中获取新task
@@ -159,6 +159,10 @@ class DcmdCenterTaskMgr{
    // 更新命令的状态
    inline bool UpdateCmdState(DcmdTss* tss, bool is_commit,
      uint64_t cmd_id, uint8_t state, char const* err_msg);
+   // 更新任务的信息
+   inline bool UpdateTaskInfo(DcmdTss* tss, bool is_commit,uint32_t task_id,
+     uint32_t con_num, uint32_t con_rate, uint32_t timeout, bool is_auto,
+     uint32_t uid);
    // 创建任务的子任务
    inline bool CreateSubtasksForTask(DcmdTss* tss, DcmdCenterTask* task,
      bool is_commit, uint32_t uid);

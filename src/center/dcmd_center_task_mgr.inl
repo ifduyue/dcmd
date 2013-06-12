@@ -125,6 +125,31 @@ inline bool DcmdCenterTaskMgr::UpdateCmdState(DcmdTss* tss, bool is_commit,
   return true;
 }
 
+inline bool DcmdCenterTaskMgr::UpdateTaskInfo(DcmdTss* tss, bool is_commit,
+  uint32_t task_id, uint32_t con_num, uint32_t con_rate, uint32_t timeout,
+  bool is_auto, uint32_t uid)
+{
+  CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
+    "update task set concurrent_num=%d, concurrent_rate=%d, timeout=%d, auto=%d,"\
+    "opr_uid=%d, utime=now() where task_id=%u",
+    con_num, con_rate, timeout, is_auto?1:0, uid, task_id);
+  if (-1 == mysql_->execute(tss->sql_)) {
+    tss->err_msg_ = string("Failure to exec sql, err:") + mysql_->getErrMsg(),
+      + ". sql:" + tss->sql_;
+    CWX_ERROR((tss->err_msg_.c_str()));
+    mysql_->rollback();
+    return false;
+  }
+  if (is_commit && !mysql_->commit()) {
+    tss->err_msg_ = string("Failure to commit sql, err:") + mysql_->getErrMsg(),
+      + ". sql:" + tss->sql_;
+    CWX_ERROR((tss->err_msg.c_str()));
+    mysql_->rollback();
+    return false;
+  }
+  return true;
+}
+
 // 创建任务的子任务
 inline bool DcmdCenterTaskMgr::CreateSubtasksForTask(DcmdTss* tss, DcmdCenterTask* task,
   bool is_commit, uint32_t uid)
