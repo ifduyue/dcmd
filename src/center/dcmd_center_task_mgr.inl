@@ -259,9 +259,6 @@ inline void DcmdCenterTaskMgr::RemoveTaskFromMem(DcmdCenterTask* task) {
       if (subtasks_iter->second->exec_cmd_){
         RemoveCmd(subtasks_iter->second->exec_cmd_);
       }
-      if (subtasks_iter->second->cancel_cmd_){
-        RemoveCmd(subtasks_iter->second->cancel_cmd_);
-      }
       all_subtasks_.erase(subtasks_iter->second->subtask_id_);
       delete subtasks_iter->second;
       subtasks_iter++;
@@ -283,8 +280,6 @@ inline void DcmdCenterTaskMgr::RemoveCmd(DcmdCenterCmd* cmd) {
   if (cmd->subtask_) {
     if (cmd->subtask_->exec_cmd_ == cmd) {
       cmd->subtask_->exec_cmd_ = NULL;
-    } else if ( cmd->subtask_->cancel_cmd_ == cmd) {
-      cmd->subtask_->cancel_cmd_ = NULL;
     }
   }
   delete cmd;

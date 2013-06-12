@@ -57,22 +57,20 @@ class DcmdCenterTaskMgr{
   void Reset();
   // 启动任务
   dcmd_api::DcmdState TaskCmdStartTask(DcmdTss* tss, uint32_t task_id,
-    uint32_t uid, DcmdCenterCmd** cmd);
+    uint32_t uid);
   // 暂停任务
-  dcmd_api::DcmdState TaskCmdPauseTask(DcmdTss* tss, uint32_t task_id,
-    uint32_t uid, DcmdCenterCmd** cmd);
+  dcmd_api::DcmdState TaskCmdPauseTask(DcmdTss* tss, uint32_t task_id, uint32_t uid);
   // 继续任务
-  dcmd_api::DcmdState TaskCmdResumeTask(DcmdTss* tss, uint32_t task_id,
-    uint32_t uid, DcmdCenterCmd** cmd);
+  dcmd_api::DcmdState TaskCmdResumeTask(DcmdTss* tss, uint32_t task_id, uint32_t uid);
   // 重试任务
   dcmd_api::DcmdState TaskCmdRetryTask(DcmdTss* tss, uint32_t task_id,
-    uint32_t uid, DcmdCenterCmd** cmd);
+    uint32_t uid);
   // 完成任务
   dcmd_api::DcmdState TaskCmdFinishTask(DcmdTss* tss, uint32_t task_id,
-    uint32_t uid, DcmdCenterCmd** cmd);
+    uint32_t uid);
   // 添加新任务节点
   dcmd_api::DcmdState TaskCmdAddTaskNode(DcmdTss* tss, uint32_t task_id,
-    char const* svr_pool, char const* ip, uint32_t uid, DcmdCenterCmd** cmd);
+    char const* svr_pool, char const* ip, uint32_t uid);
   // cancel具体subtask的执行
   dcmd_api::DcmdState TaskCmdCancelSubtask(DcmdTss* tss, uint64_t subtask_id,
     uint32_t uid, DcmdCenterCmd** cmd);

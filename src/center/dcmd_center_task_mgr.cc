@@ -67,28 +67,27 @@ bool DcmdCenterTaskMgr::ReceiveCmd(DcmdTss* tss,
   } else {
     switch(cmd.cmd_type()) {
     case dcmd_api::CMD_START_TASK:
-      state = TaskCmdStartTask(tss, strtoul(cmd.task_id().c_str(), NULL, 10),
-        cmd.uid(), NULL);
+      state = TaskCmdStartTask(tss, strtoul(cmd.task_id().c_str(), NULL, 10), cmd.uid());
       break;
     case dcmd_api::CMD_PAUSE_TASK:
       state =TaskCmdPauseTask(tss, strtoul(cmd.task_id().c_str(), NULL, 10),
-        cmd.uid(), NULL);
+        cmd.uid());
       break;
     case dcmd_api::CMD_RESUME_TASK:
       state = TaskCmdResumeTask(tss, strtoul(cmd.task_id().c_str(), NULL, 10),
-        cmd.uid(), NULL);
+        cmd.uid());
       break;
     case dcmd_api::CMD_RETRY_TASK:
       state = TaskCmdRetryTask(tss, strtoul(cmd.task_id().c_str(), NULL, 10),
-        cmd.uid(), NULL);
+        cmd.uid());
       break;
     case dcmd_api::CMD_FINISH_TASK:
       state = TaskCmdFinishTask(tss, strtoul(cmd.task_id().c_str(), NULL, 10),
-        cmd.uid(), NULL);
+        cmd.uid());
       break;
     case dcmd_api::CMD_ADD_NODE:
       state = TaskCmdAddTaskNode(tss, strtoul(cmd.task_id().c_str(), NULL, 10),
-        cmd.ip().c_str(), cmd.svr_pool().c_str(), cmd.uid(), NULL);
+        cmd.ip().c_str(), cmd.svr_pool().c_str(), cmd.uid());
     case dcmd_api::CMD_CANCEL_SUBTASK:
       state = TaskCmdCancelSubtask(tss, strtoull(cmd.subtask_id().c_str(), NULL, 10),
         cmd.uid(), NULL);
@@ -489,22 +488,22 @@ bool DcmdCenterTaskMgr::LoadAllCmd(DcmdTss* tss) {
     cmd = iter->second;
     switch (cmd->cmd_type_) {
     case dcmd_api::CMD_START_TASK:
-      state = TaskCmdStartTask(tss,  cmd->task_id_, 0, &cmd);
+      CWX_ASSERT(0);
       break;
     case dcmd_api::CMD_PAUSE_TASK:
-      state =TaskCmdPauseTask(tss, cmd->task_id_, 0, &cmd);
+      CWX_ASSERT(0);
       break;
     case dcmd_api::CMD_RESUME_TASK:
-      state = TaskCmdResumeTask(tss, cmd->task_id_, 0, &cmd);
+      CWX_ASSERT(0);
       break;
     case dcmd_api::CMD_RETRY_TASK:
-      state = TaskCmdRetryTask(tss, cmd->task_id_, 0, &cmd);
+      CWX_ASSERT(0);
       break;
     case dcmd_api::CMD_FINISH_TASK:
-      state = TaskCmdFinishTask(tss, cmd->task_id_, 0, &cmd);
+      CWX_ASSERT(0);
       break;
     case dcmd_api::CMD_ADD_NODE:
-      state = TaskCmdAddTaskNode(tss, cmd->task_id_, cmd->agent_ip_.c_str(), cmd->svr_pool_.c_str(), 0, &cmd);
+      CWX_ASSERT(0);
       break;
     case dcmd_api::CMD_CANCEL_SUBTASK:
       state = TaskCmdCancelSubtask(tss, cmd->subtask_id_, 0, &cmd);
@@ -733,68 +732,55 @@ int DcmdCenterTaskMgr::FetchTaskCmdInfoFromDb(DcmdTss* tss, , char const* task_c
 }
 
 dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdStartTask(DcmdTss* tss, uint32_t task_id,
-  uint32_t uid, DcmdCenterCmd** cmd) {
-    DcmdCenterTask* task = NULL;
-    // 加载任务
-    if (!LoadNewTask(tss)) {
-      mysql_->disconnect();
-      return dcmd_api::DCMD_STATE_FAILED;
-    }
-    task = GetTask(task_id);
-    if (!task) {
-      tss->err_msg_ = "No task.";
-      return dcmd_api::DCMD_STATE_NO_TASK;
-    }
-    if (!task->is_valid_) {
-      tss->err_msg_ = "Task is invalid.";
-      return dcmd_api::DCMD_STATE_FAILED;
-    }
-    if (dcmd_api::TASK_INIT != task->state_) {
-      tss->err_msg_ = "Task is started.";
-      return dcmd_api::DCMD_STATE_FAILED;
-    }
-    bool is_success = true;
-    do {
-      if (!CreateSubtasksForTask(tss, task, false, uid)){
-        mysql_->disconnect();
-        is_success = false;
-        break;
-      }
-      if (!cmd) {
-        // 插入start的命令
-        if (!InsertCommand(tss, false, uid, task->task_id_,
-          0, "", 0, task->service_.c_str(), "", dcmd_api::CMD_START_TASK, 
-          dcmd_api::COMMAND_SUCCESS, ""))
-        {
-          mysql_->disconnect();
-          is_success = false;
-          break;
-        }
-      } else {
-        if (!UpdateCmdState(tss, false, cmd->cmd_id_, dcmd_api::COMMAND_SUCCESS, "")) {
-          mysql_->disconnect();
-          is_success = false;
-          break;
-        }
-      }
-      // 更新任务状态
-      if (!UpdateTaskState(tss, true, task->task_id_, dcmd_api::TASK_DOING)) {
-        mysql_->disconnect();
-        is_success = false;
-        break;
-      }
-    } while(0);
-    if (!is_success) return dcmd_api::DCMD_STATE_FAILED;
-    task->state_ = dcmd_api::TASK_DOING;
-    if (!LoadNewSubtask(tss)) {
-      mysql_->disconnect();
-      return dcmd_api::DCMD_STATE_FAILED;
-    }
-    return dcmd_api::DCMD_STATE_SUCCESS;
+  uint32_t uid)
+{
+  DcmdCenterTask* task = NULL;
+  // 加载任务
+  if (!LoadNewTask(tss)) {
+    mysql_->disconnect();
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
+  task = GetTask(task_id);
+  if (!task) {
+    tss->err_msg_ = "No task.";
+    return dcmd_api::DCMD_STATE_NO_TASK;
+  }
+  if (!task->is_valid_) {
+    tss->err_msg_ = "Task is invalid.";
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
+  if (dcmd_api::TASK_INIT != task->state_) {
+    tss->err_msg_ = "Task is started.";
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
+  if (!CreateSubtasksForTask(tss, task, false, uid)){
+    mysql_->disconnect();
+    is_success = false;
+    break;
+  }
+  // 插入start的命令
+  if (!InsertCommand(tss, false, uid, task->task_id_,
+    0, "", 0, task->service_.c_str(), "", dcmd_api::CMD_START_TASK, 
+    dcmd_api::COMMAND_SUCCESS, ""))
+  {
+    mysql_->disconnect();
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
+  // 更新任务状态
+  if (!UpdateTaskState(tss, true, task->task_id_, dcmd_api::TASK_DOING)) {
+    mysql_->disconnect();
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
+  task->state_ = dcmd_api::TASK_DOING;
+  if (!LoadNewSubtask(tss)) {
+    mysql_->disconnect();
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
+  return dcmd_api::DCMD_STATE_SUCCESS;
 }
 
 dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdPauseTask(DcmdTss* tss, uint32_t task_id,
-  uint32_t uid, DcmdCenterCmd** cmd)
+  uint32_t uid)
 {
   DcmdCenterTask* task =  GetTask(task_id);
   // 加载任务
@@ -810,41 +796,27 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdPauseTask(DcmdTss* tss, uint32_t t
     return dcmd_api::DCMD_STATE_NO_TASK;
   }
   if (task->is_pause_) return dcmd_api::DCMD_STATE_SUCCESS;
-  bool is_success = true;
-  do {
-    if (!cmd) {
-      // 插入start的命令
-      if (!InsertCommand(tss, false, uid, task->task_id_,
-        0, "", 0, task->service_.c_str(), "", dcmd_api::CMD_PAUSE_TASK,
-        dcmd_api::COMMAND_SUCCESS, ""))
-      {
-        mysql_->disconnect();
-        is_success = false;
-        break;
-      }
-    } else {
-      if (!UpdateCmdState(tss, false, cmd->cmd_id_, dcmd_api::COMMAND_SUCCESS, "")) {
-        mysql_->disconnect();
-        is_success = false;
-        break;
-      }
-    }
-    // 更新任务状态
-    CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
-      "update task set pause=1 where task_id = %u", task->task_id_);
-    if (!ExecSql(tss, true)) {
-      mysql_->disconnect();
-      is_success = false;
-      break;
-    }
-  }while(0);
-  if (!is_success) return dcmd_api::DCMD_STATE_FAILED;
+  // 插入start的命令
+  if (!InsertCommand(tss, false, uid, task->task_id_,
+    0, "", 0, task->service_.c_str(), "", dcmd_api::CMD_PAUSE_TASK,
+    dcmd_api::COMMAND_SUCCESS, ""))
+  {
+    mysql_->disconnect();
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
+  // 更新任务状态
+  CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
+    "update task set pause=1 where task_id = %u", task->task_id_);
+  if (!ExecSql(tss, true)) {
+    mysql_->disconnect();
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
   task->is_pause_ = true;
   return dcmd_api::DCMD_STATE_SUCCESS;
 }
 
 dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdResumeTask(DcmdTss* tss, uint32_t task_id,
-  uint32_t uid, DcmdCenterCmd** cmd)
+  uint32_t uid)
 {
   DcmdCenterTask* task =  GetTask(task_id);
   // 加载任务
@@ -860,41 +832,27 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdResumeTask(DcmdTss* tss, uint32_t 
     return dcmd_api::DCMD_STATE_NO_TASK;
   }
   if (!task->is_pause_) return dcmd_api::DCMD_STATE_SUCCESS;
-  bool is_success = true;
-  do {
-    if (!cmd) {
-      // 插入start的命令
-      if (!InsertCommand(tss, false, uid, task->task_id_,
-        0, "", 0, task->service_.c_str(), "", dcmd_api::CMD_RESUME_TASK,
-        dcmd_api::COMMAND_SUCCESS, ""))
-      {
-        mysql_->disconnect();
-        is_success = false;
-        break;
-      }
-    } else {
-      if (!UpdateCmdState(tss, false, cmd->cmd_id_, dcmd_api::COMMAND_SUCCESS, "")) {
-        mysql_->disconnect();
-        is_success = false;
-        break;
-      }
-    }
-    // 更新任务状态
-    CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
-      "update task set pause=0 where task_id = %u", task->task_id_);
-    if (!ExecSql(tss, true)) {
-      mysql_->disconnect();
-      is_success = false;
-      break;
-    }
-  }while(0);
-  if (!is_success) return dcmd_api::DCMD_STATE_FAILED;
+  // 插入start的命令
+  if (!InsertCommand(tss, false, uid, task->task_id_,
+    0, "", 0, task->service_.c_str(), "", dcmd_api::CMD_RESUME_TASK,
+    dcmd_api::COMMAND_SUCCESS, ""))
+  {
+    mysql_->disconnect();
+    return dcmd_api::DCMD_STATE_SUCCESS;
+  }
+  // 更新任务状态
+  CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
+    "update task set pause=0 where task_id = %u", task->task_id_);
+  if (!ExecSql(tss, true)) {
+    mysql_->disconnect();
+    return dcmd_api::DCMD_STATE_SUCCESS;
+  }
   task->is_pause_ = false;
   return dcmd_api::DCMD_STATE_SUCCESS;
 }
 
 dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdRetryTask(DcmdTss* tss, uint32_t task_id,
-  uint32_t uid, DcmdCenterCmd** cmd)
+  uint32_t uid)
 {
   DcmdCenterTask* task =  GetTask(task_id);
   // 加载任务
@@ -910,34 +868,21 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdRetryTask(DcmdTss* tss, uint32_t t
     return dcmd_api::DCMD_STATE_NO_TASK;
   }
   if (task->is_valid_) return dcmd_api::DCMD_STATE_SUCCESS;
-  bool is_success = true;
-  string err_msg;
-  do {
-    if (!AnalizeTask(tss, task)) return false;
-    if (!cmd) {
-      // 插入start的命令
-      if (!InsertCommand(tss, false, uid, task->task_id_,
-        0, "", 0, task->service_.c_str(), "", dcmd_api::CMD_RETRY_TASK,
-        dcmd_api::COMMAND_SUCCESS, ""))
-      {
-        mysql_->disconnect();
-        is_success = false;
-        break;
-      }
-    } else {
-      if (!UpdateCmdState(tss, false, cmd->cmd_id_, dcmd_api::COMMAND_SUCCESS, "")) {
-        mysql_->disconnect();
-        is_success = false;
-        break;
-      }
-    }
-  }while(0);
+  if (!AnalizeTask(tss, task)) return dcmd_api::DCMD_STATE_FAILED;
+  // 插入start的命令
+  if (!InsertCommand(tss, false, uid, task->task_id_,
+    0, "", 0, task->service_.c_str(), "", dcmd_api::CMD_RETRY_TASK,
+    dcmd_api::COMMAND_SUCCESS, ""))
+  {
+    mysql_->disconnect();
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
   if (!task->is_valid_) return dcmd_api::DCMD_STATE_FAILED;
   return dcmd_api::DCMD_STATE_SUCCESS;
 }
 
 dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdFinishTask(DcmdTss* tss, uint32_t task_id,
-  uint32_t uid, DcmdCenterCmd** cmd)
+  uint32_t uid)
 {
   DcmdCenterTask* task =  GetTask(task_id);
   // 加载任务
@@ -997,16 +942,10 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdFinishTask(DcmdTss* tss, uint32_t 
     CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
       "delete from task_node where task_id = %u", task_id);
     if (-1 == mysql_->execute(tss->sql_)) break;
-
-    if (!cmd) {
-      // 插入start的命令
-      if (!InsertCommand(tss, false, uid, task->task_id_,
-        0, "", 0, task->service_.c_str(), "", dcmd_api::CMD_RETRY_TASK,
-        dcmd_api::COMMAND_SUCCESS, "")) break;
-    } else {
-      if (!UpdateCmdState(tss, false, cmd->cmd_id_, dcmd_api::COMMAND_SUCCESS, ""))
-        break;
-    }
+    // 插入start的命令
+    if (!InsertCommand(tss, false, uid, task->task_id_,
+      0, "", 0, task->service_.c_str(), "", dcmd_api::CMD_RETRY_TASK,
+      dcmd_api::COMMAND_SUCCESS, "")) break;
     CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
       "delete from command_history where task_id = %u", task_id);
     if (-1 == mysql_->execute(tss->sql_)) break;
@@ -1041,7 +980,7 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdFinishTask(DcmdTss* tss, uint32_t 
 }
 
 dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdAddTaskNode(DcmdTss* tss, uint32_t task_id,
-  char const* ip, char const* svr_pool, uint32_t uid, DcmdCenterCmd** cmd)
+  char const* ip, char const* svr_pool, uint32_t uid)
 {
   DcmdCenterTask* task =  GetTask(task_id);
   // 加载任务
@@ -1079,37 +1018,18 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdAddTaskNode(DcmdTss* tss, uint32_t
     "values(%s, %u, '%s', '%s', '%s', '%s', %u, 0, now(), now(), '', '', now(), now(), %u)",
     task_id, str_task_cmd.c_str(), str_svr_pool.c_str(), str_service.c_str(), str_ip.c_str(),
     dcmd_api::SUBTASK_INIT, uid);
-  if (!cmd) {
-    // 插入start的命令
-    if (!InsertCommand(tss, false, uid, task->task_id_,
-      0, "", 0, task->service_.c_str(), "", dcmd_api::CMD_RETRY_TASK,
-      dcmd_api::COMMAND_SUCCESS, ""))
-    {
-      CWX_ERROR((tss->err_msg_.c_str()));
-      mysql_->rollback();
-      mysql_->disconnect();
-      return dcmd_api::DCMD_STATE_FAILED;
-    }
-  } else {
-    if (!UpdateCmdState(tss, false, cmd->cmd_id_, dcmd_api::COMMAND_SUCCESS, "")) {
-      CWX_ERROR((tss->err_msg_.c_str()));
-      mysql_->rollback();
-      mysql_->disconnect();
-      return dcmd_api::DCMD_STATE_FAILED;
-    }
-  }
-  if (-1 == mysql_->execute(tss->sql_)) {
-    tss->err_msg_ = string("Failure to exec sql, err:") + mysql_->getErrMsg(),
-      + ". sql:" + tss->sql_;
+  if (!ExecSql(tss, false)) {
     CWX_ERROR((tss->err_msg_.c_str()));
     mysql_->rollback();
     mysql_->disconnect();
     return dcmd_api::DCMD_STATE_FAILED;
   }
-  if (!mysql_->commit()) {
-    tss->err_msg_ = string("Failure to commit sql, err:") + mysql_->getErrMsg(),
-      + ". sql:" + tss->sql_;
-    CWX_ERROR((tss->err_msg.c_str()));
+  // 插入add node的命令
+  if (!InsertCommand(tss, true, uid, task->task_id_,
+    0, "", 0, task->service_.c_str(), "", dcmd_api::CMD_ADD_NODE,
+    dcmd_api::COMMAND_SUCCESS, ""))
+  {
+    CWX_ERROR((tss->err_msg_.c_str()));
     mysql_->rollback();
     mysql_->disconnect();
     return dcmd_api::DCMD_STATE_FAILED;
@@ -1144,16 +1064,6 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdCancelSubtask(DcmdTss* tss, uint64
   if (subtask->task_->depend_task_ && subtask->task_->depend_task_->IsFinished()) {
     tss->err_msg_ = "Depend task is not finished.";
     return dcmd_api::DCMD_STATE_FAILED;
-  }
-  // 已经有cancel的命令
-  if (subtask->cancel_cmd_) return dcmd_api::DCMD_STATE_SUCCESS;
-  if (cmd) {
-    subtask->cancel_cmd_ = *cmd;
-    cmd = NULL;
-  } else {
-    subtask->cancel_cmd_ = new DcmdCenterCmd;
-    subtask->cancel_cmd_->agent_ip_ = subtask->ip_;
-    subtask->cancel_cmd_->begin_time_ =
   }
 
 }
@@ -1205,6 +1115,13 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdFreezeTask(DcmdTss* tss,  uint32_t
 {
   DcmdCenterTask* task = GetTask(task_id);
   if (!task) {
+    if (!LoadNewTask(tss)) {
+      mysql_->disconnect();
+      return dcmd_api::DCMD_STATE_FAILED;
+    }
+    task = GetTask(task_id);
+  }
+  if (!task) {
     tss->err_msg_ = "No task.";
     return dcmd_api::DCMD_STATE_NO_TASK;
   }
@@ -1236,6 +1153,13 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdUnfreezeTask(DcmdTss* tss, uint32_
 {
   DcmdCenterTask* task = GetTask(task_id);
   if (!task) {
+    if (!LoadNewTask(tss)) {
+      mysql_->disconnect();
+      return dcmd_api::DCMD_STATE_FAILED;
+    }
+    task = GetTask(task_id);
+  }
+  if (!task) {
     tss->err_msg_ = "No task.";
     return dcmd_api::DCMD_STATE_NO_TASK;
   }
@@ -1266,6 +1190,13 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdUpdateTask(DcmdTss* tss, uint32_t 
   uint32_t con_num, uint32_t con_rate, uint32_t timeout, bool is_auto, uint32_t uid)
 {
   DcmdCenterTask* task = GetTask(task_id);
+  if (!task) {
+    if (!LoadNewTask(tss)) {
+      mysql_->disconnect();
+      return dcmd_api::DCMD_STATE_FAILED;
+    }
+    task = GetTask(task_id);
+  }
   if (!task) {
     tss->err_msg_ = "No task.";
     return dcmd_api::DCMD_STATE_NO_TASK;

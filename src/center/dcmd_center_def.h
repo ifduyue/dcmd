@@ -79,7 +79,6 @@ class DcmdCenterSubtask{
     start_time_ = 0;
     finish_time_ = 0;
     exec_cmd_ = NULL;
-    cancel_cmd_ = NULL;
     agent_ = NULL;
     task_ = NULL;
   }
@@ -110,8 +109,6 @@ public:
   string                   err_msg_;
   // 等着执行的任务
   DcmdCenterCmd*           exec_cmd_;
-  // 等待执行的cancel
-  DcmdCenterCmd*           cancel_cmd_;
   // 子任务对应的agent对象
   DcmdCenterAgent*         agent_;
   // 子任务对应的task对象
