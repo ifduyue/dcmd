@@ -73,7 +73,7 @@ class DcmdCenterTaskMgr{
     char const* svr_pool, char const* ip, uint32_t uid);
   // cancel具体subtask的执行
   dcmd_api::DcmdState TaskCmdCancelSubtask(DcmdTss* tss, uint64_t subtask_id,
-    uint32_t uid, DcmdCenterCmd** cmd);
+    uint32_t uid);
   // cancel一个服务的所有任务的执行
   dcmd_api::DcmdState TaskCmdCancelSvrSubtask(DcmdTss* tss, uint32_t task_id,
     char const* serivce, char const* agent_ip, uint32_t uid, DcmdCenterCmd** cmd);

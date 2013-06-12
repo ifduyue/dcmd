@@ -33,9 +33,6 @@ int DcmdCenterH4AgentTask::onRecvMsg(CwxMsgBlock*& msg, CwxTss* pThrEnv) {
   case dcmd_api::MTYPE_UI_EXEC_TASK:
     UiExecTaskCmd(msg, tss);
     break;
-  case dcmd_api::MTYPE_UI_WATCH_TASK:
-    UiWatchTaskCmd(msg, tss);
-    break;
   default:
     CWX_ERROR(("Receive invalid msg type[%d] from host:%s, ignore it.",
       msg->event().getMsgHeader().getMsgType(),
@@ -83,274 +80,244 @@ int DcmdCenterH4AgentTask::onTimeoutCheck(CwxMsgBlock*& , CwxTss* pThrEnv) {
 }
 
 int DcmdCenterH4AgentTask::onUserEvent(CwxMsgBlock*& , CwxTss* pThrEnv){
-    DcmdTss* pTss = (DcmdTss*)pThrEnv;
-    CWX_INFO(("Receive master change event. app master:%s, handle master:%s",
-        m_pApp->isMaster()?"true":"false",
-        m_bMaster?"true":"false"));
-    if (m_pApp->isMaster()){
-        ///由于是不同的链接，防止master切换带来问题
-        CWX_DEBUG(("Start check task mysql..........."));
-        if (!m_pApp->checkMysql(m_pApp->getTaskMysql())) return 1;
-        string strHost;
-        if (!DcmdCenterH4Check::getMasterHost(m_pApp->getTaskMysql(), strHost, pTss)){
-            ///关闭mysql的连接
-            m_pApp->getTaskMysql()->disconnect();
-            return 1;
-        }
-        if (strHost != m_pApp->getConfig().getCommon().m_strHost){
-            m_pApp->getTaskMysql()->disconnect();
-            return 1;
-        }
-        if (!m_bMaster){
-            CWX_INFO(("Startup task manager......."));
-            m_bMaster = m_pApp->getTaskMgr()->start(pTss);
-            if (!m_bMaster){
-                CWX_ERROR(("Failure to start task manager."));
-            }else{
-                ///通知所有agent，自己是master
-                CWX_INFO(("Notice all agent that i am master......"));
-                noticeMaster(pTss, NULL);
-            }
-        }
-    }else{
-        CWX_INFO(("Stop task manager."));
-        m_pApp->getTaskMgr()->stop(pTss);
-        m_pApp->getAgentMgr()->ClearMasterNoticeReportReply();
-        m_bMaster = false;
+  DcmdTss* tss = (DcmdTss*)pThrEnv;
+  CWX_INFO(("Receive master change event. app master:%s, handle master:%s",
+    app_->is_master()?"true":"false",
+    is_master_?"true":"false"));
+  if (app_->is_master()){
+    // 由于是不同的链接，防止master切换带来问题
+    CWX_DEBUG(("Start check task mysql..........."));
+    if (!app_->CheckMysql(app_->GetTaskMysql())) return 1;
+    string host;
+    if (!DcmdCenterH4Check::GetMasterHost(app_->GetTaskMysql(), host, tss)){
+      // 关闭mysql的连接
+      app_->GetTaskMysql()->disconnect();
+      return 1;
     }
-    return 1;
+    if (host != app_->config().common().host_id_){
+      app_->GetTaskMysql()->disconnect();
+      return 1;
+    }
+    if (!is_master_){
+      CWX_INFO(("Startup task manager......."));
+      is_master_ = app_->GetTaskMgr()->Start();
+      if (!is_master_){
+        CWX_ERROR(("Failure to start task manager."));
+      }else{
+        ///通知所有agent，自己是master
+        CWX_INFO(("Notice all agent that i am master......"));
+        NoticeMaster(tss, NULL);
+      }
+    }
+  }else{
+    CWX_INFO(("Stop task manager."));
+    app_->GetTaskMgr()->Stop(tss);
+    app_->GetAgentMgr()->ClearMasterNoticeReportReply();
+    is_master_ = false;
+  }
+  return 1;
 }
 
-void DcmdCenterH4AgentTask::replyAgentReport(DcmdCenterApp* app,
-                                                  DcmdTss* tss,
-                                                  CWX_UINT32 uiConnId,
-                                                  CWX_UINT32 uiTaskId,
-                                                  bool bSuccess,
-                                                  CWX_UINT32 uiHeatbeat,
-                                                  CWX_UINT32 uiPMsize,
-                                                  char const* szErrMsg,
-                                                  string const& strAgentIp)
+void DcmdCenterH4AgentTask::ReplyAgentReport(DcmdCenterApp* app,
+  DcmdTss*      tss,
+  uint32_t      conn_id,
+  uint32_t      msg_taskid,
+  dcmd_api::AgentReportReply const* reply)
 {
-    CwxMsgBlock* msg = NULL;
-    if (DCMD_ERR_SUCCESS != DcmdPoco::packAgentReportReply(tss->m_pWriter,
-        msg,
-        uiTaskId,
-        bSuccess?0:1,
-        szErrMsg,
-        uiHeatbeat,
-        uiPMsize,
-        tss->m_szBuf2K))
-    {
-        CWX_ERROR(("Failure to package agent report reply, err=%s", tss->m_szBuf2K));
-        app->noticeCloseConn(uiConnId);
-        return;
-    }
-    msg->send_ctrl().setSvrId(DcmdCenterApp::SVR_TYPE_AGENT);
-    msg->send_ctrl().setConnId(uiConnId);
-    msg->send_ctrl().setMsgAttr(bSuccess?CwxMsgSendCtrl::NONE:CwxMsgSendCtrl::CLOSE_NOTICE);
-    
-    if (0 != app->sendMsgByConn(msg)){
-        CwxMsgBlockAlloc::free(msg);
-        CWX_ERROR(("Failure to send msg to agent:%s, close connect.", strAgentIp.c_str()));
-        app->noticeCloseConn(uiConnId);
-    }
-}
-
-///false：发送失败；true：发送成功。
-bool DcmdCenterH4AgentTask::sendAgentTask(DcmdCenterApp* app,
-                          DcmdTss* tss,
-                          string const& strAgentIp,
-                          CWX_UINT32 uiTaskId,
-                          DcmdTaskCmd const& notice,
-                          string const& strScript,
-                          map<string, string> const& taskArgs)
-{
-    CwxMsgBlock* msg = NULL;
-    if (DCMD_ERR_SUCCESS != DcmdPoco::packTaskCmd(tss->m_pWriter,
-        tss->m_pWriter1,
-        msg,
-        uiTaskId,
-        notice,
-        strScript.length()?strScript.c_str():NULL,
-        strScript.length(),
-        taskArgs,
-        tss->m_szBuf2K))
-    {
-        CWX_ERROR(("Failure to package task, err=%s", tss->m_szBuf2K));
-        app->getAgentMgr()->closeAgent(strAgentIp);
-        return false;
-    }
-    msg->send_ctrl().setSvrId(DcmdCenterApp::SVR_TYPE_AGENT);
-    msg->send_ctrl().setMsgAttr(CwxMsgSendCtrl::NONE);
-    CWX_UINT32 uiConnId = 0;
-    if (!app->getAgentMgr()->sendMsg(strAgentIp, msg, uiConnId)){
-        CwxMsgBlockAlloc::free(msg);
-        CWX_ERROR(("Failure to send task to agent:%s.", strAgentIp.c_str()));
-        return false;
-    }
-    return true;
-}
-
-///false：发送失败；true：发送成功
-bool DcmdCenterH4AgentTask::replyAgentTaskResult(DcmdCenterApp* app,
-                                 DcmdTss* tss,
-                                 string const& strAgentIp,
-                                 CWX_UINT32 uiTaskId,
-                                 CWX_UINT64 ullCmdId)
-{
-    CwxMsgBlock* msg = NULL;
-    if (DCMD_ERR_SUCCESS != DcmdPoco::packTaskCmdResultReply(tss->m_pWriter,
-        msg,
-        uiTaskId,
-        ullCmdId,
-        tss->m_szBuf2K))
-    {
-        CWX_ERROR(("Failure to package task result reply, err=%s", tss->m_szBuf2K));
-        app->getAgentMgr()->closeAgent(strAgentIp);
-        return false;
-    }
-    msg->send_ctrl().setSvrId(DcmdCenterApp::SVR_TYPE_AGENT);
-    msg->send_ctrl().setMsgAttr(CwxMsgSendCtrl::NONE);
-    CWX_UINT32 uiConnId = 0;
-    if (!app->getAgentMgr()->sendMsg(strAgentIp, msg, uiConnId)){
-        CwxMsgBlockAlloc::free(msg);
-        CWX_ERROR(("Failure to send msg to agent:%s.", strAgentIp.c_str()));
-        return false;
-    }
-    return true;
-}
-
-///agent报告自己的状态
-void  DcmdCenterH4AgentTask::agentReport(CwxMsgBlock*& msg, DcmdTss* tss){
-    char const* szAgentIps = NULL;
-    string strAgentIps;
-    char const* szVer = NULL;
-    string strConnIp="";
-    string strAgentIp;
-    string strIpList;
-    list<string> ips;
-    bool bRefresh = false;
-    bool bSuccess = true;
-    string strErr;
-
-    ///连接已经不存在
-    if (!m_pApp->getAgentMgr()->getConnIp(msg->event().getConnId(), strConnIp)){///连接已经关闭
-        return;
-    }
-    do{
-        if (DCMD_ERR_SUCCESS != DcmdPoco::parseAgentReport(tss->m_pReader,
-            msg,
-            szAgentIps,
-            szVer,
-            tss->m_szBuf2K))
-        {
-            CWX_ERROR(("Failure unpack agent report msg from %s, close it. err:%s", strConnIp.c_str(), tss->m_szBuf2K));
-            strErr = "Failure unpack agent report msg, err=";
-            strErr += tss->m_szBuf2K;
-            bSuccess = false;
-            break;
-        }
-        CWX_DEBUG(("Receive agent[%s]'s report from %s", szAgentIps?szAgentIps:"", strConnIp.c_str())); 
-        strAgentIps = szAgentIps;
-        CwxCommon::split(strAgentIps, ips, DCMD_ITEM_SPLIT_CHAR);
-        if (!m_pApp->getTaskMgr()->getAgentIp(tss,
-            ips,
-            strAgentIp,
-            strIpList,
-            bRefresh))
-        {
-            CWX_ERROR(("report agent ip:%s isn't registered , close it.", szAgentIps));
-            strErr = "report agent ip isn't registered";
-            bSuccess = false;
-            ///添加到无效的agent连接中
-            m_pApp->getIllegalAgentMgr()->addConn(strConnIp, strAgentIps);
-            break;
-        }
-        //鉴权
-        string strOldConnIp;
-        CWX_UINT32 uiOldConnId;
-        int ret = m_pApp->getAgentMgr()->auth(msg->event().getConnId(),
-            strAgentIp,
-            szVer,
-            strOldConnIp,
-            uiOldConnId);
-        if (2 == ret){///连接已经关闭
-            CWX_ERROR(("Agent[%s] is closed.", strAgentIp.c_str()));
-            return;
-        }
-        if (1 == ret){//auth ip exist，可能是非法冒充ip，也可能是重连
-            if (strOldConnIp == strConnIp){//关闭旧连接
-                m_pApp->getAgentMgr()->unAuth(strAgentIp);
-                m_pApp->getTaskMgr()->agentClose(tss, strAgentIp);
-                m_pApp->noticeCloseConn(uiOldConnId);
-                ///重新认证
-                ret = m_pApp->getAgentMgr()->auth(msg->event().getConnId(),
-                    strAgentIp,
-                    strOldConnIp,
-                    uiOldConnId);
-                CWX_INFO(("Connection for agent[%s] is duplicate, close the old", strAgentIp.c_str()));
-                CWX_ASSERT(1 != ret); ///可能为2，连接不存在
-            }else if(strConnIp==strAgentIp){///当前的连接就是正确的
-                m_pApp->getAgentMgr()->unAuth(strAgentIp);
-                m_pApp->getTaskMgr()->agentClose(tss, strAgentIp);
-                m_pApp->noticeCloseConn(uiOldConnId);
-                ///重新认证
-                ret = m_pApp->getAgentMgr()->auth(msg->event().getConnId(),
-                    strAgentIp,
-                    strOldConnIp,
-                    uiOldConnId);
-                CWX_INFO(("Old conn[%s] for agent[%s] is invalid, close the old", strOldConnIp.c_str(), strAgentIp.c_str()));
-                CWX_ASSERT(1 != ret); ///可能为2，连接不存在
-                if (2 == ret) return; ///连接不存在
-            }else{///通过数据库决策
-                if (strIpList.find(strConnIp) == std::string::npos){
-                    CWX_INFO(("conn[%s] for agent[%s] is invalid, close it", strConnIp.c_str(), strAgentIp.c_str()));
-                    bSuccess = false;
-                    strErr = "Failure to auth";
-                    ///添加到无效的agent 连接中
-                    CwxCommon::replaceAll(strAgentIps, ";", "");
-                    m_pApp->getIllegalAgentMgr()->addConn(strConnIp, strAgentIps);
-                    break;
-                }
-                m_pApp->getAgentMgr()->unAuth(strAgentIp);
-                m_pApp->getTaskMgr()->agentClose(tss, strAgentIp);
-                m_pApp->noticeCloseConn(uiOldConnId);
-                CWX_INFO(("Old conn[%s] for agent[%s] is invalid, close the old", strOldConnIp.c_str(), strAgentIp.c_str()));
-                ///重新认证
-                ret = m_pApp->getAgentMgr()->auth(msg->event().getConnId(),
-                    strAgentIp,
-                    strOldConnIp,
-                    uiOldConnId);
-                CWX_ASSERT(1 != ret); ///可能为2，连接不存在
-                if (2 == ret) return; ///连接不存在
-            }
-        }
-        bSuccess = true;
-    }while(0);
-
-    if (bRefresh){
-        m_pApp->getAgentMgr()->refreshAgent(m_pApp->getTaskMgr()->getIpTable());
-    }
-
-    ///回复
-    replyAgentReport(this->m_pApp,
-        tss,
-        msg->event().getConnId(),
-        msg->event().getMsgHeader().getTaskId(),
-        bSuccess,
-        m_pApp->getConfig().getCommon().m_uiHeatbeat,
-        m_pApp->getConfig().getCommon().m_uiAgentPSize,
-        strErr.c_str(),
-        strAgentIp);
-    ///如果自己是master，则通知agent
-    if (bSuccess && m_pApp->isMaster()){
-        noticeMaster(tss, &strAgentIp);
-    }
+  CwxMsgBlock* msg = NULL;
+  if (!reply->SerializeToString(&tss->proto_str_)) {
+    CWX_ERROR(("Failure to pack agent report msg."));
+    app->noticeCloseConn(conn_id);
     return;
+  }
+  CwxMsgHead head(0, 0, dcmd_api::MTYPE_AGENT_REPORT_R, msg_taskid,
+    tss->proto_str_.length());
+  msg = CwxMsgBlockAlloc::pack(head, tss->proto_str_.c_str(),
+    tss->proto_str_.length());
+  if (!msg) {
+    CWX_ERROR(("Failure to pack agent report reply msg for no memory"));
+    exit(1);
+  }
+  msg->send_ctrl().setSvrId(DcmdCenterApp::SVR_TYPE_AGENT);
+  msg->send_ctrl().setConnId(conn_id);
+  msg->send_ctrl().setMsgAttr(CwxMsgSendCtrl::NONE);
+  if (0 != app->sendMsgByConn(msg)){
+    CwxMsgBlockAlloc::free(msg);
+    CWX_ERROR(("Failure to send msg to agent:%s, close connect.", strAgentIp.c_str()));
+    app->noticeCloseConn(conn_id);
+  }
+}
+
+// false：发送失败；true：发送成功。
+bool DcmdCenterH4AgentTask::SendAgentCmd(DcmdCenterApp* app,
+  DcmdTss* tss,
+  string const& agent_ip,
+  uint32_t msg_taskid,
+  dcmd_api::AgentTaskCmd const* cmd)
+{
+  CwxMsgBlock* msg = NULL;
+  if (!reply->SerializeToString(&tss->proto_str_)) {
+    CWX_ERROR(("Failure to pack agent report msg."));
+    app->noticeCloseConn(conn_id);
+    return false;
+  }
+  CwxMsgHead head(0, 0, dcmd_api::MTYPE_CENTER_SUBTASK_CMD, msg_taskid,
+    tss->proto_str_.length());
+  msg = CwxMsgBlockAlloc::pack(head, tss->proto_str_.c_str(),
+    tss->proto_str_.length());
+  if (!msg) {
+    CWX_ERROR(("Failure to pack agent report reply msg for no memory"));
+    exit(1);
+  }
+  msg->send_ctrl().setSvrId(DcmdCenterApp::SVR_TYPE_AGENT);
+  msg->send_ctrl().setConnId(conn_id);
+  msg->send_ctrl().setMsgAttr(CwxMsgSendCtrl::NONE);
+  if (0 != app->sendMsgByConn(msg)){
+    CwxMsgBlockAlloc::free(msg);
+    CWX_ERROR(("Failure to send msg to agent:%s, close connect.", strAgentIp.c_str()));
+    app->noticeCloseConn(conn_id);
+    return false;
+  }
+  return true;
+}
+
+// false：发送失败；true：发送成功
+bool DcmdCenterH4AgentTask::ReplyAgentCmdResult(DcmdCenterApp* app,
+                                 DcmdTss* tss,
+                                 string const& agent_ip,
+                                 uint32_t msg_taskid,
+                                 dcmd_api::AgentTaskResultReply const* reply)
+{
+  CwxMsgBlock* msg = NULL;
+  if (!reply->SerializeToString(&tss->proto_str_)) {
+    CWX_ERROR(("Failure to pack agent report msg."));
+    app->noticeCloseConn(conn_id);
+    return false;
+  }
+  CwxMsgHead head(0, 0, dcmd_api::MTYPE_CENTER_SUBTASK_CMD, msg_taskid,
+    tss->proto_str_.length());
+  msg = CwxMsgBlockAlloc::pack(head, tss->proto_str_.c_str(),
+    tss->proto_str_.length());
+  if (!msg) {
+    CWX_ERROR(("Failure to pack agent report reply msg for no memory"));
+    exit(1);
+  }
+  msg->send_ctrl().setSvrId(DcmdCenterApp::SVR_TYPE_AGENT);
+  msg->send_ctrl().setConnId(conn_id);
+  msg->send_ctrl().setMsgAttr(CwxMsgSendCtrl::NONE);
+  uint32_t conn_id = 0;
+  if (!app->GetAgentMgr()->SendMsg(agent_ip, msg, conn_id)){
+    CwxMsgBlockAlloc::free(msg);
+    CWX_ERROR(("Failure to send msg to agent:%s.", agent_ip.c_str()));
+    return false;
+  }
+  return true;
+}
+
+// agent报告自己的状态
+void  DcmdCenterH4AgentTask::AgentReport(CwxMsgBlock*& msg, DcmdTss* tss){
+  string agent_ips;
+  string conn_ip="";
+  string agent_ip;
+  list<string> ips;
+  bool is_success = false;
+  string err_msg;
+  dcmd_api::AgentReport report;
+  // 连接已经不存在
+  if (!app_->GetAgentMgr()->GetConnIp(msg->event().getConnId(), conn_ip)) return;
+  do{
+    tss->proto_str_.assign(msg->rd_ptr(), msg->length());
+    if (!report.ParseFromString(tss->proto_str_)) {
+      CWX_ERROR(("Failure unpack agent report msg from %s, close it.", conn_ip.c_str()));
+      err_msg = "Failure unpack agent report msg";
+      break;
+    }
+    for (uint32_t i=0; i<report.agent_ips_size(); i++) {
+      if (agent_ips.length()) {
+        agent_ips += ",";
+      }
+      agent_ips += report.agent_ips(i);
+      ips.push_back(report.agent_ips(i));
+    }
+    CWX_DEBUG(("Receive agent[%s]'s report from %s", agent_ips.c_str(), conn_ip.c_str())); 
+    if (!app_->GetAgentMgr()->ComfirmAgentIpByReportedIp(ips, agent_ip)){
+      CWX_ERROR(("report agent ip:%s isn't registered , close it.", agent_ips.c_str()));
+      err_msg = "report agent ip isn't registered";
+      ///添加到无效的agent连接中
+      app_->GetAgentMgr()->AddInvalidConn(conn_ip, agent_ips);
+      break;
+    }
+    //鉴权
+    string old_conn_ip;
+    uint32_t old_conn_id=0;
+    int ret = app_->GetAgentMgr()->Auth(msg->event().getConnId(),
+      agent_ip,
+      report.version(),
+      agent_ips,
+      old_conn_ip,
+      old_conn_id);
+    if (2 == ret){///连接已经关闭
+      CWX_ERROR(("Agent[%s] is closed.", agent_ip.c_str()));
+      return;
+    }
+    if (1 == ret){//auth ip exist，可能是非法冒充ip，也可能是重连
+      if (old_conn_ip == conn_ip){//关闭旧连接
+        app_->GetAgentMgr()->UnAuth(agent_ip);
+        app_->GetTaskMgr()->ReceiveAgentClosed(tss, agent_ip);
+        app_->noticeCloseConn(old_conn_id);
+        ///重新认证
+        ret = app_->GetAgentMgr()->Auth(msg->event().getConnId(),
+          agent_ip,
+          report.version(),
+          agent_ips,
+          old_conn_ip,
+          old_conn_id);
+        CWX_INFO(("Connection for agent[%s] is duplicate, close the old", agent_ip.c_str()));
+        CWX_ASSERT(1 != ret); ///可能为2，连接不存在
+      }else if(conn_ip == agent_ip){///当前的连接就是正确的
+        app_->GetAgentMgr()->UnAuth(agent_ip);
+        app_->GetTaskMgr()->ReceiveAgentClosed(tss, agent_ip);
+        app_->noticeCloseConn(old_conn_id);
+        ///重新认证
+        ret = app_->GetAgentMgr()->Auth(msg->event().getConnId(),
+          agent_ip,
+          report.version(),
+          agent_ips,
+          old_conn_ip,
+          old_conn_id);
+        CWX_INFO(("Old conn[%s] for agent[%s] is invalid, close the old", old_conn_ip.c_str(), agent_ip.c_str()));
+        CWX_ASSERT(1 != ret); ///可能为2，连接不存在
+        if (2 == ret) return; ///连接不存在
+      } else {
+        CWX_INFO(("conn[%s] for agent[%s] is invalid, close it", conn_ip.c_str(), agent_ip.c_str()));
+        err_msg = "Failure to auth";
+        app_->GetAgentMgr()->AddInvalidConn(conn_ip,agent_ips);
+        break;
+      }
+    }
+    is_success = true;
+  }while(0);
+
+  // 回复
+  dcmd_api::AgentReportReply  reply;
+  reply.set_state(is_success?dcmd_api::DCMD_STATE_SUCCESS:dcmd_api::DCMD_STATE_FAILED);
+  reply.set_err(is_success?err_msg:"");
+  reply.set_heatbeat(app_->config().common().heatbeat_internal_);
+  reply.set_package_size(app_->config().common().agent_package_size_);
+  reply.set_opr_overflow_threshold(app_->config().common().opr_overflow_threshold_);
+  reply.set_opr_queue_threshold(app_->config().common().opr_queue_threshold_);
+  ReplyAgentReport(app_,
+    tss,
+    msg->event().getConnId(),
+    msg->event().getMsgHeader().getTaskId(),
+    &reply);
+  // 如果自己是master，则通知agent
+  if (is_success && app_->is_master())  noticeMaster(tss, &agent_ip);
+  return;
 }
 
 ///agent报告自己的任务处理状态
-void  DcmdCenterH4AgentTask::agentMasterReply(CwxMsgBlock*& msg, DcmdTss* tss){
+void  DcmdCenterH4AgentTask::AgentMasterReply(CwxMsgBlock*& msg, DcmdTss* tss){
     char const* szCmdIds = NULL;
     string strConnIp="";
     string strAgentIp = "";

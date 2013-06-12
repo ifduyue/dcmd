@@ -90,7 +90,7 @@ bool DcmdCenterTaskMgr::ReceiveCmd(DcmdTss* tss,
         cmd.ip().c_str(), cmd.svr_pool().c_str(), cmd.uid());
     case dcmd_api::CMD_CANCEL_SUBTASK:
       state = TaskCmdCancelSubtask(tss, strtoull(cmd.subtask_id().c_str(), NULL, 10),
-        cmd.uid(), NULL);
+        cmd.uid());
       break;
     case dcmd_api::CMD_CANCEL_SVR_SUBTASK:
       state = TaskCmdCancelSvrSubtask(tss, strtoul(cmd.task_id().c_str(), NULL, 10),
@@ -506,7 +506,7 @@ bool DcmdCenterTaskMgr::LoadAllCmd(DcmdTss* tss) {
       CWX_ASSERT(0);
       break;
     case dcmd_api::CMD_CANCEL_SUBTASK:
-      state = TaskCmdCancelSubtask(tss, cmd->subtask_id_, 0, &cmd);
+      CWX_ASSERT(0);
       break;
     case dcmd_api::CMD_CANCEL_SVR_SUBTASK:
       state = TaskCmdCancelSvrSubtask(tss, cmd->service_.c_str(), cmd->task_id_,
@@ -1042,7 +1042,7 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdAddTaskNode(DcmdTss* tss, uint32_t
 }
 
 dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdCancelSubtask(DcmdTss* tss, uint64_t subtask_id,
-  uint32_t uid, DcmdCenterCmd** cmd)
+  uint32_t uid)
 {
   DcmdCenterSubtask* subtask =  GetSubTask(subtask_id);
   if (!subtask) {
@@ -1062,10 +1062,13 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdCancelSubtask(DcmdTss* tss, uint64
     return dcmd_api::DCMD_STATE_FAILED;
   }
   if (subtask->task_->depend_task_ && subtask->task_->depend_task_->IsFinished()) {
-    tss->err_msg_ = "Depend task is not finished.";
+    tss->err_msg_ = "Depended task is not finished.";
     return dcmd_api::DCMD_STATE_FAILED;
   }
-
+  if (!subtask->exec_cmd_) return dcmd_api::DCMD_STATE_SUCCESS;
+  // 发送cancel命令
+  DcmdCenterCmd cmd;
+  DcmdCenterH4AgentTask::SendAgentCmd(app_, tss, subtask->ip_, 0, DcmdCenterCmd*)
 }
 
 dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdCancelSvrSubtask(DcmdTss* tss, uint32_t task_id,

@@ -383,9 +383,7 @@ int DcmdCenterApp::onRecvMsg(CwxMsgBlock* msg,
   msg->event().setHostId(conn.getConnInfo().getHostId());
   msg->event().setConnId(conn.getConnInfo().getConnId());
   if (SVR_TYPE_ADMIN == conn.getConnInfo().getSvrId()) { // ui来的消息
-    if ((msg->event().getMsgHeader().getMsgType() == dcmd_api::MTYPE_UI_WATCH_TASK) ||
-      (msg->event.getMsgHeader().getMsgType() == dcmd_api::MTYPE_UI_EXEC_TASK))
-    {
+    if (msg->event.getMsgHeader().getMsgType() == dcmd_api::MTYPE_UI_EXEC_TASK){
       task_thread_pool_->append(msg);
     } else {
       admin_thread_pool_->append(msg);
@@ -394,9 +392,9 @@ int DcmdCenterApp::onRecvMsg(CwxMsgBlock* msg,
   }else if (SVR_TYPE_AGENT == conn.getConnInfo().getSvrId()){
     // 其他消息由agent线程处理
     if ((header.getMsgType() == dcmd_api::MTYPE_CENTER_OPR_CMD_R) ||
-      (header.getMsgType() == dcmd_api::MTYPE_CENTER_SUBTASK_CMD_OUTPUT) ||
-      (header.getMsgType() == dcmd_api::MTYPE_CENTER_RUNNING_TASK_R) ||
-      (header.getMsgType() == dcmd_api::MTYPE_CENTER_RUNNING_OPR_R))
+      (header.getMsgType() == dcmd_api::MTYPE_CENTER_AGENT_SUBTASK_OUTPUT_R) ||
+      (header.getMsgType() == dcmd_api::MTYPE_CENTER_AGENT_RUNNING_TASK_R) ||
+      (header.getMsgType() == dcmd_api::MTYPE_CENTER_AGENT_RUNNING_OPR_R))
     {
       ///设置新的svr类型
       msg->event().setSvrId(SVR_TYPE_AGENT_OPR);

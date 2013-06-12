@@ -40,7 +40,7 @@ class DcmdCenterH4AgentTask: public CwxCmdOp{
     DcmdTss* tss,
     string const& agent_ip,
     uint32_t msg_taskid,
-    DcmdCenterCmd const* cmd);
+    dcmd_api::AgentTaskCmd const* cmd);
   // 回复agent的cmd的结果。返回值，false：发送失败；true：发送成功
   static bool ReplyAgentCmdResult(DcmdCenterApp* app,
     DcmdTss* tss,
@@ -62,8 +62,6 @@ class DcmdCenterH4AgentTask: public CwxCmdOp{
   void  AgentSubtaskProcess(CwxMsgBlock*& msg, DcmdTss* tss);
   // 接收到UI命令
   void  UiExecTaskCmd(CwxMsgBlock*& msg, DcmdTss* tss);
-  // Watch命令
-  void  UiWatchTaskCmd(CwxMsgBlock*& msg, DcmdTss* tss);
   // 通知所有连接，自己是master
   void  NoticeMaster(DcmdTss* tss, string const* agent_ip=NULL);
 
