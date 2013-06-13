@@ -46,8 +46,7 @@ class DcmdCenterTaskMgr{
     dcmd_api::AgentTaskResult const& result
     );
   // 设置agent上的任务处理进度
-  void SetAgentTaskProcess(string const& task_id,
-    string const& subtask_id,
+  void SetAgentTaskProcess(string const& subtask_id,
     char const* process);
   // 获取agent上的任务处理进度, false表示不存在
   bool GetAgentsTaskProcess(string const& subtask_id, string& process);

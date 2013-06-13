@@ -297,7 +297,6 @@ void  DcmdCenterH4AgentTask::AgentReport(CwxMsgBlock*& msg, DcmdTss* tss){
     }
     is_success = true;
   }while(0);
-
   // 回复
   dcmd_api::AgentReportReply  reply;
   reply.set_state(is_success?dcmd_api::DCMD_STATE_SUCCESS:dcmd_api::DCMD_STATE_FAILED);
@@ -318,139 +317,122 @@ void  DcmdCenterH4AgentTask::AgentReport(CwxMsgBlock*& msg, DcmdTss* tss){
 
 ///agent报告自己的任务处理状态
 void  DcmdCenterH4AgentTask::AgentMasterReply(CwxMsgBlock*& msg, DcmdTss* tss){
-    char const* szCmdIds = NULL;
-    string strConnIp="";
-    string strAgentIp = "";
-    if (!m_pApp->getAgentMgr()->getConnIp(msg->event().getConnId(), strConnIp)){///连接已经关闭
-        return;
-    }
-    if (!m_pApp->getAgentMgr()->getAgentIp(msg->event().getConnId(), strAgentIp)){
-        ///若没有认证，则直接关闭连接
-        CWX_ERROR(("Close agent connection with conn-ip[%s] for recieving master-reply but no auth. ", strConnIp.c_str()));
-        m_pApp->noticeCloseConn(msg->event().getConnId());
-        return;
-    }
-
-    if (!m_pApp->isMaster()){
-        CWX_DEBUG(("I'm not master, ignore agent's master-reply."));
-        m_pApp->getTaskMgr()->stop(tss);
-        return; ///若不是master，直接忽略
-    }
-    
-    if (DCMD_ERR_SUCCESS != DcmdPoco::parseCenterMasterNoticeReply(tss->m_pReader,
-        msg,
-        szCmdIds,
-        tss->m_szBuf2K))
-    {
-        CWX_ERROR(("Failure unpack agent's master-notice reply msg from %s, close it. err:%s", strConnIp.c_str(), tss->m_szBuf2K));
-        m_pApp->noticeCloseConn(msg->event().getConnId());
-        return;
-    }
-    CWX_DEBUG(("Receive agent's master-reply, agent:%s, cmd_id=%s", strAgentIp.c_str(), szCmdIds));
-
-    int ret = m_pApp->getAgentMgr()->masterNoticeReply(msg->event().getConnId());
-    if (2 == ret) {///连接已经关闭
-        return;
-    }
-    if (1 == ret){///没有报告自己的agent信息
-        CWX_ERROR(("agent[%s] doesn't report self-agent info it.", strConnIp.c_str()));
-        m_pApp->noticeCloseConn(msg->event().getConnId());
-        return;
-    }
-    ///通知task manager，agent已经建立可以发送消息了
-    string strCmdIds(szCmdIds);
-    m_pApp->getTaskMgr()->agentMasterReply(tss, strAgentIp, strCmdIds);
+  string conn_ip;
+  string agent_ip;
+  // 连接已经关闭
+  if (!app_->GetAgentMgr()->GetConnIp(msg->event().getConnId(), conn_ip)) return;
+  if (!app_->GetAgentMgr()->GetAgentIp(msg->event().getConnId(), agent_ip)) {
+    ///若没有认证，则直接关闭连接
+    CWX_ERROR(("Close agent connection with conn-ip[%s] for recieving master-reply but no auth. ",
+      conn_ip.c_str()));
+    app_->noticeCloseConn(msg->event().getConnId());
+    return;
+  }
+  if (!app_->is_master()) {
+    CWX_DEBUG(("I'm not master, ignore agent's master-reply."));
+    app_->GetTaskMgr()->Stop(tss);
+    return;
+  }
+  int ret = app_->GetAgentMgr()->MasterNoticeReply(msg->event().getConnId());
+  if (2 == ret)  return; // 连接已经关闭
+  if (1 == ret){// 没有报告自己的agent信息
+    CWX_ERROR(("agent[%s] doesn't report self-agent info it.", conn_ip.c_str()));
+    app_->noticeCloseConn(msg->event().getConnId());
+    return;
+  }
+  dcmd_api::AgentMasterNoticeReply notice_reply;
+  tss->proto_str_.assign(msg->rd_ptr(), msg->length());
+  if (!notice_reply.ParseFromString(tss->proto_str_)) {
+    CWX_ERROR(("Failure unpack master notice reply msg from %s, close it.", agent_ip.c_str()));
+    app_->noticeCloseConn(msg->event().getConnId());
+    return;
+  }
+  list<string> cmd_list;
+  string cmds;
+  uint32_t i = 0;
+  for (i=0; i<notice_reply.cmd_size(); i++){
+    cmd_list.push_back(notice_reply.cmd(i));
+    if (cmds.length()) cmds += ",";
+  }
+  CWX_DEBUG(("Receive agent's master-reply, agent:%s, cmd_id=%s", agent_ip.c_str(),
+    cmds.c_str()));
+  app_->GetTaskMgr()->ReceiveAgentMasterReply(tss, agent_ip,  agent_ip, cmd_list);
+  for (uint32_t i=0; i<notice_reply.subtask_process_size(); i++){
+    app_->GetTaskMgr()->SetAgentTaskProcess(notice_reply.subtask_process(i).subtask_id(),
+      notice_reply.subtask_process(i).process().c_str());
+  }
 }
 
 ///agent报告自己已经接受子任务
-void  DcmdCenterH4AgentTask::agentTaskAcccept(CwxMsgBlock*& msg, DcmdTss* tss){
-    if (!m_pApp->isMaster()){
-        return; ///若不是master，直接忽略
-    }
-    string strAgentIp="";
-    if (!m_pApp->getAgentMgr()->getAgentIp(msg->event().getConnId(), strAgentIp)){///连接已经关闭
-        return;   
-    }
-    CWX_UINT64 ullCmdId = 0;
-    if (DCMD_ERR_SUCCESS != DcmdPoco::parseTaskCmdReply(tss->m_pReader,
-        msg,
-        ullCmdId,
-        tss->m_szBuf2K))
-    {
-        CWX_ERROR(("Failure unpack agent's task reply msg from %s, close it. err:%s", strAgentIp.c_str(), tss->m_szBuf2K));
-        m_pApp->noticeCloseConn(msg->event().getConnId());
-        return;
-    }
-    char szTmp[128];
-    CWX_DEBUG(("Receive agent's command-confirm message, agent:%s, cmd_id=%s",
-        strAgentIp.c_str(), 
-        CwxCommon::toString(ullCmdId, szTmp, 0)));
-    m_pApp->getTaskMgr()->agentNoticeConfirm(tss, strAgentIp, ullCmdId);
-
+void  DcmdCenterH4AgentTask::AgentSubtaskAccept(CwxMsgBlock*& msg, DcmdTss* tss) {
+  if (!app_->is_master()) return; // 若不是master，直接忽略
+  string agent_ip;
+  if (!app_->GetAgentMgr()->GetAgentIp(msg->event().getConnId(), agent_ip))
+    return;//连接已经关闭
+  dcmd_api::AgentTaskCmdReply cmd_reply;
+  tss->proto_str_.assign(msg->rd_ptr(), msg->length());
+  if (!cmd_reply.ParseFromString(tss->proto_str_)) {
+    CWX_ERROR(("Failure unpack subtask msg from %s, close it.", agent_ip.c_str()));
+    app_->noticeCloseConn(msg->event().getConnId());
+    return;
+  }
+  CWX_DEBUG(("Receive agent's command-confirm message, agent:%s, cmd_id=%s",
+    agent_ip.c_str(),
+    cmd_reply.cmd().c_str()));
+  app_->GetTaskMgr()->ReceiveAgentSubtaskConfirm(tss, agent_ip, cmd_reply.cmd());
 }
 
-///agent回复任务的处理结果
-void  DcmdCenterH4AgentTask::agentTaskResult(CwxMsgBlock*& msg, DcmdTss* tss){
-    if (!m_pApp->isMaster()){
-        return; ///若不是master，直接忽略
-    }
-    string strAgentIp="";
-    if (!m_pApp->getAgentMgr()->getAgentIp(msg->event().getConnId(), strAgentIp)){///连接已经关闭
-        return;
-    }
-    DcmdTaskCmdResult result;
-    if (DCMD_ERR_SUCCESS != DcmdPoco::parseTaskCmdResult(tss->m_pReader,
-        msg,
-        result,
-        tss->m_szBuf2K))
-    {
-        CWX_ERROR(("Failure unpack agent's task result msg, close it. err:%s",tss->m_szBuf2K));
-        m_pApp->noticeCloseConn(msg->event().getConnId());
-        return;
-    }
-    char szTmp1[128];
-    char szTmp2[128];
-    CWX_DEBUG(("Receive agent's command result, agent:%s, task_id=%u tasknode-id:%s cmd_id=%s",
-        strAgentIp.c_str(), 
-        result.m_uiTaskId,
-        CwxCommon::toString(result.m_ullTaskNodeId, szTmp1, 10),
-        CwxCommon::toString(result.m_ullCmdId, szTmp2, 10)));
-
-    if (!m_pApp->getTaskMgr()->agentNoticeResult(tss, msg->event().getMsgHeader().getTaskId(), result)){
-        ///关闭连接以便再处理
-        m_pApp->noticeCloseConn(msg->event().getConnId());
-    }
+// agent回复任务的处理结果
+void  DcmdCenterH4AgentTask::AgentSubtaskResult(CwxMsgBlock*& msg, DcmdTss* tss){
+  if (!app_->is_master()) return; // 若不是master，直接忽略
+  string agent_ip="";
+  if (!app_->GetAgentMgr()->GetAgentIp(msg->event().getConnId(), agent_ip))
+    return; // 连接已经关闭
+  dcmd_api::AgentTaskResult result;
+  tss->proto_str_.assign(msg->rd_ptr(), msg->length());
+  if (!result.ParseFromString(tss->proto_str_)) {
+    CWX_ERROR(("Failure unpack subtask result msg from %s, close it.", agent_ip.c_str()));
+    app_->noticeCloseConn(msg->event().getConnId());
+    return;
+  }
+  CWX_DEBUG(("Receive agent's command result, agent:%s, task_id=%s, subtask_id=%s, cmd_id=%s",
+    agent_ip.c_str(),
+    result.task_id().c_str(),
+    result.subtask_id().c_str(),
+    result.cmd().c_str()));
+  if (!app_->GetTaskMgr()->ReceiveAgentSubtaskResult(tss, msg->event().getMsgHeader().getTaskId(), result))
+    app_->noticeCloseConn(msg->event().getConnId()); // 关闭连接以便再处理
 }
 
-///agent报告任务的处理进度
-void DcmdCenterH4AgentTask::agentTaskProcess(CwxMsgBlock*& msg, DcmdTss* tss){
-    if (!m_pApp->isMaster()){
-        return; ///若不是master，直接忽略
-    }
-    string strAgentIp="";
-    if (!m_pApp->getAgentMgr()->getAgentIp(msg->event().getConnId(), strAgentIp)){///连接已经关闭
-        return;
-    }
-    CWX_UINT32 uiTid = 0;
-    CWX_UINT64 ullTaskNodeId = 0;
-    char* szProcess = NULL;
-    if (DCMD_ERR_SUCCESS != DcmdPoco::parseTaskCmdProcess(tss->m_pReader,
-        msg,
-        uiTid,
-        ullTaskNodeId,
-        szProcess,
-        tss->m_szBuf2K))
-    {
-        CWX_ERROR(("Failure unpack agent's task process msg. err:%s",tss->m_szBuf2K));
-        return;
-    }
-    char szTmp1[128];
-    CWX_DEBUG(("Receive agent's task process, agent:%s, task_id=%u tasknode-id:%s  process=%s",
-        strAgentIp.c_str(), 
-        uiTid,
-        CwxCommon::toString(ullTaskNodeId, szTmp1, 10),
-        szProcess?szProcess:""));
-    m_pApp->getTaskMgr()->setAgentTaskProcess(uiTid, ullTaskNodeId, szProcess);
+// agent报告任务的处理进度
+void DcmdCenterH4AgentTask::AgentSubtaskProcess(CwxMsgBlock*& msg, DcmdTss* tss){
+  if (!m_pApp->isMaster()){
+    return; ///若不是master，直接忽略
+  }
+  string strAgentIp="";
+  if (!m_pApp->getAgentMgr()->getAgentIp(msg->event().getConnId(), strAgentIp)){///连接已经关闭
+    return;
+  }
+  CWX_UINT32 uiTid = 0;
+  CWX_UINT64 ullTaskNodeId = 0;
+  char* szProcess = NULL;
+  if (DCMD_ERR_SUCCESS != DcmdPoco::parseTaskCmdProcess(tss->m_pReader,
+    msg,
+    uiTid,
+    ullTaskNodeId,
+    szProcess,
+    tss->m_szBuf2K))
+  {
+    CWX_ERROR(("Failure unpack agent's task process msg. err:%s",tss->m_szBuf2K));
+    return;
+  }
+  char szTmp1[128];
+  CWX_DEBUG(("Receive agent's task process, agent:%s, task_id=%u tasknode-id:%s  process=%s",
+    strAgentIp.c_str(), 
+    uiTid,
+    CwxCommon::toString(ullTaskNodeId, szTmp1, 10),
+    szProcess?szProcess:""));
+  m_pApp->getTaskMgr()->setAgentTaskProcess(uiTid, ullTaskNodeId, szProcess);
 }
 
 void DcmdCenterH4AgentTask::noticeMaster(DcmdTss* tss, string const* strAgentIp){
