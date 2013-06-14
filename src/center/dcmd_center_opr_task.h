@@ -32,7 +32,7 @@ class DcmdCenterAgentOprReply {
   // 执行的结果
   string              result_;
   // 执行的错误信息
-  char const*         err_msg_; 
+  string              err_msg_; 
 };
 
 // UI控制台的操作命令的task对象
@@ -134,8 +134,10 @@ class DcmdCenterOprTask : public CwxTaskBoardTask {
   uint32_t                     msg_task_id_;
   // 消息的cmd id
   uint64_t                     opr_cmd_id_;
-  // 指令的参数
-  list<pair<string, string> >  opr_args_
+  // 执行的agent
+  set<string>                  agents_;
+  // 执行的参数
+  map<string, string>          opr_args_;
  private:
   // opr的指令对象
   DcmdCenterOprCmd             opr_cmd_;

@@ -17,8 +17,22 @@ void DcmdCenterOprTask::noticeRecvMsg(CwxMsgBlock*& msg, CwxTss* ThrEnv, bool& )
       agent_replys_[i].recv_msg_ = msg;
       msg = NULL;
       receive_num_++;
-      if (receive_num_ >= agent_num_)
-        setTaskState(CwxTaskBoardTask::TASK_STATE_FINISH);
+      if (receive_num_ >= agent_num_) setTaskState(CwxTaskBoardTask::TASK_STATE_FINISH);
+      dcmd_api::AgentOprCmdReply reply;
+      tss->proto_str_.assign(msg->rd_ptr(), msg->length());
+      if (!reply.ParseFromString(tss->proto_str_)) {
+        CWX_ERROR(("Failed to unpack msg from %s.", agent_conns_[i].agent_ip_.c_str()));
+        agent_replys_[i].is_exec_success = false;
+        agent_replys_[i].err_msg_ = "Failed to unpack msg";
+      } else {
+        if (reply.state()==dcmd_api::DCMD_STATE_SUCCESS) {
+          agent_replys_[i].is_exec_success = true;
+          agent_replys_[i].result_ = reply.result();
+        } else {
+          agent_replys_[i].is_exec_success = false;
+          agent_replys_[i].err_msg_ = reply.err();
+        }
+      }
       return ;
     }
   }
@@ -54,206 +68,208 @@ void DcmdCenterOprTask::noticeConnClosed(CWX_UINT32 , CWX_UINT32 , CWX_UINT32 ui
   }
 }
 
-bool DcmdCenterOprTask::FetchOprCmd(DcmdTss* tss){
-  ///首先从cache中获取
-  if (!m_pApp->getOprCmdCache()->getOprCmd(m_ullOprCmdId, m_oprCmd)){
+bool DcmdCenterOprTask::FetchOprCmd(DcmdTss* tss) {
+  // 首先从cache中获取
+  if (!app_->GetOprCmdCache()->GetOprCmd(opr_cmd_id_, opr_cmd_)){
     ///从db中获取
-    Mysql* my = m_pApp->getAdminMysql();
-    if (!m_pApp->checkMysql(my)){
+    Mysql* my = app_->GetAdminMysql();
+    if (!app_->CheckMysql(my)){
       CwxCommon::snprintf(tss->m_szBuf2K, 2047, "Failure to connect mysql, error=%s", my->getErrMsg());
       CWX_ERROR((tss->m_szBuf2K));
-      m_strErrMsg = tss->m_szBuf2K;
+      err_msg_ = tss->m_szBuf2K;
       return false;
     }
     //从mysql获取opr指令的信息
     CwxCommon::snprintf(tss->sql_,
       DcmdTss::kMaxSqlBufSize,
-      "select a.ui_name, a.script_file, a.run_user,a.script_md5, b.timeout, b.ip, b.arg,"\
-      "b.repeat, b.arg_mutable, b.cache from  opr_cmd as a, opr_cmd_exec as b"\
-      "where b.id =%s and a.script_file = b.script_file",
-      CwxCommon::toString(m_ullOprCmdId, tss->m_szBuf2K, 10));
+      "select a.ui_name, a.opr_cmd, a.run_user,a.script_md5, a.agent_mutable,"\
+      "b.timeout, b.ip, b.priority, b.arg, b.repeat, b.cache_time, b.arg_mutable "\
+      "from  opr_cmd as a, opr_cmd_exec as b"\
+      "where b.exec_id =%s and a.opr_cmd = b.opr_cmd",
+      CwxCommon::toString(opr_cmd_id_, tss->m_szBuf2K, 10));
     if (!my->query(tss->sql_)){
       CwxCommon::snprintf(tss->m_szBuf2K, 2047, "Failure to fetch opr cmd from mysql, Sql:%s error=%s", tss->sql_, my->getErrMsg());
       CWX_ERROR((tss->m_szBuf2K));
-      m_strErrMsg = tss->m_szBuf2K;
+      err_msg_ = tss->m_szBuf2K;
       return false;
     }
     ///获取sql的结果
-    if (1 != my->next()){
+    if (!my->next()) {
       CwxCommon::snprintf(tss->m_szBuf2K, 2047,
         "Command[%s] doesn't exist in opr_cmd_exec table",
-        CwxCommon::toString(m_ullOprCmdId, tss->sql_, 10));
+        CwxCommon::toString(opr_cmd_id_, tss->sql_, 10));
       CWX_ERROR((tss->m_szBuf2K));
-      m_strErrMsg = tss->m_szBuf2K;
+      err_msg_ = tss->m_szBuf2K;
       ///释放结果集
       my->freeResult();
       return false;
     }
     bool bNull = false;
-    char const* value = NULL;
-    ///获取ui name
-    m_oprCmd.m_strUiName = my->fetch(0, bNull);
-    ///获取opr file
-    m_oprCmd.m_strOprFile = my->fetch(1, bNull);
-    ///获取run user
-    m_oprCmd.m_strOprRunUser = my->fetch(2, bNull);
-    ///获取opr file的md5
-    m_oprCmd.m_strOprFileMd5 = my->fetch(3, bNull);
+    opr_cmd_.opr_cmd_id_ = opr_cmd_id_;
+    // 获取ui name
+    opr_cmd_.opr_name_ = my->fetch(0, bNull);
+    // 获取opr file
+    opr_cmd_.opr_file_ = my->fetch(1, bNull);
+    // 获取run user
+    opr_cmd_.opr_run_user_ = my->fetch(2, bNull);
+    // 获取opr file的md5
+    opr_cmd_.opr_file_md5_ = my->fetch(3, bNull);
+    // 获取 agent是否可变
+    opr_cmd_.is_agent_mutable_ = strtoul(my->fetch(3, bNull), NULL, 10);
     ///获取opr的timeout
-    value = my->fetch(4, bNull);
-    m_oprCmd.m_uiOprTimeout = value?strtoul(value, NULL, 10):DCMD_DEF_OPR_CMD_TIMEOUT;
-    if (m_oprCmd.m_uiOprTimeout < DCMD_MIN_OPR_CMD_TIMEOUT) m_oprCmd.m_uiOprTimeout = DCMD_MIN_OPR_CMD_TIMEOUT;
-    if (m_oprCmd.m_uiOprTimeout > DCMD_MAX_OPR_CMD_TIMEOUT) m_oprCmd.m_uiOprTimeout = DCMD_MAX_OPR_CMD_TIMEOUT;
+    opr_cmd_.opr_timeout_ = strtoul(my->fetch(4, bNull), NULL, 10);
+    if (opr_cmd_.opr_timeout_ < kMinOprCmdTimeoutSecond) opr_cmd_.opr_timeout_ = kMinOprCmdTimeoutSecond;
+    if (opr_cmd_.opr_timeout_ > kMaxOprCmdTimeoutSecond) opr_cmd_.opr_timeout_ = kMaxOprCmdTimeoutSecond;
     ///获取ip
-    m_oprCmd.m_strOprAgents = my->fetch(5, bNull);
-    ///获取arg
-    m_oprCmd.m_strArgs = my->fetch(6, bNull);
-    ///获取repeat
-    value  = my->fetch(7, bNull);
-    m_oprCmd.m_ucRepeatType = value?strtoul(value, NULL, 10):DcmdCenterOprCmd::DCMD_OPR_CMD_NO_REPEAT;
-    if (m_oprCmd.m_ucRepeatType > DcmdCenterOprCmd::DCMD_OPR_CMD_REPEAT_MAX) m_oprCmd.m_ucRepeatType = DcmdCenterOprCmd::DCMD_OPR_CMD_NO_REPEAT;
-    if (m_pApp->getConfig().getCommon().m_bOprCmdExecHistory){
-      if (m_oprCmd.m_ucRepeatType == DcmdCenterOprCmd::DCMD_OPR_CMD_REPEAT_WITHOUT_HISTORY)
-        m_oprCmd.m_ucRepeatType = DcmdCenterOprCmd::DCMD_OPR_CMD_REPEAT_HISTORY;
+    list<string> ips;
+    string agent_ip;
+    CwxCommon::split(my->fetch(5, bNull), ips, kItemSplitChar);
+    list<string>::iterator iter = ips.begin();
+    while(iter != ips.end()) {
+      agent_ip = *iter;
+      CwxCommon::trim(agent_ip);
+      if (agent_ip.length()) {
+        opr_cmd_.agents_.insert(agent_ip);
+      }
+      ++iter;
     }
-    ///获取arg mutable
-    value = my->fetch(8, bNull);
-    m_oprCmd.m_bArgMutable = value?(strtoul(value, NULL, 0)?true:false):false;
-    if (!m_pApp->getConfig().getCommon().m_bOprCmdArgMutable) m_oprCmd.m_bArgMutable = false;
+    // 获取操作的优先级
+    opr_cmd_.priority_ = strtoul(my->fetch(6, bNull), NULL, 10);
+    if (opr_cmd_.priority_ < kMaxHighOprPriority) opr_cmd_.priority_ = kMaxHighOprPriority;
+    if (opr_cmd_.priority_ > kMaxLowOprPriority) opr_cmd_.priority_ = kMaxLowOprPriority;
+    ///获取arg
+    opr_cmd_.opr_args_ = my->fetch(7, bNull);
+    // 获取repeat
+    opr_cmd_.repeat_type_ = strtoul(my->fetch(8, bNull), NULL, 10);
+    if (opr_cmd_.repeat_type_ > DcmdCenterOprCmd::DCMD_OPR_CMD_REPEAT_MAX)
+      opr_cmd_.repeat_type_ = DcmdCenterOprCmd::DCMD_OPR_CMD_NO_REPEAT;
+    if (app_->config().common().is_opr_cmd_history_){
+      if (opr_cmd_.repeat_type_ == DcmdCenterOprCmd::DCMD_OPR_CMD_REPEAT_WITHOUT_HISTORY)
+        opr_cmd_.repeat_type_ = DcmdCenterOprCmd::DCMD_OPR_CMD_REPEAT_HISTORY;
+    }
     ///获取cache
-    value = my->fetch(9, bNull);
-    m_oprCmd.m_uiCacheSec = value?strtoul(value, NULL,0):0;
-    m_oprCmd.m_uiExpire = m_oprCmd.m_uiCacheSec?m_oprCmd->m_uiExpire = ((CWX_UINT32)time(NULL)) + m_oprCmd->m_uiCacheSec;
+    opr_cmd_.cache_time_ = strtoul(my->fetch(9, bNull), NULL, 10);
+    opr_cmd_.expire_time_ =opr_cmd_.cache_time_?((uint32_t)time(NULL)) + opr_cmd_.cache_time_:0;
+    ///获取arg mutable
+    opr_cmd_.is_arg_mutable_ = strtoul(my->fetch(10, bNull), NULL, 10)?true:false;
+    if (!app_->config().common().is_opr_cmd_arg_mutable_) opr_cmd_.is_arg_mutable_ = false;
     ///释放结果集
     my->freeResult();
     ///获取脚本、检查md5
-    string strOprFile;
-    DcmdCenterConf::getOprCmdFile(m_oprCmd.m_strOprFile, strOprFile);
-    strOprFile = m_pApp->getConfig().getCommon().m_strOprScriptPath + strOprFile;
-    if (!tss->readFile(strOprFile.c_str(), m_oprCmd.m_strContent, m_strErrMsg)){
-      CWX_ERROR((m_strErrMsg.c_str()));
+    string opr_file;
+    DcmdCenterConf::opr_cmd_file(opr_cmd_.opr_file_, opr_file);
+    opr_file = app_->config().common().opr_script_path_ + opr_file;
+    if (!tss->readFile(opr_file.c_str(), opr_cmd_.opr_script_content_, err_msg_)){
+      CWX_ERROR((err_msg_.c_str()));
       return false;
     }
-    ///计算md5
-    string strMd5;
-    dcmdMd5(m_oprCmd.m_strContent.c_str(), m_oprCmd.m_strContent.length(), strMd5);
-    if (strcasecmp(m_oprCmd.m_strOprFileMd5.c_str(), strMd5.c_str()) != 0){
-      CwxCommon::snprintf(tss->m_szBuf2K, 2047, "opr-file[%s]'s md5[%s] is not same with table's md5 is:%s",
-        strOprFile.c_str(),
-        strMd5.c_str(),
-        m_oprCmd.m_strOprFileMd5.c_str());
+    // 计算md5
+    string file_md5;
+    dcmd_md5(opr_cmd_.opr_script_content_.c_str(), opr_cmd_.opr_script_content_.length(), file_md5);
+    if (strcasecmp(opr_cmd_.opr_file_md5_.c_str(), file_md5.c_str()) != 0){
+      CwxCommon::snprintf(tss->m_szBuf2K, 2047, "opr-file[%s]'s md5[%s] is not same with table's md5:%s",
+        opr_file.c_str(),
+        file_md5.c_str(),
+        opr_cmd_.opr_file_md5_.c_str());
       CWX_ERROR((tss->m_szBuf2K));
-      m_strErrMsg = tss->m_szBuf2K;
+      err_msg_ = tss->m_szBuf2K;
       return false;
     }
-    ///解析ip参数
-    list<string> ips;
-    m_oprCmd.m_agentSet.clear();
-    CwxCommon::split(m_oprCmd.m_strOprAgents, ips, DCMD_ITEM_SPLIT_CHAR);
-    list<string>::iterator ip_iter = ips.begin();
-    string strIp;
-    while(ip_iter != ips.end()){
-      strIp = *ip_iter;
-      CwxCommon::trim(strIp);
-      if (strIp.length()) m_agentSet.insert(strIp);
-      ip_iter ++;
-    }
-    if (0 == m_agentSet.size()){
-      CwxCommon::snprintf(tss->m_szBuf2K, 2047, "No host in host list:%s", m_strOprAgents.c_str());
-      CWX_ERROR((tss->m_szBuf2K));
-      m_strErrMsg = tss->m_szBuf2K;
-      return false;
-    }
-    m_oprCmd.m_argMap.clear();
-  }
-  ///替换执行的参数
-  if (m_bWithOprArg){
-    if (!m_oprCmd.m_bArgMutable){
-      CwxCommon::snprintf(tss->m_szBuf2K, 2047, "Can't change opr cmd's arg, opr cmd:%s",
-        CwxCommon::toString(m_ullOprCmdId, tss->sql_, 10));
-      CWX_ERROR((tss->m_szBuf2K));
-      m_strErrMsg = tss->m_szBuf2K;
-      return false;
-    }
-    m_oprCmd.m_strArgs = m_strOprArg;
-    m_oprCmd.m_argMap.clear();
-  }
-  ///形成参数
-  if (m_oprCmd.m_strArgs.length() && !m_oprCmd.m_argMap.size()){
-    XmlConfigParser parser;
-    if (!parser.parse(m_oprCmd.m_strArgs.c_str())){
-      CwxCommon::snprintf(tss->m_szBuf2K, 2047, "Failure to parse shell arg for invalid xml, arg:%s", m_strArgs.c_str());
-      CWX_ERROR((tss->m_szBuf2K));
-      m_strErrMsg = tss->m_szBuf2K;
-      return false;
-    }
-    XmlTreeNode const* node = parser.getRoot()->m_pChildHead;
-    string strNodeValue;
-    while(node){
-      if (node->m_pChildHead){
-        CwxCommon::snprintf(tss->m_szBuf2K, 2047, "arg[%s] has child, it's invalid.", node->m_szElement);
+    // 形成参数
+    opr_cmd_.opr_args_map_.clear();
+    if (opr_cmd_.opr_args_.length()){
+      XmlConfigParser parser;
+      if (!parser.parse(opr_cmd_.opr_args_.c_str())){
+        CwxCommon::snprintf(tss->m_szBuf2K, 2047, "Failure to parse shell arg for invalid xml, arg:%s", opr_cmd_.opr_args_.c_str());
         CWX_ERROR((tss->m_szBuf2K));
-        m_strErrMsg = tss->m_szBuf2K;
+        err_msg_ = tss->m_szBuf2K;
         return false;
       }
-      strNodeValue = "";
-      list<char*>::const_iterator iter = node->m_listData.begin();
-      while(iter != node->m_listData.end()){
-        strNodeValue += *iter;
-        iter++;
+      XmlTreeNode const* node = parser.getRoot()->m_pChildHead;
+      string strNodeValue;
+      while(node){
+        if (node->m_pChildHead){
+          CwxCommon::snprintf(tss->m_szBuf2K, 2047, "arg[%s] has child, it's invalid.", node->m_szElement);
+          CWX_ERROR((tss->m_szBuf2K));
+          err_msg_ = tss->m_szBuf2K;
+          return false;
+        }
+        strNodeValue = "";
+        list<char*>::const_iterator iter = node->m_listData.begin();
+        while(iter != node->m_listData.end()){
+          strNodeValue += *iter;
+          iter++;
+        }
+        opr_cmd_.opr_args_map_.[string(node->m_szElement)] = strNodeValue;
+        node = node->m_next;
       }
-      m_oprCmd.m_argMap.m_argMap[string(node->m_szElement)] = strNodeValue;
-      node = node->m_next;
     }
+    ///cache对象
+    if (opr_cmd_.cache_time_) app_->GetOprCmdCache()->AddOprCmd(opr_cmd_id_, opr_cmd_);
   }
-
-  ///形成历史
-  bool bExecSql = false;
-  if (m_oprCmd.m_ucRepeatType != DcmdCenterOprCmd::DCMD_OPR_CMD_REPEAT_WITHOUT_HISTORY){
-    string strArg = m_oprCmd.m_strArgs;
-    dcmdEscapeMysqlString(strArg);
-    if (strArg.length() + 2048 > DcmdTss::kMaxSqlBufSize ){
-      CwxCommon::snprintf(tss->m_szBuf2K, 2047, "arg is too long, max:%d", kMaxSqlBufSize - 2048);
-      CWX_ERROR((tss->m_szBuf2K));
-      m_strErrMsg = tss->m_szBuf2K;
+  // 获取命令执行的agent
+  if (agents_.size()) {
+    if (!opr_cmd_.is_agent_mutable_) {
+      err_msg_ = "Can't change opr's host ip";
       return false;
-
     }
-    bExecSql = true;
+  } else {
+    agents_  = opr_cmd_.agents_;
+  }
+  if (!agents_.size()) {
+    err_msg_ = "No host ip";
+    return false;
+  }
+  // 获取命令执行的参数
+  if (opr_args_.size()) {
+    if (!opr_cmd_.is_arg_mutable_) {
+      err_msg_ = "Can't change opr's arg";
+      return false;
+    }
+    map<string, string>::iterator iter = opr_cmd_.opr_args_.begin();
+    while(iter != opr_cmd_.opr_args_.end()) {
+      if (opr_args_.find(iter->first) == opr_args_.end()) {
+        opr_args_[iter->first] = iter->second;
+      }
+    }
+  } else {
+    opr_args_ = opr_cmd_.opr_args_map_;
+  }
+  ///形成历史
+  bool is_exec_sql = false;
+  if (opr_cmd_.repeat_type_ != DcmdCenterOprCmd::DCMD_OPR_CMD_REPEAT_WITHOUT_HISTORY){
     ///记录操作历史
     CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
-      "insert into opr_cmd_exec_history(id, script_file, timeout, ip, repeat, arg_mutable, cache, arg, opr_user, create_time, exec_time) \
-      select id, script_file, timeout, ip, repeat, arg_mutable, cache, '%s', opr_user, create_time, now() from opr_cmd_exec \
-      where id=%s",
-      strArg.c_str(),
-      CwxCommon::toString(m_ullOprCmdId, tss->m_szBuf2K, 10));
+      "insert into opr_cmd_exec_history(exec_id, opr_cmd_Id, opr_cmd, timeout, ip, priority, repeat,"\
+      "cache_time, arg_mutable, arg, utime, ctime, opr_uid) "\
+      "select exec_id, opr_cmd_Id, opr_cmd, timeout, ip, priority, repeat,"\
+      "cache_time, arg_mutable, arg, now(), ctime, opr_uid from opr_cmd_exec \
+      where exec_id=%s",
+      CwxCommon::toString(opr_cmd_id_, tss->m_szBuf2K, 10));
     if (-1 == my->execute(tss->sql_)){
       CwxCommon::snprintf(tss->m_szBuf2K, 2047, "Failure to exec sql:%s",  tss->sql_);
       CWX_ERROR((tss->m_szBuf2K));
-      m_strErrMsg = tss->m_szBuf2K;
+      err_msg_ = tss->m_szBuf2K;
       my->rollback();
       return false;
     }
+    is_exec_sql = true;
   }
   ///删除数据
-  if (DcmdCenterOprCmd::DCMD_OPR_CMD_NO_REPEAT == m_oprCmd.m_ucRepeatType){
-    bExecSql = true;
+  if (DcmdCenterOprCmd::DCMD_OPR_CMD_NO_REPEAT == opr_cmd_.repeat_type_){
+    is_exec_sql = true;
     CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
-      "delete from opr_cmd_exec where id=%s",
-      CwxCommon::toString(m_ullOprCmdId, tss->m_szBuf2K, 10));
+      "delete from opr_cmd_exec where exec_id=%s",
+      CwxCommon::toString(opr_cmd_id_, tss->m_szBuf2K, 10));
     if (-1 == my->execute(tss->sql_)){
       CwxCommon::snprintf(tss->m_szBuf2K, 2047, "Failure to delete opr , exec sql:%s",  tss->sql_);
       CWX_ERROR((tss->m_szBuf2K));
-      m_strErrMsg = tss->m_szBuf2K;
+      err_msg_ = tss->m_szBuf2K;
       my->rollback();
       return false;
     }
   }
-  if (bExecSql) my->commit();
-  ///cache对象
-  if (m_oprCmd.m_uiCacheSec){
-    m_pApp->getOprCmdCache()->addOprCmd(m_ullOprCmdId, m_oprCmd);
-  }
+  if (is_exec_sql) my->commit();
   return true;
 }
 
@@ -263,7 +279,7 @@ int DcmdCenterOprTask::noticeActive(CwxTss* ThrEnv) {
   setTaskState(TASK_STATE_WAITING);
   if (!FetchOprCmd(tss)){
     setTaskState(TASK_STATE_FINISH);
-    m_bFail = true;
+    is_failed_ = true;
     return -1;
   }
   CWX_UINT64 timeStamp = m_uiOprTimeout;
@@ -271,60 +287,69 @@ int DcmdCenterOprTask::noticeActive(CwxTss* ThrEnv) {
   timeStamp += CwxDate::getTimestamp();
   this->setTimeoutValue(timeStamp);
 
-  CwxMsgBlock* msg=NULL;
-  if (DCMD_ERR_SUCCESS != DcmdPoco::packAgentOprCmd(tss->m_pWriter,
-    msg,
-    getTaskId(),
-    m_oprCmd.m_strUiName.c_str(),
-    m_oprCmd.m_strOprFile.c_str(),
-    m_oprCmd.m_strOprRunUser.c_str(),
-    m_oprCmd.m_strContent.c_str(),
-    m_oprCmd.m_strContent.length(),
-    m_oprCmd.m_uiOprTimeout,
-    m_oprCmd.m_argMap,
-    tss->m_szBuf2K))
-  {
-    m_strErrMsg = "Failure to package shell package, err:";
-    m_strErrMsg += tss->m_szBuf2K;
-    CWX_ERROR((m_strErrMsg.c_str()));
+  dcmd_api::AgentOprCmd  opr_cmd;
+  CwxCommon::toString(opr_cmd_id_, tss->m_szBuf2K, 10);
+  opr_cmd.set_opr_id(tss->m_szBuf2K);
+  opr_cmd.set_name(opr_cmd_.opr_name_);
+  opr_cmd.set_priority(opr_cmd_.priority_);
+  opr_cmd.set_run_user(opr_cmd_.opr_run_user_);
+  opr_cmd.set_timeout(opr_cmd_.opr_timeout_);
+  opr_cmd.set_script(opr_cmd_.opr_script_content_);
+  dcmd_api::KeyValue* kv;
+  map<string, string>::iterator iter = opr_cmd_.opr_args_map_.begin();
+  while(iter != opr_cmd_.opr_args_map_.end()) {
+    kv = opr_cmd.add_args();
+    kv->set_key(iter->first);
+    kv->set_value(iter->second);
+    ++iter;
+  }
+  if (!opr_cmd.SerializeToString(&tss->proto_str_)) {
+    CWX_ERROR(("Failure to pack opr cmd msg."));
+    err_msg_ = "Failure to pack opr cmd msg.";
     setTaskState(TASK_STATE_FINISH);
-    m_bFail = true;
+    is_failed_ = true;
     return -1;
   }
-  CwxMsgBlock* sendBlock = NULL;
-
-  m_unAgentNum = m_oprCmd.m_agentSet.size();
-  m_unRecvNum = 0;
-  m_agentConns = new DcmdAgentConnect[m_unAgentNum];
-  m_agentReply = new DcmdCenterAgentOprReply[m_unAgentNum];
+  CwxMsgHead head(0, 0, dcmd_api::MTYPE_CENTER_OPR_CMD, msg_task_id_,
+    tss->proto_str_.length());
+  msg = CwxMsgBlockAlloc::pack(head, tss->proto_str_.c_str(),
+    tss->proto_str_.length());
+  if (!msg) {
+    CWX_ERROR(("Failure to pack opr cmd msg for no memory"));
+    exit(1);
+  }
+  CwxMsgBlock* send_block = NULL;
+  agent_num_ = agents_.size();
+  receive_num_ = 0;
+  agent_conns_ = new DcmdAgentConnect[agent_num_];
+  agent_replys_ = new DcmdCenterAgentOprReply[agent_num_];
   ///发送msg
-  set<string>::iterator iter = m_oprCmd.m_agentSet.begin();
-  CWX_UINT32 uiConnId = 0;
-  CWX_UINT32 unIndex = 0;
-  while(iter != m_oprCmd.m_agentSet.end()){
-    if (!sendBlock) sendBlock = CwxMsgBlockAlloc::clone(msg);
-    if (!DcmdCenterH4AgentOpr::SendAgentMsg(m_pApp,
+  set<string>::iterator iter = agents_.begin();
+  uint32_t conn_id = 0;
+  uint32_t index = 0;
+  while(iter != agents_.end()){
+    if (!send_block) send_block = CwxMsgBlockAlloc::clone(msg);
+    if (!DcmdCenterH4AgentOpr::SendAgentMsg(app_,
       *iter,
       getTaskId(),
-      sendBlock,
-      uiConnId,
-      true))
+      send_block,
+      conn_id))
     {
-      CWX_ERROR(("Failure send msg to agent:%s for opr:%s", iter->c_str(), m_oprCmd.m_strUiName.c_str()));
-      m_agentConns[unIndex].m_uiConnId = 0;
-      m_agentReply[unIndex].m_bSendFail = true;
-      m_unRecvNum++;
+      CWX_ERROR(("Failure send msg to agent:%s for opr:%s", iter->c_str(), opr_cmd_.opr_name_.c_str()));
+      agent_conns_[index].conn_id_ = 0;
+      agent_replys_[index].is_send_failed_ = true;
+      receive_num_++;
     }else{
-      sendBlock = NULL;
-      m_agentConns[unIndex].m_uiConnId = uiConnId;
+      send_block = NULL;
+      agent_conns_[index].conn_id_ = uiConnId;
     }
-    m_agentConns[unIndex].m_strAgentIp = *iter;
-    unIndex++;
+    agent_conns_[index].agent_ip_ = *iter;
+    index++;
     iter++;
   }
   CwxMsgBlockAlloc::free(msg);
-  if (sendBlock) CwxMsgBlockAlloc::free(sendBlock);
-  if (m_unRecvNum == m_unAgentNum){
+  if (send_block) CwxMsgBlockAlloc::free(send_block);
+  if (receive_num_ == receive_num_){
     setTaskState(TASK_STATE_FINISH);
   }
   return 0;
@@ -347,66 +372,36 @@ void DcmdCenterOprTask::execute(CwxTss* pThrEnv) {
 }
 
 void DcmdCenterOprTask::reply(CwxTss* pThrEnv) {
-  static string strSplit = "----------------------------------------------\n";
-  DcmdTss* pTss = (DcmdTss*)pThrEnv;
-  int ret = DCMD_ERR_SUCCESS;
-  if (m_bFail) ret = DCMD_ERR_ERROR;
-  CWX_UINT16 unIndex = 0;
-  string strReply;
-  CwxCommon::snprintf(pTss->m_szBuf2K, 2047, "state:%s\nerr:%s\n",
-    m_bFail?"error":"success",
-    m_bFail?m_strErrMsg.c_str():"");
-  strReply = pTss->m_szBuf2K;
-
-  if (!m_bFail){
+  DcmdTss* tss = (DcmdTss*)pThrEnv;
+  uint16_t index = 0;
+  dcmd_api::UiExecOprCmdReply reply;
+  if (is_failed_) {
+    reply.set_state(dcmd_api::DCMD_STATE_FAILED);
+    reply.set_err(err_msg_);
+  } else {
+    reply.set_state(dcmd_api::DCMD_STATE_SUCCESS);
+  }
+  dcmd_api::AgentOprCmdReply* agent_reply=NULL;
+  if (!is_failed_){
     ///输出发送失败的host
-    for (unIndex =0; unIndex < m_unAgentNum; unIndex++){
-      if (m_agentReply[unIndex].m_bSendFail){
-        strReply += strSplit;
-        sprintf(pTss->m_szBuf2K, "ip:%s\nstate:lost\nresult:\nlost connect\n",
-          m_agentConns[unIndex].m_strAgentIp.c_str());
-        strReply += pTss->m_szBuf2K;
-      }
-    }
-    ///输出error的host
-    for (unIndex =0; unIndex < m_unAgentNum; unIndex++){
-      if (!m_agentReply[unIndex].m_bSendFail && !m_agentReply[unIndex].m_bExecSuccess){
-        strReply += strSplit;
-        CwxCommon::snprintf(pTss->m_szBuf2K, 2048, "ip:%s\nstate:error\nresult:\n%s\n",
-          m_agentConns[unIndex].m_strAgentIp.c_str(),
-          m_agentReply[unIndex].m_szErrMsg);
-        strReply += pTss->m_szBuf2K;
-      }
-    }
-    ///输出timeout的
-    for (unIndex =0; unIndex < m_unAgentNum; unIndex++){
-      if (!m_agentReply[unIndex].m_bSendFail && !m_agentReply[unIndex].m_msg){
-        strReply += strSplit;
-        CwxCommon::snprintf(pTss->m_szBuf2K, 2048, "ip:%s\nstate:timeout\nresult:\ntimeout\n",
-          m_agentConns[unIndex].m_strAgentIp.c_str());
-        strReply += pTss->m_szBuf2K;
-      }
-    }
-    ///输出正常返回的
-    for (unIndex =0; unIndex < m_unAgentNum; unIndex++){
-      if (!m_agentReply[unIndex].m_bSendFail && m_agentReply[unIndex].m_msg && m_agentReply[unIndex].m_bExecSuccess){
-        strReply += strSplit;
-        CwxCommon::snprintf(pTss->m_szBuf2K, 2048, "ip:%s\nstate=success\ndetail:\n",
-          m_agentConns[unIndex].m_strAgentIp.c_str());
-        strReply += pTss->m_szBuf2K;
-        strReply += m_agentReply[unIndex].m_szResult;
-        strReply += "\n";
+    for (index =0; index < agent_num_; index++){
+      agent_reply = reply.add_result();
+      agent_reply->set_ip(agent_conns_[index].agent_ip_)
+      if (agent_replys_[index].is_send_failed_){
+        agent_reply->set_err("Lost connected.");
+        agent_reply->set_state(dcmd_api::DCMD_STATE_FAILED);
+      } else if (!agent_replys_[index].is_exec_success) {
+        agent_reply->set_err(agent_replys_[index].err_msg_);
+        agent_reply->set_state(dcmd_api::DCMD_STATE_FAILED);
+      } else if (!agent_replys_[index].m_msg) {
+        agent_reply->set_err("timeout");
+        agent_reply->set_state(dcmd_api::DCMD_STATE_FAILED);
+      } else {
+        agent_reply->set_result(agent_replys_[index].result_);
+        agent_reply->set_state(dcmd_api::DCMD_STATE_SUCCESS);
       }
     }
   }
-  //reply
-  CWX_UINT32 uiState = m_bFail?DCMD_ERR_ERROR:DCMD_ERR_SUCCESS;
-  DcmdCenterH4Admin::replyOprCmdResult(m_pApp,
-    pTss,
-    m_uiReplyConnId,
-    m_uiMsgTaskId,
-    uiState,
-    strReply.c_str(),
-    m_strErrMsg.c_str());
+  DcmdCenterH4Admin::ReplyExecOprCmd(app_, tss, reply_conn_id_, msg_task_id_, &reply);
 }
 }  // dcmd

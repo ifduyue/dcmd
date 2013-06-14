@@ -32,6 +32,7 @@ class DcmdCenterOprCmd{
     is_agent_mutable_ = false;
     cache_time_ = 0;
     expire_time_ = 0;
+    priority_ = kDefOprPriority;
   }
   DcmdCenterOprCmd& operator=(DcmdCenterOprCmd const& item) {
     if (this == &item) return *this;
@@ -42,7 +43,9 @@ class DcmdCenterOprCmd{
     opr_run_user_ = item.opr_run_user_; 
     opr_timeout_ = item.opr_timeout_;
     agents_ = item.agents_;
+    priority_ = item.priority_;
     opr_args_ = item.opr_args_;
+    opr_args_map_ = item.opr_args_map_;
     opr_script_content_ = item.opr_script_content_;
     repeat_type_ = item.repeat_type_;
     is_arg_mutable_ = item.is_arg_mutable_;
@@ -60,7 +63,9 @@ class DcmdCenterOprCmd{
     opr_run_user_ = item.opr_run_user_; 
     opr_timeout_ = item.opr_timeout_;
     agents_ = item.agents_;
+    priority_ = item.priority_;
     opr_args_ = item.opr_args_;
+    opr_args_map_ = item.opr_args_map_;
     opr_script_content_ = item.opr_script_content_;
     repeat_type_ = item.repeat_type_;
     is_arg_mutable_ = item.is_arg_mutable_;
@@ -84,8 +89,12 @@ class DcmdCenterOprCmd{
   uint32_t              opr_timeout_;
   // opr操作对应的agent
   set<string>           agents_;
+  // opr的优先级
+  uint32_t              priority_;
+  // 操作的参数
+  string                opr_args_;
   // opr对应的参数
-  map<string, string>   opr_args_;
+  map<string, string>   opr_args_map_;
   // opr的cmd文件名
   string                opr_script_content_;
   // 可重复执行的类型

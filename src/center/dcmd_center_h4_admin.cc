@@ -101,11 +101,15 @@ void DcmdCenterH4Admin::ExecOprCmd(CwxMsgBlock*& msg, DcmdTss* tss) {
   opr_task->reply_conn_id_ = msg->event().getConnId();
   opr_task->msg_task_id_ = msg->event().getMsgHeader().getTaskId();
   opr_task->opr_cmd_id_ = strtoull(opr_cmd.opr_id().c_str(), NULL, 10);
+  uint32_t i = 0;
   if (opr_cmd.args_size()) {
-    dcmd_api::KeyValue
     for (i=0; i< opr_cmd.args_size(); i++) {
-      opr_task->opr_args_.push_back(pair<string, string>(opr_cmd.args(i).key,
-        opr_cmd.args(i).value));
+      opr_task->opr_args_[opr_cmd.args(i).key] = opr_cmd.args(i).value;
+    }
+  }
+  if (opr_cmd.agents_size()) {
+    for (i=0; i< opr_cmd.agents_size(); i++) {
+      opr_task->agents_.insert(opr_cmd.agents(i));
     }
   }
   opr_task->setTaskId(NextMsgTaskId());

@@ -311,7 +311,7 @@ void  DcmdCenterH4AgentTask::AgentReport(CwxMsgBlock*& msg, DcmdTss* tss){
     msg->event().getMsgHeader().getTaskId(),
     &reply);
   // 如果自己是master，则通知agent
-  if (is_success && app_->is_master())  noticeMaster(tss, &agent_ip);
+  if (is_success && app_->is_master())  NoticeMaster(tss, &agent_ip);
   return;
 }
 
@@ -406,57 +406,59 @@ void  DcmdCenterH4AgentTask::AgentSubtaskResult(CwxMsgBlock*& msg, DcmdTss* tss)
 
 // agent报告任务的处理进度
 void DcmdCenterH4AgentTask::AgentSubtaskProcess(CwxMsgBlock*& msg, DcmdTss* tss){
-  if (!m_pApp->isMaster()){
-    return; ///若不是master，直接忽略
-  }
-  string strAgentIp="";
-  if (!m_pApp->getAgentMgr()->getAgentIp(msg->event().getConnId(), strAgentIp)){///连接已经关闭
+  if (!app_->is_master()) return; //若不是master，直接忽略
+  string agent_ip ;
+  if (!app_->GetAgentMgr()->getAgentIp(msg->event().getConnId(), agent_ip))
+    return; // 连接已经关闭
+  dcmd_api::AgentSubTaskProcess process;
+  tss->proto_str_.assign(msg->rd_ptr(), msg->length());
+  if (!process.ParseFromString(tss->proto_str_)) {
+    CWX_ERROR(("Failure unpack subtask process msg from %s, close it.", agent_ip.c_str()));
+    app_->noticeCloseConn(msg->event().getConnId());
     return;
   }
-  CWX_UINT32 uiTid = 0;
-  CWX_UINT64 ullTaskNodeId = 0;
-  char* szProcess = NULL;
-  if (DCMD_ERR_SUCCESS != DcmdPoco::parseTaskCmdProcess(tss->m_pReader,
-    msg,
-    uiTid,
-    ullTaskNodeId,
-    szProcess,
-    tss->m_szBuf2K))
-  {
-    CWX_ERROR(("Failure unpack agent's task process msg. err:%s",tss->m_szBuf2K));
-    return;
-  }
-  char szTmp1[128];
-  CWX_DEBUG(("Receive agent's task process, agent:%s, task_id=%u tasknode-id:%s  process=%s",
-    strAgentIp.c_str(), 
-    uiTid,
-    CwxCommon::toString(ullTaskNodeId, szTmp1, 10),
-    szProcess?szProcess:""));
-  m_pApp->getTaskMgr()->setAgentTaskProcess(uiTid, ullTaskNodeId, szProcess);
+  CWX_DEBUG(("Receive agent's subtask-process, agent:%s, task_id=%s, subtask_id=%s, process=%s",
+    agent_ip.c_str(), 
+    process.task_id().c_str(),
+    process.subtask_id().c_str(),
+    process.process().c_str()));
+  app_->GetTaskMgr()->SetAgentTaskProcess(process.subtask_id(), process.process().c_str());
 }
 
-void DcmdCenterH4AgentTask::noticeMaster(DcmdTss* tss, string const* strAgentIp){
-    CwxMsgBlock* msg = NULL;
-    CWX_DEBUG(("I am master, notice agent[%s]", strAgentIp?strAgentIp->c_str():"all"));
+// 接收到UI命令
+void DcmdCenterH4AgentTask::UiExecTaskCmd(CwxMsgBlock*& msg, DcmdTss* tss){
+  if (!app_->is_master()) return; //若不是master，直接忽略
+  dcmd_api::UiTaskCmd task_cmd;
+  tss->proto_str_.assign(msg->rd_ptr(), msg->length());
+  if (!task_cmd.ParseFromString(tss->proto_str_)) {
+    CWX_ERROR(("Failure unpack task cmd msg, close it."));
+    app_->noticeCloseConn(msg->event().getConnId());
+    return;
+  }
+  CWX_DEBUG(("Receive task cmd, task_id=%s, cmd_type=%d",
+    task_cmd.task_id().c_str(),
+    task_cmd.cmd_type()));
+  app_->GetTaskMgr()->ReceiveCmd(tss, task_cmd, msg->event().getConnId(), msg->event().getMsgHeader().getTaskId());
+}
 
-    if (DCMD_ERR_SUCCESS != DcmdPoco::packCenterMasterNotice(tss->m_pWriter,
-        msg,
-        0,
-        tss->m_szBuf2K))
-    {
-        CWX_ERROR(("Failure to pack master notice msg, err:%s", tss->m_szBuf2K));
-        CWX_ASSERT(0);
-    }
-    msg->send_ctrl().setSvrId(DcmdCenterApp::SVR_TYPE_AGENT);
-    msg->send_ctrl().setMsgAttr(CwxMsgSendCtrl::NONE);
-    CWX_UINT32 uiConnId = 0;
-    if (!strAgentIp){
-        m_pApp->getAgentMgr()->broadcastMsg(msg);
-    }
-    else{
-        if (!m_pApp->getAgentMgr()->sendMsg(*strAgentIp, msg, uiConnId)){
-            CwxMsgBlockAlloc::free(msg);
-        }
-    }
+void DcmdCenterH4AgentTask::NoticeMaster(DcmdTss* tss, string const* agent_ip) {
+  CwxMsgBlock* msg = NULL;
+  CWX_DEBUG(("I am master, notice agent[%s]", agent_ip?agent_ip->c_str():"all"));
+  CwxMsgBlock* msg = NULL;
+  CwxMsgHead head(0, 0, dcmd_api::MTYPE_CENTER_MASTER_NOTICE, 0, 0);
+  msg = CwxMsgBlockAlloc::pack(head, "", 0);
+  if (!msg){
+    CWX_ERROR(("Failure to pack master notice msg for no memory"));
+    CWX_ASSERT(0);
+  }
+  msg->send_ctrl().setSvrId(DcmdCenterApp::SVR_TYPE_AGENT);
+  msg->send_ctrl().setMsgAttr(CwxMsgSendCtrl::NONE);
+  uint32_t conn_id = 0;
+  if (!agent_ip) {
+    app_->GetAgentMgr()->BroadcastMsg(msg);
+  } else {
+    if (!app_->GetAgentMgr()->SendMsg(agent_ip, msg, conn_id))
+      CwxMsgBlockAlloc::free(msg);
+  }
 }
 }  // dcmd
