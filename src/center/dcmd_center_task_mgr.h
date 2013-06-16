@@ -75,7 +75,7 @@ class DcmdCenterTaskMgr{
     uint32_t uid);
   // cancel一个服务的所有任务的执行
   dcmd_api::DcmdState TaskCmdCancelSvrSubtask(DcmdTss* tss, uint32_t task_id,
-    char const* serivce, char const* agent_ip, uint32_t uid, DcmdCenterCmd** cmd);
+    char const* serivce, char const* agent_ip, uint32_t uid);
   // 重做整个任务
   dcmd_api::DcmdState TaskCmdRedoTask(DcmdTss* tss, uint32_t task_id,
     uint32_t uid, DcmdCenterCmd** cmd);
@@ -167,8 +167,8 @@ class DcmdCenterTaskMgr{
    // 创建任务的子任务
    inline bool CreateSubtasksForTask(DcmdTss* tss, DcmdCenterTask* task,
      bool is_commit, uint32_t uid);
-   // 创建cmd
-   inline bool InsertCommand(DcmdTss* tss, bool is_commit, uint32_t uid,
+   // 创建cmd, 0表示失败
+   inline uint64_t InsertCommand(DcmdTss* tss, bool is_commit, uint32_t uid,
      uint32_t task_id, uint64_t subtask_id, char const* svr_pool,
      uint32_t svr_pool_id, char const* service, char const* ip,
      uint8_t cmt_type, uint8_t state, char const* err_msg);
@@ -178,6 +178,13 @@ class DcmdCenterTaskMgr{
    inline void RemoveTaskFromMem(DcmdCenterTask* task);
    // 删除指定的cmd
    inline void RemoveCmd(DcmdCenterCmd* cmd);
+   // 设置发送的cancel命令
+   inline void FillCtrlCmd(dcmd_api::AgentTaskCmd& cmd,
+     uint64_t cmd_id,
+     string const& agent_ip,
+     string const& svr_name,
+     DcmdCenterSubtask* subtask
+     );
 
 
 

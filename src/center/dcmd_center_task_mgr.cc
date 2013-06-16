@@ -94,7 +94,7 @@ bool DcmdCenterTaskMgr::ReceiveCmd(DcmdTss* tss,
       break;
     case dcmd_api::CMD_CANCEL_SVR_SUBTASK:
       state = TaskCmdCancelSvrSubtask(tss, strtoul(cmd.task_id().c_str(), NULL, 10),
-        cmd.svr_name().c_str(), cmd.ip().c_str(), cmd.uid(), NULL);
+        cmd.svr_name().c_str(), cmd.ip().c_str(), cmd.uid());
       break;
     case dcmd_api::CMD_REDO_TASK:
       state = TaskCmdRedoTask(tss, strtoul(cmd.task_id().c_str(), NULL, 10),
@@ -509,8 +509,7 @@ bool DcmdCenterTaskMgr::LoadAllCmd(DcmdTss* tss) {
       CWX_ASSERT(0);
       break;
     case dcmd_api::CMD_CANCEL_SVR_SUBTASK:
-      state = TaskCmdCancelSvrSubtask(tss, cmd->service_.c_str(), cmd->task_id_,
-        cmd->agent_ip_.c_str(), 0, &cmd);
+      CWX_ASSERT(0);
       break;
     case dcmd_api::CMD_REDO_TASK:
       state = TaskCmdRedoTask(tss, cmd->task_id_, 0, &cmd);
@@ -1122,7 +1121,7 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdCancelSubtask(DcmdTss* tss, uint64
     tss->err_msg_ = "No task";
     return dcmd_api::DCMD_STATE_NO_TASK;
   }
-  if (!subtask->task_->is_freezed_) {
+  if (subtask->task_->is_freezed_) {
     tss->err_msg_ = "Task is in freezed state.";
     return dcmd_api::DCMD_STATE_FAILED;
   }
@@ -1135,15 +1134,53 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdCancelSubtask(DcmdTss* tss, uint64
     return dcmd_api::DCMD_STATE_FAILED;
   }
   if (!subtask->exec_cmd_) return dcmd_api::DCMD_STATE_SUCCESS;
+  // 将cancel命令插入数据库
+  uint64_t cmd_id = InsertCommand(tss, true, uid, subtask->task_id_, subtask_id,
+    subtask->svr_pool_.c_str(), subtask->task_->GetSvrPoolId(subtask->svr_pool_),
+    subtask->service_.c_str(), subtask->ip_.c_str(), dcmd_api::CMD_CANCEL_SUBTASK,
+    dcmd_api::COMMAND_SUCCESS, "");
+  if (!cmd_id) return dcmd_api::DCMD_STATE_FAILED;
   // 发送cancel命令
-  DcmdCenterCmd cmd;
-  DcmdCenterH4AgentTask::SendAgentCmd(app_, tss, subtask->ip_, 0, DcmdCenterCmd*)
+  dcmd_api::AgentTaskCmd cmd;
+  FillCtrlCmd(cmd, cmd_id, subtask->ip_, subtask->service_, subtask);
+  DcmdCenterH4AgentTask::SendAgentCmd(app_, tss, subtask->ip_, 0, &cmd);
+  return dcmd_api::DCMD_STATE_SUCCESS;
 }
 
 dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdCancelSvrSubtask(DcmdTss* tss, uint32_t task_id,
-  char const* serivce, char const* agent_ip, uint32_t uid, DcmdCenterCmd** cmd)
+  char const* serivce, char const* agent_ip, uint32_t uid)
 {
-
+  DcmdCenterTask* task =  GetTask(task_id);
+  // 加载任务
+  if (!task) {
+    if (!LoadNewTask(tss)) {
+      mysql_->disconnect();
+      return dcmd_api::DCMD_STATE_FAILED;
+    }
+    task = GetTask(task_id);
+  }
+  if (!task) {
+    tss->err_msg_ = "No task.";
+    return dcmd_api::DCMD_STATE_NO_TASK;
+  }
+  if (task->is_freezed_) {
+    tss->err_msg_ = "Task is in freezed state.";
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
+  if (!task->is_valid_) {
+    tss->err_msg_ = "Task is invalid.";
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
+  // 将cancel命令插入数据库
+  uint64_t cmd_id = InsertCommand(tss, true, uid, task_id, 0,
+    "", "", serivce, agent_ip, dcmd_api::CMD_CANCEL_SVR_SUBTASK,
+    dcmd_api::COMMAND_SUCCESS, "");
+  if (!cmd_id) return dcmd_api::DCMD_STATE_FAILED;
+  // 发送cancel命令
+  dcmd_api::AgentTaskCmd cmd;
+  FillCtrlCmd(cmd, cmd_id, agent_ip, serivce, NULL);
+  DcmdCenterH4AgentTask::SendAgentCmd(app_, tss, agent_ip, 0, &cmd);
+  return dcmd_api::DCMD_STATE_SUCCESS;
 }
 
 dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdRedoTask(DcmdTss* tss, uint32_t task_id,

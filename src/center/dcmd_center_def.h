@@ -286,6 +286,8 @@ class DcmdCenterTask {
   bool AddSvrPool(DcmdCenterSvrPool* pool);
   // 获取task的池子
   DcmdCenterSvrPool* GetSvrPool(string const& pool_name);
+  // 获取池子的id
+  uint32_t GetSvrPoolId(string const& pool_name);
   // 添加新subtask，true 成功；false：失败。失败或者subtask存在，或者pool不存在
   bool AddSubtask(DcmdCenterSubtask* subtask);
   // 改变任务的状态，true 成功；false：失败。失败或者subtask不存在，或者pool不存在

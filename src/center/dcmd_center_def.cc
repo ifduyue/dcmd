@@ -95,6 +95,12 @@ DcmdCenterSvrPool* DcmdCenterTask::GetSvrPool(string const& pool_name) {
   if ( iter == pools_.end()) return NULL;
   return iter->second;
 }
+// 获取池子的id
+uint32_t DcmdCenterTask::GetSvrPoolId(string const& pool_name) {
+  map<string, DcmdCenterSvrPool*>::iterator iter = pools_.find(pool_name);
+  if ( iter == pools_.end()) return 0;
+  return iter->second->svr_pool_id_;
+}
 
 bool DcmdCenterTask::AddSubtask(DcmdCenterSubtask* subtask) {
   map<string, DcmdCenterSvrPool*>::iterator iter = pools_.find(subtask->svr_pool_);
