@@ -64,15 +64,16 @@ enum CmdType {
   CMD_ADD_NODE = 6,
   CMD_CANCEL_SUBTASK = 7,
   CMD_CANCEL_SVR_SUBTASK = 8,
-  CMD_REDO_TASK = 9,
-  CMD_REDO_SVR_POOL = 10,
-  CMD_REDO_SUBTASK = 11,
-  CMD_REDO_FAILED_SUBTASK = 12,
-  CMD_REDO_FAILED_SVR_POOL_SUBTASK = 13,
-  CMD_IGNORE_SUBTASK = 14,
-  CMD_FREEZE_TASK = 15,
-  CMD_UNFREEZE_TASK = 16,
-  CMD_UPDATE_TASK = 17
+  CMD_DO_SUBTASK = 9,
+  CMD_REDO_TASK = 10,
+  CMD_REDO_SVR_POOL = 11,
+  CMD_REDO_SUBTASK = 12,
+  CMD_REDO_FAILED_SUBTASK = 13,
+  CMD_REDO_FAILED_SVR_POOL_SUBTASK = 14,
+  CMD_IGNORE_SUBTASK = 15,
+  CMD_FREEZE_TASK = 16,
+  CMD_UNFREEZE_TASK = 17,
+  CMD_UPDATE_TASK = 18
 };
 bool CmdType_IsValid(int value);
 const CmdType CmdType_MIN = CMD_UNKNOWN;
@@ -953,10 +954,26 @@ class UiExecOprCmd : public ::google::protobuf::Message {
   inline ::google::protobuf::RepeatedPtrField< ::dcmd_api::KeyValue >*
       mutable_args();
   
-  // required string user = 4;
+  // repeated string agents = 4;
+  inline int agents_size() const;
+  inline void clear_agents();
+  static const int kAgentsFieldNumber = 4;
+  inline const ::std::string& agents(int index) const;
+  inline ::std::string* mutable_agents(int index);
+  inline void set_agents(int index, const ::std::string& value);
+  inline void set_agents(int index, const char* value);
+  inline void set_agents(int index, const char* value, size_t size);
+  inline ::std::string* add_agents();
+  inline void add_agents(const ::std::string& value);
+  inline void add_agents(const char* value);
+  inline void add_agents(const char* value, size_t size);
+  inline const ::google::protobuf::RepeatedPtrField< ::std::string>& agents() const;
+  inline ::google::protobuf::RepeatedPtrField< ::std::string>* mutable_agents();
+  
+  // required string user = 5;
   inline bool has_user() const;
   inline void clear_user();
-  static const int kUserFieldNumber = 4;
+  static const int kUserFieldNumber = 5;
   inline const ::std::string& user() const;
   inline void set_user(const ::std::string& value);
   inline void set_user(const char* value);
@@ -964,10 +981,10 @@ class UiExecOprCmd : public ::google::protobuf::Message {
   inline ::std::string* mutable_user();
   inline ::std::string* release_user();
   
-  // required string passwd = 5;
+  // required string passwd = 6;
   inline bool has_passwd() const;
   inline void clear_passwd();
-  static const int kPasswdFieldNumber = 5;
+  static const int kPasswdFieldNumber = 6;
   inline const ::std::string& passwd() const;
   inline void set_passwd(const ::std::string& value);
   inline void set_passwd(const char* value);
@@ -990,12 +1007,13 @@ class UiExecOprCmd : public ::google::protobuf::Message {
   
   ::std::string* opr_id_;
   ::google::protobuf::RepeatedPtrField< ::dcmd_api::KeyValue > args_;
+  ::google::protobuf::RepeatedPtrField< ::std::string> agents_;
   ::std::string* user_;
   ::std::string* passwd_;
   ::google::protobuf::int32 client_msg_id_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(5 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(6 + 31) / 32];
   
   friend void  protobuf_AddDesc_dcmd_5fui_2eproto();
   friend void protobuf_AssignDesc_dcmd_5fui_2eproto();
@@ -4015,15 +4033,59 @@ UiExecOprCmd::mutable_args() {
   return &args_;
 }
 
-// required string user = 4;
+// repeated string agents = 4;
+inline int UiExecOprCmd::agents_size() const {
+  return agents_.size();
+}
+inline void UiExecOprCmd::clear_agents() {
+  agents_.Clear();
+}
+inline const ::std::string& UiExecOprCmd::agents(int index) const {
+  return agents_.Get(index);
+}
+inline ::std::string* UiExecOprCmd::mutable_agents(int index) {
+  return agents_.Mutable(index);
+}
+inline void UiExecOprCmd::set_agents(int index, const ::std::string& value) {
+  agents_.Mutable(index)->assign(value);
+}
+inline void UiExecOprCmd::set_agents(int index, const char* value) {
+  agents_.Mutable(index)->assign(value);
+}
+inline void UiExecOprCmd::set_agents(int index, const char* value, size_t size) {
+  agents_.Mutable(index)->assign(
+    reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* UiExecOprCmd::add_agents() {
+  return agents_.Add();
+}
+inline void UiExecOprCmd::add_agents(const ::std::string& value) {
+  agents_.Add()->assign(value);
+}
+inline void UiExecOprCmd::add_agents(const char* value) {
+  agents_.Add()->assign(value);
+}
+inline void UiExecOprCmd::add_agents(const char* value, size_t size) {
+  agents_.Add()->assign(reinterpret_cast<const char*>(value), size);
+}
+inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
+UiExecOprCmd::agents() const {
+  return agents_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::std::string>*
+UiExecOprCmd::mutable_agents() {
+  return &agents_;
+}
+
+// required string user = 5;
 inline bool UiExecOprCmd::has_user() const {
-  return (_has_bits_[0] & 0x00000008u) != 0;
+  return (_has_bits_[0] & 0x00000010u) != 0;
 }
 inline void UiExecOprCmd::set_has_user() {
-  _has_bits_[0] |= 0x00000008u;
+  _has_bits_[0] |= 0x00000010u;
 }
 inline void UiExecOprCmd::clear_has_user() {
-  _has_bits_[0] &= ~0x00000008u;
+  _has_bits_[0] &= ~0x00000010u;
 }
 inline void UiExecOprCmd::clear_user() {
   if (user_ != &::google::protobuf::internal::kEmptyString) {
@@ -4073,15 +4135,15 @@ inline ::std::string* UiExecOprCmd::release_user() {
   }
 }
 
-// required string passwd = 5;
+// required string passwd = 6;
 inline bool UiExecOprCmd::has_passwd() const {
-  return (_has_bits_[0] & 0x00000010u) != 0;
+  return (_has_bits_[0] & 0x00000020u) != 0;
 }
 inline void UiExecOprCmd::set_has_passwd() {
-  _has_bits_[0] |= 0x00000010u;
+  _has_bits_[0] |= 0x00000020u;
 }
 inline void UiExecOprCmd::clear_has_passwd() {
-  _has_bits_[0] &= ~0x00000010u;
+  _has_bits_[0] &= ~0x00000020u;
 }
 inline void UiExecOprCmd::clear_passwd() {
   if (passwd_ != &::google::protobuf::internal::kEmptyString) {

@@ -201,10 +201,11 @@ void protobuf_AssignDesc_dcmd_5fui_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(UiAgentRunningOprReply));
   UiExecOprCmd_descriptor_ = file->message_type(6);
-  static const int UiExecOprCmd_offsets_[5] = {
+  static const int UiExecOprCmd_offsets_[6] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UiExecOprCmd, client_msg_id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UiExecOprCmd, opr_id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UiExecOprCmd, args_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UiExecOprCmd, agents_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UiExecOprCmd, user_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UiExecOprCmd, passwd_),
   };
@@ -590,62 +591,63 @@ void protobuf_AddDesc_dcmd_5fui_2eproto() {
     "\006passwd\030\004 \002(\t\"\203\001\n\026UiAgentRunningOprReply"
     "\022\025\n\rclient_msg_id\030\001 \002(\005\022\"\n\005state\030\002 \002(\0162\023"
     ".dcmd_api.DcmdState\022!\n\006result\030\003 \003(\0132\021.dc"
-    "md_api.OprInfo\022\013\n\003err\030\004 \001(\t\"u\n\014UiExecOpr"
-    "Cmd\022\025\n\rclient_msg_id\030\001 \002(\005\022\016\n\006opr_id\030\002 \001"
-    "(\t\022 \n\004args\030\003 \003(\0132\022.dcmd_api.KeyValue\022\014\n\004"
-    "user\030\004 \002(\t\022\016\n\006passwd\030\005 \002(\t\"\207\001\n\021UiExecOpr"
-    "CmdReply\022\025\n\rclient_msg_id\030\001 \002(\005\022\"\n\005state"
-    "\030\002 \002(\0162\023.dcmd_api.DcmdState\022*\n\006result\030\003 "
-    "\003(\0132\032.dcmd_api.AgentOprCmdReply\022\013\n\003err\030\004"
-    " \001(\t\"`\n\013UiAgentInfo\022\025\n\rclient_msg_id\030\001 \002"
-    "(\005\022\013\n\003ips\030\002 \003(\t\022\017\n\007version\030\003 \002(\010\022\014\n\004user"
-    "\030\004 \002(\t\022\016\n\006passwd\030\005 \002(\t\"\202\001\n\020UiAgentInfoRe"
-    "ply\022\025\n\rclient_msg_id\030\001 \002(\005\022\"\n\005state\030\002 \002("
-    "\0162\023.dcmd_api.DcmdState\022&\n\tagentinfo\030\003 \003("
-    "\0132\023.dcmd_api.AgentInfo\022\013\n\003err\030\004 \001(\t\"I\n\022U"
-    "iInvalidAgentInfo\022\025\n\rclient_msg_id\030\001 \002(\005"
-    "\022\014\n\004user\030\002 \002(\t\022\016\n\006passwd\030\003 \002(\t\"\211\001\n\027UiInv"
-    "alidAgentInfoReply\022\025\n\rclient_msg_id\030\001 \002("
-    "\005\022\"\n\005state\030\002 \002(\0162\023.dcmd_api.DcmdState\022&\n"
-    "\tagentinfo\030\003 \002(\0132\023.dcmd_api.AgentInfo\022\013\n"
-    "\003err\030\004 \001(\t\"Y\n\020UiTaskScriptInfo\022\025\n\rclient"
-    "_msg_id\030\001 \002(\005\022\020\n\010task_cmd\030\002 \002(\t\022\014\n\004user\030"
-    "\003 \002(\t\022\016\n\006passwd\030\004 \002(\t\"|\n\025UiTaskScriptInf"
-    "oReply\022\025\n\rclient_msg_id\030\001 \002(\005\022\"\n\005state\030\002"
-    " \002(\0162\023.dcmd_api.DcmdState\022\016\n\006script\030\003 \001("
-    "\t\022\013\n\003err\030\004 \001(\t\022\013\n\003md5\030\005 \001(\t\"X\n\017UiOprScri"
-    "ptInfo\022\025\n\rclient_msg_id\030\001 \002(\005\022\020\n\010opr_fil"
-    "e\030\002 \002(\t\022\014\n\004user\030\003 \002(\t\022\016\n\006passwd\030\004 \002(\t\"{\n"
-    "\024UiOprScriptInfoReply\022\025\n\rclient_msg_id\030\001"
-    " \002(\005\022\"\n\005state\030\002 \002(\0162\023.dcmd_api.DcmdState"
-    "\022\016\n\006script\030\003 \001(\t\022\013\n\003err\030\004 \001(\t\022\013\n\003md5\030\005 \001"
-    "(\t\"]\n\022UiAgentTaskProcess\022\025\n\rclient_msg_i"
-    "d\030\001 \002(\005\022\022\n\nsubtask_id\030\002 \003(\t\022\014\n\004user\030\003 \002("
-    "\t\022\016\n\006passwd\030\004 \002(\t\"\214\001\n\027UiAgentTaskProcess"
-    "Reply\022\025\n\rclient_msg_id\030\001 \002(\005\022\"\n\005state\030\002 "
-    "\002(\0162\023.dcmd_api.DcmdState\022)\n\007process\030\003 \003("
-    "\0132\030.dcmd_api.SubTaskProcess\022\013\n\003err\030\004 \001(\t"
-    "\"\234\002\n\tUiTaskCmd\022\025\n\rclient_msg_id\030\001 \002(\005\022\017\n"
-    "\007task_id\030\002 \002(\t\022\013\n\003uid\030\003 \002(\005\022\022\n\nsubtask_i"
-    "d\030\004 \001(\t\022\n\n\002ip\030\005 \001(\t\022\020\n\010svr_name\030\006 \001(\t\022\020\n"
-    "\010svr_pool\030\007 \001(\t\022\026\n\016concurrent_num\030\010 \001(\005\022"
-    "\027\n\017concurrent_rate\030\t \001(\005\022\024\n\014task_timeout"
-    "\030\n \001(\005\022\014\n\004auto\030\013 \001(\010\022#\n\010cmd_type\030\014 \002(\0162\021"
-    ".dcmd_api.CmdType\022\014\n\004user\030\r \002(\t\022\016\n\006passw"
-    "d\030\016 \002(\t\"X\n\016UiTaskCmdReply\022\025\n\rclient_msg_"
+    "md_api.OprInfo\022\013\n\003err\030\004 \001(\t\"\205\001\n\014UiExecOp"
+    "rCmd\022\025\n\rclient_msg_id\030\001 \002(\005\022\016\n\006opr_id\030\002 "
+    "\001(\t\022 \n\004args\030\003 \003(\0132\022.dcmd_api.KeyValue\022\016\n"
+    "\006agents\030\004 \003(\t\022\014\n\004user\030\005 \002(\t\022\016\n\006passwd\030\006 "
+    "\002(\t\"\207\001\n\021UiExecOprCmdReply\022\025\n\rclient_msg_"
     "id\030\001 \002(\005\022\"\n\005state\030\002 \002(\0162\023.dcmd_api.DcmdS"
-    "tate\022\013\n\003err\030\004 \001(\t*\242\003\n\007CmdType\022\017\n\013CMD_UNK"
-    "NOWN\020\000\022\022\n\016CMD_START_TASK\020\001\022\022\n\016CMD_PAUSE_"
-    "TASK\020\002\022\023\n\017CMD_RESUME_TASK\020\003\022\022\n\016CMD_RETRY"
-    "_TASK\020\004\022\023\n\017CMD_FINISH_TASK\020\005\022\020\n\014CMD_ADD_"
-    "NODE\020\006\022\026\n\022CMD_CANCEL_SUBTASK\020\007\022\032\n\026CMD_CA"
-    "NCEL_SVR_SUBTASK\020\010\022\021\n\rCMD_REDO_TASK\020\t\022\025\n"
-    "\021CMD_REDO_SVR_POOL\020\n\022\024\n\020CMD_REDO_SUBTASK"
-    "\020\013\022\033\n\027CMD_REDO_FAILED_SUBTASK\020\014\022$\n CMD_R"
-    "EDO_FAILED_SVR_POOL_SUBTASK\020\r\022\026\n\022CMD_IGN"
-    "ORE_SUBTASK\020\016\022\023\n\017CMD_FREEZE_TASK\020\017\022\025\n\021CM"
-    "D_UNFREEZE_TASK\020\020\022\023\n\017CMD_UPDATE_TASK\020\021B\021"
-    "\n\017com.cwinux.dcmd", 2937);
+    "tate\022*\n\006result\030\003 \003(\0132\032.dcmd_api.AgentOpr"
+    "CmdReply\022\013\n\003err\030\004 \001(\t\"`\n\013UiAgentInfo\022\025\n\r"
+    "client_msg_id\030\001 \002(\005\022\013\n\003ips\030\002 \003(\t\022\017\n\007vers"
+    "ion\030\003 \002(\010\022\014\n\004user\030\004 \002(\t\022\016\n\006passwd\030\005 \002(\t\""
+    "\202\001\n\020UiAgentInfoReply\022\025\n\rclient_msg_id\030\001 "
+    "\002(\005\022\"\n\005state\030\002 \002(\0162\023.dcmd_api.DcmdState\022"
+    "&\n\tagentinfo\030\003 \003(\0132\023.dcmd_api.AgentInfo\022"
+    "\013\n\003err\030\004 \001(\t\"I\n\022UiInvalidAgentInfo\022\025\n\rcl"
+    "ient_msg_id\030\001 \002(\005\022\014\n\004user\030\002 \002(\t\022\016\n\006passw"
+    "d\030\003 \002(\t\"\211\001\n\027UiInvalidAgentInfoReply\022\025\n\rc"
+    "lient_msg_id\030\001 \002(\005\022\"\n\005state\030\002 \002(\0162\023.dcmd"
+    "_api.DcmdState\022&\n\tagentinfo\030\003 \002(\0132\023.dcmd"
+    "_api.AgentInfo\022\013\n\003err\030\004 \001(\t\"Y\n\020UiTaskScr"
+    "iptInfo\022\025\n\rclient_msg_id\030\001 \002(\005\022\020\n\010task_c"
+    "md\030\002 \002(\t\022\014\n\004user\030\003 \002(\t\022\016\n\006passwd\030\004 \002(\t\"|"
+    "\n\025UiTaskScriptInfoReply\022\025\n\rclient_msg_id"
+    "\030\001 \002(\005\022\"\n\005state\030\002 \002(\0162\023.dcmd_api.DcmdSta"
+    "te\022\016\n\006script\030\003 \001(\t\022\013\n\003err\030\004 \001(\t\022\013\n\003md5\030\005"
+    " \001(\t\"X\n\017UiOprScriptInfo\022\025\n\rclient_msg_id"
+    "\030\001 \002(\005\022\020\n\010opr_file\030\002 \002(\t\022\014\n\004user\030\003 \002(\t\022\016"
+    "\n\006passwd\030\004 \002(\t\"{\n\024UiOprScriptInfoReply\022\025"
+    "\n\rclient_msg_id\030\001 \002(\005\022\"\n\005state\030\002 \002(\0162\023.d"
+    "cmd_api.DcmdState\022\016\n\006script\030\003 \001(\t\022\013\n\003err"
+    "\030\004 \001(\t\022\013\n\003md5\030\005 \001(\t\"]\n\022UiAgentTaskProces"
+    "s\022\025\n\rclient_msg_id\030\001 \002(\005\022\022\n\nsubtask_id\030\002"
+    " \003(\t\022\014\n\004user\030\003 \002(\t\022\016\n\006passwd\030\004 \002(\t\"\214\001\n\027U"
+    "iAgentTaskProcessReply\022\025\n\rclient_msg_id\030"
+    "\001 \002(\005\022\"\n\005state\030\002 \002(\0162\023.dcmd_api.DcmdStat"
+    "e\022)\n\007process\030\003 \003(\0132\030.dcmd_api.SubTaskPro"
+    "cess\022\013\n\003err\030\004 \001(\t\"\234\002\n\tUiTaskCmd\022\025\n\rclien"
+    "t_msg_id\030\001 \002(\005\022\017\n\007task_id\030\002 \002(\t\022\013\n\003uid\030\003"
+    " \002(\005\022\022\n\nsubtask_id\030\004 \001(\t\022\n\n\002ip\030\005 \001(\t\022\020\n\010"
+    "svr_name\030\006 \001(\t\022\020\n\010svr_pool\030\007 \001(\t\022\026\n\016conc"
+    "urrent_num\030\010 \001(\005\022\027\n\017concurrent_rate\030\t \001("
+    "\005\022\024\n\014task_timeout\030\n \001(\005\022\014\n\004auto\030\013 \001(\010\022#\n"
+    "\010cmd_type\030\014 \002(\0162\021.dcmd_api.CmdType\022\014\n\004us"
+    "er\030\r \002(\t\022\016\n\006passwd\030\016 \002(\t\"X\n\016UiTaskCmdRep"
+    "ly\022\025\n\rclient_msg_id\030\001 \002(\005\022\"\n\005state\030\002 \002(\016"
+    "2\023.dcmd_api.DcmdState\022\013\n\003err\030\004 \001(\t*\266\003\n\007C"
+    "mdType\022\017\n\013CMD_UNKNOWN\020\000\022\022\n\016CMD_START_TAS"
+    "K\020\001\022\022\n\016CMD_PAUSE_TASK\020\002\022\023\n\017CMD_RESUME_TA"
+    "SK\020\003\022\022\n\016CMD_RETRY_TASK\020\004\022\023\n\017CMD_FINISH_T"
+    "ASK\020\005\022\020\n\014CMD_ADD_NODE\020\006\022\026\n\022CMD_CANCEL_SU"
+    "BTASK\020\007\022\032\n\026CMD_CANCEL_SVR_SUBTASK\020\010\022\022\n\016C"
+    "MD_DO_SUBTASK\020\t\022\021\n\rCMD_REDO_TASK\020\n\022\025\n\021CM"
+    "D_REDO_SVR_POOL\020\013\022\024\n\020CMD_REDO_SUBTASK\020\014\022"
+    "\033\n\027CMD_REDO_FAILED_SUBTASK\020\r\022$\n CMD_REDO"
+    "_FAILED_SVR_POOL_SUBTASK\020\016\022\026\n\022CMD_IGNORE"
+    "_SUBTASK\020\017\022\023\n\017CMD_FREEZE_TASK\020\020\022\025\n\021CMD_U"
+    "NFREEZE_TASK\020\021\022\023\n\017CMD_UPDATE_TASK\020\022B\021\n\017c"
+    "om.cwinux.dcmd", 2974);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "dcmd_ui.proto", &protobuf_RegisterTypes);
   UiTaskOutput::default_instance_ = new UiTaskOutput();
@@ -722,6 +724,7 @@ bool CmdType_IsValid(int value) {
     case 15:
     case 16:
     case 17:
+    case 18:
       return true;
     default:
       return false;
@@ -3142,6 +3145,7 @@ void UiAgentRunningOprReply::Swap(UiAgentRunningOprReply* other) {
 const int UiExecOprCmd::kClientMsgIdFieldNumber;
 const int UiExecOprCmd::kOprIdFieldNumber;
 const int UiExecOprCmd::kArgsFieldNumber;
+const int UiExecOprCmd::kAgentsFieldNumber;
 const int UiExecOprCmd::kUserFieldNumber;
 const int UiExecOprCmd::kPasswdFieldNumber;
 #endif  // !_MSC_VER
@@ -3227,6 +3231,7 @@ void UiExecOprCmd::Clear() {
     }
   }
   args_.Clear();
+  agents_.Clear();
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
 }
@@ -3280,12 +3285,30 @@ bool UiExecOprCmd::MergePartialFromCodedStream(
           goto handle_uninterpreted;
         }
         if (input->ExpectTag(26)) goto parse_args;
-        if (input->ExpectTag(34)) goto parse_user;
+        if (input->ExpectTag(34)) goto parse_agents;
         break;
       }
       
-      // required string user = 4;
+      // repeated string agents = 4;
       case 4: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_agents:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->add_agents()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+            this->agents(0).data(), this->agents(0).length(),
+            ::google::protobuf::internal::WireFormat::PARSE);
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(34)) goto parse_agents;
+        if (input->ExpectTag(42)) goto parse_user;
+        break;
+      }
+      
+      // required string user = 5;
+      case 5: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
          parse_user:
@@ -3297,12 +3320,12 @@ bool UiExecOprCmd::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(42)) goto parse_passwd;
+        if (input->ExpectTag(50)) goto parse_passwd;
         break;
       }
       
-      // required string passwd = 5;
-      case 5: {
+      // required string passwd = 6;
+      case 6: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
          parse_passwd:
@@ -3356,22 +3379,31 @@ void UiExecOprCmd::SerializeWithCachedSizes(
       3, this->args(i), output);
   }
   
-  // required string user = 4;
+  // repeated string agents = 4;
+  for (int i = 0; i < this->agents_size(); i++) {
+  ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+    this->agents(i).data(), this->agents(i).length(),
+    ::google::protobuf::internal::WireFormat::SERIALIZE);
+    ::google::protobuf::internal::WireFormatLite::WriteString(
+      4, this->agents(i), output);
+  }
+  
+  // required string user = 5;
   if (has_user()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->user().data(), this->user().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     ::google::protobuf::internal::WireFormatLite::WriteString(
-      4, this->user(), output);
+      5, this->user(), output);
   }
   
-  // required string passwd = 5;
+  // required string passwd = 6;
   if (has_passwd()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->passwd().data(), this->passwd().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     ::google::protobuf::internal::WireFormatLite::WriteString(
-      5, this->passwd(), output);
+      6, this->passwd(), output);
   }
   
   if (!unknown_fields().empty()) {
@@ -3404,24 +3436,33 @@ void UiExecOprCmd::SerializeWithCachedSizes(
         3, this->args(i), target);
   }
   
-  // required string user = 4;
+  // repeated string agents = 4;
+  for (int i = 0; i < this->agents_size(); i++) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->agents(i).data(), this->agents(i).length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteStringToArray(4, this->agents(i), target);
+  }
+  
+  // required string user = 5;
   if (has_user()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->user().data(), this->user().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        4, this->user(), target);
+        5, this->user(), target);
   }
   
-  // required string passwd = 5;
+  // required string passwd = 6;
   if (has_passwd()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->passwd().data(), this->passwd().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        5, this->passwd(), target);
+        6, this->passwd(), target);
   }
   
   if (!unknown_fields().empty()) {
@@ -3449,14 +3490,14 @@ int UiExecOprCmd::ByteSize() const {
           this->opr_id());
     }
     
-    // required string user = 4;
+    // required string user = 5;
     if (has_user()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::StringSize(
           this->user());
     }
     
-    // required string passwd = 5;
+    // required string passwd = 6;
     if (has_passwd()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::StringSize(
@@ -3470,6 +3511,13 @@ int UiExecOprCmd::ByteSize() const {
     total_size +=
       ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
         this->args(i));
+  }
+  
+  // repeated string agents = 4;
+  total_size += 1 * this->agents_size();
+  for (int i = 0; i < this->agents_size(); i++) {
+    total_size += ::google::protobuf::internal::WireFormatLite::StringSize(
+      this->agents(i));
   }
   
   if (!unknown_fields().empty()) {
@@ -3498,6 +3546,7 @@ void UiExecOprCmd::MergeFrom(const ::google::protobuf::Message& from) {
 void UiExecOprCmd::MergeFrom(const UiExecOprCmd& from) {
   GOOGLE_CHECK_NE(&from, this);
   args_.MergeFrom(from.args_);
+  agents_.MergeFrom(from.agents_);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     if (from.has_client_msg_id()) {
       set_client_msg_id(from.client_msg_id());
@@ -3528,7 +3577,7 @@ void UiExecOprCmd::CopyFrom(const UiExecOprCmd& from) {
 }
 
 bool UiExecOprCmd::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000019) != 0x00000019) return false;
+  if ((_has_bits_[0] & 0x00000031) != 0x00000031) return false;
   
   for (int i = 0; i < args_size(); i++) {
     if (!this->args(i).IsInitialized()) return false;
@@ -3541,6 +3590,7 @@ void UiExecOprCmd::Swap(UiExecOprCmd* other) {
     std::swap(client_msg_id_, other->client_msg_id_);
     std::swap(opr_id_, other->opr_id_);
     args_.Swap(&other->args_);
+    agents_.Swap(&other->agents_);
     std::swap(user_, other->user_);
     std::swap(passwd_, other->passwd_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
