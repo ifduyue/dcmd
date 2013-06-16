@@ -54,42 +54,6 @@ class UiAgentTaskProcessReply;
 class UiTaskCmd;
 class UiTaskCmdReply;
 
-enum CmdType {
-  CMD_UNKNOWN = 0,
-  CMD_START_TASK = 1,
-  CMD_PAUSE_TASK = 2,
-  CMD_RESUME_TASK = 3,
-  CMD_RETRY_TASK = 4,
-  CMD_FINISH_TASK = 5,
-  CMD_ADD_NODE = 6,
-  CMD_CANCEL_SUBTASK = 7,
-  CMD_CANCEL_SVR_SUBTASK = 8,
-  CMD_DO_SUBTASK = 9,
-  CMD_REDO_TASK = 10,
-  CMD_REDO_SVR_POOL = 11,
-  CMD_REDO_SUBTASK = 12,
-  CMD_REDO_FAILED_SUBTASK = 13,
-  CMD_REDO_FAILED_SVR_POOL_SUBTASK = 14,
-  CMD_IGNORE_SUBTASK = 15,
-  CMD_FREEZE_TASK = 16,
-  CMD_UNFREEZE_TASK = 17,
-  CMD_UPDATE_TASK = 18
-};
-bool CmdType_IsValid(int value);
-const CmdType CmdType_MIN = CMD_UNKNOWN;
-const CmdType CmdType_MAX = CMD_UPDATE_TASK;
-const int CmdType_ARRAYSIZE = CmdType_MAX + 1;
-
-const ::google::protobuf::EnumDescriptor* CmdType_descriptor();
-inline const ::std::string& CmdType_Name(CmdType value) {
-  return ::google::protobuf::internal::NameOfEnum(
-    CmdType_descriptor(), value);
-}
-inline bool CmdType_Parse(
-    const ::std::string& name, CmdType* value) {
-  return ::google::protobuf::internal::ParseNamedEnum<CmdType>(
-    CmdType_descriptor(), name, value);
-}
 // ===================================================================
 
 class UiTaskOutput : public ::google::protobuf::Message {
@@ -6788,10 +6752,6 @@ inline ::std::string* UiTaskCmdReply::release_err() {
 namespace google {
 namespace protobuf {
 
-template <>
-inline const EnumDescriptor* GetEnumDescriptor< dcmd_api::CmdType>() {
-  return dcmd_api::CmdType_descriptor();
-}
 
 }  // namespace google
 }  // namespace protobuf

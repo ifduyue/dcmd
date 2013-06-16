@@ -131,7 +131,7 @@ void protobuf_AssignDesc_dcmd_5fagent_2eproto() {
   static const int AgentTaskCmd_offsets_[17] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentTaskCmd, cmd_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentTaskCmd, task_cmd_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentTaskCmd, ctrl_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentTaskCmd, cmd_type_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentTaskCmd, task_id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentTaskCmd, subtask_id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentTaskCmd, ip_),
@@ -460,39 +460,40 @@ void protobuf_AddDesc_dcmd_5fagent_2eproto() {
     "\004 \001(\005\022\033\n\023opr_queue_threshold\030\005 \001(\005\022\036\n\026op"
     "r_overflow_threshold\030\006 \001(\005\"X\n\026AgentMaste"
     "rNoticeReply\022\013\n\003cmd\030\001 \003(\t\0221\n\017subtask_pro"
-    "cess\030\002 \003(\0132\030.dcmd_api.SubTaskProcess\"\320\002\n"
+    "cess\030\002 \003(\0132\030.dcmd_api.SubTaskProcess\"\347\002\n"
     "\014AgentTaskCmd\022\013\n\003cmd\030\001 \002(\t\022\020\n\010task_cmd\030\002"
-    " \002(\t\022\014\n\004ctrl\030\003 \002(\010\022\017\n\007task_id\030\004 \001(\t\022\022\n\ns"
-    "ubtask_id\030\005 \001(\t\022\n\n\002ip\030\006 \001(\t\022\020\n\010svr_name\030"
-    "\007 \001(\t\022\020\n\010svr_pool\030\010 \001(\t\022\017\n\007svr_ver\030\t \001(\t"
-    "\022\020\n\010svr_repo\030\n \001(\t\022\020\n\010svr_user\030\013 \001(\t\022\023\n\013"
-    "svr_env_ver\030\014 \001(\t\022\022\n\nupdate_env\030\r \001(\010\022\022\n"
-    "\nupdate_ver\030\016 \001(\010\022\026\n\016output_process\030\017 \001("
-    "\010\022\016\n\006script\030\020 \001(\t\022$\n\010task_arg\030\021 \003(\0132\022.dc"
-    "md_api.KeyValue\" \n\021AgentTaskCmdReply\022\013\n\003"
-    "cmd\030\001 \002(\t\"K\n\023AgentSubTaskProcess\022\017\n\007task"
-    "_id\030\001 \002(\t\022\022\n\nsubtask_id\030\002 \002(\t\022\017\n\007process"
-    "\030\003 \002(\t\"r\n\017AgentTaskResult\022\013\n\003cmd\030\001 \002(\t\022\017"
-    "\n\007task_id\030\002 \002(\t\022\022\n\nsubtask_id\030\003 \002(\t\022\017\n\007s"
-    "uccess\030\004 \002(\010\022\013\n\003err\030\005 \001(\t\022\017\n\007process\030\006 \001"
-    "(\t\"#\n\024AgentTaskResultReply\022\013\n\003cmd\030\001 \002(\t\""
-    "\222\001\n\013AgentOprCmd\022\016\n\006opr_id\030\001 \002(\t\022\014\n\004name\030"
-    "\002 \002(\t\022\020\n\010priority\030\003 \002(\005\022\020\n\010run_user\030\004 \002("
-    "\t\022\017\n\007timeout\030\005 \002(\005\022\016\n\006script\030\006 \002(\t\022 \n\004ar"
-    "gs\030\007 \003(\0132\022.dcmd_api.KeyValue\"A\n\017AgentTas"
-    "kOutput\022\022\n\nsubtask_id\030\001 \002(\t\022\016\n\006offset\030\002 "
-    "\002(\005\022\n\n\002ip\030\003 \001(\t\"g\n\024AgentTaskOutputReply\022"
-    "\"\n\005state\030\001 \002(\0162\023.dcmd_api.DcmdState\022\016\n\006r"
-    "esult\030\002 \002(\t\022\016\n\006offset\030\003 \002(\005\022\013\n\003err\030\004 \001(\t"
-    "\"0\n\020AgentRunningTask\022\n\n\002ip\030\001 \001(\t\022\020\n\010svr_"
-    "name\030\002 \001(\t\"o\n\025AgentRunningTaskReply\022\"\n\005s"
-    "tate\030\001 \002(\0162\023.dcmd_api.DcmdState\022%\n\006resul"
-    "t\030\002 \003(\0132\025.dcmd_api.SubTaskInfo\022\013\n\003err\030\003 "
-    "\001(\t\"\035\n\017AgentRunningOpr\022\n\n\002ip\030\001 \001(\t\"j\n\024Ag"
-    "entRunningOprReply\022\"\n\005state\030\001 \002(\0162\023.dcmd"
-    "_api.DcmdState\022!\n\006result\030\002 \003(\0132\021.dcmd_ap"
-    "i.OprInfo\022\013\n\003err\030\003 \001(\t\"\036\n\nInvalidMsg\022\020\n\010"
-    "msg_type\030\001 \002(\005B\021\n\017com.cwinux.dcmd", 1633);
+    " \002(\t\022#\n\010cmd_type\030\003 \002(\0162\021.dcmd_api.CmdTyp"
+    "e\022\017\n\007task_id\030\004 \001(\t\022\022\n\nsubtask_id\030\005 \001(\t\022\n"
+    "\n\002ip\030\006 \001(\t\022\020\n\010svr_name\030\007 \001(\t\022\020\n\010svr_pool"
+    "\030\010 \001(\t\022\017\n\007svr_ver\030\t \001(\t\022\020\n\010svr_repo\030\n \001("
+    "\t\022\020\n\010svr_user\030\013 \001(\t\022\023\n\013svr_env_ver\030\014 \001(\t"
+    "\022\022\n\nupdate_env\030\r \001(\010\022\022\n\nupdate_ver\030\016 \001(\010"
+    "\022\026\n\016output_process\030\017 \001(\010\022\016\n\006script\030\020 \001(\t"
+    "\022$\n\010task_arg\030\021 \003(\0132\022.dcmd_api.KeyValue\" "
+    "\n\021AgentTaskCmdReply\022\013\n\003cmd\030\001 \002(\t\"K\n\023Agen"
+    "tSubTaskProcess\022\017\n\007task_id\030\001 \002(\t\022\022\n\nsubt"
+    "ask_id\030\002 \002(\t\022\017\n\007process\030\003 \002(\t\"r\n\017AgentTa"
+    "skResult\022\013\n\003cmd\030\001 \002(\t\022\017\n\007task_id\030\002 \002(\t\022\022"
+    "\n\nsubtask_id\030\003 \002(\t\022\017\n\007success\030\004 \002(\010\022\013\n\003e"
+    "rr\030\005 \001(\t\022\017\n\007process\030\006 \001(\t\"#\n\024AgentTaskRe"
+    "sultReply\022\013\n\003cmd\030\001 \002(\t\"\222\001\n\013AgentOprCmd\022\016"
+    "\n\006opr_id\030\001 \002(\t\022\014\n\004name\030\002 \002(\t\022\020\n\010priority"
+    "\030\003 \002(\005\022\020\n\010run_user\030\004 \002(\t\022\017\n\007timeout\030\005 \002("
+    "\005\022\016\n\006script\030\006 \002(\t\022 \n\004args\030\007 \003(\0132\022.dcmd_a"
+    "pi.KeyValue\"A\n\017AgentTaskOutput\022\022\n\nsubtas"
+    "k_id\030\001 \002(\t\022\016\n\006offset\030\002 \002(\005\022\n\n\002ip\030\003 \001(\t\"g"
+    "\n\024AgentTaskOutputReply\022\"\n\005state\030\001 \002(\0162\023."
+    "dcmd_api.DcmdState\022\016\n\006result\030\002 \002(\t\022\016\n\006of"
+    "fset\030\003 \002(\005\022\013\n\003err\030\004 \001(\t\"0\n\020AgentRunningT"
+    "ask\022\n\n\002ip\030\001 \001(\t\022\020\n\010svr_name\030\002 \001(\t\"o\n\025Age"
+    "ntRunningTaskReply\022\"\n\005state\030\001 \002(\0162\023.dcmd"
+    "_api.DcmdState\022%\n\006result\030\002 \003(\0132\025.dcmd_ap"
+    "i.SubTaskInfo\022\013\n\003err\030\003 \001(\t\"\035\n\017AgentRunni"
+    "ngOpr\022\n\n\002ip\030\001 \001(\t\"j\n\024AgentRunningOprRepl"
+    "y\022\"\n\005state\030\001 \002(\0162\023.dcmd_api.DcmdState\022!\n"
+    "\006result\030\002 \003(\0132\021.dcmd_api.OprInfo\022\013\n\003err\030"
+    "\003 \001(\t\"\036\n\nInvalidMsg\022\020\n\010msg_type\030\001 \002(\005B\021\n"
+    "\017com.cwinux.dcmd", 1656);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "dcmd_agent.proto", &protobuf_RegisterTypes);
   AgentReport::default_instance_ = new AgentReport();
@@ -1498,7 +1499,7 @@ void AgentMasterNoticeReply::Swap(AgentMasterNoticeReply* other) {
 #ifndef _MSC_VER
 const int AgentTaskCmd::kCmdFieldNumber;
 const int AgentTaskCmd::kTaskCmdFieldNumber;
-const int AgentTaskCmd::kCtrlFieldNumber;
+const int AgentTaskCmd::kCmdTypeFieldNumber;
 const int AgentTaskCmd::kTaskIdFieldNumber;
 const int AgentTaskCmd::kSubtaskIdFieldNumber;
 const int AgentTaskCmd::kIpFieldNumber;
@@ -1533,7 +1534,7 @@ void AgentTaskCmd::SharedCtor() {
   _cached_size_ = 0;
   cmd_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   task_cmd_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
-  ctrl_ = false;
+  cmd_type_ = 0;
   task_id_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   subtask_id_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   ip_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
@@ -1627,7 +1628,7 @@ void AgentTaskCmd::Clear() {
         task_cmd_->clear();
       }
     }
-    ctrl_ = false;
+    cmd_type_ = 0;
     if (has_task_id()) {
       if (task_id_ != &::google::protobuf::internal::kEmptyString) {
         task_id_->clear();
@@ -1724,19 +1725,24 @@ bool AgentTaskCmd::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(24)) goto parse_ctrl;
+        if (input->ExpectTag(24)) goto parse_cmd_type;
         break;
       }
       
-      // required bool ctrl = 3;
+      // required .dcmd_api.CmdType cmd_type = 3;
       case 3: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
-         parse_ctrl:
+         parse_cmd_type:
+          int value;
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &ctrl_)));
-          set_has_ctrl();
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          if (dcmd_api::CmdType_IsValid(value)) {
+            set_cmd_type(static_cast< dcmd_api::CmdType >(value));
+          } else {
+            mutable_unknown_fields()->AddVarint(3, value);
+          }
         } else {
           goto handle_uninterpreted;
         }
@@ -2013,9 +2019,10 @@ void AgentTaskCmd::SerializeWithCachedSizes(
       2, this->task_cmd(), output);
   }
   
-  // required bool ctrl = 3;
-  if (has_ctrl()) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(3, this->ctrl(), output);
+  // required .dcmd_api.CmdType cmd_type = 3;
+  if (has_cmd_type()) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      3, this->cmd_type(), output);
   }
   
   // optional string task_id = 4;
@@ -2157,9 +2164,10 @@ void AgentTaskCmd::SerializeWithCachedSizes(
         2, this->task_cmd(), target);
   }
   
-  // required bool ctrl = 3;
-  if (has_ctrl()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(3, this->ctrl(), target);
+  // required .dcmd_api.CmdType cmd_type = 3;
+  if (has_cmd_type()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
+      3, this->cmd_type(), target);
   }
   
   // optional string task_id = 4;
@@ -2309,9 +2317,10 @@ int AgentTaskCmd::ByteSize() const {
           this->task_cmd());
     }
     
-    // required bool ctrl = 3;
-    if (has_ctrl()) {
-      total_size += 1 + 1;
+    // required .dcmd_api.CmdType cmd_type = 3;
+    if (has_cmd_type()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::EnumSize(this->cmd_type());
     }
     
     // optional string task_id = 4;
@@ -2443,8 +2452,8 @@ void AgentTaskCmd::MergeFrom(const AgentTaskCmd& from) {
     if (from.has_task_cmd()) {
       set_task_cmd(from.task_cmd());
     }
-    if (from.has_ctrl()) {
-      set_ctrl(from.ctrl());
+    if (from.has_cmd_type()) {
+      set_cmd_type(from.cmd_type());
     }
     if (from.has_task_id()) {
       set_task_id(from.task_id());
@@ -2516,7 +2525,7 @@ void AgentTaskCmd::Swap(AgentTaskCmd* other) {
   if (other != this) {
     std::swap(cmd_, other->cmd_);
     std::swap(task_cmd_, other->task_cmd_);
-    std::swap(ctrl_, other->ctrl_);
+    std::swap(cmd_type_, other->cmd_type_);
     std::swap(task_id_, other->task_id_);
     std::swap(subtask_id_, other->subtask_id_);
     std::swap(ip_, other->ip_);

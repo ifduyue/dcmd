@@ -40,6 +40,7 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
   AgentOprCmdReply_reflection_ = NULL;
 const ::google::protobuf::EnumDescriptor* DcmdMsgType_descriptor_ = NULL;
 const ::google::protobuf::EnumDescriptor* DcmdState_descriptor_ = NULL;
+const ::google::protobuf::EnumDescriptor* CmdType_descriptor_ = NULL;
 const ::google::protobuf::EnumDescriptor* AgentState_descriptor_ = NULL;
 const ::google::protobuf::EnumDescriptor* TaskState_descriptor_ = NULL;
 const ::google::protobuf::EnumDescriptor* SubTaskState_descriptor_ = NULL;
@@ -189,10 +190,11 @@ void protobuf_AssignDesc_dcmd_5fcmn_2eproto() {
       sizeof(AgentOprCmdReply));
   DcmdMsgType_descriptor_ = file->enum_type(0);
   DcmdState_descriptor_ = file->enum_type(1);
-  AgentState_descriptor_ = file->enum_type(2);
-  TaskState_descriptor_ = file->enum_type(3);
-  SubTaskState_descriptor_ = file->enum_type(4);
-  CommandState_descriptor_ = file->enum_type(5);
+  CmdType_descriptor_ = file->enum_type(2);
+  AgentState_descriptor_ = file->enum_type(3);
+  TaskState_descriptor_ = file->enum_type(4);
+  SubTaskState_descriptor_ = file->enum_type(5);
+  CommandState_descriptor_ = file->enum_type(6);
 }
 
 namespace {
@@ -305,17 +307,28 @@ void protobuf_AddDesc_dcmd_5fcmn_2eproto() {
     "O_MASTER\020\001\022\033\n\027DCMD_STATE_WRONG_MASTER\020\002\022"
     "\026\n\022DCMD_STATE_NO_TASK\020\003\022\031\n\025DCMD_STATE_NO"
     "_SUBTASK\020\004\022\030\n\024DCMD_STATE_HOST_LOST\020\005\022\025\n\021"
-    "DCMD_STATE_FAILED\020\006*c\n\nAgentState\022\026\n\022AGE"
-    "NT_UN_CONNECTED\020\000\022\021\n\rAGENT_UN_AUTH\020\001\022\025\n\021"
-    "AGENT_UN_REPORTED\020\002\022\023\n\017AGENT_CONNECTED\020\003"
-    "*m\n\tTaskState\022\r\n\tTASK_INIT\020\000\022\016\n\nTASK_DOI"
-    "NG\020\001\022\017\n\013TASK_FAILED\020\002\022\021\n\rTASK_FINISHED\020\003"
-    "\022\035\n\031TASK_FINISHED_WITH_FAILED\020\004*]\n\014SubTa"
-    "skState\022\020\n\014SUBTASK_INIT\020\000\022\021\n\rSUBTASK_DOI"
-    "NG\020\001\022\024\n\020SUBTASK_FINISHED\020\002\022\022\n\016SUBTASK_FA"
-    "ILED\020\003*J\n\014CommandState\022\021\n\rCOMMAND_DOING\020"
-    "\000\022\023\n\017COMMAND_SUCCESS\020\001\022\022\n\016COMMAND_FAILED"
-    "\020\002B\021\n\017com.cwinux.dcmd", 2741);
+    "DCMD_STATE_FAILED\020\006*\266\003\n\007CmdType\022\017\n\013CMD_U"
+    "NKNOWN\020\000\022\022\n\016CMD_START_TASK\020\001\022\022\n\016CMD_PAUS"
+    "E_TASK\020\002\022\023\n\017CMD_RESUME_TASK\020\003\022\022\n\016CMD_RET"
+    "RY_TASK\020\004\022\023\n\017CMD_FINISH_TASK\020\005\022\020\n\014CMD_AD"
+    "D_NODE\020\006\022\026\n\022CMD_CANCEL_SUBTASK\020\007\022\032\n\026CMD_"
+    "CANCEL_SVR_SUBTASK\020\010\022\022\n\016CMD_DO_SUBTASK\020\t"
+    "\022\021\n\rCMD_REDO_TASK\020\n\022\025\n\021CMD_REDO_SVR_POOL"
+    "\020\013\022\024\n\020CMD_REDO_SUBTASK\020\014\022\033\n\027CMD_REDO_FAI"
+    "LED_SUBTASK\020\r\022$\n CMD_REDO_FAILED_SVR_POO"
+    "L_SUBTASK\020\016\022\026\n\022CMD_IGNORE_SUBTASK\020\017\022\023\n\017C"
+    "MD_FREEZE_TASK\020\020\022\025\n\021CMD_UNFREEZE_TASK\020\021\022"
+    "\023\n\017CMD_UPDATE_TASK\020\022*c\n\nAgentState\022\026\n\022AG"
+    "ENT_UN_CONNECTED\020\000\022\021\n\rAGENT_UN_AUTH\020\001\022\025\n"
+    "\021AGENT_UN_REPORTED\020\002\022\023\n\017AGENT_CONNECTED\020"
+    "\003*m\n\tTaskState\022\r\n\tTASK_INIT\020\000\022\016\n\nTASK_DO"
+    "ING\020\001\022\017\n\013TASK_FAILED\020\002\022\021\n\rTASK_FINISHED\020"
+    "\003\022\035\n\031TASK_FINISHED_WITH_FAILED\020\004*]\n\014SubT"
+    "askState\022\020\n\014SUBTASK_INIT\020\000\022\021\n\rSUBTASK_DO"
+    "ING\020\001\022\024\n\020SUBTASK_FINISHED\020\002\022\022\n\016SUBTASK_F"
+    "AILED\020\003*J\n\014CommandState\022\021\n\rCOMMAND_DOING"
+    "\020\000\022\023\n\017COMMAND_SUCCESS\020\001\022\022\n\016COMMAND_FAILE"
+    "D\020\002B\021\n\017com.cwinux.dcmd", 3182);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "dcmd_cmn.proto", &protobuf_RegisterTypes);
   KeyValue::default_instance_ = new KeyValue();
@@ -408,6 +421,37 @@ bool DcmdState_IsValid(int value) {
     case 4:
     case 5:
     case 6:
+      return true;
+    default:
+      return false;
+  }
+}
+
+const ::google::protobuf::EnumDescriptor* CmdType_descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return CmdType_descriptor_;
+}
+bool CmdType_IsValid(int value) {
+  switch(value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+    case 9:
+    case 10:
+    case 11:
+    case 12:
+    case 13:
+    case 14:
+    case 15:
+    case 16:
+    case 17:
+    case 18:
       return true;
     default:
       return false;

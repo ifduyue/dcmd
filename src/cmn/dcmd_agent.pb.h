@@ -469,12 +469,12 @@ class AgentTaskCmd : public ::google::protobuf::Message {
   inline ::std::string* mutable_task_cmd();
   inline ::std::string* release_task_cmd();
   
-  // required bool ctrl = 3;
-  inline bool has_ctrl() const;
-  inline void clear_ctrl();
-  static const int kCtrlFieldNumber = 3;
-  inline bool ctrl() const;
-  inline void set_ctrl(bool value);
+  // required .dcmd_api.CmdType cmd_type = 3;
+  inline bool has_cmd_type() const;
+  inline void clear_cmd_type();
+  static const int kCmdTypeFieldNumber = 3;
+  inline dcmd_api::CmdType cmd_type() const;
+  inline void set_cmd_type(dcmd_api::CmdType value);
   
   // optional string task_id = 4;
   inline bool has_task_id() const;
@@ -625,8 +625,8 @@ class AgentTaskCmd : public ::google::protobuf::Message {
   inline void clear_has_cmd();
   inline void set_has_task_cmd();
   inline void clear_has_task_cmd();
-  inline void set_has_ctrl();
-  inline void clear_has_ctrl();
+  inline void set_has_cmd_type();
+  inline void clear_has_cmd_type();
   inline void set_has_task_id();
   inline void clear_has_task_id();
   inline void set_has_subtask_id();
@@ -666,13 +666,13 @@ class AgentTaskCmd : public ::google::protobuf::Message {
   ::std::string* svr_ver_;
   ::std::string* svr_repo_;
   ::std::string* svr_user_;
-  ::std::string* svr_env_ver_;
-  ::std::string* script_;
-  ::google::protobuf::RepeatedPtrField< ::dcmd_api::KeyValue > task_arg_;
-  bool ctrl_;
+  int cmd_type_;
   bool update_env_;
   bool update_ver_;
   bool output_process_;
+  ::std::string* svr_env_ver_;
+  ::std::string* script_;
+  ::google::protobuf::RepeatedPtrField< ::dcmd_api::KeyValue > task_arg_;
   
   mutable int _cached_size_;
   ::google::protobuf::uint32 _has_bits_[(17 + 31) / 32];
@@ -2474,26 +2474,27 @@ inline ::std::string* AgentTaskCmd::release_task_cmd() {
   }
 }
 
-// required bool ctrl = 3;
-inline bool AgentTaskCmd::has_ctrl() const {
+// required .dcmd_api.CmdType cmd_type = 3;
+inline bool AgentTaskCmd::has_cmd_type() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
-inline void AgentTaskCmd::set_has_ctrl() {
+inline void AgentTaskCmd::set_has_cmd_type() {
   _has_bits_[0] |= 0x00000004u;
 }
-inline void AgentTaskCmd::clear_has_ctrl() {
+inline void AgentTaskCmd::clear_has_cmd_type() {
   _has_bits_[0] &= ~0x00000004u;
 }
-inline void AgentTaskCmd::clear_ctrl() {
-  ctrl_ = false;
-  clear_has_ctrl();
+inline void AgentTaskCmd::clear_cmd_type() {
+  cmd_type_ = 0;
+  clear_has_cmd_type();
 }
-inline bool AgentTaskCmd::ctrl() const {
-  return ctrl_;
+inline dcmd_api::CmdType AgentTaskCmd::cmd_type() const {
+  return static_cast< dcmd_api::CmdType >(cmd_type_);
 }
-inline void AgentTaskCmd::set_ctrl(bool value) {
-  set_has_ctrl();
-  ctrl_ = value;
+inline void AgentTaskCmd::set_cmd_type(dcmd_api::CmdType value) {
+  GOOGLE_DCHECK(dcmd_api::CmdType_IsValid(value));
+  set_has_cmd_type();
+  cmd_type_ = value;
 }
 
 // optional string task_id = 4;

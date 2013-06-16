@@ -77,7 +77,6 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 const ::google::protobuf::Descriptor* UiTaskCmdReply_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   UiTaskCmdReply_reflection_ = NULL;
-const ::google::protobuf::EnumDescriptor* CmdType_descriptor_ = NULL;
 
 }  // namespace
 
@@ -465,7 +464,6 @@ void protobuf_AssignDesc_dcmd_5fui_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(UiTaskCmdReply));
-  CmdType_descriptor_ = file->enum_type(0);
 }
 
 namespace {
@@ -635,19 +633,8 @@ void protobuf_AddDesc_dcmd_5fui_2eproto() {
     "\010cmd_type\030\014 \002(\0162\021.dcmd_api.CmdType\022\014\n\004us"
     "er\030\r \002(\t\022\016\n\006passwd\030\016 \002(\t\"X\n\016UiTaskCmdRep"
     "ly\022\025\n\rclient_msg_id\030\001 \002(\005\022\"\n\005state\030\002 \002(\016"
-    "2\023.dcmd_api.DcmdState\022\013\n\003err\030\004 \001(\t*\266\003\n\007C"
-    "mdType\022\017\n\013CMD_UNKNOWN\020\000\022\022\n\016CMD_START_TAS"
-    "K\020\001\022\022\n\016CMD_PAUSE_TASK\020\002\022\023\n\017CMD_RESUME_TA"
-    "SK\020\003\022\022\n\016CMD_RETRY_TASK\020\004\022\023\n\017CMD_FINISH_T"
-    "ASK\020\005\022\020\n\014CMD_ADD_NODE\020\006\022\026\n\022CMD_CANCEL_SU"
-    "BTASK\020\007\022\032\n\026CMD_CANCEL_SVR_SUBTASK\020\010\022\022\n\016C"
-    "MD_DO_SUBTASK\020\t\022\021\n\rCMD_REDO_TASK\020\n\022\025\n\021CM"
-    "D_REDO_SVR_POOL\020\013\022\024\n\020CMD_REDO_SUBTASK\020\014\022"
-    "\033\n\027CMD_REDO_FAILED_SUBTASK\020\r\022$\n CMD_REDO"
-    "_FAILED_SVR_POOL_SUBTASK\020\016\022\026\n\022CMD_IGNORE"
-    "_SUBTASK\020\017\022\023\n\017CMD_FREEZE_TASK\020\020\022\025\n\021CMD_U"
-    "NFREEZE_TASK\020\021\022\023\n\017CMD_UPDATE_TASK\020\022B\021\n\017c"
-    "om.cwinux.dcmd", 2974);
+    "2\023.dcmd_api.DcmdState\022\013\n\003err\030\004 \001(\tB\021\n\017co"
+    "m.cwinux.dcmd", 2533);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "dcmd_ui.proto", &protobuf_RegisterTypes);
   UiTaskOutput::default_instance_ = new UiTaskOutput();
@@ -699,37 +686,6 @@ struct StaticDescriptorInitializer_dcmd_5fui_2eproto {
     protobuf_AddDesc_dcmd_5fui_2eproto();
   }
 } static_descriptor_initializer_dcmd_5fui_2eproto_;
-
-const ::google::protobuf::EnumDescriptor* CmdType_descriptor() {
-  protobuf_AssignDescriptorsOnce();
-  return CmdType_descriptor_;
-}
-bool CmdType_IsValid(int value) {
-  switch(value) {
-    case 0:
-    case 1:
-    case 2:
-    case 3:
-    case 4:
-    case 5:
-    case 6:
-    case 7:
-    case 8:
-    case 9:
-    case 10:
-    case 11:
-    case 12:
-    case 13:
-    case 14:
-    case 15:
-    case 16:
-    case 17:
-    case 18:
-      return true;
-    default:
-      return false;
-  }
-}
 
 
 // ===================================================================
