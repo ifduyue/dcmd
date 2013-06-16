@@ -1262,17 +1262,57 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdExecSubtask(DcmdTss* tss, uint64_t
 dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdRedoTask(DcmdTss* tss, uint32_t task_id,
   uint32_t uid)
 {
+  DcmdCenterTask* task = GetTask(task_id);
+  if (!task) {
+    if (!LoadNewTask(tss)) {
+      mysql_->disconnect();
+      return dcmd_api::DCMD_STATE_FAILED;
+    }
+    task = GetTask(task_id);
+  }
+  if (!task) {
+    tss->err_msg_ = "No task.";
+    return dcmd_api::DCMD_STATE_NO_TASK;
+  }
+  if (task->is_freezed_) {
+    tss->err_msg_ = "Task is in freezed state.";
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
+  if (!task->is_valid_) {
+    dcmd_api::DcmdState state = TaskCmdRetryTask(tss, task_id, uid);
+    if (state != dcmd_api::DCMD_STATE_SUCCESS) return state;
+    if (!task->is_valid_){
+      tss->err_msg_ = "Task is invalid.";
+      return dcmd_api::DCMD_STATE_FAILED;
+    }
+  }
+  if (task->depend_task_ && task->depend_task_->IsFinished()) {
+    tss->err_msg_ = "Depended task is not finished.";
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
+  // 更新任务的状态
+  CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
+    "update task set state=1, pause=0 where task_id = %d", task_id);
+  if (!ExecSql(tss, false)) {
+    mysql_->disconnect();
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
+  // 更新svr pool的信息
+  CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
+    "update task set state=1, pause=0 where task_id = %d", task_id);
+  if (!ExecSql(tss, false)) {
+    mysql_->disconnect();
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
+
+
+
+
 
 }
 
 dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdRedoSvrPool(DcmdTss* tss, uint32_t task_id,
   char const* svr_pool, uint32_t uid)
-{
-
-}
-
-dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdRedoSubtask(DcmdTss* tss, uint64_t subtask_id,
-  uint32_t uid)
 {
 
 }
@@ -1289,10 +1329,64 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdRedoFailedSvrPoolSubtask(DcmdTss* 
 
 }
 
+dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdRedoSubtask(DcmdTss* tss, uint64_t subtask_id,
+  uint32_t uid)
+{
+  DcmdCenterSubtask* subtask =  GetSubTask(subtask_id);
+  if (!subtask) {
+    tss->err_msg_ = "No subtask.";
+    return dcmd_api::DCMD_STATE_NO_SUBTASK;
+  }
+  if (!subtask->task_) {
+    tss->err_msg_ = "No task";
+    return dcmd_api::DCMD_STATE_NO_TASK;
+  }
+  if (subtask->task_->is_freezed_) {
+    tss->err_msg_ = "Task is in freezed state.";
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
+  if (!subtask->task_->is_valid_) {
+    tss->err_msg_ = "Task is invalid.";
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
+  if (subtask->task_->depend_task_ && subtask->task_->depend_task_->IsFinished()) {
+    tss->err_msg_ = "Depended task is not finished.";
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
+  if (subtask->exec_cmd_) return dcmd_api::DCMD_STATE_SUCCESS;
+  return TaskCmdExecSubtask(tss, subtask_id, uid, 0);
+}
+
 dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdIgnoreSubtask(DcmdTss* tss, uint64_t subtask_id,
   uint32_t uid)
 {
-
+  DcmdCenterSubtask* subtask =  GetSubTask(subtask_id);
+  if (!subtask) {
+    tss->err_msg_ = "No subtask.";
+    return dcmd_api::DCMD_STATE_NO_SUBTASK;
+  }
+  if (!subtask->task_) {
+    tss->err_msg_ = "No task";
+    return dcmd_api::DCMD_STATE_NO_TASK;
+  }
+  if (subtask->task_->is_freezed_) {
+    tss->err_msg_ = "Task is in freezed state.";
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
+  if (!subtask->task_->is_valid_) {
+    tss->err_msg_ = "Task is invalid.";
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
+  if (subtask->is_ignored_) return dcmd_api::DCMD_STATE_SUCCESS;
+  CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
+    "update task_node set ignored=1 where subtask_id = %s",
+    CwxCommon::toString(subtask_id, tss->m_szBuf2K, 10));
+  if (!ExecSql(tss, true)) {
+    mysql_->disconnect();
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
+  subtask->task_->ChangeSubtaskState(subtask, subtask->state_, true);
+  return dcmd_api::DCMD_STATE_SUCCESS;
 }
 
 dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdFreezeTask(DcmdTss* tss,  uint32_t task_id,

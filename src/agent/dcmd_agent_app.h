@@ -163,6 +163,8 @@ class DcmdAgentApp : public CwxAppFramework{
   void ExecCtrlTaskCmdForCancelAll(AgentSvrObj* svr_obj, AgentTaskCmd* cmd);
   // 处理控制指令
   void ExecCtrlTaskCmdForCancelSubTask(AgentSvrObj* svr_obj, AgentTaskCmd* cmd);
+  // 处理控制指令
+  void ExecCancelSubTask(AgentSvrObj* svr_obj, string const& subtask_id);
   // 准备subtask命令运行的环境
   bool PrepareSubtaskRunEnv(AgentTaskCmd* cmd, string& err_msg);
   // 基于subtask形成task result

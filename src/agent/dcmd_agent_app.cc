@@ -479,6 +479,19 @@ void DcmdAgentApp::CheckTaskAndOprCmd(){
         svr_obj->running_cmd_ = NULL;
         svr_map_[svr_obj->svr_name_] = svr_obj;
       }
+      // cancel存在的同一个subtask的命令
+      if ((*iter)->cmd_type() == dcmd_api::CMD_DO_SUBTASK) {
+        list<AgentTaskCmd*>::iterator svr_iter =  svr_obj->cmds_.begin();
+        while(svr_iter != svr_obj->cmds_.end()) {
+          if ((*svr_iter)->cmd_type() == dcmd_api::CMD_DO_SUBTASK) {
+            // 若是同一个任务的指令
+            if ((*iter)->subtask_id() == (*svr_iter)->subtask_id()) {
+              ExecCancelSubTask(svr_obj, (*iter)->subtask_id());
+            }
+          }
+          ++svr_iter;
+        }
+      }
       svr_obj->cmds_.push_back(*iter);
       ++iter;
     }
@@ -896,7 +909,9 @@ void DcmdAgentApp::ExecCtrlTaskCmdForCancelSubTask(AgentSvrObj* svr_obj,
     cmd->cmd_.subtask_id().length()?cmd->cmd_.subtask_id().c_str():""));
   bool bCanceled = false;
   // 检查是否需要cancel当前正在执行的任务
-  if (svr_obj->running_cmd_) {
+  if (svr_obj->running_cmd_ && 
+    (svr_obj->running_cmd_->cmd_.subtask_id() == cmd->cmd_.subtask_id()))
+  {
     CWX_INFO(("Cancel running subtask, svr=%s  cmd_id=%s  sub_task=%s",
       svr_obj->svr_name_.c_str(),
       svr_obj->running_cmd_->cmd_.cmd().c_str(),
@@ -928,9 +943,7 @@ void DcmdAgentApp::ExecCtrlTaskCmdForCancelSubTask(AgentSvrObj* svr_obj,
   // 处理cancel指令
   list<AgentTaskCmd*>::iterator iter = svr_obj->cmds_.begin();
   while(iter != svr_obj->cmds_.end()){
-    if ((*iter)->cmd_id_ == cmd->cmd_id_){
-      break;
-    }
+    if ((*iter)->cmd_id_ == cmd->cmd_id_) break;
     iter++;
   }
   CWX_ASSERT(iter != svr_obj->cmds_.end());
@@ -939,6 +952,41 @@ void DcmdAgentApp::ExecCtrlTaskCmdForCancelSubTask(AgentSvrObj* svr_obj,
   wait_send_result_map_[result->cmd_id_] = result;
   // 将cancel指令从队里中删除
   svr_obj->cmds_.erase(iter);
+}
+
+// 处理控制指令
+void DcmdAgentApp::ExecCancelSubTask(AgentSvrObj* svr_obj, string const& subtask_id) {
+  AgentTaskResult* result = NULL;
+  CWX_INFO(("Exec cancel command for all, svr=%s,subtask_id=%s",
+    svr_obj->svr_name_.c_str(),
+    subtask_id.c_str()));
+  bool bCanceled = false;
+  // 检查是否需要cancel当前正在执行的任务
+  if (svr_obj->running_cmd_ && 
+    (svr_obj->running_cmd_->cmd_.subtask_id() == subtask_id))
+  {
+    CWX_INFO(("Cancel running subtask, svr=%s,sub_task=%s",
+      svr_obj->svr_name_.c_str(),
+      subtask_id.c_str()));
+    CheckRuningSubTask(svr_obj, true);
+    bCanceled = true;
+  }
+  // 将cmds中cancel之前的任务全部cancel掉
+  if (!bCanceled) {
+    list<AgentTaskCmd*>::iterator iter_cancel = svr_obj->cmds_.begin();
+    while(iter_cancel != svr_obj->cmds_.end()){
+      if ((*iter_cancel)->cmd_.subtask_id() ==  subtask_id) {
+        CWX_INFO(("Cancel subtask, svr=%s, sub_task=%s",
+          svr_obj->svr_name_.c_str(),
+          subtask_id.c_str()));
+        result = new AgentTaskResult();
+        FillTaskResult(*(*iter_cancel), *result, "", false, "Subtask is canceled.");
+        wait_send_result_map_[result->cmd_id_] = result;
+        svr_obj->cmds_.erase(iter_cancel);
+        break;
+      }
+    }
+  }
 }
 
 void DcmdAgentApp::ExecCtrlTaskCmdForCancelAll(AgentSvrObj* svr_obj,
