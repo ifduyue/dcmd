@@ -624,7 +624,33 @@ void DcmdAgentApp::CheckSvrTask(AgentSvrObj* svr_obj) {
   // 检查当前的进程
   if (svr_obj->processor_) CheckRuningSubTask(svr_obj, false);
   // 首先处理控制指令
-  ExecCtrlTaskCmd(svr_obj);
+  {
+    list<AgentTaskCmd*>::iterator iter = svr_obj->cmds_.begin();
+    while(iter != svr_obj->cmds_.end()){
+      if ((*iter)->cmd_.cmd_type() != dcmd_api::CMD_DO_SUBTASK) {
+        if ((*iter)->cmd_.cmd_type() == dcmd_api::CMD_CANCEL_SUBTASK){
+          ExecCtrlTaskCmdForCancelSubTask(svr_obj, *iter);
+        } else if ((*iter)->cmd_.cmd_type() == dcmd_api::CMD_CANCEL_SVR_SUBTASK) {
+          ExecCtrlTaskCmdForCancelAll(svr_obj, *iter);
+        } else {
+          // 未知的命令
+          CWX_INFO(("Unknown command, svr=%s, cmd_id=%s, sub_task=%s, type=%s, cmd_type=%d",
+            svr_obj->svr_name_.c_str(),
+            (*iter)->cmd_.cmd().c_str(),
+            (*iter)->cmd_.subtask_id().c_str(),
+            (*iter)->cmd_.task_cmd().c_str(),
+            (*iter)->cmd_.cmd_type()));
+          result = new AgentTaskResult();
+          FillTaskResult(**iter, *result, "", false, "Unknown cmd type");
+          wait_send_result_map_[result->cmd_id_] = result;
+          svr_obj->cmds_.erase(iter);
+        }
+        iter = svr_obj->cmds_.begin();
+      } else {
+        iter++;
+      }
+    }
+  }
   // 检测是否要fork进程执行subtask
   if (!svr_obj->processor_ && (svr_obj->cmds_.begin() != svr_obj->cmds_.end())) {
     CWX_ASSERT(!svr_obj->running_cmd_);
@@ -965,36 +991,6 @@ void DcmdAgentApp::ExecCtrlTaskCmdForCancelAll(AgentSvrObj* svr_obj,
   wait_send_result_map_[result->cmd_id_] = result;
   // 将cancel指令从队里中删除
   svr_obj->cmds_.erase(iter);
-}
-
-// 处理控制指令
-void DcmdAgentApp::ExecCtrlTaskCmd(AgentSvrObj* svr_obj) {
-  AgentTaskResult* result = NULL;
-  list<AgentTaskCmd*>::iterator iter = svr_obj->cmds_.begin();
-  while(iter != svr_obj->cmds_.end()){
-    if ((*iter)->cmd_.ctrl()){
-      if ((*iter)->cmd_.task_cmd() == kDcmdSysCmdCancel){
-        if ((*iter)->cmd_.subtask_id().length()) {
-          ExecCtrlTaskCmdForCancelSubTask(svr_obj, *iter);
-        } else {
-          ExecCtrlTaskCmdForCancelAll(svr_obj, *iter);
-        }
-      }else{// 未知的命令
-        CWX_INFO(("Unknown control command , svr=%s  cmd_id=%s  sub_task=%s, type=%s",
-          svr_obj->svr_name_.c_str(),
-          (*iter)->cmd_.cmd().c_str(),
-          (*iter)->cmd_.subtask_id().c_str(),
-          (*iter)->cmd_.task_cmd().c_str()));
-        result = new AgentTaskResult();
-        FillTaskResult(**iter, *result, "", false, "Unknown ctrl type");
-        wait_send_result_map_[result->cmd_id_] = result;
-        svr_obj->cmds_.erase(iter);
-      }
-      iter = svr_obj->cmds_.begin();
-      continue;
-    }
-    iter++;
-  }
 }
 
 bool DcmdAgentApp::PrepareSubtaskRunEnv(AgentTaskCmd* cmd, string& err_msg) {

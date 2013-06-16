@@ -160,8 +160,6 @@ class DcmdAgentApp : public CwxAppFramework{
   // 检查正在运行的subtask
   void CheckRuningSubTask(AgentSvrObj* svr_obj, bool is_cancel=false);
   // 处理控制指令
-  void ExecCtrlTaskCmd(AgentSvrObj* svr_obj);
-  // 处理控制指令
   void ExecCtrlTaskCmdForCancelAll(AgentSvrObj* svr_obj, AgentTaskCmd* cmd);
   // 处理控制指令
   void ExecCtrlTaskCmdForCancelSubTask(AgentSvrObj* svr_obj, AgentTaskCmd* cmd);

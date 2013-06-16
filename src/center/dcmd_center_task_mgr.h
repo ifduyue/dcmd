@@ -76,24 +76,27 @@ class DcmdCenterTaskMgr{
   // cancel一个服务的所有任务的执行
   dcmd_api::DcmdState TaskCmdCancelSvrSubtask(DcmdTss* tss, uint32_t task_id,
     char const* serivce, char const* agent_ip, uint32_t uid);
+  // 执行具体subtask的执行
+  dcmd_api::DcmdState TaskCmdExecSubtask(DcmdTss* tss, uint64_t subtask_id,
+    uint32_t uid, DcmdCenterCmd** cmd);
   // 重做整个任务
   dcmd_api::DcmdState TaskCmdRedoTask(DcmdTss* tss, uint32_t task_id,
-    uint32_t uid, DcmdCenterCmd** cmd);
+    uint32_t uid);
   // 重做一个服务池子
   dcmd_api::DcmdState TaskCmdRedoSvrPool(DcmdTss* tss, uint32_t task_id,
-    char const* svr_pool, uint32_t uid, DcmdCenterCmd** cmd);
+    char const* svr_pool, uint32_t uid);
   // 重做一个subtask
   dcmd_api::DcmdState TaskCmdRedoSubtask(DcmdTss* tss, uint64_t subtask_id,
-    uint32_t uid, DcmdCenterCmd** cmd);
+    uint32_t uid);
   // 重做失败的subtask
   dcmd_api::DcmdState TaskCmdRedoFailedSubtask(DcmdTss* tss, uint32_t task_id,
-    uint32_t uid, DcmdCenterCmd** cmd);
+    uint32_t uid);
   // 重做一个服务池子中的失败subtask
   dcmd_api::DcmdState TaskCmdRedoFailedSvrPoolSubtask(DcmdTss* tss, uint32_t task_id,
-    char const* svr_pool, uint32_t uid, DcmdCenterCmd** cmd);
+    char const* svr_pool, uint32_t uid);
   // ignore某个subtask的结果
   dcmd_api::DcmdState TaskCmdIgnoreSubtask(DcmdTss* tss, uint64_t subtask_id,
-    uint32_t uid, DcmdCenterCmd** cmd);
+    uint32_t uid);
   // 冻结任务的执行
   dcmd_api::DcmdState TaskCmdFreezeTask(DcmdTss* tss,  uint32_t task_id,
    uint32_t uid);
