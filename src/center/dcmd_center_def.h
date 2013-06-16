@@ -180,35 +180,6 @@ public:
   uint32_t ignored_failed_host_num() const {
     return ignored_failed_subtasks_.size();
   }
-  // 获取所有的subtask
-  map<uint64_t, DcmdCenterSubtask*> const* all_subtasks() const {
-    return &all_subtasks_;
-  }
-  // 获取未作的subtask
-  map<uint64_t, DcmdCenterSubtask*> const* undo_subtasks() const {
-    return &undo_subtasks_;
-  }
-  //获取正在做的subtask
-  map<uint64_t, DcmdCenterSubtask*> const* doing_subtasks() const {
-    return &doing_subtasks_;
-  }
-  //获取被ignored的正在做的subtask
-  map<uint64_t, DcmdCenterSubtask*> const* ignored_doing_subtasks() const {
-    return &ignored_doing_subtasks_;
-  }
-  // 获取已经完成的subtask
-  map<uint64_t, DcmdCenterSubtask*> const* finished_subtasks() const {
-    return &finished_subtasks_;
-  }
-  // 获取失败的subtask
-  map<uint64_t, DcmdCenterSubtask*> const* failed_subtasks() const {
-    return &failed_subtasks_;
-  }
-  // 获取被ignored的失败subtask
-  map<uint64_t, DcmdCenterSubtask*> const* ignored_failed_subtasks() const {
-    return &ignored_failed_subtasks_;
-  }
-
  public:
   // 任务的id
   uint32_t                          task_id_;
@@ -237,7 +208,6 @@ public:
   uint32_t                          ignored_doing_subtask_num_;
   // ignored的失败的子任务
   uint32_t                          ignored_failed_subtask_num_;
- private:
   // 所有设备的subtask的map
   map<uint64_t, DcmdCenterSubtask*>      all_subtasks_;
   map<uint64_t, DcmdCenterSubtask*>      undo_subtasks_;

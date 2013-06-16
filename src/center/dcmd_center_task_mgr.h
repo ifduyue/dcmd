@@ -50,7 +50,10 @@ class DcmdCenterTaskMgr{
     char const* process);
   // 获取agent上的任务处理进度, false表示不存在
   bool GetAgentsTaskProcess(string const& subtask_id, string& process);
-
+  // 是否已经启动
+  inline bool IsStart() const {
+    return is_start_;
+  }
  private:
   // 清空对象
   void Reset();

@@ -706,8 +706,57 @@ bool DcmdCenterTaskMgr::Schedule(DcmdTss* tss)
 bool DcmdCenterTaskMgr::Schedule(DcmdTss* tss, 
   DcmdCenterTask* task)
 {
+  if (!task->is_auto_ && !task->is_valid_) return true;
+  if (!task->state_ != dcmd_api::TASK_DOING) return true;
+  if (task->depend_task_ && !task->IsFinished()) return true;
 
+  map<string, DcmdCenterSvrPool*>::iterator iter= task->pools_.begin();
+  uint32_t pool_undo_host_num = 0;
+  uint32_t pool_doing_host_num = 0;
+  uint32_t pool_failed_host_num = 0;
+  while(iter !=  task->pools_.end()){
+    pool_undo_host_num = iter->second->undo_host_num();
+    pool_doing_host_num = iter->second->doing_host_num();
+    pool_failed_host_num = iter->second->failed_host_num();
+    if (pool_undo_host_num){
+      CWX_INFO(("Schedule task:%s, pool:%s, undo:%u, doing:%u, fail:%u, finish:%u, doing-skip:%u, fail-skip:%u",
+        task->task_name_.c_str(),
+        iter->second->svr_pool_.c_str(),
+        pool_undo_host_num,
+        pool_doing_host_num,
+        pool_failed_host_num,
+        iter->second->finished_host_num(),
+        iter->second->ignored_doing_host_num(),
+        iter->second->ignored_failed_host_num()));
+      uint32_t  schedule_num = 0;
+      uint32_t  doing_num  = pool_failed_host_num + pool_doing_host_num + schedule_num;
+      map<uint64_t, DcmdCenterSubtask*>::iterator subtask_iter = iter->second->undo_subtasks_.begin();
+      while (1){
+        if (subtask_iter == iter->second->undo_subtasks_.end()) break;
+        doing_num = pool_failed_host_num + pool_doing_host_num + schedule_num;
+        if (!iter->second->EnableSchedule(doing_num, task->max_current_num_, task->max_current_rate_)){
+          CWX_DEBUG(("Don't schedule pool[%s] of task[%s] for reach the max concurrency, doing-num[fail:%u, doing:%u, schedule:%u], max:%u",
+            iter->second->svr_pool_.c_str(),
+            task->task_name_.c_str(),
+            pool_failed_host_num,
+            pool_doing_host_num,
+            schedule_num,
+            task->max_current_num_));
+          break;
+        }
+        dcmd_api::DcmdState ret = TaskCmdExecSubtask(tss, subtask_iter->first, 0, NULL);
+        if ((dcmd_api::DCMD_STATE_SUCCESS != ret) && (!mysql_->IsConnected())) return false;
+        CWX_DEBUG(("Add new command for exec task node, task:%s, agent:%s",
+          task->task_name_.c_str(), subtask_iter->second->ip_.c_str()));
+        schedule_num++;
+        subtask_iter++;
+      }
+    }
+    iter++;
+  }
+  return true;
 }
+
 
 bool DcmdCenterTaskMgr::FinishTaskCmd(DcmdTss* tss,
   dcmd_api::AgentTaskResult const& result,
@@ -1180,7 +1229,10 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdExecSubtask(DcmdTss* tss, uint64_t
       cmd_obj->service_.c_str(), cmd_obj->agent_ip_.c_str(),
       cmd_obj->cmd_type_, dcmd_api::SUBTASK_DOING, "");
     delete cmd_obj;
-    if (!cmd_obj->cmd_id_) return dcmd_api::DCMD_STATE_FAILED;
+    if (!cmd_obj->cmd_id_) {
+      mysql_->disconnect();
+      return dcmd_api::DCMD_STATE_FAILED;
+    }
     cmd = &cmd_obj;
   } else {
     if (subtask->exec_cmd_) {
