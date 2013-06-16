@@ -38,6 +38,7 @@ class DcmdCenterCmd{
     task_ = NULL;
     subtask_ = NULL;
     agent_ = NULL;
+    is_ctrl_ = false;
   }
   ~DcmdCenterCmd() {
    }
@@ -60,6 +61,8 @@ class DcmdCenterCmd{
   uint32_t                begin_time_;
   // 命令的状态
   uint8_t                 state_;
+  // 是否是控制指令
+  bool                    is_ctrl_;
   // 命令对应的任务对象
   DcmdCenterTask*         task_;
   // 命令对应的subtask对象
@@ -120,6 +123,12 @@ class DcmdCenterSvrPool{
  public:
    DcmdCenterSvrPool(uint32_t task_id): task_id_(task_id) {
      svr_pool_id_ = 0;
+     undo_subtask_num_ = 0;
+     doing_subtask_num_ = 0;
+     failed_subtask_num_ = 0;
+     finished_subtask_num_ = 0;
+     ignored_doing_subtask_num_ = 0;
+     ignored_failed_subtask_num_ = 0;
    }
    ~DcmdCenterSvrPool(){
    }
@@ -215,7 +224,19 @@ public:
   string                            repo_;
   // 服务池子的运行用户
   string                            run_user_;
- 
+  // 下面是池子的子任务的统计信息
+  // 未作的子任务
+  uint32_t                          undo_subtask_num_;
+  // 正在执行的子任务，不包含ignored
+  uint32_t                          doing_subtask_num_;
+  // 失败的子任务，不包含ignored
+  uint32_t                          failed_subtask_num_;
+  // 已完成的子任务
+  uint32_t                          finished_subtask_num_;
+  // ignored的正在做的子任务
+  uint32_t                          ignored_doing_subtask_num_;
+  // ignored的失败的子任务
+  uint32_t                          ignored_failed_subtask_num_;
  private:
   // 所有设备的subtask的map
   map<uint64_t, DcmdCenterSubtask*>      all_subtasks_;

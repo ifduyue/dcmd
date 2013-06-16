@@ -123,7 +123,6 @@ class DcmdCenterTaskMgr{
   // 获取task cmd的数据库md5签名。返回值，1：成功；0：不存在；-1：失败
   int FetchTaskCmdInfoFromDb(DcmdTss* tss, char const* task_cmd, string& md5,
     bool& is_cluster);
-
   // 对所有的任务进行调度，若返回false，是数据库操作失败。
   bool Schedule(DcmdTss* tss);
   // 调度指定任务的指令，若返回false是数据库操作失败
@@ -153,6 +152,11 @@ class DcmdCenterTaskMgr{
    // 更新子任务的状态
    inline bool UpdateSubtaskState(DcmdTss* tss, bool is_commit,
      uint64_t subtask_id, uint8_t state, char const* err_msg);
+   // 更新子任务的信息
+   inline bool UpdateSubtaskInfo(DcmdTss* tss, uint64_t subtask_id,
+     bool is_commit, uint64_t* cmd_id, uint32_t* state, bool* is_skip,
+     bool is_start_time, bool is_finish_time, char const* err_msg, 
+     char const* process);
    // 更新命令的状态
    inline bool UpdateCmdState(DcmdTss* tss, bool is_commit,
      uint64_t cmd_id, uint8_t state, char const* err_msg);

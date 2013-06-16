@@ -285,4 +285,75 @@ inline void DcmdCenterTaskMgr::RemoveCmd(DcmdCenterCmd* cmd) {
   delete cmd;
 }
 
+inline bool DcmdCenterTaskMgr::UpdateSubtaskInfo(DcmdTss* tss, uint64_t subtask_id,
+  bool is_commit, uint32_t* state, bool* is_skip,
+  bool is_start_time, bool is_finish_time, char const* err_msg, 
+  char const* process)
+{
+  char tmp_buf[64];
+  string value;
+  string sql;
+  uint32_t init_len = 0;
+  CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
+    "update task_node set ");
+  sql = tss->sql_;
+  init_len = sql.length();
+  if (state){
+    CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
+      " state=%d ", *state);
+    if (sql.length() != init_len) sql += ",";
+    sql += tss->sql_;
+  }
+  if (is_skip){
+    CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
+      " skip=%d ", *is_skip?1:0);
+    if (sql.length() != init_len) sql += ",";
+    sql += tss->sql_;
+  }
+  if (is_start_time){
+    CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
+      " start_time=now() ");
+    if (sql.length() != init_len) sql += ",";
+    sql += tss->sql_;
+  }
+  if (is_finish_time){
+    CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
+      " finish_time=now() ");
+    if (sql.length() != init_len) sql += ",";
+    sql += tss->sql_;
+  }
+  if (err_msg){
+    value = err_msg;
+    dcmd_escape_mysql_string(value);
+    CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
+      " errmsg='%s' ", value.c_str());
+    if (sql.length() != init_len) sql += ",";
+    sql += tss->sql_;
+  }
+  if (process){
+    value = process;
+    dcmd_escape_mysql_string(value);
+    CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
+      " process='%s' ", value.c_str());
+    if (sql.length() != init_len) sql += ",";
+    sql += tss->sql_;
+  }
+  CwxCommon::snprintf(tss->sql_, DcmdTss::MAX_SQL_BUF_SIZE,
+    ", update_time=now() where subtask_id = %s ", 
+    CwxCommon::toString(subtask_id, szTmp, 10));
+  sql += tss->sql_;
+
+  if (-1 == mysql_->execute(sql.c_str())){
+    CWX_ERROR(("Failure to exec sql, err:%s; sql:%s", mysql_->getErrMsg(), sql.c_str()));
+    mysql_->rollback();
+    return false;
+  }
+  if (is_commit && !mysql_->commit()){
+    CWX_ERROR(("Failure to commit sql, err:%s; sql:%s", mysql_->getErrMsg(), sql.c_str()));
+    mysql_->rollback();
+    return false;
+  }
+  return true;
+}
+
 }  // dcmd

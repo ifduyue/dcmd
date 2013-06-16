@@ -571,7 +571,8 @@ bool DcmdCenterTaskMgr::LoadAllCmd(DcmdTss* tss) {
 
 bool DcmdCenterTaskMgr::LoadTaskSvrPool(DcmdTss* tss, DcmdCenterTask* task) {
   CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
-    "select svr_pool, svr_pool_id, env_ver, repo, run_user from task_service_pool where task_id=%u",
+    "select svr_pool, svr_pool_id, env_ver, repo, run_user, undo_node, doing_node, "\
+    "finish_node, fail_node, ignored_fail_node, ignored_doing_node from task_service_pool where task_id=%u",
     task->task_id_);
   if (!mysql_->query(tss->sql_)) {
     CwxCommon::snprintf(tss->m_szBuf2K, 2047, "Failure to fetch task[%u]'s service pool. err:%s; sql:%s", mysql_->getErrMsg(),
@@ -591,6 +592,12 @@ bool DcmdCenterTaskMgr::LoadTaskSvrPool(DcmdTss* tss, DcmdCenterTask* task) {
     svr_pool->svr_env_ver_ = mysql_->fetch(2, is_null);
     svr_pool->repo_ = mysql_->fetch(3, is_null);
     svr_pool->run_user_ = mysql_->fetch(4, is_null);
+    svr_pool->undo_subtask_num_ = strtoul(mysql_->fetch(5, is_null), NULL, 10);
+    svr_pool->doing_subtask_num_ = strtoul(mysql_->fetch(6, is_null), NULL, 10);
+    svr_pool->finished_subtask_num_ = strtoul(mysql_->fetch(7, is_null), NULL, 10);
+    svr_pool->failed_subtask_num_ = strtoul(mysql_->fetch(8, is_null), NULL, 10);
+    svr_pool->ignored_failed_subtask_num_ = strtoul(mysql_->fetch(9, is_null), NULL, 10);
+    svr_pool->ignored_doing_subtask_num_ = strtoul(mysql_->fetch(10, is_null), NULL, 10);
     // 将service pool添加到任务中
     task->AddSvrPool(svr_pool);
   }
@@ -730,6 +737,68 @@ int DcmdCenterTaskMgr::FetchTaskCmdInfoFromDb(DcmdTss* tss, , char const* task_c
   tss->err_msg_ = tss->m_szBuf2K;
   return 0;
 }
+
+bool DcmdCenterTaskMgr::Schedule(DcmdTss* tss)
+{
+  map<uint32_t, DcmdCenterTask*>::iterator iter = all_tasks_.begin();
+  while(iter != all_tasks_.end()){
+    if (iter->second->is_auto_ && iter->second->is_valid_
+      (dcmd_api::TASK_DOING == iter->second->state_))
+    {
+      if (!Schedule(tss, iter->second,)) return false;
+    }
+    iter++;
+  }
+  return true;
+}
+
+bool DcmdCenterTaskMgr::Schedule(DcmdTss* tss, 
+  DcmdCenterTask* task)
+{
+
+}
+
+bool DcmdCenterTaskMgr::FinishTaskCmd(DcmdTss* tss,
+  dcmd_api::AgentTaskResult const& result,
+  string& agent_ip,
+  DcmdCenterTask*& task
+  )
+{
+  map<CWX_UINT64, DcmdCenterCmd*>::iterator iter;
+  uint64_t cmd_id = strtoul(result.cmd().c_str(), NULL, 10);
+  iter =  waiting_cmds_.find(cmd_id);
+  if (iter == waiting_cmds_.end()) return true;// 可能认为已经完成或者是ctrl命令
+  CWX_ASSERT(!iter->second->is_ctrl_);
+  uint32_t state = result.success()?dcmd_api::SUBTASK_FINISHED:dcmd_api::SUBTASK_FAILED;
+  bool is_skip = false;
+  if (!UpdateSubtaskInfo(tss,
+    iter->second->subtask_id_,
+    false,
+    NULL,
+    &state,
+    &is_skip,
+    false,
+    true,
+    result.success()?"":result.err().c_str(),
+    result.process().c_str()))
+  {
+    return false;
+  }
+  if (!UpdateCmdState(tss,
+    false,
+    cmd_id,
+    result.success()?dcmd_api::COMMAND_SUCCESS:dcmd_api::COMMAND_FAILED,
+    result.success?"":result.err().c_str()))
+  {
+    return false;
+  }
+  agent_ip = iter->second->subtask_->agent_ip_;
+  task = iter->second->subtask_->task_;
+  task->ChangeSubtaskState(iter->second->subtask_, state);
+  RemoveCmd(iter->second);
+  return true;
+}
+
 
 dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdStartTask(DcmdTss* tss, uint32_t task_id,
   uint32_t uid)

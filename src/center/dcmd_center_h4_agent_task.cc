@@ -75,6 +75,8 @@ int DcmdCenterH4AgentTask::onTimeoutCheck(CwxMsgBlock*& , CwxTss* pThrEnv) {
         NoticeMaster(pTss, NULL);
       }
     }
+    // 调度任务
+    app_->GetTaskMgr()->Schedule(tss);
   }
   return 1;
 }
