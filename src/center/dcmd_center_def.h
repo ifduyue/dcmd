@@ -31,6 +31,7 @@ class DcmdCenterCmd{
   DcmdCenterCmd() {
     cmd_id_ = 0;
     task_id_ = 0;
+    svr_pool_id_ = 0;
     subtask_id_ = 0;
     cmd_type_ = dcmd_api::CMD_UNKNOWN;
     state_ = DCMD_CMD_STATE_UNDO;
@@ -38,7 +39,6 @@ class DcmdCenterCmd{
     task_ = NULL;
     subtask_ = NULL;
     agent_ = NULL;
-    is_ctrl_ = false;
   }
   ~DcmdCenterCmd() {
    }
@@ -51,6 +51,8 @@ class DcmdCenterCmd{
   uint64_t                subtask_id_;
   // cmd对应的svr池子
   string                  svr_pool_;
+  // cmd对应的svr池子的id
+  uint32_t                svr_pool_id_;
   // cmd对应的service
   string                  service_;
   // cmd对应的agent的ip地址
@@ -61,8 +63,6 @@ class DcmdCenterCmd{
   uint32_t                begin_time_;
   // 命令的状态
   uint8_t                 state_;
-  // 是否是控制指令
-  bool                    is_ctrl_;
   // 命令对应的任务对象
   DcmdCenterTask*         task_;
   // 命令对应的subtask对象
@@ -82,8 +82,8 @@ class DcmdCenterSubtask{
     start_time_ = 0;
     finish_time_ = 0;
     exec_cmd_ = NULL;
-    agent_ = NULL;
     task_ = NULL;
+    svr_pool_ = NULL;
   }
 public:
   // 子任务的id
@@ -93,7 +93,7 @@ public:
   // 任务命令的名字
   string                   task_cmd_;
   // 子任务的服务池子名字
-  string                   svr_pool_;
+  string                   svr_pool_name_;
   // service的名字
   string                   service_;
   // subtask的ip
@@ -112,10 +112,10 @@ public:
   string                   err_msg_;
   // 等着执行的任务
   DcmdCenterCmd*           exec_cmd_;
-  // 子任务对应的agent对象
-  DcmdCenterAgent*         agent_;
   // 子任务对应的task对象
   DcmdCenterTask*          task_;
+  // subtask所属的svr pool
+  DcmdCenterSvrPool*       svr_pool_;
 };
 
 // Task svr pool 对象，对应于task_service_pool表

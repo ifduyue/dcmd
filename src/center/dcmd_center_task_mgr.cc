@@ -174,10 +174,11 @@ bool DcmdCenterTaskMgr::ReceiveAgentMasterReply(DcmdTss* tss, ///<tss对象
   if (agent){
     // 如果不存在节点，则不作任何处理，否则将所有的命令一次性发送到agent
     map<uint64_t, DcmdCenterCmd*>::const_iterator iter = agent->cmds_.begin();
-    DcmdCenterCmd
+    dcmd_api::AgentTaskCmd task_cmd;
     while(iter != agent->cmds_.end()) {
       if (cmd_set.find(iter->first) == cmd_set.end()){
         // 指令没有分发
+        FillTaskCmd(task_cmd, iter->first, *iter->second->subtask_);
         if (!DcmdCenterH4AgentTask::SendAgentCmd(app_,
           tss,
           agent_ip,
@@ -419,7 +420,7 @@ bool DcmdCenterTaskMgr::LoadNewSubtask(DcmdTss* tss) {
     subtask->subtask_id_ = strtoull(mysql_->fetch(0, is_null), NULL, 0);
     subtask->task_id_ = strtoull(mysql_->fetch(1, is_null), NULL, 0);
     subtask->task_cmd_ = mysql_->fetch(2, is_null);
-    subtask->svr_pool_ = mysql_->fetch(3, is_null);
+    subtask->svr_pool_name_ = mysql_->fetch(3, is_null);
     subtask->service_ = mysql_->fetch(4, is_null);
     subtask->ip_ = mysql_->fetch(5, is_null);
     subtask->state_ = strtoul(mysql_->fetch(6, is_null), NULL, 0);
@@ -441,6 +442,15 @@ bool DcmdCenterTaskMgr::LoadNewSubtask(DcmdTss* tss) {
       UpdateSubtaskState(tss, true, subtask->subtask_id_, dcmd_api::SUBTASK_FAILED, "No task.");
       all_subtasks_.erase(subtask->subtask_id_);
       iter = all_subtasks_.upper(subtask->subtask_id_);
+      delete subtask;
+      continue;
+    }
+    subtask->svr_pool_ = subtask->task_->GetSvrPool(subtask->svr_pool_name_);
+    if (!subtask->svr_pool_) {
+      UpdateSubtaskState(tss, true, subtask->subtask_id_, dcmd_api::SUBTASK_FAILED, "No svr_pool.");
+      all_subtasks_.erase(subtask->subtask_id_);
+      iter = all_subtasks_.upper(subtask->subtask_id_);
+      delete subtask;
       continue;
     }
     if (subtask->state_ > dcmd_api::SUBTASK_FAILED) {
@@ -457,7 +467,7 @@ bool DcmdCenterTaskMgr::LoadNewSubtask(DcmdTss* tss) {
 
 bool DcmdCenterTaskMgr::LoadAllCmd(DcmdTss* tss) {
   CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
-    "select cmd_id, task_id, subtask_id, svr_pool, service, ip, state, cmd_type "\
+    "select cmd_id, task_id, subtask_id, svr_pool, svr_pool_id, service, ip, state, cmd_type "\
     " from command where state = 0 and cmd_type = %d order by cmd_id desc ", dcmd_api::CMD_DO_SUBTASK);
   if (!mysql_->query(tss->sql_)) {
     CwxCommon::snprintf(tss->m_szBuf2K, 2047, "Failure to fetch command. err:%s; sql:%s", mysql_->getErrMsg(),
@@ -477,10 +487,11 @@ bool DcmdCenterTaskMgr::LoadAllCmd(DcmdTss* tss) {
     cmd->task_id_ = strtoull(mysql_->fetch(1, is_null), NULL, 0);
     cmd->subtask_id_ = mysql_->fetch(2, is_null);
     cmd->svr_pool_ = mysql_->fetch(3, is_null);
-    cmd->service_ = mysql_->fetch(4, is_null);
-    cmd->agent_ip_ = mysql_->fetch(5, is_null);
-    cmd->state_ = strtoul(mysql_->fetch(6, is_null), NULL, 0);
-    cmd->cmd_type_ = strtoul(mysql_->fetch(7, is_null), NULL, 0);
+    cmd->svr_pool_id_ strtoul(mysql_->fetch(4, is_null), NULL, 10);
+    cmd->service_ = mysql_->fetch(5, is_null);
+    cmd->agent_ip_ = mysql_->fetch(6, is_null);
+    cmd->state_ = strtoul(mysql_->fetch(7, is_null), NULL, 0);
+    cmd->cmd_type_ = strtoul(mysql_->fetch(8, is_null), NULL, 0);
     next_cmd_id_ = cmd->cmd_id_ + 1;
     cmds.push_back(cmd);
   }
@@ -708,7 +719,6 @@ bool DcmdCenterTaskMgr::FinishTaskCmd(DcmdTss* tss,
   uint64_t cmd_id = strtoul(result.cmd().c_str(), NULL, 10);
   iter =  waiting_cmds_.find(cmd_id);
   if (iter == waiting_cmds_.end()) return true;// 可能认为已经完成或者是ctrl命令
-  CWX_ASSERT(!iter->second->is_ctrl_);
   uint32_t state = result.success()?dcmd_api::SUBTASK_FINISHED:dcmd_api::SUBTASK_FAILED;
   bool is_skip = false;
   if (!UpdateSubtaskInfo(tss,
@@ -1077,13 +1087,13 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdCancelSubtask(DcmdTss* tss, uint64
   if (!subtask->exec_cmd_) return dcmd_api::DCMD_STATE_SUCCESS;
   // 将cancel命令插入数据库
   uint64_t cmd_id = InsertCommand(tss, true, uid, subtask->task_id_, subtask_id,
-    subtask->svr_pool_.c_str(), subtask->task_->GetSvrPoolId(subtask->svr_pool_),
+    subtask->svr_pool_name_.c_str(), subtask->svr_pool_->svr_pool_id_,
     subtask->service_.c_str(), subtask->ip_.c_str(), dcmd_api::CMD_CANCEL_SUBTASK,
     dcmd_api::COMMAND_SUCCESS, "");
   if (!cmd_id) return dcmd_api::DCMD_STATE_FAILED;
   // 发送cancel命令
   dcmd_api::AgentTaskCmd cmd;
-  FillCtrlCmd(cmd, cmd_id, subtask->ip_, subtask->service_, subtask);
+  FillCtrlCmd(cmd, cmd_id, dcmd_api::CMD_CANCEL_SUBTASK, subtask->ip_, subtask->service_, subtask);
   DcmdCenterH4AgentTask::SendAgentCmd(app_, tss, subtask->ip_, 0, &cmd);
   return dcmd_api::DCMD_STATE_SUCCESS;
 }
@@ -1119,7 +1129,7 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdCancelSvrSubtask(DcmdTss* tss, uin
   if (!cmd_id) return dcmd_api::DCMD_STATE_FAILED;
   // 发送cancel命令
   dcmd_api::AgentTaskCmd cmd;
-  FillCtrlCmd(cmd, cmd_id, agent_ip, serivce, NULL);
+  FillCtrlCmd(cmd, cmd_id, dcmd_api::CMD_CANCEL_SVR_SUBTASK, agent_ip, serivce, NULL);
   DcmdCenterH4AgentTask::SendAgentCmd(app_, tss, agent_ip, 0, &cmd);
   return dcmd_api::DCMD_STATE_SUCCESS;
 }
@@ -1149,8 +1159,52 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdExecSubtask(DcmdTss* tss, uint64_t
     tss->err_msg_ = "Depended task is not finished.";
     return dcmd_api::DCMD_STATE_FAILED;
   }
-  if (!subtask->exec_cmd_) return dcmd_api::DCMD_STATE_SUCCESS;
-
+  if (!cmd) {
+    if (subtask->exec_cmd_) return dcmd_api::DCMD_STATE_SUCCESS;
+    DcmdCenterCmd* cmd_obj = new DcmdCenterCmd;
+    cmd = &cmd_obj;
+    cmd_obj->task_id_ = subtask->task_id_;
+    cmd_obj->subtask_id_ = subtask->subtask_id_;
+    cmd_obj->svr_pool_ = subtask->svr_pool_name_;
+    cmd_obj->svr_pool_id_ = subtask->svr_pool_->svr_pool_id_;
+    cmd_obj->service_ = subtask->task_->service_;
+    cmd_obj->agent_ip_ = subtask->ip_;
+    cmd_obj->cmd_type_ = dcmd_api::CMD_DO_SUBTASK;
+    cmd_obj->begin_time_ = time(NULL);
+    cmd_obj->state_ = dcmd_api::COMMAND_DOING;
+    cmd_obj->task_ = subtask->task_;
+    cmd_obj->subtask_ = subtask;
+    cmd_obj->agent_ = NULL;
+    cmd_obj->cmd_id_ = InsertCommand(tss, true, uid, subtask->task_id_,
+      subtask_id, cmd_obj->svr_pool_.c_str(), cmd_obj->svr_pool_id_,
+      cmd_obj->service_.c_str(), cmd_obj->agent_ip_.c_str(),
+      cmd_obj->cmd_type_, dcmd_api::SUBTASK_DOING, "");
+    delete cmd_obj;
+    if (!cmd_obj->cmd_id_) return dcmd_api::DCMD_STATE_FAILED;
+    cmd = &cmd_obj;
+  } else {
+    if (subtask->exec_cmd_) {
+      tss->err_msg_ = "subtask is been doing.";
+      return dcmd_api::DCMD_STATE_FAILED;
+    }
+    (*cmd)->task_ = subtask->task_;
+    (*cmd)->subtask_ = subtask;
+    cmd_obj->agent_ = NULL;
+  }
+  subtask->exec_cmd_ = *cmd;
+  cmd = NULL;
+  subtask->task_->ChangeSubtaskState(subtask, dcmd_api::SUBTASK_DOING, subtask->is_ignored_);
+  waiting_cmds_[subtask->exec_cmd_->cmd_id_] = subtask->exec_cmd_;
+  subtask->exec_cmd_->agent_ = GetAgent(subtask->ip_);
+  if (!subtask->exec_cmd_->agent_) {
+    subtask->exec_cmd_->agent_ = new DcmdCenterAgent(subtask->ip_);
+    agents_[subtask->ip_] = subtask->exec_cmd_->agent_;
+  }
+  subtask->exec_cmd_->agent_->cmds_[subtask->exec_cmd_->cmd_id_] = subtask->exec_cmd_;
+  dcmd_api::AgentTaskCmd task_cmd;
+  FillTaskCmd(task_cmd, subtask->exec_cmd_->cmd_id_, *subtask);
+  DcmdCenterH4AgentTask::SendAgentCmd(app_, tss, subtask->ip_, 0, &task_cmd);
+  return dcmd_api::DCMD_STATE_SUCCESS;
 }
 
 dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdRedoTask(DcmdTss* tss, uint32_t task_id,

@@ -359,25 +359,59 @@
 
   inline void DcmdCenterTaskMgr::FillCtrlCmd(dcmd_api::AgentTaskCmd& cmd,
     uint64_t cmd_id,
+    dcmd_api::CmdType cmd_type,
     string const& agent_ip,
     string const& svr_name,
-    DcmdCenterSubtask* subtask,
+    DcmdCenterSubtask* subtask
     )
   {
     char buf[64];
     CwxCommon::toString(buf, cmd_id, 10);
     cmd.set_cmd(buf);
     cmd.set_task_cmd(kDcmdSysCmdCancel);
-    cmd.set_ctrl(true);
+    cmd.set_cmd_type(cmd_type);
     if (subtask) {
       sprintf(buf, "%u", subtask->task_id_);
       cmd.set_task_id(buf);
+      CwxCommon::toString(buf, subtask?subtask->subtask_id_:0, 10);
+      cmd.set_subtask_id(buf);
     }
-    CwxCommon::toString(buf, subtask?subtask->subtask_id_:0, 10);
-    cmd.set_subtask_id(buf);
     cmd.set_ip(agent_ip);
     cmd.set_svr_name(svr_name);
     cmd.set_svr_pool("");
+  }
+  inline void DcmdCenterTaskMgr::FillTaskCmd(dcmd_api::AgentTaskCmd& cmd,
+    uint64_t cmd_id,
+    DcmdCenterSubtask const& subtask) 
+  {
+    char buf[64];
+    CwxCommon::toString(buf, cmd_id, 10);
+    cmd.set_cmd(buf);
+    cmd.set_task_cmd(subtask.task_->task_cmd_);
+    cmd.set_cmd_type(dcmd_api::CMD_DO_SUBTASK);
+    sprintf(buf, "%u", subtask.task_->task_id_);
+    cmd.set_task_id(buf);
+    CwxCommon::toString(buf, subtask.subtask_id_, 10);
+    cmd.set_subtask_id(buf);
+    cmd.set_ip(subtask.ip_);
+    cmd.set_svr_name(subtask.task_->service_);
+    cmd.set_svr_pool(subtask.svr_pool_name_);
+    cmd.set_svr_ver(subtask.task_->tag_);
+    cmd.set_svr_repo(subtask.svr_pool_->repo_);
+    cmd.set_svr_user(subtask.svr_pool_->run_user_);
+    cmd.set_env_ver(subtask.svr_pool_->svr_env_ver_);
+    cmd.set_update_env(subtask.task_->update_env_);
+    cmd.set_update_ver(subtask.task_->update_tag_);
+    cmd.set_output_process(subtask.task_->is_output_process_);
+    cmd.set_script(subtask.task_->task_cmd_script_);
+    dcmd_api::KeyValue* kv = NULL;
+    map<string, string>::iterator iter = subtask.task_->args_.begin();
+    while (iter != subtask.task_->args_.end()) {
+      kv = cmd.task_arg().add_task_arg();
+      kv.set_key(iter->first);
+      kv.set_value(iter->second);
+      ++iter;
+    }
   }
 
 

@@ -184,13 +184,15 @@ class DcmdCenterTaskMgr{
    // 设置发送的cancel命令
    inline void FillCtrlCmd(dcmd_api::AgentTaskCmd& cmd,
      uint64_t cmd_id,
+     dcmd_api::CmdType cmd_type,
      string const& agent_ip,
      string const& svr_name,
      DcmdCenterSubtask* subtask
      );
-
-
-
+   // 设置发送的task cmd命令
+   inline void FillTaskCmd(dcmd_api::AgentTaskCmd& cmd,
+     uint64_t cmd_id,
+     DcmdCenterSubtask const& subtask);
  private:
   // app对象
   DcmdCenterApp*                               app_;
