@@ -21,7 +21,7 @@ class DcmdAgentConnect{
   DcmdAgentConnect() {
     create_time_ = time(NULL);
     last_heatbeat_time_ = time(NULL);
-    is_reply_master_ = false;
+    is_master_report_reply_ = false;
     conn_id_ = 0;
   }
 
@@ -30,7 +30,7 @@ class DcmdAgentConnect{
     last_heatbeat_time_ = time(NULL);
     is_master_report_reply_= false;
     conn_id_ = conn_id;
-    conn_ip_ = conn_ip_;
+    conn_ip_ = conn_ip;
   }
 
   DcmdAgentConnect& operator=(DcmdAgentConnect const& item){
@@ -81,7 +81,7 @@ class DcmdIllegalAgentConnect{
     conn_time_ = time(NULL);
   }
   ///构造函数
-  DcmdIllegalAgentConnect(string const& conn_ip, list<string> const& report_ips){
+  DcmdIllegalAgentConnect(string const& conn_ip, string const& report_ips){
     conn_time_ = time(NULL);
     conn_ip_ = conn_ip;
     report_agent_ips_ = report_ips;
