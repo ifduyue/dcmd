@@ -5,7 +5,9 @@
 #include <CwxHostInfo.h>
 
 #include "dcmd_macro.h"
-#include "dcmd.pb.h"
+#include "dcmd_cmd.pb.h"
+#include "dcmd_agent.pb.h"
+#include "dcmd_ui.pb.h"
 
 namespace dcmd {
 
