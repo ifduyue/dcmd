@@ -91,12 +91,6 @@ class DcmdCenterTaskMgr{
   // 重做一个subtask
   dcmd_api::DcmdState TaskCmdRedoSubtask(DcmdTss* tss, uint64_t subtask_id,
     uint32_t uid);
-  // 重做失败的subtask
-  dcmd_api::DcmdState TaskCmdRedoFailedSubtask(DcmdTss* tss, uint32_t task_id,
-    uint32_t uid);
-  // 重做一个服务池子中的失败subtask
-  dcmd_api::DcmdState TaskCmdRedoFailedSvrPoolSubtask(DcmdTss* tss, uint32_t task_id,
-    char const* svr_pool, uint32_t uid);
   // ignore某个subtask的结果
   dcmd_api::DcmdState TaskCmdIgnoreSubtask(DcmdTss* tss, uint64_t subtask_id,
     uint32_t uid);

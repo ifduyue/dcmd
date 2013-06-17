@@ -111,14 +111,6 @@ bool DcmdCenterTaskMgr::ReceiveCmd(DcmdTss* tss,
       state = TaskCmdRedoSubtask(tss, strtoull(cmd.subtask_id().c_str(), NULL, 10),
         cmd.uid());
       break;
-    case dcmd_api::CMD_REDO_FAILED_SUBTASK:
-      state = TaskCmdRedoFailedSubtask(task, strtoul(cmd.task_id().c_str(), NULL, 10),
-        cmd.uid());
-      break;
-    case dcmd_api::CMD_REDO_FAILED_SVR_POOL_SUBTASK:
-      state = TaskCmdRedoFailedSvrPoolSubtask(task, strtoul(cmd.task_id().c_str(), NULL, 10),
-        cmd.svr_pool().c_str(), cmd.uid());
-      break;
     case dcmd_api::CMD_IGNORE_SUBTASK:
       state = TaskCmdIgnoreSubtask(task, strtoull(cmd.subtask_id().c_str(), NULL, 10),
         cmd.uid());
@@ -1208,8 +1200,15 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdExecSubtask(DcmdTss* tss, uint64_t
     tss->err_msg_ = "Depended task is not finished.";
     return dcmd_api::DCMD_STATE_FAILED;
   }
+  if (subtask->exec_cmd_) {
+    if (!UpdateCmdState(tss, true, subtask->exec_cmd_->cmd_id_, dcmd_api::COMMAND_FAILED, "redo")){
+      mysql_->disconnect();
+      return dcmd_api::DCMD_STATE_FAILED;
+    }
+    RemoveCmd(subtask->exec_cmd_);
+    return dcmd_api::DCMD_STATE_SUCCESS;
+  }
   if (!cmd) {
-    if (subtask->exec_cmd_) return dcmd_api::DCMD_STATE_SUCCESS;
     DcmdCenterCmd* cmd_obj = new DcmdCenterCmd;
     cmd = &cmd_obj;
     cmd_obj->task_id_ = subtask->task_id_;
@@ -1235,10 +1234,6 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdExecSubtask(DcmdTss* tss, uint64_t
     }
     cmd = &cmd_obj;
   } else {
-    if (subtask->exec_cmd_) {
-      tss->err_msg_ = "subtask is been doing.";
-      return dcmd_api::DCMD_STATE_FAILED;
-    }
     (*cmd)->task_ = subtask->task_;
     (*cmd)->subtask_ = subtask;
     cmd_obj->agent_ = NULL;
@@ -1292,41 +1287,175 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdRedoTask(DcmdTss* tss, uint32_t ta
   }
   // 更新任务的状态
   CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
-    "update task set state=1, pause=0 where task_id = %d", task_id);
+    "update task set state=%d, pause=0 where task_id = %d", dcmd_api::TASK_DOING, task_id);
   if (!ExecSql(tss, false)) {
     mysql_->disconnect();
     return dcmd_api::DCMD_STATE_FAILED;
   }
   // 更新svr pool的信息
+  map<string, DcmdCenterSvrPool*>::iterator iter = task->pools_.begin();
+  while (iter != task->pools_.end()) {
+    CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
+      "update task_service_pool set undo_node=%d, doing_node=0, finish_node=0, fail_node=0, "\
+      "ignored_fail_node=0, ignored_doing_node=0 where task_id = %d and svr_pool_id = %d",
+      iter->second->all_subtasks_.size(), task_id, iter->second->svr_pool_id_);
+    if (!ExecSql(tss, false)) {
+      mysql_->disconnect();
+      return dcmd_api::DCMD_STATE_FAILED;
+    }
+    ++iter;
+  }
+  // 更新tasknode
   CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
-    "update task set state=1, pause=0 where task_id = %d", task_id);
+    "update task_node set state=0, ignore=0, start_time=now(), finish_time=now(), process='', errmsg='' "\
+    "where task_id = %d", task_id);
   if (!ExecSql(tss, false)) {
     mysql_->disconnect();
     return dcmd_api::DCMD_STATE_FAILED;
   }
+  // 更新command
+  CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
+    "update command set state=2 where state = 0 and task_id = %d", task_id);
+  if (!ExecSql(tss, true)) {
+    mysql_->disconnect();
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
 
-
-
-
-
+  // 更新内存
+  task->state_ = dcmd_api::TASK_DOING;
+  task->is_pause_ = false;
+  // 将所有的任务变成undo状态
+  iter = task->pools_.begin();
+  while(iter != task->pools_.end()) {
+    iter->second->undo_subtasks_ = iter->second->all_subtasks_;
+    iter->second->doing_subtasks_.clear();
+    iter->second->finished_subtasks_.clear();
+    iter->second->failed_subtasks_.clear;
+    iter->second->ignored_failed_subtasks_.clear();
+    iter->second->ignored_doing_subtasks_.clear();
+    iter->second->undo_subtask_num_ = iter->second->all_subtasks_.size();
+    iter->second->doing_subtask_num_ = 0;
+    iter->second->failed_subtask_num_ = 0;
+    iter->second->finished_subtask_num_ = 0;
+    iter->second->ignored_doing_subtask_num_ = 0;
+    iter->second->ignored_failed_subtask_num_ = 0;
+    // 删除存在的cmd
+    map<uint64_t, DcmdCenterSubtask*>::iterator subtask_iter = iter->second->all_subtasks_;
+    while(subtask_iter != iter->second->all_subtasks_.end()){
+      subtask_iter->second->start_time_ = time(NULL);
+      subtask_iter->second->finish_time_ = time(NULL);
+      subtask_iter->second->state_ = dcmd_api::SUBTASK_INIT;
+      subtask_iter->second->is_ignored_ = false;
+      subtask_iter->second->process_ = "";
+      subtask_iter->second->err_msg_ = "";
+      if (subtask_iter->second->exec_cmd_) ReceiveCmd(subtask_iter->second->exec_cmd_);
+      ++subtask_iter;
+    }
+    ++iter;
+  }
+  return dcmd_api::DCMD_STATE_SUCCESS;
 }
 
 dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdRedoSvrPool(DcmdTss* tss, uint32_t task_id,
   char const* svr_pool, uint32_t uid)
 {
+  DcmdCenterTask* task = GetTask(task_id);
+  if (!task) {
+    if (!LoadNewTask(tss)) {
+      mysql_->disconnect();
+      return dcmd_api::DCMD_STATE_FAILED;
+    }
+    task = GetTask(task_id);
+  }
+  if (!task) {
+    tss->err_msg_ = "No task.";
+    return dcmd_api::DCMD_STATE_NO_TASK;
+  }
+  if (task->is_freezed_) {
+    tss->err_msg_ = "Task is in freezed state.";
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
+  if (!task->is_valid_) {
+    dcmd_api::DcmdState state = TaskCmdRetryTask(tss, task_id, uid);
+    if (state != dcmd_api::DCMD_STATE_SUCCESS) return state;
+    if (!task->is_valid_){
+      tss->err_msg_ = "Task is invalid.";
+      return dcmd_api::DCMD_STATE_FAILED;
+    }
+  }
+  if (task->depend_task_ && task->depend_task_->IsFinished()) {
+    tss->err_msg_ = "Depended task is not finished.";
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
+  DcmdCenterSvrPool* pool = task->GetSvrPool(svr_pool);
+  if (!pool) {
+    tss->err_msg_ = "svr pool doesn't exist.";
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
+  // 更新任务的状态
+  CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
+    "update task set state=%d, pause=0 where task_id = %d", dcmd_api::TASK_DOING, task_id);
+  if (!ExecSql(tss, false)) {
+    mysql_->disconnect();
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
 
-}
-
-dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdRedoFailedSubtask(DcmdTss* tss, uint32_t task_id,
-  uint32_t uid)
-{
-
-}
-
-dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdRedoFailedSvrPoolSubtask(DcmdTss* tss, uint32_t task_id,
-  char const* svr_pool, uint32_t uid)
-{
-
+  // 更新svr pool的信息
+  CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
+    "update task_service_pool set undo_node=%d, doing_node=0, finish_node=0, fail_node=0, "\
+    "ignored_fail_node=0, ignored_doing_node=0 where task_id = %d and ",
+    pool->all_subtasks_.size(), task_id, pool->svr_pool_id_);
+  if (!ExecSql(tss, false)) {
+    mysql_->disconnect();
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
+  // 更新tasknode
+  string escape_svr_pool_name(pool->svr_pool_);
+  dcmd_escape_mysql_string(escape_svr_pool_name);
+  CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
+    "update task_node set state=0, ignore=0, start_time=now(), finish_time=now(), process='', errmsg='' "\
+    "where task_id = %d and svr_pool='%s'", task_id, escape_svr_pool_name.c_str());
+  if (!ExecSql(tss, false)) {
+    mysql_->disconnect();
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
+  // 更新command
+  CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
+    "update command set state=2 where state = 0 and task_id = %d and svr_pool_id",
+    task_id, pool->svr_pool_id_);
+  if (!ExecSql(tss, true)) {
+    mysql_->disconnect();
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
+  // 更新内存
+  task->state_ = dcmd_api::TASK_DOING;
+  task->is_pause_ = false;
+  // 将svr_pool的任务变成undo状态
+  pool->undo_subtasks_ = iter->second->all_subtasks_;
+  pool->doing_subtasks_.clear();
+  pool->finished_subtasks_.clear();
+  pool->failed_subtasks_.clear;
+  pool->ignored_failed_subtasks_.clear();
+  pool->ignored_doing_subtasks_.clear();
+  pool->undo_subtask_num_ = iter->second->all_subtasks_.size();
+  pool->doing_subtask_num_ = 0;
+  pool->failed_subtask_num_ = 0;
+  pool->finished_subtask_num_ = 0;
+  pool->ignored_doing_subtask_num_ = 0;
+  pool->ignored_failed_subtask_num_ = 0;
+  // 删除存在的cmd
+  map<uint64_t, DcmdCenterSubtask*>::iterator subtask_iter = pool->all_subtasks_;
+  while(subtask_iter != pool->all_subtasks_.end()){
+    subtask_iter->second->start_time_ = time(NULL);
+    subtask_iter->second->finish_time_ = time(NULL);
+    subtask_iter->second->state_ = dcmd_api::SUBTASK_INIT;
+    subtask_iter->second->is_ignored_ = false;
+    subtask_iter->second->process_ = "";
+    subtask_iter->second->err_msg_ = "";
+    if (subtask_iter->second->exec_cmd_) ReceiveCmd(subtask_iter->second->exec_cmd_);
+    ++subtask_iter;
+  }
+  return dcmd_api::DCMD_STATE_SUCCESS;
 }
 
 dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdRedoSubtask(DcmdTss* tss, uint64_t subtask_id,
@@ -1353,8 +1482,7 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdRedoSubtask(DcmdTss* tss, uint64_t
     tss->err_msg_ = "Depended task is not finished.";
     return dcmd_api::DCMD_STATE_FAILED;
   }
-  if (subtask->exec_cmd_) return dcmd_api::DCMD_STATE_SUCCESS;
-  return TaskCmdExecSubtask(tss, subtask_id, uid, 0);
+  return TaskCmdExecSubtask(tss, subtask_id, uid, NULL);
 }
 
 dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdIgnoreSubtask(DcmdTss* tss, uint64_t subtask_id,

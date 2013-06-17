@@ -274,6 +274,16 @@ class DcmdCenterTask {
   inline bool IsFinished() const {
     return (dcmd_api::TASK_FINISHED == state_) || (dcmd_api::TASK_FINISHED_WITH_FAILED == state_);
   }
+  // 获取主机的数量
+  inline uint32_t GetSubtaskNum() const {
+    uint32_t num = 0;
+    map<string, DcmdCenterSvrPool*>::const_iterator iter = pools_.begin();
+    while(iter != pools_.end()) {
+      num += iter->second->all_subtasks_.size();
+      ++iter;
+    }
+    return num;
+  }
  public:
   // 任务的id
   uint32_t                    task_id_;
