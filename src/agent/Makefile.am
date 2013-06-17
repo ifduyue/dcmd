@@ -18,7 +18,7 @@ dcmd_agent_SOURCES = dcmd_agent_app.cc\
 		../cmn/dcmd_agent.pb.cc\
 		../cmn/dcmd_tss.cc
 dcmd_agent_LDADD=
-dcmd_agent_LDFLAGS =-L@cwinux_dir@/lib
+dcmd_agent_LDFLAGS=
 LIBS=-lcwxapp -lcwxnet -lcwxcmn -lprotobuf -lpthread -ldl -lrt 
 INCLUDES=-I@cwinux_dir@/app -I@cwinux_dir@/cmn -I@cwinux_dir@/net -I@protobuf_dir@ -I. -I../cmn
 
