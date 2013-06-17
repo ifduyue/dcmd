@@ -5,9 +5,6 @@
 #include <CwxLockGuard.h>
 #include <CwxMsgBlock.h>
 
-#include "dcmd_cmn.pb.h"
-#include "dcmd_agent.pb.h"
-#include "dcmd_ui.pb.h"
 #include "dcmd_center_def.h"
 
 namespace dcmd {

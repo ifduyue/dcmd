@@ -1,4 +1,4 @@
-﻿#ifndef __DCMD_CENTER_OPR_TASK_H__
+#ifndef __DCMD_CENTER_OPR_TASK_H__
 #define __DCMD_CENTER_OPR_TASK_H__
 
 #include <CwxTaskBoard.h>

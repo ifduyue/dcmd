@@ -5,9 +5,6 @@
 #include <CwxTss.h>
 
 #include "dcmd_macro.h"
-#include "dcmd_cmn.pb.h"
-#include "dcmd_agent.pb.h"
-#include "dcmd_ui.pb.h"
 namespace dcmd {
 //dcmd的tss
 class DcmdTss:public CwxTss{

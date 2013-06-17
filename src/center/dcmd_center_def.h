@@ -6,7 +6,6 @@
 
 #include "dcmd_def.h"
 #include "dcmd_tss.h"
-#include "dcmd_macro.h"
 
 namespace dcmd {
 

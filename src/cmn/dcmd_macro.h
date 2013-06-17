@@ -5,6 +5,9 @@
 #include <CwxStl.h>
 #include <CwxStlFunc.h>
 #include <CwxType.h>
+#include "dcmd_cmn.pb.h"
+#include "dcmd_agent.pb.h"
+#include "dcmd_ui.pb.h"
 
 CWINUX_USING_NAMESPACE
 
