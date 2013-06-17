@@ -121,8 +121,7 @@ class DcmdCenterTaskMgr{
   // 读取task cmd的内容
   bool ReadTaskCmdContent(DcmdTss* tss, char const* task_cmd, string& content);
   // 获取task cmd的数据库md5签名。返回值，1：成功；0：不存在；-1：失败
-  int FetchTaskCmdInfoFromDb(DcmdTss* tss, char const* task_cmd, string& md5,
-    bool& is_cluster);
+  int FetchTaskCmdInfoFromDb(DcmdTss* tss, char const* task_cmd, string& md5);
   // 对所有的任务进行调度，若返回false，是数据库操作失败。
   bool Schedule(DcmdTss* tss);
   // 调度指定任务的指令，若返回false是数据库操作失败

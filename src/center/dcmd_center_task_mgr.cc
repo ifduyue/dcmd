@@ -601,7 +601,7 @@ bool DcmdCenterTaskMgr::AnalizeTask(DcmdTss* tss, DcmdCenterTask* task) {
     }
     // load task_cmd文件
     string md5;
-    int ret = FetchTaskCmdInfoFromDb(tss, task->task_cmd_.c_str(), md5, task->is_cluster_);
+    int ret = FetchTaskCmdInfoFromDb(tss, task->task_cmd_.c_str(), md5);
     if (-1 == ret) return false;
     if (0 == ret) {
       task->is_valid_ = false;
@@ -655,7 +655,7 @@ bool DcmdCenterTaskMgr::ReadTaskCmdContent(DcmdTss* tss, char const* task_cmd, s
 }
 
 int DcmdCenterTaskMgr::FetchTaskCmdInfoFromDb(DcmdTss* tss, , char const* task_cmd,
-  string& md5, bool& is_cluster) {
+  string& md5) {
   string task_cmd_str = task_cmd;
   dcmd_escape_mysql_string(task_cmd_str);
   CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,

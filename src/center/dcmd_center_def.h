@@ -224,7 +224,6 @@ class DcmdCenterTask {
   DcmdCenterTask() {
     task_id_ = 0;
     depend_task_id_ = 0;
-    is_cluster_ = false;
     depend_task_ = NULL;
     svr_id_ = 0;
     group_id_ = 0;
