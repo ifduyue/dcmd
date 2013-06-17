@@ -89,14 +89,14 @@ void DcmdCenterSubtaskOutputTask::Reply(CwxTss* pThrEnv){
   dcmd_api::AgentTaskOutputReply agent_reply;
   DcmdTss* tss = (DcmdTss*)pThrEnv;
   if (!recv_msg_) {
-    reply.set_state(dcmd_api::FAILED);
+    reply.set_state(dcmd_api::DCMD_STATE_FAILED);
     reply.set_result("");
     reply.set_offset(0);
     reply.set_err(err_msg_);
   }else{
     tss->proto_str_.assign(recv_msg_->rd_ptr(), recv_msg_->length());
     if (!agent_reply.ParseFromString(tss->proto_str_)) {
-      reply.set_state(dcmd_api::FAILED);
+      reply.set_state(dcmd_api::DCMD_STATE_FAILED);
       reply.set_result("");
       reply.set_offset(0);
       reply.set_err("Failed to parse agent's msg");

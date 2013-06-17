@@ -480,13 +480,13 @@ void DcmdAgentApp::CheckTaskAndOprCmd(){
         svr_map_[svr_obj->svr_name_] = svr_obj;
       }
       // cancel存在的同一个subtask的命令
-      if ((*iter)->cmd_type() == dcmd_api::CMD_DO_SUBTASK) {
+      if ((*iter)->cmd_.cmd_type() == dcmd_api::CMD_DO_SUBTASK) {
         list<AgentTaskCmd*>::iterator svr_iter =  svr_obj->cmds_.begin();
         while(svr_iter != svr_obj->cmds_.end()) {
-          if ((*svr_iter)->cmd_type() == dcmd_api::CMD_DO_SUBTASK) {
+          if ((*svr_iter)->cmd_.cmd_type() == dcmd_api::CMD_DO_SUBTASK) {
             // 若是同一个任务的指令
-            if ((*iter)->subtask_id() == (*svr_iter)->subtask_id()) {
-              ExecCancelSubTask(svr_obj, (*iter)->subtask_id());
+            if ((*iter)->cmd_.subtask_id() == (*svr_iter)->subtask_id()) {
+              ExecCancelSubTask(svr_obj, (*iter)->cmd_.subtask_id());
             }
           }
           ++svr_iter;
@@ -1046,47 +1046,16 @@ bool DcmdAgentApp::PrepareSubtaskRunEnv(AgentTaskCmd* cmd, string& err_msg) {
   FILE* fd = NULL;
   string result_file;
   string output_file;
-  string env_file;
   string script_file;
   string script_sh_file;
   GetTaskResultFile(cmd->cmd_.svr_name(), cmd->cmd_.task_cmd(), result_file);
   if (CwxFile::isFile(result_file.c_str())) CwxFile::rmFile(result_file.c_str());
   GetTaskOutputFile(output_file, cmd->cmd_.subtask_id());
   if (CwxFile::isFile(output_file.c_str())) CwxFile::rmFile(output_file.c_str());
-  GetTaskAppEnvFile(cmd->cmd_.svr_name(), cmd->cmd_.task_cmd(), env_file);
-  if (CwxFile::isFile(env_file.c_str())) CwxFile::rmFile(env_file.c_str());
   GetTaskRunScriptFile(cmd->cmd_.svr_name(), cmd->cmd_.task_cmd(), script_file);
   if (CwxFile::isFile(script_file.c_str())) CwxFile::rmFile(script_file.c_str());
   GetTaskRunScriptShellFile(cmd->cmd_.svr_name(), cmd->cmd_.task_cmd(), script_sh_file);
   if (CwxFile::isFile(script_sh_file.c_str())) CwxFile::rmFile(script_sh_file.c_str());
-
-  // 准备环境文件
-  if(cmd->cmd_.svr_env_content().length()){
-    // 形成环境文件
-    fd = fopen(env_file.c_str(), "w+");
-    if (!fd){
-      CwxCommon::snprintf(err_2k_, 2047, "Failure to open env file:%s, errno=%d",
-        env_file.c_str(), errno);
-      err_msg = err_2k_;
-      return false;
-    }
-    if (fwrite(cmd->cmd_.svr_env_content().c_str(), 1,
-      cmd->cmd_.svr_env_content().length(), fd) != cmd->cmd_.svr_env_content().length())
-    {
-      CwxCommon::snprintf(err_2k_, 2047, "Failure to write env file:%s,"\
-        "errno=%d", env_file.c_str(), errno);
-      err_msg = err_2k_;
-      fclose(fd);
-      return false;
-    }
-    fclose(fd);
-    if (0 != chmod(env_file.c_str(), S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH)){
-      CwxCommon::snprintf(err_2k_, 2047, "Failure to set file mode for env file:%s, errno=%d",
-        env_file.c_str(), errno);
-      err_msg = err_2k_;
-      return false;
-    }
-  }
   // 写shell脚本
   if (!cmd->cmd_.script().length()){
     CwxCommon::snprintf(err_2k_, 2047, "subtask's script is empty.");
@@ -1164,12 +1133,6 @@ bool DcmdAgentApp::PrepareSubtaskRunEnv(AgentTaskCmd* cmd, string& err_msg) {
       break;
     }
     if (!OutputShellEnv(fd, "DCMD_SVR_ENV_V", cmd->cmd_.svr_env_ver(), err_2k_, script_sh_file.c_str())){
-      err_msg = err_2k_;
-      break;
-    }
-    if (fprintf(fd, "export DCMD_SVR_ENV_FILE=%s\n", env_file.c_str()) < 0){
-      CwxCommon::snprintf(err_2k_, 2047, "Failure to write run shell file:%s, errno=%d",
-        script_sh_file.c_str(), errno);
       err_msg = err_2k_;
       break;
     }
@@ -1274,7 +1237,7 @@ int DcmdAgentApp::ReportReply(CwxMsgBlock*& msg, AgentCenter* center) {
     CWX_ERROR((err_2k_));
     return -1;
   }
-  if (dcmd_api::SUCCESS != report_reply.state()){
+  if (dcmd_api::DCMD_STATE_SUCCESS != report_reply.state()){
     snprintf(err_2k_, 2047, "Failure to auth to center:%s, err:%s",
       center->host_name_.c_str(), report_reply.err().c_str());
     center->is_auth_ = false;
@@ -1493,7 +1456,7 @@ int DcmdAgentApp::ReplyOprCmd(AgentCenter* center,
 {
   CwxMsgBlock* block = NULL;
   dcmd_api::AgentOprCmdReply reply;
-  reply.set_state(is_success?dcmd_api::SUCCESS:dcmd_api::FAILED);
+  reply.set_state(is_success?dcmd_api::DCMD_STATE_SUCCESS:dcmd_api::DCMD_STATE_FAILED);
   reply.set_result(result?result:"", result?strlen(result):0);
   reply.set_err(err_msg?err_msg:"", err_msg?strlen(err_msg):0);
   if (!reply.SerializeToString(&proto_str_)) {
@@ -1691,7 +1654,7 @@ int DcmdAgentApp::FetchTaskOutputResultRecieved(CwxMsgBlock*& msg, AgentCenter* 
     if (-1 == fd){
       reply.set_err("Task result doesn't exist.");
       reply.set_result(reply.err().c_str(), reply.err().length());
-      reply.set_state(dcmd_api::FAILED);
+      reply.set_state(dcmd_api::DCMD_STATE_FAILED);
       reply.set_offset(0);
       break;
     }
@@ -1701,7 +1664,7 @@ int DcmdAgentApp::FetchTaskOutputResultRecieved(CwxMsgBlock*& msg, AgentCenter* 
         file_name.c_str(), errno);
       reply.set_err(data_buf);
       reply.set_result(data_buf, strlen(data_buf));
-      reply.set_state(dcmd_api::FAILED);
+      reply.set_state(dcmd_api::DCMD_STATE_FAILED);
       reply.set_offset(0);
       ::close(fd);
       break;
@@ -1709,7 +1672,7 @@ int DcmdAgentApp::FetchTaskOutputResultRecieved(CwxMsgBlock*& msg, AgentCenter* 
     ::close(fd);
     reply.set_err("");
     reply.set_result(data_buf, ret);
-    reply.set_state(dcmd_api::SUCCESS);
+    reply.set_state(dcmd_api::DCMD_STATE_SUCCESS);
     reply.set_offset(ret + recv.offset());
   }while(0);
 
@@ -1810,7 +1773,7 @@ int DcmdAgentApp::GetRunTaskRecieved(CwxMsgBlock*& msg, AgentCenter* center) {
     }
   }
   reply.set_err("");
-  reply.set_state(dcmd_api::SUCCESS);
+  reply.set_state(dcmd_api::DCMD_STATE_SUCCESS);
   CwxMsgBlock* block=NULL;
   if (!reply.SerializeToString(&proto_str_)) {
     CWX_ERROR(("Failure to pack fetch subtask list reply message."));
@@ -1867,7 +1830,7 @@ int DcmdAgentApp::GetRunOprRecieved(CwxMsgBlock*& msg, AgentCenter* center) {
     iter++;
   }
   reply.set_err("");
-  reply.set_state(dcmd_api::SUCCESS);
+  reply.set_state(dcmd_api::DCMD_STATE_SUCCESS);
 
   CwxMsgBlock* block=NULL;
   if (!reply.SerializeToString(&proto_str_)) {

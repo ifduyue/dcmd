@@ -86,13 +86,6 @@ class DcmdAgentApp : public CwxAppFramework{
     file += string("/") + svr + string("_") + task_cmd + string(".result");
     return file;
   }
-  // 获取Task的app的环境配置文件
-  inline string& GetTaskAppEnvFile(string const& svr, string const& task_cmd,
-    string& env_file) {
-    GetTaskScriptPath(env_file);
-    env_file += string("/") + svr + string("_") + task_cmd + string(".env");
-    return env_file;
-  }
   // 获取任务执行的script文件
   inline string& GetTaskRunScriptFile(string const& svr, string const& task_cmd,
     string& file) {

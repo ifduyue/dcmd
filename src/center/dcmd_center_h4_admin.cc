@@ -60,7 +60,7 @@ void DcmdCenterH4Admin::ExecOprCmd(CwxMsgBlock*& msg, DcmdTss* tss) {
   dcmd_api::UiExecOprCmd       opr_cmd;
   if (!app_->config().common().is_allow_opr_cmd_) {
     opr_cmd_reply.set_err("Exec opr-cmd is disable.");
-    opr_cmd_reply.set_state(dcmd_api::FAILED);
+    opr_cmd_reply.set_state(dcmd_api::DCMD_STATE_FAILED);
     DcmdCenterH4Admin::ReplyExecOprCmd(app_,
       tss,
       msg->event().getConnId(),
@@ -71,7 +71,7 @@ void DcmdCenterH4Admin::ExecOprCmd(CwxMsgBlock*& msg, DcmdTss* tss) {
   tss->proto_str_.assign(msg->rd_ptr(), msg->length());
   if (!opr_cmd.ParseFromString(tss->proto_str_)) {
     opr_cmd_reply.set_err("Failed to parse opr cmd.");
-    opr_cmd_reply.set_state(dcmd_api::FAILED);
+    opr_cmd_reply.set_state(dcmd_api::DCMD_STATE_FAILED);
     DcmdCenterH4Admin::ReplyExecOprCmd(app_,
       tss,
       msg->event().getConnId(),
@@ -88,7 +88,7 @@ void DcmdCenterH4Admin::ExecOprCmd(CwxMsgBlock*& msg, DcmdTss* tss) {
       opr_cmd.user().c_str(),
       opr_cmd.passwd()));
     opr_cmd_reply.set_err("user or passwd is wrong.");
-    opr_cmd_reply.set_state(dcmd_api::FAILED);
+    opr_cmd_reply.set_state(dcmd_api::DCMD_STATE_FAILED);
     DcmdCenterH4Admin::ReplyExecOprCmd(app_,
       tss,
       msg->event().getConnId(),
@@ -123,7 +123,7 @@ void DcmdCenterH4Admin::QuerySubtaskOutput(CwxMsgBlock*& msg, DcmdTss* tss) {
   tss->proto_str_.assign(msg->rd_ptr(), msg->length());
   if (!subtask_output_.ParseFromString(tss->proto_str_)) {
     subtask_output_reply_.set_err("Failed to parse subtask-result command.");
-    subtask_output_reply_.set_state(dcmd_api::FAILED);
+    subtask_output_reply_.set_state(dcmd_api::DCMD_STATE_FAILED);
     subtask_output_reply_.set_offset(0);
     subtask_output_reply_.set_result("");
     DcmdCenterH4Admin::ReplySubTaskOutput(app_,
@@ -143,7 +143,7 @@ void DcmdCenterH4Admin::QuerySubtaskOutput(CwxMsgBlock*& msg, DcmdTss* tss) {
       subtask_output_.user().c_str(),
       subtask_output_.passwd().c_str()));
     subtask_output_reply_.set_err("user or passwd is wrong.");
-    subtask_output_reply_.set_state(dcmd_api::FAILED);
+    subtask_output_reply_.set_state(dcmd_api::DCMD_STATE_FAILED);
     subtask_output_reply_.set_offset(0);
     subtask_output_reply_.set_result("");
     DcmdCenterH4Admin::ReplySubTaskOutput(app_,
@@ -171,7 +171,7 @@ void DcmdCenterH4Admin::QueryAgentRunSubTask(CwxMsgBlock*& msg, DcmdTss* tss) {
   tss->proto_str_.assign(msg->rd_ptr(), msg->length());
   if (!running_subtask_query.ParseFromString(tss->proto_str_)) {
     running_subtask_reply.set_err("Failed to parse running-subtask msg.");
-    running_subtask_reply.set_state(dcmd_api::FAILED);
+    running_subtask_reply.set_state(dcmd_api::DCMD_STATE_FAILED);
     DcmdCenterH4Admin::ReplyAgentRunSubTask(app_,
       tss,
       msg->event().getConnId(),
@@ -189,7 +189,7 @@ void DcmdCenterH4Admin::QueryAgentRunSubTask(CwxMsgBlock*& msg, DcmdTss* tss) {
       running_subtask_query.user().c_str(),
       running_subtask_query.passwd().c_str()));
     running_subtask_reply.set_err("User name or password is wrong.");
-    running_subtask_reply.set_state(dcmd_api::FAILED);
+    running_subtask_reply.set_state(dcmd_api::DCMD_STATE_FAILED);
     DcmdCenterH4Admin::ReplyAgentRunSubTask(app_,
       tss,
       msg->event().getConnId(),
@@ -214,7 +214,7 @@ void DcmdCenterH4Admin::QueryAgentRunOpr(CwxMsgBlock*& msg, DcmdTss* tss) {
   tss->proto_str_.assign(msg->rd_ptr(), msg->length());
   if (!running_opr_query.ParseFromString(tss->proto_str_)) {
     running_opr_reply.set_err("Failed to parse running-opr msg.");
-    running_opr_reply.set_state(dcmd_api::FAILED);
+    running_opr_reply.set_state(dcmd_api::DCMD_STATE_FAILED);
     DcmdCenterH4Admin::ReplyAgentRunOprCmd(app_,
       tss,
       msg->event().getConnId(),
@@ -232,7 +232,7 @@ void DcmdCenterH4Admin::QueryAgentRunOpr(CwxMsgBlock*& msg, DcmdTss* tss) {
       running_opr_query.user().c_str(),
       running_opr_query.passwd().c_str()));
     running_opr_reply.set_err("User name or password is wrong.");
-    running_opr_reply.set_state(dcmd_api::FAILED);
+    running_opr_reply.set_state(dcmd_api::DCMD_STATE_FAILED);
     DcmdCenterH4Admin::ReplyAgentRunOprCmd(app_,
       tss,
       msg->event().getConnId(),
@@ -254,7 +254,7 @@ void DcmdCenterH4Admin::QueryAgentStatus(CwxMsgBlock*& msg, DcmdTss* tss){
   tss->proto_str_.assign(msg->rd_ptr(), msg->length());
   if (!agent_info_query.ParseFromString(tss->proto_str_)) {
     agent_info_reply.set_err("Failed to parse agent-info msg.");
-    agent_info_reply.set_state(dcmd_api::FAILED);
+    agent_info_reply.set_state(dcmd_api::DCMD_STATE_FAILED);
     DcmdCenterH4Admin::ReplyAgentStatus(app_,
       tss,
       msg->event().getConnId(),
@@ -267,7 +267,7 @@ void DcmdCenterH4Admin::QueryAgentStatus(CwxMsgBlock*& msg, DcmdTss* tss){
     (app_->config().common().ui_user_passwd_ != agent_info_query.passwd()))
   {
     agent_info_reply.set_err("User or password is wrong.");
-    agent_info_reply.set_state(dcmd_api::FAILED);
+    agent_info_reply.set_state(dcmd_api::DCMD_STATE_FAILED);
     DcmdCenterH4Admin::ReplyAgentStatus(app_,
       tss,
       msg->event().getConnId(),
@@ -297,7 +297,7 @@ void DcmdCenterH4Admin::QueryIllegalAgent(CwxMsgBlock*& msg, DcmdTss* tss) {
   tss->proto_str_.assign(msg->rd_ptr(), msg->length());
   if (!invalid_agent_query.ParseFromString(tss->proto_str_)) {
     invalid_agent_reply.set_err("Failed to parse invalid-agent msg.");
-    invalid_agent_reply.set_state(dcmd_api::FAILED);
+    invalid_agent_reply.set_state(dcmd_api::DCMD_STATE_FAILED);
     DcmdCenterH4Admin::ReplyIllegalAgent(app_,
       tss,
       msg->event().getConnId(),
@@ -310,7 +310,7 @@ void DcmdCenterH4Admin::QueryIllegalAgent(CwxMsgBlock*& msg, DcmdTss* tss) {
     (app_->config().common().ui_user_passwd_ != invalid_agent_query.passwd()))
   {
     invalid_agent_reply.set_err("User or password is wrong.");
-    invalid_agent_reply.set_state(dcmd_api::FAILED);
+    invalid_agent_reply.set_state(dcmd_api::DCMD_STATE_FAILED);
     DcmdCenterH4Admin::ReplyIllegalAgent(app_,
       tss,
       msg->event().getConnId(),
@@ -333,7 +333,7 @@ void DcmdCenterH4Admin::QueryOprCmdScriptContent(CwxMsgBlock*& msg, DcmdTss* tss
   tss->proto_str_.assign(msg->rd_ptr(), msg->length());
   if (!opr_script_query.ParseFromString(tss->proto_str_)) {
     opr_script_reply.set_err("Failed to parse opr script msg.");
-    opr_script_reply.set_state(dcmd_api::FAILED);
+    opr_script_reply.set_state(dcmd_api::DCMD_STATE_FAILED);
     DcmdCenterH4Admin::ReplyOprScriptContent(app_,
       tss,
       msg->event().getConnId(),
@@ -346,7 +346,7 @@ void DcmdCenterH4Admin::QueryOprCmdScriptContent(CwxMsgBlock*& msg, DcmdTss* tss
     (app_->config().common().ui_user_passwd_ != opr_script_query.passwd()))
   {
     opr_script_reply.set_err("User or password is wrong.");
-    opr_script_reply.set_state(dcmd_api::FAILED);
+    opr_script_reply.set_state(dcmd_api::DCMD_STATE_FAILED);
     DcmdCenterH4Admin::ReplyOprScriptContent(app_,
       tss,
       msg->event().getConnId(),
@@ -368,7 +368,7 @@ void DcmdCenterH4Admin::QueryOprCmdScriptContent(CwxMsgBlock*& msg, DcmdTss* tss
       err_msg.c_str());
     CWX_ERROR((tss->m_szBuf2K));
     opr_script_reply.set_err(tss->m_szBuf2K);
-    opr_script_reply.set_state(dcmd_api::FAILED);
+    opr_script_reply.set_state(dcmd_api::DCMD_STATE_FAILED);
     DcmdCenterH4Admin::ReplyOprScriptContent(app_,
       tss,
       msg->event().getConnId(),
@@ -378,7 +378,7 @@ void DcmdCenterH4Admin::QueryOprCmdScriptContent(CwxMsgBlock*& msg, DcmdTss* tss
   }
   // 计算md5
   dcmd_md5(content.c_str(), content.length(), content_md5);
-  opr_script_reply.set_state(dcmd_api::SUCCESS);
+  opr_script_reply.set_state(dcmd_api::DCMD_STATE_SUCCESS);
   opr_script_reply.set_md5(content_md5);
   opr_script_reply.set_script(content);
   DcmdCenterH4Admin::ReplyOprScriptContent(app_,
@@ -394,7 +394,7 @@ void DcmdCenterH4Admin::QueryTaskCmdScriptContent(CwxMsgBlock*& msg, DcmdTss* ts
   tss->proto_str_.assign(msg->rd_ptr(), msg->length());
   if (!task_script_query.ParseFromString(tss->proto_str_)) {
     task_script_reply.set_err("Failed to parse task script msg.");
-    task_script_reply.set_state(dcmd_api::FAILED);
+    task_script_reply.set_state(dcmd_api::DCMD_STATE_FAILED);
     DcmdCenterH4Admin::ReplyTaskCmdScriptContent(app_,
       tss,
       msg->event().getConnId(),
@@ -407,7 +407,7 @@ void DcmdCenterH4Admin::QueryTaskCmdScriptContent(CwxMsgBlock*& msg, DcmdTss* ts
     (app_->config().common().ui_user_passwd_ != task_script_query.passwd()))
   {
     task_script_reply.set_err("User or password is wrong.");
-    task_script_reply.set_state(dcmd_api::FAILED);
+    task_script_reply.set_state(dcmd_api::DCMD_STATE_FAILED);
     DcmdCenterH4Admin::ReplyTaskCmdScriptContent(app_,
       tss,
       msg->event().getConnId(),
@@ -429,7 +429,7 @@ void DcmdCenterH4Admin::QueryTaskCmdScriptContent(CwxMsgBlock*& msg, DcmdTss* ts
       err_msg.c_str());
     CWX_ERROR((tss->m_szBuf2K));
     task_script_reply.set_err(tss->m_szBuf2K);
-    task_script_reply.set_state(dcmd_api::FAILED);
+    task_script_reply.set_state(dcmd_api::DCMD_STATE_FAILED);
     DcmdCenterH4Admin::ReplyTaskCmdScriptContent(app_,
       tss,
       msg->event().getConnId(),
@@ -439,7 +439,7 @@ void DcmdCenterH4Admin::QueryTaskCmdScriptContent(CwxMsgBlock*& msg, DcmdTss* ts
   }
   // 计算md5
   dcmd_md5(content.c_str(), content.length(), content_md5);
-  task_script_reply.set_state(dcmd_api::SUCCESS);
+  task_script_reply.set_state(dcmd_api::DCMD_STATE_SUCCESS);
   task_script_reply.set_md5(content_md5);
   task_script_reply.set_script(content);
   DcmdCenterH4Admin::ReplyTaskCmdScriptContent(app_,
@@ -455,7 +455,7 @@ void DcmdCenterH4Admin::QuerySubTaskProcess(CwxMsgBlock*& msg, DcmdTss* tss) {
   tss->proto_str_.assign(msg->rd_ptr(), msg->length());
   if (!task_process_query.ParseFromString(tss->proto_str_)) {
     task_process_reply.set_err("Failed to parse task process msg.");
-    task_process_reply.set_state(dcmd_api::FAILED);
+    task_process_reply.set_state(dcmd_api::DCMD_STATE_FAILED);
     DcmdCenterH4Admin::ReplyAgentSubTaskProcess(app_,
       tss,
       msg->event().getConnId(),
@@ -468,7 +468,7 @@ void DcmdCenterH4Admin::QuerySubTaskProcess(CwxMsgBlock*& msg, DcmdTss* tss) {
     (app_->config().common().ui_user_passwd_ != task_process_query.passwd()))
   {
     task_process_reply.set_err("User or password is wrong.");
-    task_process_reply.set_state(dcmd_api::FAILED);
+    task_process_reply.set_state(dcmd_api::DCMD_STATE_FAILED);
     DcmdCenterH4Admin::ReplyAgentSubTaskProcess(app_,
       tss,
       msg->event().getConnId(),
@@ -482,7 +482,7 @@ void DcmdCenterH4Admin::QuerySubTaskProcess(CwxMsgBlock*& msg, DcmdTss* tss) {
     app_->GetTaskMgr()->GetAgentsTaskProcess(task_process_query->subtask_id(i), process);
     task_process_reply.add_process(process);
   }
-  task_process_reply.set_state(dcmd_api::SUCCESS);
+  task_process_reply.set_state(dcmd_api::DCMD_STATE_SUCCESS);
   DcmdCenterH4Admin::ReplyAgentSubTaskProcess(app_,
     tss,
     msg->event().getConnId(),

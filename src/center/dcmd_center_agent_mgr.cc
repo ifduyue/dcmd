@@ -231,7 +231,7 @@ void DcmdCenterAgentMgr::GetAgentStatus(list<string> const& agent_ips,
   DcmdAgentConnect* conn;
   CwxMutexGuard<CwxMutexLock>  lock(&lock_);
   result.clear_agentinfo();
-  result.set_state(dcmd_api::SUCCESS);
+  result.set_state(dcmd_api::DCMD_STATE_SUCCESS);
   result.clear_err();
   dcmd_api::AgentInfo* agent_info;
   if (agent_ips.begin() != agent_ips.end()) {
@@ -401,7 +401,7 @@ bool DcmdCenterAgentMgr::IsInvalidConnIp(string const& conn_ip) {
 void DcmdCenterAgentMgr::GetInvalidAgent(dcmd_api::UiInvalidAgentInfoReply& result)
 {
   result.clear_agentinfo();
-  result.set_state(dcmd_api::SUCCESS);
+  result.set_state(dcmd_api::DCMD_STATE_SUCCESS);
   result.clear_err();
   dcmd_api::AgentInfo* agent_info=NULL;
   {
