@@ -32,7 +32,7 @@
     string str_tmp = err_msg?string(err_msg):"";
     dcmd_escape_mysql_string(str_tmp);
     CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
-      "update task set valid=%d, errmsg='%s where task_id=%d',
+      "update task set valid=%d, errmsg='%s' where task_id=%d",
       is_valid?1:0, is_valid?"":str_tmp.c_str(), task_id);
     if (-1 == mysql_->execute(tss->sql_)) {
       tss->err_msg_ = string("Failure to exec sql, err:") + mysql_->getErrMsg(),
@@ -54,7 +54,7 @@
   inline bool DcmdCenterTaskMgr::UpdateTaskState(DcmdTss* tss, bool is_commit,
     uint32_t task_id, dcmd_api::TaskState state) {
       CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
-        "update task set state=%d where task_id=%d', state);
+        "update task set state=%d where task_id=%d", state);
         if (-1 == mysql_->execute(tss->sql_)) {
           tss->err_msg_ = string("Failure to exec sql, err:") + mysql_->getErrMsg(),
             + ". sql:" + tss->sql_;
@@ -80,7 +80,7 @@
     dcmd_escape_mysql_string(str_tmp);
     CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
       "update task_node set state=%d , errmsg = %s where subtask_id=%s",
-      state， str_tmp.c_str(), CwxCommon::toString(subtask_id, buf, 10));
+      state, str_tmp.c_str(), CwxCommon::toString(subtask_id, buf, 10));
     if (-1 == mysql_->execute(tss->sql_)) {
       tss->err_msg_ = string("Failure to exec sql, err:") + mysql_->getErrMsg(),
         + ". sql:" + tss->sql_;
@@ -107,7 +107,7 @@
     dcmd_escape_mysql_string(str_tmp);
     CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
       "update command set state=%d, errmsg = %s where cmd_id=%s",
-      state， str_tmp.c_str(), CwxCommon::toString(subtask_id, buf, 10));
+      state, str_tmp.c_str(), CwxCommon::toString(subtask_id, buf, 10));
     if (-1 == mysql_->execute(tss->sql_)) {
       tss->err_msg_ = string("Failure to exec sql, err:") + mysql_->getErrMsg(),
         + ". sql:" + tss->sql_;

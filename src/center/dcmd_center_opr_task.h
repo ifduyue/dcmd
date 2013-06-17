@@ -3,8 +3,7 @@
 
 #include <CwxTaskBoard.h>
 
-#include "../cmn/dcmd_tss.h"
-#include "../cmn/dcmd.pb.h"
+#include "dcmd_tss.h"
 #include "dcmd_center_def.h"
 #include "dcmd_center_agent_mgr.h"
 

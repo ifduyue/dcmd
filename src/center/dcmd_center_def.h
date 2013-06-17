@@ -4,10 +4,9 @@
 #include <CwxCommon.h>
 #include <CwxHostInfo.h>
 
-#include "../cmn/dcmd_def.h"
-#include "../cmn/dcmd_tss.h"
-#include "../cmn/dcmd.pb.h"
-#include "../cmn/dcmd_macro.h"
+#include "dcmd_def.h"
+#include "dcmd_tss.h"
+#include "dcmd_macro.h"
 
 namespace dcmd {
 

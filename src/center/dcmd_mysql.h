@@ -15,9 +15,9 @@
 #include "CwxCommon.h"
 #include "CwxStl.h"
 #include "CwxStlFunc.h"
-#include "DcmdMacro.h"
 #include "CwxLogger.h"
 #include "CwxTss.h"
+#include "dcmd_macro.h"
 
 
 #include <mysql.h>
