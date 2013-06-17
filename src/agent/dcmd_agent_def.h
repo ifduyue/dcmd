@@ -6,7 +6,6 @@
 
 #include "../cmn/dcmd_def.h"
 #include "../cmn/dcmd_tss.h"
-#include "../cmn/dcmd.pb.h"
 #include "../cmn/dcmd_macro.h"
 #include "dcmd_process.h"
 

@@ -485,7 +485,7 @@ void DcmdAgentApp::CheckTaskAndOprCmd(){
         while(svr_iter != svr_obj->cmds_.end()) {
           if ((*svr_iter)->cmd_.cmd_type() == dcmd_api::CMD_DO_SUBTASK) {
             // 若是同一个任务的指令
-            if ((*iter)->cmd_.subtask_id() == (*svr_iter)->subtask_id()) {
+            if ((*iter)->cmd_.subtask_id() == (*svr_iter)->cmd_.subtask_id()) {
               ExecCancelSubTask(svr_obj, (*iter)->cmd_.subtask_id());
             }
           }
