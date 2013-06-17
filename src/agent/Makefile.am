@@ -14,7 +14,8 @@ dcmd_agent_SOURCES = dcmd_agent_app.cc\
 		dcmd_agent_def.cc\
 		dcmd_process.cc\
 		../cmn/dcmd_def.cc\
-		../cmn/dcmd.pb.cc\
+		../cmn/dcmd_cmn.pb.cc\
+		../cmn/dcmd_agent.pb.cc\
 		../cmn/dcmd_tss.cc
 dcmd_agent_LDADD=
 dcmd_agent_LDFLAGS =-L@cwinux_dir@/lib
