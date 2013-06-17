@@ -8,11 +8,24 @@ BUILD_DATE=$(shell date +%F)
 
 bin_PROGRAMS = dcmd_agent
 dcmd_agent_CPPFLAGS = -D_BUILD_DATE="$(BUILD_DATE)" -W -Wall
-dcmd_agent_SOURCES = dcmd_agent_app.cc\
-		dcmd_agent.cc\
-		dcmd_agent_config.cc\
-		dcmd_agent_def.cc\
-		dcmd_process.cc\
+dcmd_agent_SOURCES =dcmd_center_agent_mgr.cc\
+		dcmd_center_h4_admin.cc\
+		dcmd_center_opr_task.cc\
+		dcmd_center_watch_mgr.cc\
+		dcmd_center_app.cc\
+		dcmd_center_h4_agent_opr.cc\
+		dcmd_center_run_opr_task.cc\
+		dcmd_mysql.cc\
+		dcmd_center.cc\
+		dcmd_center_h4_agent_task.cc\
+		dcmd_center_run_subtask_task.cc\
+		dcmd_xml_parse.cc\
+		dcmd_center_config.cc\
+		dcmd_center_h4_check.cc\
+		dcmd_center_subtask_output_task.cc\
+		dcmd_center_def.cc\
+		dcmd_center_opr_cache.cc\
+		dcmd_center_task_mgr.cc\
 		../cmn/dcmd_def.cc\
 		../cmn/dcmd_cmn.pb.cc\
 		../cmn/dcmd_agent.pb.cc\
