@@ -13,6 +13,7 @@ namespace dcmd {
 class DcmdCenterTask;
 class DcmdCenterSubTask;
 class DcmdCenterAgent;
+class DcmdCenterSvrPool;
 
 // 命令对象，为数据库command表中的记录
 class DcmdCenterCmd{
