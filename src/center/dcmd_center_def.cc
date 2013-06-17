@@ -116,24 +116,4 @@ bool DcmdCenterTask::ChangeSubtaskState(DcmdCenterSubtask const* subtask,
   return subtask->svr_pool_->ChangeSubtaskState(subtask->subtask_id_, state, is_ignored);
 }
 
-void DcmdCenterTask::AddChildTask(DcmdCenterTask* child_task) {
-  CWX_ASSERT(this->is_cluster_);
-  CWX_ASSERT(task_id_ == child_task->parent_task_id_);
-  map<uint32_t, map<uint32_t, DcmdCenterTask*>* >::iterator iter = child_tasks_.find(child_task->order_);
-  map<uint32_t, DcmdCenterTask*>* tasks = NULL;
-  if (iter == child_tasks_.end()) {
-    tasks = new map<uint32_t, DcmdCenterTask*>;
-  } else {
-    tasks = iter->second;
-  }
-  child_task->parent_task_ = this;
-  (*tasks)[child_task->task_id_] = child_task;
-  if (child_task->state_ != dcmd_api::TASK_INIT) {
-    if (this->doing_order_ < child_task->order_) {
-      this->doing_order_ = child_task->order_;
-    }
-  }
-}
-
-
 }  // dcmd
