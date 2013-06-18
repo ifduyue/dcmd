@@ -174,7 +174,7 @@ class DcmdCenterTaskMgr{
    // 将任务的相关信息从内存中删除
    inline void RemoveTaskFromMem(DcmdCenterTask* task);
    // 删除指定的cmd
-   inline void RemoveCmd(DcmdCenterCmd* cmd);
+   void RemoveCmd(DcmdCenterCmd* cmd);
    // 设置发送的cancel命令
    inline void FillCtrlCmd(dcmd_api::AgentTaskCmd& cmd,
      uint64_t cmd_id,

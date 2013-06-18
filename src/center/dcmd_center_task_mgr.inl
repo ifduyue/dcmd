@@ -29,15 +29,15 @@
       is_valid?1:0, is_valid?"":str_tmp.c_str(), task_id);
     if (-1 == mysql_->execute(tss->sql_)) {
       tss->err_msg_ = string("Failure to exec sql, err:") + mysql_->getErrMsg(),
-        + ". sql:" + tss->sql_;
-      CWX_ERROR((tss->err_msg.c_str()));
+        + string(". sql:") + tss->sql_;
+      CWX_ERROR((tss->err_msg_.c_str()));
       mysql_->rollback();
       return false;
     }
     if (is_commit && !mysql_->commit()) {
       tss->err_msg_ = string("Failure to commit sql, err:") + mysql_->getErrMsg(),
-        + ". sql:" + tss->sql_;
-      CWX_ERROR((tss->err_msg.c_str()));
+        + string(". sql:") + tss->sql_;
+      CWX_ERROR((tss->err_msg_.c_str()));
       mysql_->rollback();
       return false;
     }
@@ -45,7 +45,7 @@
   }
 
   inline bool DcmdCenterTaskMgr::UpdateTaskState(DcmdTss* tss, bool is_commit,
-    uint32_t task_id, dcmd_api::TaskState state) {
+    uint32_t task_id, uint8_t state) {
       CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
         "update task set state=%d where task_id=%d", state);
         if (-1 == mysql_->execute(tss->sql_)) {
@@ -76,15 +76,15 @@
       state, str_tmp.c_str(), CwxCommon::toString(subtask_id, buf, 10));
     if (-1 == mysql_->execute(tss->sql_)) {
       tss->err_msg_ = string("Failure to exec sql, err:") + mysql_->getErrMsg(),
-        + ". sql:" + tss->sql_;
+        + string(". sql:") + tss->sql_;
       CWX_ERROR((tss->err_msg_.c_str()));
       mysql_->rollback();
       return false;
     }
     if (is_commit && !mysql_->commit()) {
       tss->err_msg_ = string("Failure to commit sql, err:") + mysql_->getErrMsg(),
-        + ". sql:" + tss->sql_;
-      CWX_ERROR((tss->err_msg.c_str()));
+        + string(". sql:") + tss->sql_;
+      CWX_ERROR((tss->err_msg_.c_str()));
       mysql_->rollback();
       return false;
     }
@@ -100,18 +100,18 @@
     dcmd_escape_mysql_string(str_tmp);
     CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
       "update command set state=%d, errmsg = %s where cmd_id=%s",
-      state, str_tmp.c_str(), CwxCommon::toString(subtask_id, buf, 10));
+      state, str_tmp.c_str(), CwxCommon::toString(cmd_id, buf, 10));
     if (-1 == mysql_->execute(tss->sql_)) {
       tss->err_msg_ = string("Failure to exec sql, err:") + mysql_->getErrMsg(),
-        + ". sql:" + tss->sql_;
+        + string(". sql:") + tss->sql_;
       CWX_ERROR((tss->err_msg_.c_str()));
       mysql_->rollback();
       return false;
     }
     if (is_commit && !mysql_->commit()) {
       tss->err_msg_ = string("Failure to commit sql, err:") + mysql_->getErrMsg(),
-        + ". sql:" + tss->sql_;
-      CWX_ERROR((tss->err_msg.c_str()));
+        + string(". sql:") + tss->sql_;
+      CWX_ERROR((tss->err_msg_.c_str()));
       mysql_->rollback();
       return false;
     }
@@ -128,15 +128,15 @@
       con_num, con_rate, timeout, is_auto?1:0, uid, task_id);
     if (-1 == mysql_->execute(tss->sql_)) {
       tss->err_msg_ = string("Failure to exec sql, err:") + mysql_->getErrMsg(),
-        + ". sql:" + tss->sql_;
+        + string(". sql:") + tss->sql_;
       CWX_ERROR((tss->err_msg_.c_str()));
       mysql_->rollback();
       return false;
     }
     if (is_commit && !mysql_->commit()) {
       tss->err_msg_ = string("Failure to commit sql, err:") + mysql_->getErrMsg(),
-        + ". sql:" + tss->sql_;
-      CWX_ERROR((tss->err_msg.c_str()));
+        + string(". sql:") + tss->sql_;
+      CWX_ERROR((tss->err_msg_.c_str()));
       mysql_->rollback();
       return false;
     }
@@ -152,7 +152,7 @@
       "delete from task_node where task_id = %u", task->task_id_);
     if (-1 == mysql_->execute(tss->sql_)) {
       tss->err_msg_ = string("Failure to exec sql, err:") + mysql_->getErrMsg(),
-        + ". sql:" + tss->sql_;
+        + string(". sql:") + tss->sql_;
       CWX_ERROR((tss->err_msg_.c_str()));
       mysql_->rollback();
       return false;
@@ -164,18 +164,18 @@
       "from task as t, task_service_pool as p, service_pool_node as n "\
       "where t.task_id = %u and p.task_id=%u "\
       " and p.svr_pool_id = n.svr_pool_id",
-      task->task_id_, task->task_id_);
+      uid, task->task_id_, task->task_id_);
     if (-1 == mysql_->execute(tss->sql_)) {
       tss->err_msg_ = string("Failure to exec sql, err:") + mysql_->getErrMsg(),
-        + ". sql:" + tss->sql_;
+        + string(". sql:") + tss->sql_;
       CWX_ERROR((tss->err_msg_.c_str()));
       mysql_->rollback();
       return false;
     }
     if (is_commit && !mysql_->commit()) {
       tss->err_msg_ = string("Failure to commit sql, err:") + mysql_->getErrMsg(),
-        + ". sql:" + tss->sql_;
-      CWX_ERROR((tss->err_msg.c_str()));
+        + string(". sql:") + tss->sql_;
+      CWX_ERROR((tss->err_msg_.c_str()));
       mysql_->rollback();
       return false;
     }
@@ -187,7 +187,7 @@
     uint32_t svr_pool_id, char const* service, char const* ip,
     uint8_t cmt_type, uint8_t state, char const* err_msg)
   {
-    string svr_pool_str(svr_pool?str_pool:"");
+    string svr_pool_str(svr_pool?svr_pool:"");
     string service_str(service?service:"");
     string ip_str(ip?ip:"");
     string err_msg_str(err_msg?err_msg:"");
@@ -202,21 +202,21 @@
       "insert into command(cmd_id, task_id, subtask_id, svr_pool, svr_pool_id, service, ip,"\
       "cmd_type, state, errmsg, utime, ctime, opr_uid) "\
       " values (%s, %u, %s, '%s', %u, '%s', %u, %u, '%s', now(), now(), %u)",
-      CwxCommon::snprintf(cmd_id, cmd_id_sz,10), task_id,
-      CwxCommon::snprintf(subtask_id, subtask_id_sz, 10),svr_pool_str.c_str(),
+      CwxCommon::toString(cmd_id, cmd_id_sz,10), task_id,
+      CwxCommon::toString(subtask_id, subtask_id_sz, 10),svr_pool_str.c_str(),
       svr_pool_id, service_str.c_str(), ip_str.c_str(), cmt_type, state,
       err_msg_str.c_str(), uid);
     if (-1 == mysql_->execute(tss->sql_)) {
       tss->err_msg_ = string("Failure to exec sql, err:") + mysql_->getErrMsg(),
-        + ". sql:" + tss->sql_;
+        + string(". sql:") + tss->sql_;
       CWX_ERROR((tss->err_msg_.c_str()));
       mysql_->rollback();
       return 0;
     }
     if (is_commit && !mysql_->commit()) {
       tss->err_msg_ = string("Failure to commit sql, err:") + mysql_->getErrMsg(),
-        + ". sql:" + tss->sql_;
-      CWX_ERROR((tss->err_msg.c_str()));
+        + string(". sql:") + tss->sql_;
+      CWX_ERROR((tss->err_msg_.c_str()));
       mysql_->rollback();
       return 0;
     }
@@ -226,15 +226,15 @@
   inline bool DcmdCenterTaskMgr::ExecSql(DcmdTss* tss, bool is_commit) {
     if (-1 == mysql_->execute(tss->sql_)) {
       tss->err_msg_ = string("Failure to exec sql, err:") + mysql_->getErrMsg(),
-        + ". sql:" + tss->sql_;
+        + string(". sql:") + tss->sql_;
       CWX_ERROR((tss->err_msg_.c_str()));
       mysql_->rollback();
       return false;
     }
     if (is_commit && !mysql_->commit()) {
       tss->err_msg_ = string("Failure to commit sql, err:") + mysql_->getErrMsg(),
-        + ". sql:" + tss->sql_;
-      CWX_ERROR((tss->err_msg.c_str()));
+        + string(". sql:") + tss->sql_;
+      CWX_ERROR((tss->err_msg_.c_str()));
       mysql_->rollback();
       return false;
     }
@@ -247,7 +247,7 @@
     map<uint64_t, DcmdCenterSubtask*>::iterator subtasks_iter;
     map<string, DcmdCenterSvrPool*>::iterator pool_iter = task->pools_.begin();
     while(pool_iter != task->pools_.end()){
-      subtasks = (map<uint64_t, DcmdCenterSubtask*>*)pool_iter->second->all_subtasks();
+      subtasks = &pool_iter->second->all_subtasks_;
       subtasks_iter = subtasks->begin();
       while(subtasks_iter != subtasks->end()){
         if (subtasks_iter->second->exec_cmd_){
@@ -260,23 +260,6 @@
       pool_iter++;
     }
     delete task;
-  }
-
-  inline void DcmdCenterTaskMgr::RemoveCmd(DcmdCenterCmd* cmd) {
-    waiting_cmds_.erase(cmd->cmd_id_);
-    if (cmd->agent_) {
-      cmd->agent_->cmds_.erase(cmd->cmd_id_);
-      if (!cmd->agent_->cmds_.size()){
-        agents_.erase(cmd->agent_->ip_);
-        delete cmd->agent_;
-      }
-    }
-    if (cmd->subtask_) {
-      if (cmd->subtask_->exec_cmd_ == cmd) {
-        cmd->subtask_->exec_cmd_ = NULL;
-      }
-    }
-    delete cmd;
   }
 
   inline bool DcmdCenterTaskMgr::UpdateSubtaskInfo(DcmdTss* tss, uint64_t subtask_id,

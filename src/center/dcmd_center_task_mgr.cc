@@ -1631,4 +1631,22 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdUpdateTask(DcmdTss* tss, uint32_t 
   return dcmd_api::DCMD_STATE_SUCCESS;
 }
 
+void DcmdCenterTaskMgr::RemoveCmd(DcmdCenterCmd* cmd) {
+  waiting_cmds_.erase(cmd->cmd_id_);
+  if (cmd->agent_) {
+    cmd->agent_->cmds_.erase(cmd->cmd_id_);
+    if (!cmd->agent_->cmds_.size()){
+      agents_.erase(cmd->agent_->ip_);
+      delete cmd->agent_;
+    }
+  }
+  if (cmd->subtask_) {
+    if (cmd->subtask_->exec_cmd_ == cmd) {
+      cmd->subtask_->exec_cmd_ = NULL;
+    }
+  }
+  delete cmd;
+}
+
+
 }  // dcmd
