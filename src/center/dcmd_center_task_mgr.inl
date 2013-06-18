@@ -47,7 +47,7 @@
   inline bool DcmdCenterTaskMgr::UpdateTaskState(DcmdTss* tss, bool is_commit,
     uint32_t task_id, uint8_t state) {
       CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
-        "update task set state=%d where task_id=%d", state);
+        "update task set state=%d where task_id=%d", state, task_id);
         if (-1 == mysql_->execute(tss->sql_)) {
           tss->err_msg_ = string("Failure to exec sql, err:") + mysql_->getErrMsg();
           tss->err_msg_ += string(". sql:") + tss->sql_;
@@ -346,14 +346,14 @@
     )
   {
     char buf[64];
-    CwxCommon::toString(buf, cmd_id, 10);
+    CwxCommon::toString(cmd_id, buf, 10);
     cmd.set_cmd(buf);
     cmd.set_task_cmd(kDcmdSysCmdCancel);
     cmd.set_cmd_type(cmd_type);
     if (subtask) {
       sprintf(buf, "%u", subtask->task_id_);
       cmd.set_task_id(buf);
-      CwxCommon::toString(buf, subtask?subtask->subtask_id_:0, 10);
+      CwxCommon::toString(subtask?subtask->subtask_id_:0, buf, 10);
       cmd.set_subtask_id(buf);
     }
     cmd.set_ip(agent_ip);
@@ -379,7 +379,7 @@
     cmd.set_svr_ver(subtask.task_->tag_);
     cmd.set_svr_repo(subtask.svr_pool_->repo_);
     cmd.set_svr_user(subtask.svr_pool_->run_user_);
-    cmd.set_env_ver(subtask.svr_pool_->svr_env_ver_);
+    cmd.set_svr_env_ver(subtask.svr_pool_->svr_env_ver_);
     cmd.set_update_env(subtask.task_->update_env_);
     cmd.set_update_ver(subtask.task_->update_tag_);
     cmd.set_output_process(subtask.task_->is_output_process_);
@@ -388,8 +388,8 @@
     map<string, string>::iterator iter = subtask.task_->args_.begin();
     while (iter != subtask.task_->args_.end()) {
       kv = cmd.task_arg().add_task_arg();
-      kv.set_key(iter->first);
-      kv.set_value(iter->second);
+      kv->set_key(iter->first);
+      kv->set_value(iter->second);
       ++iter;
     }
   }

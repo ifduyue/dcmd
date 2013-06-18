@@ -1,6 +1,7 @@
 ﻿#ifndef __DCMD_CENTER_APP_H__
 #define __DCMD_CENTER_APP_H__
 
+#include "CwxAppFramework.h"
 
 #include "dcmd_center_agent_mgr.h"
 #include "dcmd_center_config.h"

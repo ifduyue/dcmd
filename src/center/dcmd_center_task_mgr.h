@@ -151,7 +151,7 @@ class DcmdCenterTaskMgr{
      uint64_t subtask_id, uint8_t state, char const* err_msg);
    // 更新子任务的信息
    inline bool UpdateSubtaskInfo(DcmdTss* tss, uint64_t subtask_id,
-     bool is_commit, uint64_t* cmd_id, uint32_t* state, bool* is_skip,
+     bool is_commit, uint32_t* state, bool* is_skip,
      bool is_start_time, bool is_finish_time, char const* err_msg, 
      char const* process);
    // 更新命令的状态
