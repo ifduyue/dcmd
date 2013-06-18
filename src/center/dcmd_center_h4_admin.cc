@@ -104,7 +104,7 @@ void DcmdCenterH4Admin::ExecOprCmd(CwxMsgBlock*& msg, DcmdTss* tss) {
   int i = 0;
   if (opr_cmd.args_size()) {
     for (i=0; i< opr_cmd.args_size(); i++) {
-      opr_task->opr_args_[opr_cmd.args(i).key] = opr_cmd.args(i).value;
+      opr_task->opr_args_[opr_cmd.args(i).key()] = opr_cmd.args(i).value();
     }
   }
   if (opr_cmd.agents_size()) {
@@ -478,9 +478,12 @@ void DcmdCenterH4Admin::QuerySubTaskProcess(CwxMsgBlock*& msg, DcmdTss* tss) {
   }
   // 查询agent的任务处理进度
   string process;
+  dcmd_api::SubTaskProcess* subtask_process = NULL;
   for (int i=0; i<task_process_query.subtask_id_size(); i++) {
     app_->GetTaskMgr()->GetAgentsTaskProcess(task_process_query.subtask_id(i), process);
-    *task_process_reply.add_process() = process;
+    subtask_process = task_process_reply.add_process();
+    subtask_process->set_process(process);
+    subtask_process->set_subtask_id(task_process_query.subtask_id(i));
   }
   task_process_reply.set_state(dcmd_api::DCMD_STATE_SUCCESS);
   DcmdCenterH4Admin::ReplyAgentSubTaskProcess(app_,
