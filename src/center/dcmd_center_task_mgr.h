@@ -140,8 +140,6 @@ class DcmdCenterTaskMgr{
    inline DcmdCenterSubtask* GetSubTask(uint64_t subtak_id);
    // 获取agent
    inline DcmdCenterAgent* GetAgent(string const& agent_ip);
-   // 任务是否freeze
-   inline bool IsTaskFreezed(DcmdCenterTask* task);
    // 更新任务无效状态
    inline bool UpdateTaskValid(DcmdTss* tss, bool is_commit, 
      uint32_t task_id, bool is_valid, char const* err_msg);
@@ -215,7 +213,7 @@ class DcmdCenterTaskMgr{
   // 下一个command的id
   uint64_t                                     next_cmd_id_;
   // watch的管理器对象
-  DcmdCenterWatchMgr*                          watches_;
+  //DcmdCenterWatchMgr*                          watches_;
 };
 
 }  // dcmd

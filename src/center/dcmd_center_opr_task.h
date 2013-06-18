@@ -6,7 +6,7 @@
 #include "dcmd_tss.h"
 #include "dcmd_center_def.h"
 #include "dcmd_center_agent_mgr.h"
-
+CWINUX_USING_NAMESPACE
 namespace  dcmd {
 class DcmdCenterApp;
 // agent的操作指令执行结果的对象
@@ -58,7 +58,7 @@ class DcmdCenterOprTask : public CwxTaskBoardTask {
     receive_num_ = 0;
     agent_conns_ = NULL;
     agent_replys_ = false;
-    app_ = false;
+    app_ = app;
   }
   ///析构函数
   ~DcmdCenterOprTask() {
