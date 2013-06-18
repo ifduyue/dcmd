@@ -104,7 +104,7 @@ void DcmdCenterH4Admin::ExecOprCmd(CwxMsgBlock*& msg, DcmdTss* tss) {
   int i = 0;
   if (opr_cmd.args_size()) {
     for (i=0; i< opr_cmd.args_size(); i++) {
-      opr_task->opr_args_map_[opr_cmd.args(i).key] = opr_cmd.args(i).value;
+      opr_task->opr_args_[opr_cmd.args(i).key] = opr_cmd.args(i).value;
     }
   }
   if (opr_cmd.agents_size()) {
@@ -130,7 +130,7 @@ void DcmdCenterH4Admin::QuerySubtaskOutput(CwxMsgBlock*& msg, DcmdTss* tss) {
       tss,
       msg->event().getConnId(),
       msg->event().getMsgHeader().getTaskId(),
-      &subtask_output_reply_);
+      &subtask_output_reply);
     return;
   }
   CWX_DEBUG(("Receive a agent subtask-output command, agent=%s, subtask_id",
@@ -197,7 +197,7 @@ void DcmdCenterH4Admin::QueryAgentRunSubTask(CwxMsgBlock*& msg, DcmdTss* tss) {
       &running_subtask_reply);
     return;
   }
-  subtask_task = new DcmdCenterRunSubtaskTask(app_, app_->getTaskBoard());
+  subtask_task = new DcmdCenterRunSubtaskTask(app_, &app_->getTaskBoard());
   subtask_task->reply_conn_id_ = msg->event().getConnId();
   subtask_task->msg_taskid_ = msg->event().getMsgHeader().getTaskId();
   subtask_task->agent_ip_ = running_subtask_query.ip();
@@ -479,8 +479,8 @@ void DcmdCenterH4Admin::QuerySubTaskProcess(CwxMsgBlock*& msg, DcmdTss* tss) {
   // 查询agent的任务处理进度
   string process;
   for (int i=0; i<task_process_query.subtask_id_size(); i++) {
-    app_->GetTaskMgr()->GetAgentsTaskProcess(task_process_query->subtask_id(i), process);
-    task_process_reply.add_process(process);
+    app_->GetTaskMgr()->GetAgentsTaskProcess(task_process_query.subtask_id(i), process);
+    *task_process_reply.add_process() = process;
   }
   task_process_reply.set_state(dcmd_api::DCMD_STATE_SUCCESS);
   DcmdCenterH4Admin::ReplyAgentSubTaskProcess(app_,

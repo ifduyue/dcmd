@@ -32,7 +32,7 @@ class DcmdTss:public CwxTss{
     return data_buf_;
   }
    // 读取文件内容
-  bool ReadFile(char const* filename, string& file_content,
+  static bool ReadFile(char const* filename, string& file_content,
     string& err_msg);
  public:
   // sql的buf
