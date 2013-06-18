@@ -50,7 +50,7 @@ int DcmdCenterApp::initRunEnv(){
   // 设置系统的时钟间隔，最小刻度为1ms，此为1s。
   this->setClick(100);//0.1s
   // 设置工作目录
-  this->setWorkDir(config_.common.work_home_.c_str());
+  this->setWorkDir(config_.common().work_home_.c_str());
   // 设置循环运行日志的数量
   this->setLogFileNum(config_.common().log_file_num_);
   // 设置每个日志文件的大小
@@ -305,7 +305,7 @@ int DcmdCenterApp::onConnCreated(CwxAppHandler4Msg& conn,
           CWX_ERROR(("Connect ip:%s is not valid ui ip, close it.", conn_ip));
           return -1;
         }
-        ptr[0] = 0;
+        conn_ip[ptr-conn_ip] = 0;
         if (config_.common().allow_ui_ips_.find(string(conn_ip)) == config_.common().allow_ui_ips_.end()) {
           CWX_ERROR(("Connect ip:%s is not valid ui ip, close it.", conn_ip));
           return -1;
@@ -383,7 +383,7 @@ int DcmdCenterApp::onRecvMsg(CwxMsgBlock* msg,
   msg->event().setHostId(conn.getConnInfo().getHostId());
   msg->event().setConnId(conn.getConnInfo().getConnId());
   if (SVR_TYPE_ADMIN == conn.getConnInfo().getSvrId()) { // ui来的消息
-    if (msg->event.getMsgHeader().getMsgType() == dcmd_api::MTYPE_UI_EXEC_TASK){
+    if (msg->event().getMsgHeader().getMsgType() == dcmd_api::MTYPE_UI_EXEC_TASK){
       task_thread_pool_->append(msg);
     } else {
       admin_thread_pool_->append(msg);
@@ -489,7 +489,7 @@ void DcmdCenterApp::destroy() {
 bool DcmdCenterApp::ConnectMysql(Mysql* my, uint32_t timeout) {
   if (my->IsConnected()) return true;
   my->setOption(MYSQL_OPT_CONNECT_TIMEOUT, (const char *)&timeout);
-  if (!my->connect(m_config.getMysql().m_strHost.c_str(),
+  if (!my->connect(config().getMysql().m_strHost.c_str(),
     m_config.getMysql().m_strUser.c_str(),
     m_config.getMysql().m_strPasswd.c_str(),
     m_config.getMysql().m_strDb.c_str(),
@@ -503,7 +503,7 @@ bool DcmdCenterApp::ConnectMysql(Mysql* my, uint32_t timeout) {
 bool DcmdCenterApp::CheckMysql(Mysql* my) {
   if (!my->ping()) {
     my->disconnect();
-    if (ConnectMysql(my)) {
+    if (ConnectMysql(my, kDcmdMysqlConnectTimeout)) {
       my->setAutoCommit(false);
       return true;
     }

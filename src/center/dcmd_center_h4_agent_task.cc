@@ -60,7 +60,7 @@ int DcmdCenterH4AgentTask::onTimeoutCheck(CwxMsgBlock*& , CwxTss* pThrEnv) {
   static uint32_t last_check_time = time(NULL);
   static uint32_t base_time = 0;
   uint32_t now = time(NULL);
-  bool is_clock_back = app_->isClockBack(base_time, now);
+  bool is_clock_back = app_->IsClockBack(base_time, now);
   if (!is_clock_back && (now <= last_check_time)) return 1;
   last_check_time = now;
   if (app_->is_master()()) {

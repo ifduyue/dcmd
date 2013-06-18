@@ -23,6 +23,7 @@ namespace dcmd {
   // 服务版本信息定义
   char const* const kDcmdCenterVersion = "0.1.0";
   char const* const kDcmdCenterModifyDate = "2013-03-08 08:08:08";
+  uint32_t const kDcmdMysqlConnectTimeout = 3;
 
   // Center服务的app对象
   class DcmdCenterApp : public CwxAppFramework {
@@ -68,7 +69,7 @@ namespace dcmd {
     // 检查mysql连接，若没有连接则连接，返回false表示连接失败
     bool CheckMysql(Mysql* my);
     // 检测计算机的时钟是否回调
-    static bool isClockBack(uint32_t& last_time, uint32_t now);
+    static bool IsClockBack(uint32_t& last_time, uint32_t now);
 
   public:
     // 获取配置信息对象
