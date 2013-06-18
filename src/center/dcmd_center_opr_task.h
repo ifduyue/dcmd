@@ -5,34 +5,33 @@
 
 #include "dcmd_tss.h"
 #include "dcmd_center_def.h"
-#include "dcmd_center_agent_mgr.h"
-CWINUX_USING_NAMESPACE
-namespace  dcmd {
-class DcmdCenterApp;
-// agent的操作指令执行结果的对象
-class DcmdCenterAgentOprReply {
- public:
-  DcmdCenterAgentOprReply() {
-    recv_msg_ = NULL;
-    is_send_failed_ = false;
-    is_exec_success = true;
-  }
-  ~DcmdCenterAgentOprReply(){
-    if (recv_msg_) CwxMsgBlockAlloc::free(recv_msg_);
-  }
 
- public:
-  // 收到的回复
-  CwxMsgBlock*        recv_msg_;
-  // 是否发送失败，若没有失败而且recv_msg_为空，则表示超时
-  bool                is_send_failed_;
-  // 对方执行是否成功
-  bool                is_exec_success;
-  // 执行的结果
-  string              result_;
-  // 执行的错误信息
-  string              err_msg_; 
-};
+namespace  dcmd {
+  class DcmdCenterApp;
+  // agent的操作指令执行结果的对象
+  class DcmdCenterAgentOprReply {
+  public:
+    DcmdCenterAgentOprReply() {
+      recv_msg_ = NULL;
+      is_send_failed_ = false;
+      is_exec_success = true;
+    }
+    ~DcmdCenterAgentOprReply(){
+      if (recv_msg_) CwxMsgBlockAlloc::free(recv_msg_);
+    }
+
+  public:
+    // 收到的回复
+    CwxMsgBlock*        recv_msg_;
+    // 是否发送失败，若没有失败而且recv_msg_为空，则表示超时
+    bool                is_send_failed_;
+    // 对方执行是否成功
+    bool                is_exec_success;
+    // 执行的结果
+    string              result_;
+    // 执行的错误信息
+    string              err_msg_; 
+  };
 
 // UI控制台的操作命令的task对象
 class DcmdCenterOprTask : public CwxTaskBoardTask {

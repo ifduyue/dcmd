@@ -442,6 +442,5 @@ namespace dcmd {
       ip_table_last_load_time_ = time(NULL);
     }
   }
-
 }  // dcmd
 
