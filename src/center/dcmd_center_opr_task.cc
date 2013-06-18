@@ -395,7 +395,7 @@ void DcmdCenterOprTask::Reply(CwxTss* pThrEnv) {
       } else if (!agent_replys_[index].is_exec_success) {
         agent_reply->set_err(agent_replys_[index].err_msg_);
         agent_reply->set_state(dcmd_api::DCMD_STATE_FAILED);
-      } else if (!agent_replys_[index].m_msg) {
+      } else if (!agent_replys_[index].recv_msg_) {
         agent_reply->set_err("timeout");
         agent_reply->set_state(dcmd_api::DCMD_STATE_FAILED);
       } else {
