@@ -119,5 +119,5 @@ class DcmdCenterH4Admin: public CwxCmdOp {
   // 消息的id，由于此是单线程执行，因此无需锁保护
   uint32_t                     next_msg_task_id_;
 };
-
+}
 #endif 
