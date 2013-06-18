@@ -13,7 +13,7 @@ uint32_t DcmdCenterWatchMgr::AddWatch(uint32_t ui_client_id,
   obj->watched_task_id_ = watch_task_id;
   map<uint32_t, DcmdWatchSet* >::iterator iter = task_index_.find(watch_task_id);
   DcmdWatchSet* watch_set = NULL;
-  if (iter_task == task_index_.end()) {
+  if (iter == task_index_.end()) {
     watch_set = new DcmdWatchSet;
     task_index_[watch_task_id] = watch_set;
   } else {
@@ -22,7 +22,7 @@ uint32_t DcmdCenterWatchMgr::AddWatch(uint32_t ui_client_id,
       // watch 存在，只更新watch的状态并返回
       delete obj;
       (*watch_set->find(obj))->is_watch_last_state_ = is_watch_last_state;
-      return watch_set->find(obj)->watch_id_;
+      return (*watch_set->find(obj))->watch_id_;
     }
   }
   // watch 不存在
@@ -44,7 +44,7 @@ uint32_t DcmdCenterWatchMgr::AddWatch(uint32_t ui_client_id,
 
 uint32_t DcmdCenterWatchMgr::GetWatchId(uint32_t ui_client_id,
   uint32_t conn_id,
-  uint32_t watch_task_id) 
+  uint32_t watch_task_id) const
 {
   DcmdWatchObj obj;
   obj.conn_id_ = conn_id;
@@ -52,8 +52,8 @@ uint32_t DcmdCenterWatchMgr::GetWatchId(uint32_t ui_client_id,
   obj.watched_task_id_ = watch_task_id;
   map<uint32_t, DcmdWatchSet* >::const_iterator iter = task_index_.find(watch_task_id);
   if (iter == task_index_.end()) return 0;
-  DcmdWatchSet_Iter watch_iter = (*iter->second)->find(&obj);
-  if (watch_iter == (*iter->second)->end()) return 0;
+  DcmdWatchSet_Iter watch_iter = iter->second->find(&obj);
+  if (watch_iter == iter->second->end()) return 0;
   return (*watch_iter)->watch_id_;
 }
 
@@ -72,7 +72,7 @@ void DcmdCenterWatchMgr::CancelWatch(uint32_t ui_client_id,
   uint32_t watch_id = GetWatchId(ui_client_id, conn_id, watch_task_id);
   if (!watch_id) return;
   DcmdWatchObj* obj = watches_.find(watch_id)->second;
-  map<uint32_t, DcmdWatchSet* >::const_iterator iter = task_index_.find(watch_task_id);
+  map<uint32_t, DcmdWatchSet* >::iterator iter = task_index_.find(watch_task_id);
   CWX_ASSERT(iter != task_index_.end());
   DcmdWatchSet* watch_set = iter->second;
   watch_set->erase(obj);
@@ -106,7 +106,7 @@ void DcmdCenterWatchMgr::CancelWatch(uint32_t conn_id) {
   }
 }
 
-void DcmdCenterWatchMgr:GetWatchesByConn(list<DcmdWatchObj>& watches, uint32_t conn_id) {
+void DcmdCenterWatchMgr::GetWatchesByConn(list<DcmdWatchObj>& watches, uint32_t conn_id) {
   watches.clear();
   map<uint32_t, DcmdWatchSet* >::iterator iter = conn_index_.find(conn_id);
   if (iter == conn_index_.end()) return;
@@ -153,8 +153,6 @@ void DcmdCenterWatchMgr::Clear(bool is_close_conn) {
     ++watch_iter;
   }
   watches_.clear();
-
-
 }
 
 }  // dcmd

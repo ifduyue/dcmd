@@ -69,7 +69,7 @@ class DcmdCenterWatchMgr {
   // 获取watch的id, 0表示不存在
   uint32_t GetWatchId(uint32_t ui_client_id,
     uint32_t conn_id,
-    uint32_t watch_task_id);
+    uint32_t watch_task_id) const;
   // 是否存在watch
   bool ExistWatch(uint32_t ui_client_id,
     uint32_t conn_id,
