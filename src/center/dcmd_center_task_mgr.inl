@@ -315,7 +315,7 @@
       if (sql.length() != init_len) sql += ",";
       sql += tss->sql_;
     }
-    CwxCommon::snprintf(tss->sql_, DcmdTss::MAX_SQL_BUF_SIZE,
+    CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
       ", update_time=now() where subtask_id = %s ", 
       CwxCommon::toString(subtask_id, tmp_buf, 10));
     sql += tss->sql_;
@@ -365,13 +365,13 @@
     DcmdCenterSubtask const& subtask) 
   {
     char buf[64];
-    CwxCommon::toString(buf, cmd_id, 10);
+    CwxCommon::toString(cmd_id, buf,10);
     cmd.set_cmd(buf);
     cmd.set_task_cmd(subtask.task_->task_cmd_);
     cmd.set_cmd_type(dcmd_api::CMD_DO_SUBTASK);
     sprintf(buf, "%u", subtask.task_->task_id_);
     cmd.set_task_id(buf);
-    CwxCommon::toString(buf, subtask.subtask_id_, 10);
+    CwxCommon::toString(subtask.subtask_id_, buf, 10);
     cmd.set_subtask_id(buf);
     cmd.set_ip(subtask.ip_);
     cmd.set_svr_name(subtask.task_->service_);
@@ -387,7 +387,7 @@
     dcmd_api::KeyValue* kv = NULL;
     map<string, string>::iterator iter = subtask.task_->args_.begin();
     while (iter != subtask.task_->args_.end()) {
-      kv = cmd.task_arg().add_task_arg();
+      kv = cmd.add_task_arg();
       kv->set_key(iter->first);
       kv->set_value(iter->second);
       ++iter;

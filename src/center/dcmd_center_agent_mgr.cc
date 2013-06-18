@@ -1,6 +1,7 @@
 ﻿#include "dcmd_center_agent_mgr.h"
 #include "dcmd_center_app.h"
 namespace dcmd {
+
 bool DcmdCenterAgentMgr::AddConn(uint32_t conn_id, char const* conn_ip) {
   CwxMutexGuard<CwxMutexLock>  lock(&lock_);
   if (conn_agents_.find(conn_id) != conn_agents_.end()) return false;

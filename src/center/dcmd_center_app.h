@@ -88,7 +88,7 @@ class DcmdCenterApp : public CwxAppFramework {
     return check_mysql_;
   }
   // 获取自己是否为master
-  inline bool is_master() const {
+  inline bool is_master() {
     CwxMutexGuard<CwxMutexLock> lock(&lock_);
     return is_master_;
   }
