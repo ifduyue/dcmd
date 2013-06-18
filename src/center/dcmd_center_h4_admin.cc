@@ -504,7 +504,7 @@ void DcmdCenterH4Admin::ReplyExecOprCmd(DcmdCenterApp* app,
     }
     CwxMsgHead head(0, 0, dcmd_api::MTYPE_UI_EXEC_OPR_R, msg_task_id,
       tss->proto_str_.length());
-    msg = CwxMsgBlockAlloc::pack(head, tss->proto_str_.c_str(),
+    CwxMsgBlock* msg = CwxMsgBlockAlloc::pack(head, tss->proto_str_.c_str(),
       tss->proto_str_.length());
     if (!msg) {
       CWX_ERROR(("Failure to pack opr cmd msg for no memory"));
@@ -527,7 +527,7 @@ void DcmdCenterH4Admin::ReplySubTaskOutput(DcmdCenterApp* app,
   }
   CwxMsgHead head(0, 0, dcmd_api::MTYPE_UI_AGENT_SUBTASK_OUTPUT_R, msg_task_id,
     tss->proto_str_.length());
-  msg = CwxMsgBlockAlloc::pack(head, tss->proto_str_.c_str(),
+  CwxMsgBlock* msg = CwxMsgBlockAlloc::pack(head, tss->proto_str_.c_str(),
     tss->proto_str_.length());
   if (!msg) {
     CWX_ERROR(("Failure to pack subtask output msg for no memory"));
@@ -550,7 +550,7 @@ void DcmdCenterH4Admin::ReplyAgentRunSubTask(DcmdCenterApp* app,
   }
   CwxMsgHead head(0, 0, dcmd_api::MTYPE_UI_AGENT_RUNNING_SUBTASK_R, msg_task_id,
     tss->proto_str_.length());
-  msg = CwxMsgBlockAlloc::pack(head, tss->proto_str_.c_str(),
+  CwxMsgBlock* msg = CwxMsgBlockAlloc::pack(head, tss->proto_str_.c_str(),
     tss->proto_str_.length());
   if (!msg) {
     CWX_ERROR(("Failure to pack running subtask msg for no memory"));
@@ -574,7 +574,7 @@ void DcmdCenterH4Admin::ReplyAgentRunOprCmd(DcmdCenterApp* app,
   }
   CwxMsgHead head(0, 0, dcmd_api::MTYPE_UI_AGENT_RUNNING_OPR_R, msg_task_id,
     tss->proto_str_.length());
-  msg = CwxMsgBlockAlloc::pack(head, tss->proto_str_.c_str(),
+  CwxMsgBlock* msg = CwxMsgBlockAlloc::pack(head, tss->proto_str_.c_str(),
     tss->proto_str_.length());
   if (!msg) {
     CWX_ERROR(("Failure to pack running opr msg for no memory"));
@@ -597,7 +597,7 @@ void DcmdCenterH4Admin::ReplyAgentStatus(DcmdCenterApp* app,
   }
   CwxMsgHead head(0, 0, dcmd_api::MTYPE_UI_AGENT_INFO_R, msg_task_id,
     tss->proto_str_.length());
-  msg = CwxMsgBlockAlloc::pack(head, tss->proto_str_.c_str(),
+  CwxMsgBlock* msg = CwxMsgBlockAlloc::pack(head, tss->proto_str_.c_str(),
     tss->proto_str_.length());
   if (!msg) {
     CWX_ERROR(("Failure to pack agent status msg for no memory"));
@@ -621,7 +621,7 @@ void DcmdCenterH4Admin::ReplyIllegalAgent(DcmdCenterApp* app,
   }
   CwxMsgHead head(0, 0, dcmd_api::MTYPE_UI_INVALID_AGENT_R, msg_task_id,
     tss->proto_str_.length());
-  msg = CwxMsgBlockAlloc::pack(head, tss->proto_str_.c_str(),
+  CwxMsgBlock* msg = CwxMsgBlockAlloc::pack(head, tss->proto_str_.c_str(),
     tss->proto_str_.length());
   if (!msg) {
     CWX_ERROR(("Failure to pack invalid agent for no memory"));
@@ -644,7 +644,7 @@ void DcmdCenterH4Admin::ReplyOprScriptContent(DcmdCenterApp* app,
   }
   CwxMsgHead head(0, 0, dcmd_api::MTYPE_UI_OPR_CMD_INFO_R, msg_task_id,
     tss->proto_str_.length());
-  msg = CwxMsgBlockAlloc::pack(head, tss->proto_str_.c_str(),
+  CwxMsgBlock* msg = CwxMsgBlockAlloc::pack(head, tss->proto_str_.c_str(),
     tss->proto_str_.length());
   if (!msg) {
     CWX_ERROR(("Failure to pack opr script msg for no memory"));
@@ -667,7 +667,7 @@ void DcmdCenterH4Admin::ReplyTaskCmdScriptContent(DcmdCenterApp* app,
   }
   CwxMsgHead head(0, 0, dcmd_api::MTYPE_UI_TASK_CMD_INFO_R, msg_task_id,
     tss->proto_str_.length());
-  msg = CwxMsgBlockAlloc::pack(head, tss->proto_str_.c_str(),
+  CwxMsgBlock* msg = CwxMsgBlockAlloc::pack(head, tss->proto_str_.c_str(),
     tss->proto_str_.length());
   if (!msg) {
     CWX_ERROR(("Failure to pack task cmd script msg for no memory"));
@@ -690,7 +690,7 @@ void DcmdCenterH4Admin::ReplyAgentSubTaskProcess(DcmdCenterApp* app,
   }
   CwxMsgHead head(0, 0, dcmd_api::MTYPE_UI_SUBTASK_PROCESS_R, msg_task_id,
     tss->proto_str_.length());
-  msg = CwxMsgBlockAlloc::pack(head, tss->proto_str_.c_str(),
+  CwxMsgBlock* msg = CwxMsgBlockAlloc::pack(head, tss->proto_str_.c_str(),
     tss->proto_str_.length());
   if (!msg) {
     CWX_ERROR(("Failure to pack task process msg for no memory"));
@@ -713,7 +713,7 @@ void DcmdCenterH4Admin::ReplyUiTaskCmd(DcmdCenterApp* app,
   }
   CwxMsgHead head(0, 0, dcmd_api::MTYPE_UI_EXEC_TASK_R, msg_task_id,
     tss->proto_str_.length());
-  msg = CwxMsgBlockAlloc::pack(head, tss->proto_str_.c_str(),
+  CwxMsgBlock* msg = CwxMsgBlockAlloc::pack(head, tss->proto_str_.c_str(),
     tss->proto_str_.length());
   if (!msg) {
     CWX_ERROR(("Failure to pack ui task cmd msg for no memory"));
