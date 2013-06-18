@@ -86,7 +86,7 @@ void DcmdCenterH4Admin::ExecOprCmd(CwxMsgBlock*& msg, DcmdTss* tss) {
   {
     CWX_ERROR(("admin's user[%s] or passwd[%s] is wrong.",
       opr_cmd.user().c_str(),
-      opr_cmd.passwd()));
+      opr_cmd.passwd().c_str()));
     opr_cmd_reply.set_err("user or passwd is wrong.");
     opr_cmd_reply.set_state(dcmd_api::DCMD_STATE_FAILED);
     DcmdCenterH4Admin::ReplyExecOprCmd(app_,
@@ -101,10 +101,10 @@ void DcmdCenterH4Admin::ExecOprCmd(CwxMsgBlock*& msg, DcmdTss* tss) {
   opr_task->reply_conn_id_ = msg->event().getConnId();
   opr_task->msg_task_id_ = msg->event().getMsgHeader().getTaskId();
   opr_task->opr_cmd_id_ = strtoull(opr_cmd.opr_id().c_str(), NULL, 10);
-  uint32_t i = 0;
+  int i = 0;
   if (opr_cmd.args_size()) {
     for (i=0; i< opr_cmd.args_size(); i++) {
-      opr_task->opr_args_[opr_cmd.args(i).key] = opr_cmd.args(i).value;
+      opr_task->opr_args_map_[opr_cmd.args(i).key] = opr_cmd.args(i).value;
     }
   }
   if (opr_cmd.agents_size()) {
@@ -118,14 +118,14 @@ void DcmdCenterH4Admin::ExecOprCmd(CwxMsgBlock*& msg, DcmdTss* tss) {
 
 void DcmdCenterH4Admin::QuerySubtaskOutput(CwxMsgBlock*& msg, DcmdTss* tss) {
   DcmdCenterSubtaskOutputTask*  output_task = NULL;
-  dcmd_api::UiTaskOutput        subtask_output_;
-  dcmd_api::UiTaskOutputReply   subtask_output_reply_;
+  dcmd_api::UiTaskOutput        subtask_output;
+  dcmd_api::UiTaskOutputReply   subtask_output_reply;
   tss->proto_str_.assign(msg->rd_ptr(), msg->length());
-  if (!subtask_output_.ParseFromString(tss->proto_str_)) {
-    subtask_output_reply_.set_err("Failed to parse subtask-result command.");
-    subtask_output_reply_.set_state(dcmd_api::DCMD_STATE_FAILED);
-    subtask_output_reply_.set_offset(0);
-    subtask_output_reply_.set_result("");
+  if (!subtask_output.ParseFromString(tss->proto_str_)) {
+    subtask_output_reply.set_err("Failed to parse subtask-result command.");
+    subtask_output_reply.set_state(dcmd_api::DCMD_STATE_FAILED);
+    subtask_output_reply.set_offset(0);
+    subtask_output_reply.set_result("");
     DcmdCenterH4Admin::ReplySubTaskOutput(app_,
       tss,
       msg->event().getConnId(),
@@ -134,32 +134,32 @@ void DcmdCenterH4Admin::QuerySubtaskOutput(CwxMsgBlock*& msg, DcmdTss* tss) {
     return;
   }
   CWX_DEBUG(("Receive a agent subtask-output command, agent=%s, subtask_id",
-    subtask_output_.ip.c_str(), subtask_output_.subtask_id().c_str()));
+    subtask_output.ip().c_str(), subtask_output.subtask_id().c_str()));
   // 检查用户名与密码
-  if ((app_->config().common().ui_user_name_ != subtask_output_.user()) ||
-    (app_->config().common().ui_user_passwd_ != subtask_output_.passwd()))
+  if ((app_->config().common().ui_user_name_ != subtask_output.user()) ||
+    (app_->config().common().ui_user_passwd_ != subtask_output.passwd()))
   {
     CWX_ERROR(("admin's user[%s] or passwd[%s] is wrong.",
-      subtask_output_.user().c_str(),
-      subtask_output_.passwd().c_str()));
-    subtask_output_reply_.set_err("user or passwd is wrong.");
-    subtask_output_reply_.set_state(dcmd_api::DCMD_STATE_FAILED);
-    subtask_output_reply_.set_offset(0);
-    subtask_output_reply_.set_result("");
+      subtask_output.user().c_str(),
+      subtask_output.passwd().c_str()));
+    subtask_output_reply.set_err("user or passwd is wrong.");
+    subtask_output_reply.set_state(dcmd_api::DCMD_STATE_FAILED);
+    subtask_output_reply.set_offset(0);
+    subtask_output_reply.set_result("");
     DcmdCenterH4Admin::ReplySubTaskOutput(app_,
       tss,
       msg->event().getConnId(),
       msg->event().getMsgHeader().getTaskId(),
-      &subtask_output_reply_);
+      &subtask_output_reply);
     return;
   }
 
   output_task = new DcmdCenterSubtaskOutputTask(app_, &app_->getTaskBoard());
   output_task->reply_conn_id_ = msg->event().getConnId();
   output_task->msg_taskid_ = msg->event().getMsgHeader().getTaskId();
-  output_task->agent_ip_ = subtask_output_.ip();
-  output_task->subtask_id_ = subtask_output_.subtask_id();
-  output_task->output_offset_ = subtask_output_.offset();
+  output_task->agent_ip_ = subtask_output.ip();
+  output_task->subtask_id_ = subtask_output.subtask_id();
+  output_task->output_offset_ = subtask_output.offset();
   output_task->setTaskId(NextMsgTaskId());
   output_task->execute(tss);
 }
