@@ -70,10 +70,10 @@ void DcmdCenterOprTask::noticeConnClosed(CWX_UINT32 , CWX_UINT32 , CWX_UINT32 ui
 }
 
 bool DcmdCenterOprTask::FetchOprCmd(DcmdTss* tss) {
+  ///从db中获取
+  Mysql* my = app_->GetAdminMysql();
   // 首先从cache中获取
   if (!app_->GetOprCmdCache()->GetOprCmd(opr_cmd_id_, opr_cmd_)){
-    ///从db中获取
-    Mysql* my = app_->GetAdminMysql();
     if (!app_->CheckMysql(my)){
       CwxCommon::snprintf(tss->m_szBuf2K, 2047, "Failure to connect mysql, error=%s", my->getErrMsg());
       CWX_ERROR((tss->m_szBuf2K));
@@ -160,7 +160,7 @@ bool DcmdCenterOprTask::FetchOprCmd(DcmdTss* tss) {
     string opr_file;
     DcmdCenterConf::opr_cmd_file(opr_cmd_.opr_file_, opr_file);
     opr_file = app_->config().common().opr_script_path_ + opr_file;
-    if (!tss->readFile(opr_file.c_str(), opr_cmd_.opr_script_content_, err_msg_)){
+    if (!tss->ReadFile(opr_file.c_str(), opr_cmd_.opr_script_content_, err_msg_)){
       CWX_ERROR((err_msg_.c_str()));
       return false;
     }
@@ -201,7 +201,7 @@ bool DcmdCenterOprTask::FetchOprCmd(DcmdTss* tss) {
           strNodeValue += *iter;
           iter++;
         }
-        opr_cmd_.opr_args_map_.[string(node->m_szElement)] = strNodeValue;
+        opr_cmd_.opr_args_map_[string(node->m_szElement)] = strNodeValue;
         node = node->m_next;
       }
     }
@@ -227,11 +227,12 @@ bool DcmdCenterOprTask::FetchOprCmd(DcmdTss* tss) {
       err_msg_ = "Can't change opr's arg";
       return false;
     }
-    map<string, string>::iterator iter = opr_cmd_.opr_args_.begin();
-    while(iter != opr_cmd_.opr_args_.end()) {
-      if (opr_args_.find(iter->first) == opr_args_.end()) {
-        opr_args_[iter->first] = iter->second;
+    map<string, string>::iterator opr_cmd_iter = opr_cmd_.opr_args_.begin();
+    while(opr_cmd_iter != opr_cmd_.opr_args_.end()) {
+      if (opr_args_.find(opr_cmd_iter->first) == opr_args_.end()) {
+        opr_args_[opr_cmd_iter->first] = opr_cmd_iter->second;
       }
+      opr_cmd_iter++;
     }
   } else {
     opr_args_ = opr_cmd_.opr_args_map_;
@@ -283,7 +284,7 @@ int DcmdCenterOprTask::noticeActive(CwxTss* ThrEnv) {
     is_failed_ = true;
     return -1;
   }
-  CWX_UINT64 timeStamp = m_uiOprTimeout;
+  CWX_UINT64 timeStamp = opr_cmd_.opr_timeout_;
   timeStamp *= 1000000;
   timeStamp += CwxDate::getTimestamp();
   this->setTimeoutValue(timeStamp);
@@ -313,7 +314,7 @@ int DcmdCenterOprTask::noticeActive(CwxTss* ThrEnv) {
   }
   CwxMsgHead head(0, 0, dcmd_api::MTYPE_CENTER_OPR_CMD, msg_task_id_,
     tss->proto_str_.length());
-  msg = CwxMsgBlockAlloc::pack(head, tss->proto_str_.c_str(),
+  CwxMsgBlock* msg = CwxMsgBlockAlloc::pack(head, tss->proto_str_.c_str(),
     tss->proto_str_.length());
   if (!msg) {
     CWX_ERROR(("Failure to pack opr cmd msg for no memory"));
@@ -325,28 +326,28 @@ int DcmdCenterOprTask::noticeActive(CwxTss* ThrEnv) {
   agent_conns_ = new DcmdAgentConnect[agent_num_];
   agent_replys_ = new DcmdCenterAgentOprReply[agent_num_];
   ///发送msg
-  set<string>::iterator iter = agents_.begin();
+  set<string>::iterator agent_iter = agents_.begin();
   uint32_t conn_id = 0;
   uint32_t index = 0;
-  while(iter != agents_.end()){
+  while(agent_iter != agents_.end()){
     if (!send_block) send_block = CwxMsgBlockAlloc::clone(msg);
     if (!DcmdCenterH4AgentOpr::SendAgentMsg(app_,
-      *iter,
+      *agent_iter,
       getTaskId(),
       send_block,
       conn_id))
     {
-      CWX_ERROR(("Failure send msg to agent:%s for opr:%s", iter->c_str(), opr_cmd_.opr_name_.c_str()));
+      CWX_ERROR(("Failure send msg to agent:%s for opr:%s", agent_iter->c_str(), opr_cmd_.opr_name_.c_str()));
       agent_conns_[index].conn_id_ = 0;
       agent_replys_[index].is_send_failed_ = true;
       receive_num_++;
     }else{
       send_block = NULL;
-      agent_conns_[index].conn_id_ = uiConnId;
+      agent_conns_[index].conn_id_ = conn_id;
     }
     agent_conns_[index].agent_ip_ = *iter;
     index++;
-    iter++;
+    agent_iter++;
   }
   CwxMsgBlockAlloc::free(msg);
   if (send_block) CwxMsgBlockAlloc::free(send_block);
@@ -372,7 +373,7 @@ void DcmdCenterOprTask::execute(CwxTss* pThrEnv) {
   }
 }
 
-void DcmdCenterOprTask::reply(CwxTss* pThrEnv) {
+void DcmdCenterOprTask::Reply(CwxTss* pThrEnv) {
   DcmdTss* tss = (DcmdTss*)pThrEnv;
   uint16_t index = 0;
   dcmd_api::UiExecOprCmdReply reply;
