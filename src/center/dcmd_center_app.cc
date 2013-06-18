@@ -489,11 +489,11 @@ void DcmdCenterApp::destroy() {
 bool DcmdCenterApp::ConnectMysql(Mysql* my, uint32_t timeout) {
   if (my->IsConnected()) return true;
   my->setOption(MYSQL_OPT_CONNECT_TIMEOUT, (const char *)&timeout);
-  if (!my->connect(config().mysql().m_strHost.c_str(),
-    config().mysql().m_strUser.c_str(),
-    config().mysql().m_strPasswd.c_str(),
-    config().mysql().m_strDb.c_str(),
-    config().mysql().m_unPort))
+  if (!my->connect(config().mysql().server_.c_str(),
+    config().mysql().user_.c_str(),
+    config().mysql().passwd_.c_str(),
+    config().mysql().db_name_.c_str(),
+    config().mysql().port_))
   {
     return false;
   }
