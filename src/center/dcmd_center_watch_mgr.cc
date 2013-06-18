@@ -121,7 +121,7 @@ void DcmdCenterWatchMgr::GetWatchesByConn(list<DcmdWatchObj>& watches, uint32_t 
 void DcmdCenterWatchMgr::GetWatches(list<DcmdWatchObj>& watches) {
   watches.clear();
   map<uint32_t, DcmdWatchObj*>::iterator iter = watches_.begin();
-  while( iter != watches_->end()) {
+  while( iter != watches_.end()) {
     watches.push_front(*(iter->second));
     ++iter;
   }
@@ -143,6 +143,7 @@ void DcmdCenterWatchMgr::Clear(bool is_close_conn) {
   task_index_.clear();
   iter = conn_index_.begin();
   while (iter != conn_index_.end()) {
+    if (is_close_conn) app_->noticeCloseConn(iter->first);
     delete iter->second;
     ++iter;
   }
