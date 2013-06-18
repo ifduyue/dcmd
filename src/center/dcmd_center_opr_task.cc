@@ -227,8 +227,8 @@ bool DcmdCenterOprTask::FetchOprCmd(DcmdTss* tss) {
       err_msg_ = "Can't change opr's arg";
       return false;
     }
-    map<string, string>::iterator opr_cmd_iter = opr_cmd_.opr_args_.begin();
-    while(opr_cmd_iter != opr_cmd_.opr_args_.end()) {
+    map<string, string>::iterator opr_cmd_iter = opr_cmd_.opr_args_map_.begin();
+    while(opr_cmd_iter != opr_cmd_.opr_args_map_.end()) {
       if (opr_args_.find(opr_cmd_iter->first) == opr_args_.end()) {
         opr_args_[opr_cmd_iter->first] = opr_cmd_iter->second;
       }
@@ -345,7 +345,7 @@ int DcmdCenterOprTask::noticeActive(CwxTss* ThrEnv) {
       send_block = NULL;
       agent_conns_[index].conn_id_ = conn_id;
     }
-    agent_conns_[index].agent_ip_ = *iter;
+    agent_conns_[index].agent_ip_ = *agent_iter;
     index++;
     agent_iter++;
   }
@@ -388,7 +388,7 @@ void DcmdCenterOprTask::Reply(CwxTss* pThrEnv) {
     ///输出发送失败的host
     for (index =0; index < agent_num_; index++){
       agent_reply = reply.add_result();
-      agent_reply->set_ip(agent_conns_[index].agent_ip_)
+      agent_reply->set_ip(agent_conns_[index].agent_ip_);
       if (agent_replys_[index].is_send_failed_){
         agent_reply->set_err("Lost connected.");
         agent_reply->set_state(dcmd_api::DCMD_STATE_FAILED);
