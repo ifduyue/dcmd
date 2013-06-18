@@ -4,9 +4,9 @@
 
 #include "dcmd_center_app.h"
 #include "dcmd_center_opr_task.h"
-#include "dcmd_center_result_task.h"
-#include "dcmd_center_runopr_task.h"
-#include "dcmd_center_runtask_task.h"
+#include "dcmd_center_subtask_output_task.h"
+#include "dcmd_center_run_opr_task.h"
+#include "dcmd_center_run_subtask_task.h"
 
 namespace dcmd {
 int DcmdCenterH4Admin::onRecvMsg(CwxMsgBlock*& msg, CwxTss* pThrEnv) {
