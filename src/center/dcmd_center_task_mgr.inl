@@ -28,15 +28,15 @@
       "update task set valid=%d, errmsg='%s' where task_id=%d",
       is_valid?1:0, is_valid?"":str_tmp.c_str(), task_id);
     if (-1 == mysql_->execute(tss->sql_)) {
-      tss->err_msg_ = string("Failure to exec sql, err:") + mysql_->getErrMsg(),
-        + string(". sql:") + tss->sql_;
+      tss->err_msg_ = string("Failure to exec sql, err:") +  mysql_->getErrMsg();
+      tss->err_msg_ += string(". sql:") + tss->sql_;
       CWX_ERROR((tss->err_msg_.c_str()));
       mysql_->rollback();
       return false;
     }
     if (is_commit && !mysql_->commit()) {
-      tss->err_msg_ = string("Failure to commit sql, err:") + mysql_->getErrMsg(),
-        + string(". sql:") + tss->sql_;
+      tss->err_msg_ = string("Failure to commit sql, err:") + mysql_->getErrMsg();
+      tss->err_msg_ += string(". sql:") + tss->sql_;
       CWX_ERROR((tss->err_msg_.c_str()));
       mysql_->rollback();
       return false;
@@ -49,16 +49,16 @@
       CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
         "update task set state=%d where task_id=%d", state);
         if (-1 == mysql_->execute(tss->sql_)) {
-          tss->err_msg_ = string("Failure to exec sql, err:") + mysql_->getErrMsg(),
-            + ". sql:" + tss->sql_;
+          tss->err_msg_ = string("Failure to exec sql, err:") + mysql_->getErrMsg();
+          tss->err_msg_ += string(". sql:") + tss->sql_;
           CWX_ERROR((tss->err_msg_.c_str()));
           mysql_->rollback();
           return false;
         }
         if (is_commit && !mysql_->commit()) {
-          tss->err_msg_ = string("Failure to commit sql, err:") + mysql_->getErrMsg(),
-            + ". sql:" + tss->sql_;
-          CWX_ERROR((tss->err_msg.c_str()));
+          tss->err_msg_ = string("Failure to commit sql, err:") + mysql_->getErrMsg();
+          tss->err_msg_ += string(". sql:") + tss->sql_;
+          CWX_ERROR((tss->err_msg_.c_str()));
           mysql_->rollback();
           return false;
         }
@@ -75,15 +75,15 @@
       "update task_node set state=%d , errmsg = %s where subtask_id=%s",
       state, str_tmp.c_str(), CwxCommon::toString(subtask_id, buf, 10));
     if (-1 == mysql_->execute(tss->sql_)) {
-      tss->err_msg_ = string("Failure to exec sql, err:") + mysql_->getErrMsg(),
-        + string(". sql:") + tss->sql_;
+      tss->err_msg_ = string("Failure to exec sql, err:") + mysql_->getErrMsg();
+      tss->err_msg_ += string(". sql:") + tss->sql_;
       CWX_ERROR((tss->err_msg_.c_str()));
       mysql_->rollback();
       return false;
     }
     if (is_commit && !mysql_->commit()) {
-      tss->err_msg_ = string("Failure to commit sql, err:") + mysql_->getErrMsg(),
-        + string(". sql:") + tss->sql_;
+      tss->err_msg_ = string("Failure to commit sql, err:") + mysql_->getErrMsg();
+      tss->err_msg_ += string(". sql:") + tss->sql_;
       CWX_ERROR((tss->err_msg_.c_str()));
       mysql_->rollback();
       return false;
@@ -102,15 +102,15 @@
       "update command set state=%d, errmsg = %s where cmd_id=%s",
       state, str_tmp.c_str(), CwxCommon::toString(cmd_id, buf, 10));
     if (-1 == mysql_->execute(tss->sql_)) {
-      tss->err_msg_ = string("Failure to exec sql, err:") + mysql_->getErrMsg(),
-        + string(". sql:") + tss->sql_;
+      tss->err_msg_ = string("Failure to exec sql, err:") + mysql_->getErrMsg();
+      tss->err_msg_ += string(". sql:") + tss->sql_;
       CWX_ERROR((tss->err_msg_.c_str()));
       mysql_->rollback();
       return false;
     }
     if (is_commit && !mysql_->commit()) {
-      tss->err_msg_ = string("Failure to commit sql, err:") + mysql_->getErrMsg(),
-        + string(". sql:") + tss->sql_;
+      tss->err_msg_ = string("Failure to commit sql, err:") + mysql_->getErrMsg();
+      tss->err_msg_ += string(". sql:") + tss->sql_;
       CWX_ERROR((tss->err_msg_.c_str()));
       mysql_->rollback();
       return false;
@@ -127,15 +127,15 @@
       "opr_uid=%d, utime=now() where task_id=%u",
       con_num, con_rate, timeout, is_auto?1:0, uid, task_id);
     if (-1 == mysql_->execute(tss->sql_)) {
-      tss->err_msg_ = string("Failure to exec sql, err:") + mysql_->getErrMsg(),
-        + string(". sql:") + tss->sql_;
+      tss->err_msg_ = string("Failure to exec sql, err:") + mysql_->getErrMsg();
+      tss->err_msg_ += string(". sql:") + tss->sql_;
       CWX_ERROR((tss->err_msg_.c_str()));
       mysql_->rollback();
       return false;
     }
     if (is_commit && !mysql_->commit()) {
-      tss->err_msg_ = string("Failure to commit sql, err:") + mysql_->getErrMsg(),
-        + string(". sql:") + tss->sql_;
+      tss->err_msg_ = string("Failure to commit sql, err:") + mysql_->getErrMsg();
+      tss->err_msg_ += string(". sql:") + tss->sql_;
       CWX_ERROR((tss->err_msg_.c_str()));
       mysql_->rollback();
       return false;
@@ -151,8 +151,8 @@
     CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
       "delete from task_node where task_id = %u", task->task_id_);
     if (-1 == mysql_->execute(tss->sql_)) {
-      tss->err_msg_ = string("Failure to exec sql, err:") + mysql_->getErrMsg(),
-        + string(". sql:") + tss->sql_;
+      tss->err_msg_ = string("Failure to exec sql, err:") + mysql_->getErrMsg();
+      tss->err_msg_ += string(". sql:") + tss->sql_;
       CWX_ERROR((tss->err_msg_.c_str()));
       mysql_->rollback();
       return false;
@@ -166,15 +166,15 @@
       " and p.svr_pool_id = n.svr_pool_id",
       uid, task->task_id_, task->task_id_);
     if (-1 == mysql_->execute(tss->sql_)) {
-      tss->err_msg_ = string("Failure to exec sql, err:") + mysql_->getErrMsg(),
-        + string(". sql:") + tss->sql_;
+      tss->err_msg_ = string("Failure to exec sql, err:") + mysql_->getErrMsg();
+      tss->err_msg_ += string(". sql:") + tss->sql_;
       CWX_ERROR((tss->err_msg_.c_str()));
       mysql_->rollback();
       return false;
     }
     if (is_commit && !mysql_->commit()) {
-      tss->err_msg_ = string("Failure to commit sql, err:") + mysql_->getErrMsg(),
-        + string(". sql:") + tss->sql_;
+      tss->err_msg_ = string("Failure to commit sql, err:") + mysql_->getErrMsg();
+      tss->err_msg_ += string(". sql:") + tss->sql_;
       CWX_ERROR((tss->err_msg_.c_str()));
       mysql_->rollback();
       return false;
@@ -207,15 +207,15 @@
       svr_pool_id, service_str.c_str(), ip_str.c_str(), cmt_type, state,
       err_msg_str.c_str(), uid);
     if (-1 == mysql_->execute(tss->sql_)) {
-      tss->err_msg_ = string("Failure to exec sql, err:") + mysql_->getErrMsg(),
-        + string(". sql:") + tss->sql_;
+      tss->err_msg_ = string("Failure to exec sql, err:") + mysql_->getErrMsg();
+      tss->err_msg_ += string(". sql:") + tss->sql_;
       CWX_ERROR((tss->err_msg_.c_str()));
       mysql_->rollback();
       return 0;
     }
     if (is_commit && !mysql_->commit()) {
-      tss->err_msg_ = string("Failure to commit sql, err:") + mysql_->getErrMsg(),
-        + string(". sql:") + tss->sql_;
+      tss->err_msg_ = string("Failure to commit sql, err:") + mysql_->getErrMsg();
+      tss->err_msg_ += string(". sql:") + tss->sql_;
       CWX_ERROR((tss->err_msg_.c_str()));
       mysql_->rollback();
       return 0;
@@ -225,15 +225,15 @@
 
   inline bool DcmdCenterTaskMgr::ExecSql(DcmdTss* tss, bool is_commit) {
     if (-1 == mysql_->execute(tss->sql_)) {
-      tss->err_msg_ = string("Failure to exec sql, err:") + mysql_->getErrMsg(),
-        + string(". sql:") + tss->sql_;
+      tss->err_msg_ = string("Failure to exec sql, err:") + mysql_->getErrMsg();
+      tss->err_msg_ += string(". sql:") + tss->sql_;
       CWX_ERROR((tss->err_msg_.c_str()));
       mysql_->rollback();
       return false;
     }
     if (is_commit && !mysql_->commit()) {
-      tss->err_msg_ = string("Failure to commit sql, err:") + mysql_->getErrMsg(),
-        + string(". sql:") + tss->sql_;
+      tss->err_msg_ = string("Failure to commit sql, err:") + mysql_->getErrMsg();
+      tss->err_msg_ += string(". sql:") + tss->sql_;
       CWX_ERROR((tss->err_msg_.c_str()));
       mysql_->rollback();
       return false;
@@ -317,16 +317,20 @@
     }
     CwxCommon::snprintf(tss->sql_, DcmdTss::MAX_SQL_BUF_SIZE,
       ", update_time=now() where subtask_id = %s ", 
-      CwxCommon::toString(subtask_id, szTmp, 10));
+      CwxCommon::toString(subtask_id, tmp_buf, 10));
     sql += tss->sql_;
 
     if (-1 == mysql_->execute(sql.c_str())){
-      CWX_ERROR(("Failure to exec sql, err:%s; sql:%s", mysql_->getErrMsg(), sql.c_str()));
+      tss->err_msg_ = string("Failure to exec sql, err:") + mysql_->getErrMsg();
+      tss->err_msg_ = string("; sql:") + sql;
+      CWX_ERROR((tss->err_msg_.c_str()));
       mysql_->rollback();
       return false;
     }
     if (is_commit && !mysql_->commit()){
-      CWX_ERROR(("Failure to commit sql, err:%s; sql:%s", mysql_->getErrMsg(), sql.c_str()));
+      tss->err_msg_ = string("Failure to exec sql, err:") + mysql_->getErrMsg();
+      tss->err_msg_ = string("; sql:") + sql;
+      CWX_ERROR((tss->err_msg_.c_str()));
       mysql_->rollback();
       return false;
     }
