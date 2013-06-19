@@ -284,8 +284,8 @@ CREATE TABLE `dcmd_task` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 
-DROP TABLE IF EXISTS `dcmd_task_finish`;
-CREATE TABLE `dcmd_task_finish` (
+DROP TABLE IF EXISTS `dcmd_task_history`;
+CREATE TABLE `dcmd_task_history` (
   `task_id`            int(10) unsigned NOT NULL AUTO_INCREMENT,
   `task_name`          varchar(128) NOT NULL,
   `task_cmd`          varchar(64) NOT NULL,
@@ -342,8 +342,8 @@ CREATE TABLE `dcmd_task_service_pool` (
   UNIQUE KEY (`task_id`,`svr_pool`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `dcmd_task_service_pool`;
-CREATE TABLE `dcmd_task_service_pool_finish` (
+DROP TABLE IF EXISTS `dcmd_task_service_pool_history`;
+CREATE TABLE `dcmd_task_service_pool_history` (
   `id`               int(10) unsigned NOT NULL AUTO_INCREMENT,
   `task_id`         int(10) unsigned NOT NULL,
   `task_cmd`          varchar(64) NOT NULL,
@@ -369,45 +369,45 @@ DROP TABLE IF EXISTS `dcmd_task_node`;
 CREATE TABLE `dcmd_task_node` (
   `sub_task_id`      bigint(20) NOT NULL AUTO_INCREMENT,
   `task_id`          int(10) unsigned NOT NULL,
-  `task_type`        varchar(64) NOT NULL,
-  `app_pool`         varchar(64) NOT NULL,
-  `app`              varchar(64) NOT NULL,
+  `task_cmd`        varchar(64) NOT NULL,
+  `svr_pool`         varchar(64) NOT NULL,
+  `svr_name`         varchar(64) NOT NULL,
   `ip`               varchar(16) NOT NULL,
-  `cmd_id`           bigint(20) NOT NULL DEFAULT '0',
   `state`            int(11) NOT NULL,
-  `skip`             int(11) NOT NULL,
+  `ignored`             int(11) NOT NULL,
   `start_time`       datetime NOT NULL,
   `finish_time`      datetime NOT NULL,
-  `error`            varchar(512) DEFAULT NULL,
-  `create_time`      datetime NOT NULL,
-  `update_time`      datetime NOT NULL,
-  `opr_user`         varchar(64) NOT NULL,
+  `process`         varchar(32) DEFAULT NULL,
+  `errmsg`            varchar(512) DEFAULT NULL,
+  `utime`        datetime NOT NULL,
+  `ctime`        datetime NOT NULL,
+  `opr_uid`      int(10) unsigned NOT NULL,
   PRIMARY KEY (`sub_task_id`),
   UNIQUE KEY (`task_id`,`ip`),
-  KEY `idx_sub_app_task_ip` (`ip`)
+  KEY `idx_task_node` (`ip`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-DROP TABLE IF EXISTS `dcmd_sub_app_task_finish`;
-CREATE TABLE `dcmd_sub_app_task_finish` (
+DROP TABLE IF EXISTS `dcmd_task_node_history`;
+CREATE TABLE `dcmd_task_node_history` (
   `sub_task_id`      bigint(20) NOT NULL AUTO_INCREMENT,
   `task_id`          int(10) unsigned NOT NULL,
-  `task_type`        varchar(64) NOT NULL,
-  `app_pool`         varchar(64) NOT NULL,
-  `app`              varchar(64) NOT NULL,
+  `task_cmd`        varchar(64) NOT NULL,
+  `svr_pool`         varchar(64) NOT NULL,
+  `svr_name`         varchar(64) NOT NULL,
   `ip`               varchar(16) NOT NULL,
-  `cmd_id`           bigint(20) NOT NULL DEFAULT '0',
   `state`            int(11) NOT NULL,
-  `skip`             int(11) NOT NULL,
+  `ignored`             int(11) NOT NULL,
   `start_time`       datetime NOT NULL,
   `finish_time`      datetime NOT NULL,
-  `error`            varchar(512) DEFAULT NULL,
-  `create_time`      datetime NOT NULL,
-  `update_time`      datetime NOT NULL,
-  `opr_user`         varchar(64) NOT NULL,
+  `process`         varchar(32) DEFAULT NULL,
+  `errmsg`            varchar(512) DEFAULT NULL,
+  `utime`        datetime NOT NULL,
+  `ctime`        datetime NOT NULL,
+  `opr_uid`      int(10) unsigned NOT NULL,
   PRIMARY KEY (`sub_task_id`),
-  UNIQUE KEY  (`task_id`,`ip`),
-  KEY `idx_sub_app_task_ip` (`ip`)
+  UNIQUE KEY (`task_id`,`ip`),
+  KEY `idx_task_node` (`ip`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -417,99 +417,120 @@ CREATE TABLE `dcmd_command` (
   `cmd_id`            bigint(20) NOT NULL AUTO_INCREMENT,
   `task_id`           int(10) unsigned NOT NULL,
   `sub_task_id`       bigint(20) NOT NULL,
-  `ctrl`              int(11) NOT NULL,
-  `app_pool`          varchar(64) NOT NULL,
-  `app`               varchar(64) NOT NULL,
+  `svr_pool`          varchar(64) NOT NULL,
+  `svr_pool_id`  int(10)  unsigned NOT NULL,
+  `svr_name`               varchar(64) NOT NULL,
   `ip`                varchar(16) NOT NULL,
   `cmd_type`          int(11) NOT NULL,
   `state`             int(11) NOT NULL,
-  `error`             varchar(512) DEFAULT NULL,
-  `create_time`       datetime NOT NULL,
-  `update_time`       datetime NOT NULL,
-  `opr_user`          varchar(64) NOT NULL,
+  `errmsg`             varchar(512) DEFAULT NULL,
+  `utime`        datetime NOT NULL,
+  `ctime`        datetime NOT NULL,
+  `opr_uid`      int(10) unsigned NOT NULL,
   PRIMARY KEY (`cmd_id`),
-  KEY `idx_command_app_ip` (`app`,`ip`)
+  KEY `idx_command_svr` (`svr_name`,`ip`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 
-DROP TABLE IF EXISTS `dcmd_command_finish`;
-CREATE TABLE `dcmd_command_finish` (
-  `cmd_id`             bigint(20) NOT NULL,
-  `task_id`            int(10) unsigned NOT NULL,
-  `sub_task_id`        bigint(20) NOT NULL,
-  `ctrl`               int(11) NOT NULL,
-  `app_pool`           varchar(64) NOT NULL,
-  `app`                varchar(64) NOT NULL,
-  `ip`                 varchar(16) NOT NULL,
-  `cmd_type`           int(11) NOT NULL,
-  `state`              int(11) NOT NULL,
-  `error`              varchar(512) DEFAULT NULL,
-  `create_time`        datetime NOT NULL,
-  `update_time`        datetime NOT NULL,
-  `opr_user`           varchar(64) NOT NULL,
+DROP TABLE IF EXISTS `dcmd_command_history`;
+CREATE TABLE `dcmd_command_history` (
+  `cmd_id`            bigint(20) NOT NULL AUTO_INCREMENT,
+  `task_id`           int(10) unsigned NOT NULL,
+  `sub_task_id`       bigint(20) NOT NULL,
+  `svr_pool`          varchar(64) NOT NULL,
+  `svr_pool_id`  int(10)  unsigned NOT NULL,
+  `svr_name`               varchar(64) NOT NULL,
+  `ip`                varchar(16) NOT NULL,
+  `cmd_type`          int(11) NOT NULL,
+  `state`             int(11) NOT NULL,
+  `errmsg`             varchar(512) DEFAULT NULL,
+  `utime`        datetime NOT NULL,
+  `ctime`        datetime NOT NULL,
+  `opr_uid`      int(10) unsigned NOT NULL,
   PRIMARY KEY (`cmd_id`),
-  KEY `idx_command_finish_app_ip` (`app`,`ip`)
+  KEY `idx_command_svr` (`svr_name`,`ip`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `dcmd_daemon`;
-CREATE TABLE `dcmd_daemon` (
-  `proc`        varchar(64) NOT NULL,
+DROP TABLE IF EXISTS `dcmd_center`;
+CREATE TABLE `dcmd_center` (
   `host`        varchar(32) NOT NULL,
   `master`      int(11) NOT NULL,
-  `valid`       int(11) NOT NULL,
-  `error`       varchar(512) DEFAULT NULL,
   `update_time` datetime NOT NULL,
-  PRIMARY KEY (`proc`,`host`)
+  PRIMARY KEY (`host`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 
-DROP TABLE IF EXISTS `dcmd_shell_cmd`;
-CREATE TABLE `dcmd_shell_cmd` (
-  `id`               int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `sh_file`        varchar(128) NOT NULL,
-  `sh_name`        varchar(128) NOT NULL,
+DROP TABLE IF EXISTS `dcmd_opr_cmd`;
+CREATE TABLE `dcmd_opr_cmd` (
+  `opr_cmd_id`     int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `opr_cmd`        varchar(64) NOT NULL,
+  `ui_name`        varchar(256) NOT NULL,
   `run_user`       varchar(64) NOT NULL,
-  `passwd`         varchar(64) DEFAULT NULL,
+  `script_md5`     varchar(32) DEFAULT '',
+  `agent_mutable`        int(11) NOT NULL,
   `timeout`        int(11) NOT NULL,
-  `md5`            varchar(32) DEFAULT '',
-  `group`      varchar(64) DEFAULT '',
   `comment`        varchar(512) NOT NULL,
-  `create_time`    datetime NOT NULL,
-  `update_time`    datetime NOT NULL,
-  `opr_user`       varchar(64) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY (`sh_file`),
-  UNIQUE KEY `sh_name` (`sh_name`)
+  `utime`        datetime NOT NULL,
+  `ctime`        datetime NOT NULL,
+  `opr_uid`      int(10) unsigned NOT NULL,
+  PRIMARY KEY (`opr_cmd_id`),
+  UNIQUE KEY (`opr_cmd`),
+  UNIQUE KEY `ui_name` (`ui_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `dcmd_shell_cmd_arg`;
-CREATE TABLE `dcmd_shell_cmd_arg` (
+DROP TABLE IF EXISTS `dcmd_opr_cmd_arg`;
+CREATE TABLE `dcmd_opr_cmd_arg` (
   `id`               int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `sh_file`         varchar(128) NOT NULL,
+  `opr_cmd_id`     int(10) unsigned NOT NULL,
   `arg_name`        varchar(32) NOT NULL,
   `optional`        int(11) NOT NULL,
-  `create_time`     datetime NOT NULL,
-  `update_time`     datetime NOT NULL,
-  `opr_user`        varchar(64) NOT NULL,
+  `mutable`        int(11) NOT NULL,
+  `utime`        datetime NOT NULL,
+  `ctime`        datetime NOT NULL,
+  `opr_uid`      int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY (`sh_file`,`arg_name`)
+  UNIQUE KEY (`opr_cmd_id`,`arg_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-DROP TABLE IF EXISTS `dcmd_shell_log`;
-CREATE TABLE `dcmd_shell_log` (
-  `id`           int(11) NOT NULL AUTO_INCREMENT,
-  `sh_file`      varchar(128) NOT NULL,
-  `sh_name`      varchar(256) NOT NULL,
-  `run_user`     varchar(64) NOT NULL,
-  `timeout`      int(11) NOT NULL,
+DROP TABLE IF EXISTS `dcmd_opr_cmd_exec`;
+CREATE TABLE `dcmd_opr_cmd_exec` (
+  `exec_id`           bigint(20) NOT NULL AUTO_INCREMENT,
+  `opr_cmd_id`     int(10) unsigned NOT NULL,
+  `opr_cmd`        varchar(64) NOT NULL,
+  `run_user`        varchar(64) NOT NULL,
+  `timeout`        int(11) NOT NULL,
   `ip`           text NOT NULL,
-  `arg`          varchar(2048) NOT NULL,
-  `host`         varchar(16) NOT NULL,
-  `create_time`  datetime NOT NULL,
-  `opr_user`     varchar(64) NOT NULL,
-  PRIMARY KEY (`id`)
+  `priority`      int(11) NOT NULL,
+  `repeat`      int(11) NOT NULL,
+  `cache_time`      int(11) NOT NULL,
+  `arg_mutable`      int(11) NOT NULL,
+  `arg`          text NOT NULL,
+  `utime`        datetime NOT NULL,
+  `ctime`        datetime NOT NULL,
+  `opr_uid`      int(10) unsigned NOT NULL,
+  PRIMARY KEY (`exec_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `dcmd_opr_cmd_exec_history`;
+CREATE TABLE `dcmd_opr_cmd_exec_history` (
+  `id`               bigint(20) NOT NULL AUTO_INCREMENT,
+  `exec_id`          bigint(20) NOT NULL,
+  `opr_cmd_id`     int(10) unsigned NOT NULL,
+  `opr_cmd`        varchar(64) NOT NULL,
+  `run_user`        varchar(64) NOT NULL,
+  `timeout`        int(11) NOT NULL,
+  `ip`           text NOT NULL,
+  `priority`      int(11) NOT NULL,
+  `repeat`      int(11) NOT NULL,
+  `cache_time`      int(11) NOT NULL,
+  `arg_mutable`      int(11) NOT NULL,
+  `arg`          text NOT NULL,
+  `utime`        datetime NOT NULL,
+  `ctime`        datetime NOT NULL,
+  `opr_uid`      int(10) unsigned NOT NULL,
+  PRIMARY KEY (`exec_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 
@@ -519,8 +540,8 @@ CREATE TABLE `dcmd_opr_log` (
   `log_table`     varchar(64) NOT NULL,
   `opr_type`      int(11) NOT NULL,
   `sql_statement` text NOT NULL,
-  `update_time`   datetime NOT NULL,
-  `opr_user`      varchar(64) NOT NULL,
+  `ctime`        datetime NOT NULL,
+  `opr_uid`      int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_opr_log_table` (`log_table`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
