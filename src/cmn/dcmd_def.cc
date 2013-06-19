@@ -1,9 +1,9 @@
-﻿#include "dcmd_def.h"
+#include "dcmd_def.h"
 
 #include <CwxMd5.h>
 #include <CwxFile.h>
-namespace dcmd {
 
+namespace dcmd {
 bool dcmd_parse_host_port(string const& host_port, CwxHostInfo& host) {
   if ((host_port.find(':') == string::npos) || (0 == host_port.find(':')))
     return false;

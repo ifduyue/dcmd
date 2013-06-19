@@ -1,5 +1,4 @@
-﻿#include "dcmd_mysql.h"
-
+#include "dcmd_mysql.h"
 
 bool Mysql::init(){
     disconnect();
@@ -20,6 +19,7 @@ bool Mysql::connect(char const* szSvrName,
 {
     if (m_bConnected) disconnect();
     if (!m_bInit) mysql_init(&m_handle);
+    mysql_options(&m_handle, MYSQL_SET_CHARSET_NAME, szCharset);
     m_bInit = true;
     if (uiTimeoutSecond){
         mysql_options(&m_handle, MYSQL_OPT_CONNECT_TIMEOUT, (const char *)&uiTimeoutSecond);

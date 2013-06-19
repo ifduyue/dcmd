@@ -28,6 +28,7 @@ dcmd_agent_SOURCES =dcmd_center_agent_mgr.cc\
 		dcmd_center_task_mgr.cc\
 		../cmn/dcmd_def.cc\
 		../cmn/dcmd_cmn.pb.cc\
+		../cmn/dcmd_ui.pb.cc\
 		../cmn/dcmd_agent.pb.cc\
 		../cmn/dcmd_tss.cc
 dcmd_agent_LDADD=

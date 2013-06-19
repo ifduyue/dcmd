@@ -1541,13 +1541,17 @@ class UiInvalidAgentInfoReply : public ::google::protobuf::Message {
   inline dcmd_api::DcmdState state() const;
   inline void set_state(dcmd_api::DcmdState value);
   
-  // required .dcmd_api.AgentInfo agentinfo = 3;
-  inline bool has_agentinfo() const;
+  // repeated .dcmd_api.AgentInfo agentinfo = 3;
+  inline int agentinfo_size() const;
   inline void clear_agentinfo();
   static const int kAgentinfoFieldNumber = 3;
-  inline const ::dcmd_api::AgentInfo& agentinfo() const;
-  inline ::dcmd_api::AgentInfo* mutable_agentinfo();
-  inline ::dcmd_api::AgentInfo* release_agentinfo();
+  inline const ::dcmd_api::AgentInfo& agentinfo(int index) const;
+  inline ::dcmd_api::AgentInfo* mutable_agentinfo(int index);
+  inline ::dcmd_api::AgentInfo* add_agentinfo();
+  inline const ::google::protobuf::RepeatedPtrField< ::dcmd_api::AgentInfo >&
+      agentinfo() const;
+  inline ::google::protobuf::RepeatedPtrField< ::dcmd_api::AgentInfo >*
+      mutable_agentinfo();
   
   // optional string err = 4;
   inline bool has_err() const;
@@ -1566,8 +1570,6 @@ class UiInvalidAgentInfoReply : public ::google::protobuf::Message {
   inline void clear_has_client_msg_id();
   inline void set_has_state();
   inline void clear_has_state();
-  inline void set_has_agentinfo();
-  inline void clear_has_agentinfo();
   inline void set_has_err();
   inline void clear_has_err();
   
@@ -1575,7 +1577,7 @@ class UiInvalidAgentInfoReply : public ::google::protobuf::Message {
   
   ::google::protobuf::int32 client_msg_id_;
   int state_;
-  ::dcmd_api::AgentInfo* agentinfo_;
+  ::google::protobuf::RepeatedPtrField< ::dcmd_api::AgentInfo > agentinfo_;
   ::std::string* err_;
   
   mutable int _cached_size_;
@@ -4820,33 +4822,29 @@ inline void UiInvalidAgentInfoReply::set_state(dcmd_api::DcmdState value) {
   state_ = value;
 }
 
-// required .dcmd_api.AgentInfo agentinfo = 3;
-inline bool UiInvalidAgentInfoReply::has_agentinfo() const {
-  return (_has_bits_[0] & 0x00000004u) != 0;
-}
-inline void UiInvalidAgentInfoReply::set_has_agentinfo() {
-  _has_bits_[0] |= 0x00000004u;
-}
-inline void UiInvalidAgentInfoReply::clear_has_agentinfo() {
-  _has_bits_[0] &= ~0x00000004u;
+// repeated .dcmd_api.AgentInfo agentinfo = 3;
+inline int UiInvalidAgentInfoReply::agentinfo_size() const {
+  return agentinfo_.size();
 }
 inline void UiInvalidAgentInfoReply::clear_agentinfo() {
-  if (agentinfo_ != NULL) agentinfo_->::dcmd_api::AgentInfo::Clear();
-  clear_has_agentinfo();
+  agentinfo_.Clear();
 }
-inline const ::dcmd_api::AgentInfo& UiInvalidAgentInfoReply::agentinfo() const {
-  return agentinfo_ != NULL ? *agentinfo_ : *default_instance_->agentinfo_;
+inline const ::dcmd_api::AgentInfo& UiInvalidAgentInfoReply::agentinfo(int index) const {
+  return agentinfo_.Get(index);
 }
-inline ::dcmd_api::AgentInfo* UiInvalidAgentInfoReply::mutable_agentinfo() {
-  set_has_agentinfo();
-  if (agentinfo_ == NULL) agentinfo_ = new ::dcmd_api::AgentInfo;
+inline ::dcmd_api::AgentInfo* UiInvalidAgentInfoReply::mutable_agentinfo(int index) {
+  return agentinfo_.Mutable(index);
+}
+inline ::dcmd_api::AgentInfo* UiInvalidAgentInfoReply::add_agentinfo() {
+  return agentinfo_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::dcmd_api::AgentInfo >&
+UiInvalidAgentInfoReply::agentinfo() const {
   return agentinfo_;
 }
-inline ::dcmd_api::AgentInfo* UiInvalidAgentInfoReply::release_agentinfo() {
-  clear_has_agentinfo();
-  ::dcmd_api::AgentInfo* temp = agentinfo_;
-  agentinfo_ = NULL;
-  return temp;
+inline ::google::protobuf::RepeatedPtrField< ::dcmd_api::AgentInfo >*
+UiInvalidAgentInfoReply::mutable_agentinfo() {
+  return &agentinfo_;
 }
 
 // optional string err = 4;

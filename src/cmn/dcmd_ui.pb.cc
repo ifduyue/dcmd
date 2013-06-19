@@ -606,7 +606,7 @@ void protobuf_AddDesc_dcmd_5fui_2eproto() {
     "ient_msg_id\030\001 \002(\005\022\014\n\004user\030\002 \002(\t\022\016\n\006passw"
     "d\030\003 \002(\t\"\211\001\n\027UiInvalidAgentInfoReply\022\025\n\rc"
     "lient_msg_id\030\001 \002(\005\022\"\n\005state\030\002 \002(\0162\023.dcmd"
-    "_api.DcmdState\022&\n\tagentinfo\030\003 \002(\0132\023.dcmd"
+    "_api.DcmdState\022&\n\tagentinfo\030\003 \003(\0132\023.dcmd"
     "_api.AgentInfo\022\013\n\003err\030\004 \001(\t\"Y\n\020UiTaskScr"
     "iptInfo\022\025\n\rclient_msg_id\030\001 \002(\005\022\020\n\010task_c"
     "md\030\002 \002(\t\022\014\n\004user\030\003 \002(\t\022\016\n\006passwd\030\004 \002(\t\"|"
@@ -5016,7 +5016,6 @@ UiInvalidAgentInfoReply::UiInvalidAgentInfoReply()
 }
 
 void UiInvalidAgentInfoReply::InitAsDefaultInstance() {
-  agentinfo_ = const_cast< ::dcmd_api::AgentInfo*>(&::dcmd_api::AgentInfo::default_instance());
 }
 
 UiInvalidAgentInfoReply::UiInvalidAgentInfoReply(const UiInvalidAgentInfoReply& from)
@@ -5029,7 +5028,6 @@ void UiInvalidAgentInfoReply::SharedCtor() {
   _cached_size_ = 0;
   client_msg_id_ = 0;
   state_ = 0;
-  agentinfo_ = NULL;
   err_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
@@ -5043,7 +5041,6 @@ void UiInvalidAgentInfoReply::SharedDtor() {
     delete err_;
   }
   if (this != default_instance_) {
-    delete agentinfo_;
   }
 }
 
@@ -5071,15 +5068,13 @@ void UiInvalidAgentInfoReply::Clear() {
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     client_msg_id_ = 0;
     state_ = 0;
-    if (has_agentinfo()) {
-      if (agentinfo_ != NULL) agentinfo_->::dcmd_api::AgentInfo::Clear();
-    }
     if (has_err()) {
       if (err_ != &::google::protobuf::internal::kEmptyString) {
         err_->clear();
       }
     }
   }
+  agentinfo_.Clear();
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
 }
@@ -5126,16 +5121,17 @@ bool UiInvalidAgentInfoReply::MergePartialFromCodedStream(
         break;
       }
       
-      // required .dcmd_api.AgentInfo agentinfo = 3;
+      // repeated .dcmd_api.AgentInfo agentinfo = 3;
       case 3: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
          parse_agentinfo:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_agentinfo()));
+                input, add_agentinfo()));
         } else {
           goto handle_uninterpreted;
         }
+        if (input->ExpectTag(26)) goto parse_agentinfo;
         if (input->ExpectTag(34)) goto parse_err;
         break;
       }
@@ -5186,10 +5182,10 @@ void UiInvalidAgentInfoReply::SerializeWithCachedSizes(
       2, this->state(), output);
   }
   
-  // required .dcmd_api.AgentInfo agentinfo = 3;
-  if (has_agentinfo()) {
+  // repeated .dcmd_api.AgentInfo agentinfo = 3;
+  for (int i = 0; i < this->agentinfo_size(); i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      3, this->agentinfo(), output);
+      3, this->agentinfo(i), output);
   }
   
   // optional string err = 4;
@@ -5220,11 +5216,11 @@ void UiInvalidAgentInfoReply::SerializeWithCachedSizes(
       2, this->state(), target);
   }
   
-  // required .dcmd_api.AgentInfo agentinfo = 3;
-  if (has_agentinfo()) {
+  // repeated .dcmd_api.AgentInfo agentinfo = 3;
+  for (int i = 0; i < this->agentinfo_size(); i++) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
-        3, this->agentinfo(), target);
+        3, this->agentinfo(i), target);
   }
   
   // optional string err = 4;
@@ -5261,13 +5257,6 @@ int UiInvalidAgentInfoReply::ByteSize() const {
         ::google::protobuf::internal::WireFormatLite::EnumSize(this->state());
     }
     
-    // required .dcmd_api.AgentInfo agentinfo = 3;
-    if (has_agentinfo()) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-          this->agentinfo());
-    }
-    
     // optional string err = 4;
     if (has_err()) {
       total_size += 1 +
@@ -5276,6 +5265,14 @@ int UiInvalidAgentInfoReply::ByteSize() const {
     }
     
   }
+  // repeated .dcmd_api.AgentInfo agentinfo = 3;
+  total_size += 1 * this->agentinfo_size();
+  for (int i = 0; i < this->agentinfo_size(); i++) {
+    total_size +=
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        this->agentinfo(i));
+  }
+  
   if (!unknown_fields().empty()) {
     total_size +=
       ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
@@ -5301,15 +5298,13 @@ void UiInvalidAgentInfoReply::MergeFrom(const ::google::protobuf::Message& from)
 
 void UiInvalidAgentInfoReply::MergeFrom(const UiInvalidAgentInfoReply& from) {
   GOOGLE_CHECK_NE(&from, this);
+  agentinfo_.MergeFrom(from.agentinfo_);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     if (from.has_client_msg_id()) {
       set_client_msg_id(from.client_msg_id());
     }
     if (from.has_state()) {
       set_state(from.state());
-    }
-    if (from.has_agentinfo()) {
-      mutable_agentinfo()->::dcmd_api::AgentInfo::MergeFrom(from.agentinfo());
     }
     if (from.has_err()) {
       set_err(from.err());
@@ -5331,10 +5326,10 @@ void UiInvalidAgentInfoReply::CopyFrom(const UiInvalidAgentInfoReply& from) {
 }
 
 bool UiInvalidAgentInfoReply::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000007) != 0x00000007) return false;
+  if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
   
-  if (has_agentinfo()) {
-    if (!this->agentinfo().IsInitialized()) return false;
+  for (int i = 0; i < agentinfo_size(); i++) {
+    if (!this->agentinfo(i).IsInitialized()) return false;
   }
   return true;
 }
@@ -5343,7 +5338,7 @@ void UiInvalidAgentInfoReply::Swap(UiInvalidAgentInfoReply* other) {
   if (other != this) {
     std::swap(client_msg_id_, other->client_msg_id_);
     std::swap(state_, other->state_);
-    std::swap(agentinfo_, other->agentinfo_);
+    agentinfo_.Swap(&other->agentinfo_);
     std::swap(err_, other->err_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);

@@ -100,7 +100,7 @@ void DcmdCenterH4Check::CheckMasterCenter(DcmdTss* tss) {
     }
     // 检测是否我是master
     if (!host.length() || ///没有master
-      (host == app->config().common().host_id_))
+      (host == app_->config().common().host_id_))
     { //自己就是master
         is_master = true;
     }
@@ -117,10 +117,10 @@ void DcmdCenterH4Check::CheckMasterCenter(DcmdTss* tss) {
     }
   }
   // 关闭mysql的连接
-  if (my->IsConnected())  UnlockCenterTable->disconnect();
+  if (my->IsConnected())  my->disconnect();
   if (is_master != app_->is_master()) {
     app_->SetMaster(is_master);
-    app_->SetMasterHost(host);
+    app_->SetMasterHost(host.c_str());
     CwxMsgBlock* msg = CwxMsgBlockAlloc::malloc(0);
     msg->event().setSvrId(DcmdCenterApp::SVR_TYPE_AGENT);
     msg->event().setConnId(is_master?1:0);

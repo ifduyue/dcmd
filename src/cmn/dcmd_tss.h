@@ -1,4 +1,4 @@
-﻿#ifndef __DCMD_TSS_H__
+#ifndef __DCMD_TSS_H__
 #define __DCMD_TSS_H__
 
 #include <CwxLogger.h>
@@ -6,10 +6,11 @@
 
 #include "dcmd_macro.h"
 namespace dcmd {
-//dcmd的tss
-class DcmdTss:public CwxTss{
+// dcmd的tss
+class DcmdTss:public CwxTss {
  public:
-   static const uint32_t kMaxSqlBufSize =  2 * 1024 * 1024; // buf最大长度
+   // buf最大长度
+   static const uint32_t kMaxSqlBufSize =  2 * 1024 * 1024;
 
  public:
   DcmdTss():CwxTss(){
@@ -23,8 +24,8 @@ class DcmdTss:public CwxTss{
   // tss的初始化，0：成功；-1：失败
   int Init();
   // 获取package的buf，返回NULL表示失败
-  inline char* GetBuf(uint32_t buf_size){
-    if (data_buf_len_ < buf_size){
+  inline char* GetBuf(uint32_t buf_size) {
+    if (data_buf_len_ < buf_size) {
       if (data_buf_) delete [] data_buf_;
       data_buf_ = new char[buf_size];
       data_buf_len_ = buf_size;
@@ -32,20 +33,20 @@ class DcmdTss:public CwxTss{
     return data_buf_;
   }
    // 读取文件内容
-  static bool ReadFile(char const* filename, string& file_content,
-    string& err_msg);
+  bool ReadFile(char const* filename, string& file_content, string& err_msg);
+
  public:
   // sql的buf
-  char                                  sql_[kMaxSqlBufSize];
+  char                            sql_[kMaxSqlBufSize];
   // proto的buf
-  string                                proto_str_;
+  string                          proto_str_;
   // 中间处理的错误信息
-  string                                err_msg_;
+  string                          err_msg_;
  private:
   // 数据buf
-  char*                                 data_buf_;
+  char*                           data_buf_;
   // 数据buf的空间大小
-  uint32_t                              data_buf_len_;
+  uint32_t                        data_buf_len_;
 };
 }  // dcmd
 #endif

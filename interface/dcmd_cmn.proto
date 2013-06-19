@@ -150,7 +150,7 @@ message AgentInfo {
   required AgentState state=2;
   optional string     version=3;
   optional string     connected_ip=4;
-  optional string     repored_ip=5;
+  optional string     reported_ip=5;
 }
 
 message AgentOprCmdReply {

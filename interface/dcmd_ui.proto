@@ -88,7 +88,7 @@ message UiInvalidAgentInfo {
 message UiInvalidAgentInfoReply{
   required  int32      client_msg_id=1;
   required  DcmdState  state=2;
-  required  AgentInfo  agentinfo=3;
+  repeated  AgentInfo  agentinfo=3;
   optional  string     err=4;
 }
 

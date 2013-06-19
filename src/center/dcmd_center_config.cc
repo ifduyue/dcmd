@@ -157,7 +157,7 @@ int DcmdCenterConf::Init(string const& conf_file){
   common_.allow_ui_ips_.clear();
   if (cnf.getAttr("common", "allow_ui_net", value) && value.length()){
     list<string> items;
-    CwxCommon.split(value, items, ';');
+    CwxCommon::split(value, items, ';');
     list<string>::iterator iter = items.begin();
     string ip;
     while(iter != items.end()) {

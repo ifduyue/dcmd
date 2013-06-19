@@ -63,7 +63,7 @@ int DcmdCenterH4AgentTask::onTimeoutCheck(CwxMsgBlock*& , CwxTss* pThrEnv) {
   bool is_clock_back = app_->IsClockBack(base_time, now);
   if (!is_clock_back && (now <= last_check_time)) return 1;
   last_check_time = now;
-  if (app_->is_master()()) {
+  if (app_->is_master()) {
     if (!is_master_) {
       CWX_INFO(("I becomes master, startup task manager......"));
       is_master_ = app_->GetTaskMgr()->Start(tss);
@@ -72,13 +72,13 @@ int DcmdCenterH4AgentTask::onTimeoutCheck(CwxMsgBlock*& , CwxTss* pThrEnv) {
       } else {
         // 通知所有agent，自己是master
         CWX_INFO(("Notice all agent that i becomes master......"));
-        NoticeMaster(pTss, NULL);
+        NoticeMaster(tss, NULL);
       }
     }
     // 调度任务
     if (is_master_) {
       is_master_ = app_->GetTaskMgr()->Schedule(tss);
-      if (!is_master_) app_->GetTaskMgr()->Stop();
+      if (!is_master_) app_->GetTaskMgr()->Stop(tss);
     }
   }
   return 1;
@@ -105,7 +105,7 @@ int DcmdCenterH4AgentTask::onUserEvent(CwxMsgBlock*& , CwxTss* pThrEnv){
     }
     if (!is_master_){
       CWX_INFO(("Startup task manager......."));
-      is_master_ = app_->GetTaskMgr()->Start();
+      is_master_ = app_->GetTaskMgr()->Start(tss);
       if (!is_master_){
         CWX_ERROR(("Failure to start task manager."));
       }else{
@@ -129,6 +129,8 @@ void DcmdCenterH4AgentTask::ReplyAgentReport(DcmdCenterApp* app,
   uint32_t      msg_taskid,
   dcmd_api::AgentReportReply const* reply)
 {
+  string agent_ip;
+  app->GetAgentMgr()->GetAgentIp(conn_id, agent_ip);
   CwxMsgBlock* msg = NULL;
   if (!reply->SerializeToString(&tss->proto_str_)) {
     CWX_ERROR(("Failure to pack agent report msg."));
@@ -148,7 +150,7 @@ void DcmdCenterH4AgentTask::ReplyAgentReport(DcmdCenterApp* app,
   msg->send_ctrl().setMsgAttr(CwxMsgSendCtrl::NONE);
   if (0 != app->sendMsgByConn(msg)){
     CwxMsgBlockAlloc::free(msg);
-    CWX_ERROR(("Failure to send msg to agent:%s, close connect.", strAgentIp.c_str()));
+    CWX_ERROR(("Failure to send msg to agent:%s, close connect.", agent_ip.c_str()));
     app->noticeCloseConn(conn_id);
   }
 }
@@ -161,9 +163,9 @@ bool DcmdCenterH4AgentTask::SendAgentCmd(DcmdCenterApp* app,
   dcmd_api::AgentTaskCmd const* cmd)
 {
   CwxMsgBlock* msg = NULL;
-  if (!reply->SerializeToString(&tss->proto_str_)) {
+  if (!cmd->SerializeToString(&tss->proto_str_)) {
     CWX_ERROR(("Failure to pack agent report msg."));
-    app->noticeCloseConn(conn_id);
+    app->GetAgentMgr()->CloseAgent(agent_ip);
     return false;
   }
   CwxMsgHead head(0, 0, dcmd_api::MTYPE_CENTER_SUBTASK_CMD, msg_taskid,
@@ -175,10 +177,9 @@ bool DcmdCenterH4AgentTask::SendAgentCmd(DcmdCenterApp* app,
     exit(1);
   }
   msg->send_ctrl().setSvrId(DcmdCenterApp::SVR_TYPE_AGENT);
-  msg->send_ctrl().setConnId(conn_id);
   msg->send_ctrl().setMsgAttr(CwxMsgSendCtrl::NONE);
   uint32_t conn_id = 0;
-  if (0 != app->GetAgentMgr->SendMsg(agent_ip, msg, conn_id)){
+  if (0 != app->GetAgentMgr()->SendMsg(agent_ip, msg, conn_id)){
     CwxMsgBlockAlloc::free(msg);
     CWX_ERROR(("Failure to send msg to agent:%s, close connect.", agent_ip.c_str()));
     return false;
@@ -196,7 +197,7 @@ bool DcmdCenterH4AgentTask::ReplyAgentCmdResult(DcmdCenterApp* app,
   CwxMsgBlock* msg = NULL;
   if (!reply->SerializeToString(&tss->proto_str_)) {
     CWX_ERROR(("Failure to pack agent report msg."));
-    app->noticeCloseConn(conn_id);
+    app->GetAgentMgr()->CloseAgent(agent_ip);
     return false;
   }
   CwxMsgHead head(0, 0, dcmd_api::MTYPE_CENTER_SUBTASK_CMD, msg_taskid,
@@ -208,7 +209,6 @@ bool DcmdCenterH4AgentTask::ReplyAgentCmdResult(DcmdCenterApp* app,
     exit(1);
   }
   msg->send_ctrl().setSvrId(DcmdCenterApp::SVR_TYPE_AGENT);
-  msg->send_ctrl().setConnId(conn_id);
   msg->send_ctrl().setMsgAttr(CwxMsgSendCtrl::NONE);
   uint32_t conn_id = 0;
   if (!app->GetAgentMgr()->SendMsg(agent_ip, msg, conn_id)){
@@ -237,7 +237,7 @@ void  DcmdCenterH4AgentTask::AgentReport(CwxMsgBlock*& msg, DcmdTss* tss){
       err_msg = "Failure unpack agent report msg";
       break;
     }
-    for (uint32_t i=0; i<report.agent_ips_size(); i++) {
+    for (int i=0; i<report.agent_ips_size(); i++) {
       if (agent_ips.length()) {
         agent_ips += ",";
       }
@@ -354,15 +354,15 @@ void  DcmdCenterH4AgentTask::AgentMasterReply(CwxMsgBlock*& msg, DcmdTss* tss){
   }
   list<string> cmd_list;
   string cmds;
-  uint32_t i = 0;
+  int i = 0;
   for (i=0; i<notice_reply.cmd_size(); i++){
     cmd_list.push_back(notice_reply.cmd(i));
     if (cmds.length()) cmds += ",";
   }
   CWX_DEBUG(("Receive agent's master-reply, agent:%s, cmd_id=%s", agent_ip.c_str(),
     cmds.c_str()));
-  app_->GetTaskMgr()->ReceiveAgentMasterReply(tss, agent_ip,  agent_ip, cmd_list);
-  for (uint32_t i=0; i<notice_reply.subtask_process_size(); i++){
+  app_->GetTaskMgr()->ReceiveAgentMasterReply(tss, agent_ip, cmd_list);
+  for (i=0; i<notice_reply.subtask_process_size(); i++){
     app_->GetTaskMgr()->SetAgentTaskProcess(notice_reply.subtask_process(i).subtask_id(),
       notice_reply.subtask_process(i).process().c_str());
   }
@@ -413,7 +413,7 @@ void  DcmdCenterH4AgentTask::AgentSubtaskResult(CwxMsgBlock*& msg, DcmdTss* tss)
 void DcmdCenterH4AgentTask::AgentSubtaskProcess(CwxMsgBlock*& msg, DcmdTss* tss){
   if (!app_->is_master()) return; //若不是master，直接忽略
   string agent_ip ;
-  if (!app_->GetAgentMgr()->getAgentIp(msg->event().getConnId(), agent_ip))
+  if (!app_->GetAgentMgr()->GetAgentIp(msg->event().getConnId(), agent_ip))
     return; // 连接已经关闭
   dcmd_api::AgentSubTaskProcess process;
   tss->proto_str_.assign(msg->rd_ptr(), msg->length());
@@ -446,10 +446,9 @@ void DcmdCenterH4AgentTask::UiExecTaskCmd(CwxMsgBlock*& msg, DcmdTss* tss){
   app_->GetTaskMgr()->ReceiveCmd(tss, task_cmd, msg->event().getConnId(), msg->event().getMsgHeader().getTaskId());
 }
 
-void DcmdCenterH4AgentTask::NoticeMaster(DcmdTss* tss, string const* agent_ip) {
+void DcmdCenterH4AgentTask::NoticeMaster(DcmdTss* , string const* agent_ip) {
   CwxMsgBlock* msg = NULL;
   CWX_DEBUG(("I am master, notice agent[%s]", agent_ip?agent_ip->c_str():"all"));
-  CwxMsgBlock* msg = NULL;
   CwxMsgHead head(0, 0, dcmd_api::MTYPE_CENTER_MASTER_NOTICE, 0, 0);
   msg = CwxMsgBlockAlloc::pack(head, "", 0);
   if (!msg){
@@ -462,7 +461,7 @@ void DcmdCenterH4AgentTask::NoticeMaster(DcmdTss* tss, string const* agent_ip) {
   if (!agent_ip) {
     app_->GetAgentMgr()->BroadcastMsg(msg);
   } else {
-    if (!app_->GetAgentMgr()->SendMsg(agent_ip, msg, conn_id))
+    if (!app_->GetAgentMgr()->SendMsg(*agent_ip, msg, conn_id))
       CwxMsgBlockAlloc::free(msg);
   }
 }

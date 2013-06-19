@@ -1,4 +1,4 @@
-﻿#ifndef __DCMD_MYSQL_H__
+#ifndef __DCMD_MYSQL_H__
 #define __DCMD_MYSQL_H__
 
 /**
@@ -18,7 +18,6 @@
 #include "CwxLogger.h"
 #include "CwxTss.h"
 #include "dcmd_macro.h"
-
 
 #include <mysql.h>
 

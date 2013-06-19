@@ -35,7 +35,7 @@ int DcmdCenterSubtaskOutputTask::noticeActive(CwxTss* ThrEnv) {
   CwxMsgBlock* msg=NULL;
   dcmd_api::AgentTaskOutput query;
   query.set_subtask_id(subtask_id_);
-  query.set_offset(result_offset_);
+  query.set_offset(output_offset_);
   query.set_ip(agent_ip_);
   if (!query.SerializeToString(&tss->proto_str_)) {
     err_msg_ = "Failure to package subtask-output package";
@@ -43,7 +43,7 @@ int DcmdCenterSubtaskOutputTask::noticeActive(CwxTss* ThrEnv) {
     setTaskState(TASK_STATE_FINISH);
     return -1;
   }
-  CwxMsgHead head(0, 0, dcmd_api::MTYPE_CENTER_SUBTASK_CMD_OUTPUT, getTaskId(),
+  CwxMsgHead head(0, 0, dcmd_api::MTYPE_CENTER_AGENT_SUBTASK_OUTPUT, getTaskId(),
     tss->proto_str_.length());
   msg = CwxMsgBlockAlloc::pack(head, tss->proto_str_.c_str(), tss->proto_str_.length());
   if (!msg){

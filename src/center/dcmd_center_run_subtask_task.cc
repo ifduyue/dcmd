@@ -44,7 +44,7 @@ int DcmdCenterRunSubtaskTask::noticeActive(CwxTss* ThrEnv) {
     setTaskState(TASK_STATE_FINISH);
     return -1;
   }
-  CwxMsgHead head(0, 0, dcmd_api::MTYPE_CENTER_RUNNING_TASK, getTaskId(),
+  CwxMsgHead head(0, 0, dcmd_api::MTYPE_CENTER_AGENT_RUNNING_TASK, getTaskId(),
     tss->proto_str_.length());
   msg = CwxMsgBlockAlloc::pack(head, tss->proto_str_.c_str(), tss->proto_str_.length());
   if (!msg){

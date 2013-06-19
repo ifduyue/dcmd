@@ -360,7 +360,7 @@ void DcmdCenterH4Admin::QueryOprCmdScriptContent(CwxMsgBlock*& msg, DcmdTss* tss
   string content;
   string content_md5;
   string err_msg;
-  if (!DcmdTss::ReadFile(opr_cmd_file.c_str(), content, err_msg)) {
+  if (!tss->ReadFile(opr_cmd_file.c_str(), content, err_msg)) {
     CwxCommon::snprintf(tss->m_szBuf2K, 2047,
       "Failure to read script for opr-cmd[%s]. file:%s, err:%s",
       opr_script_query.opr_file().c_str(),
@@ -421,7 +421,7 @@ void DcmdCenterH4Admin::QueryTaskCmdScriptContent(CwxMsgBlock*& msg, DcmdTss* ts
   string content;
   string content_md5;
   string err_msg;
-  if (!DcmdTss::ReadFile(task_cmd_file.c_str(), content, err_msg)) {
+  if (!tss->ReadFile(task_cmd_file.c_str(), content, err_msg)) {
     CwxCommon::snprintf(tss->m_szBuf2K, 2047,
       "Failure to read script for task-cmd[%s]. file:%s, err:%s",
       task_script_query.task_cmd().c_str(),

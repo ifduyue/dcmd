@@ -14,7 +14,7 @@ void DcmdCenterOprCache::AddOprCmd(uint64_t opr_cmd_id, DcmdCenterOprCmd const& 
   }
 }
 
-bool DcmdCenterOprCache::GetOprCmd(uint64_t opr_cmd_id, DcmdCenterOprCache& cmd) {
+bool DcmdCenterOprCache::GetOprCmd(uint64_t opr_cmd_id, DcmdCenterOprCmd& cmd) {
   CwxMutexGuard<CwxMutexLock>  lock(&lock_);
   uint32_t now = time(NULL);
   map<uint64_t, DcmdCenterOprCmd*>::iterator iter = cmd_cache_.find(opr_cmd_id);

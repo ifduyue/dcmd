@@ -1,4 +1,4 @@
-﻿#include "dcmd_xml_parse.h"
+#include "dcmd_xml_parse.h"
 
 XmlParser::XmlParser(CWX_UINT32 uiBufSize) 
 {

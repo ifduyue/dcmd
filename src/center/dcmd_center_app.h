@@ -1,8 +1,7 @@
-﻿#ifndef __DCMD_CENTER_APP_H__
+#ifndef __DCMD_CENTER_APP_H__
 #define __DCMD_CENTER_APP_H__
 
 #include "CwxAppFramework.h"
-
 #include "dcmd_center_agent_mgr.h"
 #include "dcmd_center_config.h"
 #include "dcmd_center_def.h"
@@ -24,7 +23,6 @@ namespace dcmd {
   char const* const kDcmdCenterVersion = "0.1.0";
   char const* const kDcmdCenterModifyDate = "2013-03-08 08:08:08";
   uint32_t const kDcmdMysqlConnectTimeout = 3;
-
   // Center服务的app对象
   class DcmdCenterApp : public CwxAppFramework {
   public:
@@ -63,9 +61,10 @@ namespace dcmd {
     virtual void onFailSendMsg(CwxMsgBlock*& msg);
     //消息发送成功
     virtual CWX_UINT32 onEndSendMsg(CwxMsgBlock*& msg, CwxAppHandler4Msg& conn);
+
   public:
     // 连接数据库的函数
-    bool ConnectMysql(Mysql* my, uint32_t timeout);
+    bool ConnectMysql(Mysql* my, uint32_t timeout=kDcmdMysqlConnectTimeout);
     // 检查mysql连接，若没有连接则连接，返回false表示连接失败
     bool CheckMysql(Mysql* my);
     // 检测计算机的时钟是否回调
@@ -73,21 +72,13 @@ namespace dcmd {
 
   public:
     // 获取配置信息对象
-    inline DcmdCenterConf const& config() const {
-      return config_;
-    }
+    inline DcmdCenterConf const& config() const { return config_;}
     // 获取admin 操作的mysql句柄
-    inline Mysql* GetAdminMysql() {
-      return admin_mysql_; ///<数据库句柄
-    }
+    inline Mysql* GetAdminMysql() { return admin_mysql_; }
     // 获取task操作的mysql句柄
-    inline Mysql* GetTaskMysql() {
-      return task_mysql_;
-    }
+    inline Mysql* GetTaskMysql() { return task_mysql_; }
     // 获取check操作的mysql句柄
-    inline Mysql* GetCheckMysql() {
-      return check_mysql_;
-    }
+    inline Mysql* GetCheckMysql() { return check_mysql_; }
     // 获取自己是否为master
     inline bool is_master() {
       CwxMutexGuard<CwxMutexLock> lock(&lock_);
@@ -109,21 +100,13 @@ namespace dcmd {
       master_host_ = master_host;
     }
     ///获取任务管理对象
-    inline DcmdCenterTaskMgr* GetTaskMgr() {
-      return task_mgr_; ///<任务管理对象
-    }
+    inline DcmdCenterTaskMgr* GetTaskMgr() { return task_mgr_; }
     // 获取opr cmd的cache对象
-    inline DcmdCenterOprCache* GetOprCmdCache() {
-      return opr_cmd_cache_; ///<opr cmd的cache对象
-    }
+    inline DcmdCenterOprCache* GetOprCmdCache() { return opr_cmd_cache_; }
     // 获取连接管理器对象
-    inline DcmdCenterAgentMgr* GetAgentMgr(){
-      return agent_mgr_;
-    }
+    inline DcmdCenterAgentMgr* GetAgentMgr() { return agent_mgr_; }
     // 获取任务的线程池
-    inline CwxThreadPool* GetTaskThreadPool() {
-      return task_thread_pool_;
-    }
+    inline CwxThreadPool* GetTaskThreadPool() { return task_thread_pool_; }
   protected:
     virtual int initRunEnv();
     virtual void destroy();
@@ -141,7 +124,7 @@ namespace dcmd {
     // 自己是否为master
     bool                         is_master_;
     // master主机
-    string                        master_host_;
+    string                       master_host_;
     // 来自agent事件的处理handler，由task线程处理
     DcmdCenterH4AgentTask        *agent_task_handler_;
     // 对agent进行操作的事件处理handler，由admin线程处理
@@ -167,4 +150,3 @@ namespace dcmd {
   };
 }  // dcmd
 #endif
-

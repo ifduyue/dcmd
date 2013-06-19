@@ -10,7 +10,7 @@
 namespace dcmd {
 
   class DcmdCenterTask;
-  class DcmdCenterSubTask;
+  class DcmdCenterSubtask;
   class DcmdCenterAgent;
   class DcmdCenterSvrPool;
 
@@ -65,7 +65,7 @@ namespace dcmd {
     // 命令对应的任务对象
     DcmdCenterTask*         task_;
     // 命令对应的subtask对象
-    DcmdCenterSubTask*      subtask_;
+    DcmdCenterSubtask*      subtask_;
     // 命令对应的agent对象
     DcmdCenterAgent*        agent_;
   };
@@ -137,7 +137,7 @@ namespace dcmd {
     bool AddSubtask(DcmdCenterSubtask* subtask);
     // 改变Subtask的状态；true：成功；false表示不存在
     bool ChangeSubtaskState(uint64_t subtask_id,
-      dcmd_api::SubTaskState state,
+      uint8_t state,
       bool is_ignored);
   public:
     // 是否可以调度
@@ -260,7 +260,7 @@ namespace dcmd {
     bool AddSubtask(DcmdCenterSubtask* subtask);
     // 改变任务的状态，true 成功；false：失败。失败或者subtask不存在，或者pool不存在
     bool ChangeSubtaskState(DcmdCenterSubtask const* subtask,
-      dcmd_api::SubTaskState state,
+      uint8_t state,
       bool is_ignored);
     // 返回值，false：不存在；true：存在
     bool GetArgValue(char const* arg_name, string& value) {

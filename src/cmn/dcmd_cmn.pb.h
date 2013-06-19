@@ -1016,16 +1016,16 @@ class AgentInfo : public ::google::protobuf::Message {
   inline ::std::string* mutable_connected_ip();
   inline ::std::string* release_connected_ip();
   
-  // optional string repored_ip = 5;
-  inline bool has_repored_ip() const;
-  inline void clear_repored_ip();
-  static const int kReporedIpFieldNumber = 5;
-  inline const ::std::string& repored_ip() const;
-  inline void set_repored_ip(const ::std::string& value);
-  inline void set_repored_ip(const char* value);
-  inline void set_repored_ip(const char* value, size_t size);
-  inline ::std::string* mutable_repored_ip();
-  inline ::std::string* release_repored_ip();
+  // optional string reported_ip = 5;
+  inline bool has_reported_ip() const;
+  inline void clear_reported_ip();
+  static const int kReportedIpFieldNumber = 5;
+  inline const ::std::string& reported_ip() const;
+  inline void set_reported_ip(const ::std::string& value);
+  inline void set_reported_ip(const char* value);
+  inline void set_reported_ip(const char* value, size_t size);
+  inline ::std::string* mutable_reported_ip();
+  inline ::std::string* release_reported_ip();
   
   // @@protoc_insertion_point(class_scope:dcmd_api.AgentInfo)
  private:
@@ -1037,15 +1037,15 @@ class AgentInfo : public ::google::protobuf::Message {
   inline void clear_has_version();
   inline void set_has_connected_ip();
   inline void clear_has_connected_ip();
-  inline void set_has_repored_ip();
-  inline void clear_has_repored_ip();
+  inline void set_has_reported_ip();
+  inline void clear_has_reported_ip();
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
   ::std::string* ip_;
   ::std::string* version_;
   ::std::string* connected_ip_;
-  ::std::string* repored_ip_;
+  ::std::string* reported_ip_;
   int state_;
   
   mutable int _cached_size_;
@@ -2519,60 +2519,60 @@ inline ::std::string* AgentInfo::release_connected_ip() {
   }
 }
 
-// optional string repored_ip = 5;
-inline bool AgentInfo::has_repored_ip() const {
+// optional string reported_ip = 5;
+inline bool AgentInfo::has_reported_ip() const {
   return (_has_bits_[0] & 0x00000010u) != 0;
 }
-inline void AgentInfo::set_has_repored_ip() {
+inline void AgentInfo::set_has_reported_ip() {
   _has_bits_[0] |= 0x00000010u;
 }
-inline void AgentInfo::clear_has_repored_ip() {
+inline void AgentInfo::clear_has_reported_ip() {
   _has_bits_[0] &= ~0x00000010u;
 }
-inline void AgentInfo::clear_repored_ip() {
-  if (repored_ip_ != &::google::protobuf::internal::kEmptyString) {
-    repored_ip_->clear();
+inline void AgentInfo::clear_reported_ip() {
+  if (reported_ip_ != &::google::protobuf::internal::kEmptyString) {
+    reported_ip_->clear();
   }
-  clear_has_repored_ip();
+  clear_has_reported_ip();
 }
-inline const ::std::string& AgentInfo::repored_ip() const {
-  return *repored_ip_;
+inline const ::std::string& AgentInfo::reported_ip() const {
+  return *reported_ip_;
 }
-inline void AgentInfo::set_repored_ip(const ::std::string& value) {
-  set_has_repored_ip();
-  if (repored_ip_ == &::google::protobuf::internal::kEmptyString) {
-    repored_ip_ = new ::std::string;
+inline void AgentInfo::set_reported_ip(const ::std::string& value) {
+  set_has_reported_ip();
+  if (reported_ip_ == &::google::protobuf::internal::kEmptyString) {
+    reported_ip_ = new ::std::string;
   }
-  repored_ip_->assign(value);
+  reported_ip_->assign(value);
 }
-inline void AgentInfo::set_repored_ip(const char* value) {
-  set_has_repored_ip();
-  if (repored_ip_ == &::google::protobuf::internal::kEmptyString) {
-    repored_ip_ = new ::std::string;
+inline void AgentInfo::set_reported_ip(const char* value) {
+  set_has_reported_ip();
+  if (reported_ip_ == &::google::protobuf::internal::kEmptyString) {
+    reported_ip_ = new ::std::string;
   }
-  repored_ip_->assign(value);
+  reported_ip_->assign(value);
 }
-inline void AgentInfo::set_repored_ip(const char* value, size_t size) {
-  set_has_repored_ip();
-  if (repored_ip_ == &::google::protobuf::internal::kEmptyString) {
-    repored_ip_ = new ::std::string;
+inline void AgentInfo::set_reported_ip(const char* value, size_t size) {
+  set_has_reported_ip();
+  if (reported_ip_ == &::google::protobuf::internal::kEmptyString) {
+    reported_ip_ = new ::std::string;
   }
-  repored_ip_->assign(reinterpret_cast<const char*>(value), size);
+  reported_ip_->assign(reinterpret_cast<const char*>(value), size);
 }
-inline ::std::string* AgentInfo::mutable_repored_ip() {
-  set_has_repored_ip();
-  if (repored_ip_ == &::google::protobuf::internal::kEmptyString) {
-    repored_ip_ = new ::std::string;
+inline ::std::string* AgentInfo::mutable_reported_ip() {
+  set_has_reported_ip();
+  if (reported_ip_ == &::google::protobuf::internal::kEmptyString) {
+    reported_ip_ = new ::std::string;
   }
-  return repored_ip_;
+  return reported_ip_;
 }
-inline ::std::string* AgentInfo::release_repored_ip() {
-  clear_has_repored_ip();
-  if (repored_ip_ == &::google::protobuf::internal::kEmptyString) {
+inline ::std::string* AgentInfo::release_reported_ip() {
+  clear_has_reported_ip();
+  if (reported_ip_ == &::google::protobuf::internal::kEmptyString) {
     return NULL;
   } else {
-    ::std::string* temp = repored_ip_;
-    repored_ip_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    ::std::string* temp = reported_ip_;
+    reported_ip_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
     return temp;
   }
 }

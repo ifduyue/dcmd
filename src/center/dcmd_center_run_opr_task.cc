@@ -41,7 +41,7 @@ int DcmdCenterRunOprTask::noticeActive(CwxTss* ThrEnv) {
     setTaskState(TASK_STATE_FINISH);
     return -1;
   }
-  CwxMsgHead head(0, 0, dcmd_api::MTYPE_CENTER_RUNNING_OPR, getTaskId(),
+  CwxMsgHead head(0, 0, dcmd_api::MTYPE_CENTER_AGENT_RUNNING_OPR, getTaskId(),
     tss->proto_str_.length());
   msg = CwxMsgBlockAlloc::pack(head, tss->proto_str_.c_str(), tss->proto_str_.length());
   if (!msg){
@@ -85,7 +85,7 @@ void DcmdCenterRunOprTask::execute(CwxTss* pThrEnv){
 void DcmdCenterRunOprTask::Reply(CwxTss* pThrEnv) {
   dcmd_api::UiAgentRunningOprReply reply;
   dcmd_api::AgentRunningOprReply agent_reply;
-  DcmdTss* pTss = (DcmdTss*)pThrEnv;
+  DcmdTss* tss = (DcmdTss*)pThrEnv;
   if (!recv_msg_) {
     reply.set_state(dcmd_api::DCMD_STATE_FAILED);
     reply.set_err(err_msg_);

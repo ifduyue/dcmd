@@ -1,4 +1,4 @@
-﻿#ifndef __DCMD_CENTER_AGENT_MGR_H__
+#ifndef __DCMD_CENTER_AGENT_MGR_H__
 #define __DCMD_CENTER_AGENT_MGR_H__
 
 #include <CwxAppConnInfo.h>
@@ -10,7 +10,6 @@
 #include "dcmd_mysql.h"
 
 namespace dcmd {
-
   class DcmdCenterApp;
   // 连接对象
   class DcmdAgentConnect{
@@ -21,7 +20,6 @@ namespace dcmd {
       is_master_report_reply_ = false;
       conn_id_ = 0;
     }
-
     DcmdAgentConnect(string const& conn_ip, uint32_t conn_id){
       create_time_ = time(NULL);
       last_heatbeat_time_ = time(NULL);
@@ -29,7 +27,6 @@ namespace dcmd {
       conn_id_ = conn_id;
       conn_ip_ = conn_ip;
     }
-
     DcmdAgentConnect& operator=(DcmdAgentConnect const& item){
       if (this == &item) return *this;
       create_time_ = item.create_time_;
@@ -131,8 +128,8 @@ namespace dcmd {
     }
   public:
     // 添加新连接；false表示连接存在
-    bool AddConn(uint32_t conn_id,// 连接ID
-      char const* conn_ip // 连接的IP
+    bool AddConn(uint32_t conn_id,// 连接id
+      char const* conn_ip // 连接的ip
       );
     // 删除连接；false表示连接不存在
     bool RemoveConn(uint32_t conn_id);
@@ -157,21 +154,19 @@ namespace dcmd {
     // Agent的心跳
     void Heatbeat(uint32_t conn_id);
     // 往agent_ip指定的主机发送消息；false表示发送失败
-    bool SendMsg(string const& agent_ip,
-      CwxMsgBlock* msg,
-      uint32_t& conn_id);
+    bool SendMsg(string const& agent_ip, CwxMsgBlock* msg, uint32_t& conn_id);
     // 往conn_id指定的主机发送消息；false表示发送失败
     bool SendMsg(uint32_t conn_id, CwxMsgBlock* msg);
     // 往所有的主机发送信息
     void BroadcastMsg(CwxMsgBlock* msg);
     // 检查失去心跳的agent
     void CheckHeatbeat();
-    ///刷新agent
+    // 刷新agent
     void RefreshAgent();
-    ///获取agent的状态信息
+    // 获取agent的状态信息
     void GetAgentStatus(list<string> const& agent_ips, bool fetch_version,
       dcmd_api::UiAgentInfoReply& result);
-    ///获取连接ip，false表示不存在
+    // 获取连接ip，false表示不存在
     bool GetConnIp(uint32_t conn_id, string& conn_ip);
     // 获取agent的ip，false表示不存在
     bool GetAgentIp(uint32_t conn_id, string& agent_ip);
@@ -186,12 +181,12 @@ namespace dcmd {
       );
     // 指定连接ip是否为无效的连接ip地址
     bool IsInvalidConnIp(string const& conn_ip);
-    ///获取非法的agent列表
+    // 获取非法的agent列表
     void GetInvalidAgent(dcmd_api::UiInvalidAgentInfoReply& result);
 
   private:
-    // load ip数据
-    void LoadIp();
+    // Load node数据
+    void LoadNode();
   private:
     // app对象
     DcmdCenterApp*                        app_;

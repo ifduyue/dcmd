@@ -34,7 +34,7 @@ bool DcmdCenterSvrPool::AddSubtask(DcmdCenterSubtask* subtask) {
 }
 
 bool DcmdCenterSvrPool::ChangeSubtaskState(uint64_t subtask_id,
-  dcmd_api::SubTaskState state,
+  uint8_t state,
   bool is_ignored)
 {
   // 首先删除subtask
@@ -109,7 +109,7 @@ bool DcmdCenterTask::AddSubtask(DcmdCenterSubtask* subtask) {
 }
 
 bool DcmdCenterTask::ChangeSubtaskState(DcmdCenterSubtask const* subtask,
-  dcmd_api::SubTaskState state,
+  uint8_t state,
   bool is_ignored)
 {
   CWX_ASSERT(subtask->svr_pool_);

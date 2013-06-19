@@ -33,7 +33,7 @@ int DcmdCenterH4AgentOpr::onEndSendMsg(CwxMsgBlock*& msg, CwxTss* pThrEnv) {
     msg,
     pThrEnv,
     task);
-  if (task) pTask->execute(pThrEnv);
+  if (task) task->execute(pThrEnv);
   return 1;
 }
 

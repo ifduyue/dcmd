@@ -1,5 +1,4 @@
 ﻿#include <CwxDate.h>
-
 #include "dcmd_center_app.h"
 
 namespace dcmd {
@@ -69,8 +68,7 @@ int DcmdCenterApp::initRunEnv(){
   this->setLastCompileDatetime(CWX_COMPILE_DATE(_BUILD_DATE));
   // 设置服务状态
   this->setAppRunValid(true);
-
-  ///创建admin线程的mysql对象
+  // 创建admin线程的mysql对象
   CWX_DEBUG(("Init admin mysql connection...."));
   admin_mysql_ = new Mysql();
   if (!admin_mysql_->init()) {// 此必须退出

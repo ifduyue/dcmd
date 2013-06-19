@@ -1,6 +1,5 @@
-﻿#ifndef __DCMD_XML_PARSE_H__
+#ifndef __DCMD_XML_PARSE_H__
 #define __DCMD_XML_PARSE_H__
-
 
 #include "CwxStl.h"
 #include "CwxCommon.h"
@@ -9,6 +8,7 @@
 #include <expat.h>
 #include <string.h>
 #include <stdio.h>
+
 CWINUX_USING_NAMESPACE
 
 /**
@@ -422,6 +422,4 @@ private:
     XmlConfigParser  m_parser;///<XmlConfigParser类，完成XML 内存的解析
 
 };
-
-
 #endif 
