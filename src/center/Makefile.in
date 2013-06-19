@@ -73,6 +73,7 @@ am_dcmd_agent_OBJECTS = dcmd_agent-dcmd_center_agent_mgr.$(OBJEXT) \
 	dcmd_agent-dcmd_center_opr_cache.$(OBJEXT) \
 	dcmd_agent-dcmd_center_task_mgr.$(OBJEXT) \
 	dcmd_agent-dcmd_def.$(OBJEXT) dcmd_agent-dcmd_cmn.pb.$(OBJEXT) \
+	dcmd_agent-dcmd_ui.pb.$(OBJEXT) \
 	dcmd_agent-dcmd_agent.pb.$(OBJEXT) \
 	dcmd_agent-dcmd_tss.$(OBJEXT)
 dcmd_agent_OBJECTS = $(am_dcmd_agent_OBJECTS)
@@ -227,6 +228,7 @@ dcmd_agent_SOURCES = dcmd_center_agent_mgr.cc\
 		dcmd_center_task_mgr.cc\
 		../cmn/dcmd_def.cc\
 		../cmn/dcmd_cmn.pb.cc\
+		../cmn/dcmd_ui.pb.cc\
 		../cmn/dcmd_agent.pb.cc\
 		../cmn/dcmd_tss.cc
 
@@ -329,6 +331,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_agent-dcmd_def.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_agent-dcmd_mysql.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_agent-dcmd_tss.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_agent-dcmd_ui.pb.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_agent-dcmd_xml_parse.Po@am__quote@
 
 .cc.o:
@@ -631,6 +634,20 @@ dcmd_agent-dcmd_cmn.pb.obj: ../cmn/dcmd_cmn.pb.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_cmn.pb.cc' object='dcmd_agent-dcmd_cmn.pb.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_cmn.pb.obj `if test -f '../cmn/dcmd_cmn.pb.cc'; then $(CYGPATH_W) '../cmn/dcmd_cmn.pb.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_cmn.pb.cc'; fi`
+
+dcmd_agent-dcmd_ui.pb.o: ../cmn/dcmd_ui.pb.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_ui.pb.o -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_ui.pb.Tpo" -c -o dcmd_agent-dcmd_ui.pb.o `test -f '../cmn/dcmd_ui.pb.cc' || echo '$(srcdir)/'`../cmn/dcmd_ui.pb.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_ui.pb.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_ui.pb.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_ui.pb.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_ui.pb.cc' object='dcmd_agent-dcmd_ui.pb.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_ui.pb.o `test -f '../cmn/dcmd_ui.pb.cc' || echo '$(srcdir)/'`../cmn/dcmd_ui.pb.cc
+
+dcmd_agent-dcmd_ui.pb.obj: ../cmn/dcmd_ui.pb.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_ui.pb.obj -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_ui.pb.Tpo" -c -o dcmd_agent-dcmd_ui.pb.obj `if test -f '../cmn/dcmd_ui.pb.cc'; then $(CYGPATH_W) '../cmn/dcmd_ui.pb.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_ui.pb.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_ui.pb.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_ui.pb.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_ui.pb.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_ui.pb.cc' object='dcmd_agent-dcmd_ui.pb.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_ui.pb.obj `if test -f '../cmn/dcmd_ui.pb.cc'; then $(CYGPATH_W) '../cmn/dcmd_ui.pb.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_ui.pb.cc'; fi`
 
 dcmd_agent-dcmd_agent.pb.o: ../cmn/dcmd_agent.pb.cc
 @am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_agent.pb.o -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_agent.pb.Tpo" -c -o dcmd_agent-dcmd_agent.pb.o `test -f '../cmn/dcmd_agent.pb.cc' || echo '$(srcdir)/'`../cmn/dcmd_agent.pb.cc; \
