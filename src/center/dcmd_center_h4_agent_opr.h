@@ -1,4 +1,4 @@
-﻿#ifndef __DCMD_CENTER_H4_AGENT_OPR_H__
+#ifndef __DCMD_CENTER_H4_AGENT_OPR_H__
 #define __DCMD_CENTER_H4_AGENT_OPR_H__
 
 #include <CwxCommander.h>

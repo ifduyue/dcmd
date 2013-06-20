@@ -1,4 +1,4 @@
-﻿#ifndef __DCMD_CENTER_TASK_MGR__
+#ifndef __DCMD_CENTER_TASK_MGR__
 #define __DCMD_CENTER_TASK_MGR__
 
 #include "dcmd_center_def.h"
@@ -38,12 +38,10 @@ class DcmdCenterTaskMgr{
   bool ReceiveUiClosed(DcmdTss* tss, CWX_UINT32 conn_id);
   // 收到agent的命令确认消息处理，若返回false是数据库操作失败
   bool ReceiveAgentSubtaskConfirm(DcmdTss* tss,
-    string const& agent_ip,
-    string cmd_id);
+    string const& agent_ip, string cmd_id);
   // 收到agent的命令处理结果，若返回false是数据库操作失败
   bool ReceiveAgentSubtaskResult(DcmdTss* tss,
-    uint32_t msg_taskid,
-    dcmd_api::AgentTaskResult const& result
+    uint32_t msg_taskid, dcmd_api::AgentTaskResult const& result
     );
   // 设置agent上的任务处理进度
   void SetAgentTaskProcess(string const& subtask_id,
@@ -53,9 +51,7 @@ class DcmdCenterTaskMgr{
   // 对所有的任务进行调度，若返回false，是数据库操作失败。
   bool Schedule(DcmdTss* tss);
   // 是否已经启动
-  inline bool IsStart() const {
-    return is_start_;
-  }
+  inline bool IsStart() const { return is_start_; }
  private:
   // 清空对象
   void Reset();
@@ -63,9 +59,11 @@ class DcmdCenterTaskMgr{
   dcmd_api::DcmdState TaskCmdStartTask(DcmdTss* tss, uint32_t task_id,
     uint32_t uid);
   // 暂停任务
-  dcmd_api::DcmdState TaskCmdPauseTask(DcmdTss* tss, uint32_t task_id, uint32_t uid);
+  dcmd_api::DcmdState TaskCmdPauseTask(DcmdTss* tss, uint32_t task_id,
+    uint32_t uid);
   // 继续任务
-  dcmd_api::DcmdState TaskCmdResumeTask(DcmdTss* tss, uint32_t task_id, uint32_t uid);
+  dcmd_api::DcmdState TaskCmdResumeTask(DcmdTss* tss, uint32_t task_id,
+    uint32_t uid);
   // 重试任务
   dcmd_api::DcmdState TaskCmdRetryTask(DcmdTss* tss, uint32_t task_id,
     uint32_t uid);
@@ -114,8 +112,6 @@ class DcmdCenterTaskMgr{
   bool LoadNewSubtask(DcmdTss* tss);
   // 初始化时，从数据库加载command
   bool LoadAllCmd(DcmdTss* tss);
-  
-
   // 加载任务的service pool
   bool LoadTaskSvrPool(DcmdTss* tss, DcmdCenterTask* task);
   // 分析任务的信息。返回值，true：成功；false：db操作失败
@@ -125,17 +121,12 @@ class DcmdCenterTaskMgr{
   // 获取task cmd的数据库md5签名。返回值，1：成功；0：不存在；-1：失败
   int FetchTaskCmdInfoFromDb(DcmdTss* tss, char const* task_cmd, string& md5);
   // 调度指定任务的指令，若返回false是数据库操作失败
-  bool Schedule(DcmdTss* tss, 
-        DcmdCenterTask* task);
+  bool Schedule(DcmdTss* tss, DcmdCenterTask* task);
   // 子任务完成处理操作，返回对应的task。若返回false是数据库操作失败
-  bool FinishTaskCmd(DcmdTss* tss,
-    dcmd_api::AgentTaskResult const& result,
-    string& agent_ip,
-    DcmdCenterTask*& task
-    );
+  bool FinishTaskCmd(DcmdTss* tss, dcmd_api::AgentTaskResult const& result,
+    string& agent_ip, DcmdCenterTask*& task );
   // 设置发送的task cmd命令
-  void FillTaskCmd(dcmd_api::AgentTaskCmd& cmd,
-    uint64_t cmd_id,
+  void FillTaskCmd(dcmd_api::AgentTaskCmd& cmd, uint64_t cmd_id,
     DcmdCenterSubtask const& subtask);
  private:
    // 根据task id从map中获取task对象
@@ -180,19 +171,15 @@ class DcmdCenterTaskMgr{
    // 删除指定的cmd
    void RemoveCmd(DcmdCenterCmd* cmd);
    // 设置发送的cancel命令
-   inline void FillCtrlCmd(dcmd_api::AgentTaskCmd& cmd,
-     uint64_t cmd_id,
-     dcmd_api::CmdType cmd_type,
-     string const& agent_ip,
-     string const& svr_name,
-     DcmdCenterSubtask* subtask
+   inline void FillCtrlCmd(dcmd_api::AgentTaskCmd& cmd, uint64_t cmd_id,
+     dcmd_api::CmdType cmd_type, string const& agent_ip,
+     string const& svr_name, DcmdCenterSubtask* subtask
      );
  private:
   // app对象
   DcmdCenterApp*                               app_;
   // 保护all_subtasks_的访问，并发访问process
-  CwxMutexLock                                 lock_;
-  
+  CwxMutexLock                                 lock_;  
   /****** 一下的变量全部是多线程不安全的  *****/
   // 是否已经启动
   bool                                         is_start_;
@@ -215,8 +202,6 @@ class DcmdCenterTaskMgr{
   // watch的管理器对象
   //DcmdCenterWatchMgr*                          watches_;
 };
-
 }  // dcmd
-
 #include "dcmd_center_task_mgr.inl"
 #endif

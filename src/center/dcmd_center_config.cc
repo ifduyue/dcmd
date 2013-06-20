@@ -1,18 +1,17 @@
-﻿#include "dcmd_center_config.h"
-
+#include "dcmd_center_config.h"
 #include <CwxLogger.h>
 
 namespace dcmd {
-int DcmdCenterConf::Init(string const& conf_file){
+int DcmdCenterConf::Init(string const& conf_file) {
   string value;
   CwxIniParse cnf;
-  if (!cnf.load(conf_file)){
+  if (!cnf.load(conf_file)) {
     strcpy(err_msg_, cnf.getErrMsg());
     return -1;
   }
 	/*****************load common config**************************/
   // load common:home
-  if (!cnf.getAttr("common", "home", value) || !value.length()){
+  if (!cnf.getAttr("common", "home", value) || !value.length()) {
     snprintf(err_msg_, 2047, "Must set [common:home] for running path.");
     return -1;
   }
@@ -202,7 +201,6 @@ int DcmdCenterConf::Init(string const& conf_file){
   mysql_.db_name_ = value;
   return 0;
 }
-
 void DcmdCenterConf::OutputConfig() const {
   CWX_INFO(("*****************BEGIN CONF*******************"));
   CWX_INFO(("*****************common conf*******************"));

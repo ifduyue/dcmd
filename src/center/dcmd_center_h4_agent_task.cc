@@ -1,4 +1,4 @@
-﻿#include "dcmd_center_h4_agent_task.h"
+#include "dcmd_center_h4_agent_task.h"
 
 #include <CwxMd5.h>
 

@@ -1,14 +1,12 @@
-﻿#ifndef __DCMD_CENTER_CONFIG_H__
+#ifndef __DCMD_CENTER_CONFIG_H__
 #define __DCMD_CENTER_CONFIG_H__
 
 #include <CwxCommon.h>
 #include <CwxIniParse.h>
 #include <CwxHostInfo.h>
-
 #include "dcmd_center_def.h"
 
 namespace dcmd {
-
 // 配置文件的common参数对象
 class DcmdCenterConfCmn{
  public:
@@ -70,11 +68,10 @@ class DcmdCenterConfCmn{
   // 运行连接center的ip地址，可以为c类段
   set<string>          allow_ui_ips_;
 };
-
 // 控制中心的mysql连接信息
-class DcmdCenterConfMysql{
+class DcmdCenterConfMysql {
  public:
-  DcmdCenterConfMysql(){
+  DcmdCenterConfMysql() {
     port_ = 3306;
   }
  public:
@@ -89,34 +86,25 @@ class DcmdCenterConfMysql{
   // mysql的数据库
   string			   db_name_;
 };
-
 // 配置文件加载对象
-class DcmdCenterConf{
+class DcmdCenterConf {
  public:
-  DcmdCenterConf(){
+  DcmdCenterConf() {
     err_msg_[0] = 0x00;
   }
-  ~DcmdCenterConf(){
-  }
+  ~DcmdCenterConf() {}
  public:
   // 加载配置文件.-1:failure, 0:success
   int Init(string const& conf_file);
   // 输出加载的配置文件信息
   void OutputConfig() const;
-
  public:
   // 获取common配置信息
-  inline DcmdCenterConfCmn const& common() const {
-    return  common_;
-  }
+  inline DcmdCenterConfCmn const& common() const { return  common_;}
   // 获取mysql的配置信息
-  inline DcmdCenterConfMysql const& mysql() const{
-    return mysql_;
-  }
+  inline DcmdCenterConfMysql const& mysql() const{ return mysql_; }
   // 获取配置文件加载的失败原因
-  inline char const* err_msg() const{
-    return err_msg_;
-  };
+  inline char const* err_msg() const { return err_msg_;}
   // 获取任务指令的文件名
   inline static string& task_cmd_file(string const& task_cmd, string& cmd_file) {
     cmd_file = string(kTaskTypeFilePrex) + task_cmd + kTaskTypeFileSuffix;
@@ -135,7 +123,5 @@ class DcmdCenterConf{
   // 错误消息的buf
   char                    err_msg_[2048];
 };
-
 }  // dcmd
-
 #endif

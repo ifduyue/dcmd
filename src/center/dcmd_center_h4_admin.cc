@@ -1,7 +1,5 @@
-﻿#include "dcmd_center_h4_admin.h"
-
+#include "dcmd_center_h4_admin.h"
 #include <CwxMd5.h>
-
 #include "dcmd_center_app.h"
 #include "dcmd_center_opr_task.h"
 #include "dcmd_center_subtask_output_task.h"
@@ -98,7 +96,6 @@ void DcmdCenterH4Admin::ExecOprCmd(CwxMsgBlock*& msg, DcmdTss* tss) {
       &opr_cmd_reply);
     return;
   }
-
   opr_task = new DcmdCenterOprTask(app_, &app_->getTaskBoard());
   opr_task->reply_conn_id_ = msg->event().getConnId();
   opr_task->msg_task_id_ = msg->event().getMsgHeader().getTaskId();

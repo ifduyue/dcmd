@@ -1,7 +1,5 @@
-﻿#include "dcmd_center_def.h"
-
+#include "dcmd_center_def.h"
 namespace dcmd {
-
 bool DcmdCenterSvrPool::AddSubtask(DcmdCenterSubtask* subtask) {
   if (all_subtasks_.find(subtask->subtask_id_) != all_subtasks_.end())
     return false;
@@ -32,10 +30,8 @@ bool DcmdCenterSvrPool::AddSubtask(DcmdCenterSubtask* subtask) {
   }
   return true;
 }
-
 bool DcmdCenterSvrPool::ChangeSubtaskState(uint64_t subtask_id,
-  uint8_t state,
-  bool is_ignored)
+  uint8_t state, bool is_ignored)
 {
   // 首先删除subtask
   map<uint64_t, DcmdCenterSubtask*>::iterator iter = all_subtasks_.find(subtask_id);
@@ -95,7 +91,7 @@ DcmdCenterSvrPool* DcmdCenterTask::GetSvrPool(string const& pool_name) {
   if ( iter == pools_.end()) return NULL;
   return iter->second;
 }
-// 获取池子的id
+
 uint32_t DcmdCenterTask::GetSvrPoolId(string const& pool_name) {
   map<string, DcmdCenterSvrPool*>::iterator iter = pools_.find(pool_name);
   if ( iter == pools_.end()) return 0;
@@ -115,5 +111,4 @@ bool DcmdCenterTask::ChangeSubtaskState(DcmdCenterSubtask const* subtask,
   CWX_ASSERT(subtask->svr_pool_);
   return subtask->svr_pool_->ChangeSubtaskState(subtask->subtask_id_, state, is_ignored);
 }
-
 }  // dcmd

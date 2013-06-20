@@ -1,4 +1,4 @@
-﻿#include "dcmd_center_watch_mgr.h"
+#include "dcmd_center_watch_mgr.h"
 #include "dcmd_center_app.h"
 namespace dcmd {
 uint32_t DcmdCenterWatchMgr::AddWatch(uint32_t ui_client_id,

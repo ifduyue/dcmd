@@ -1,21 +1,17 @@
-﻿#ifndef __DCMD_CENTER_DEF_H__
+#ifndef __DCMD_CENTER_DEF_H__
 #define __DCMD_CENTER_DEF_H__
-
 #include <CwxCommon.h>
 #include <CwxHostInfo.h>
-
 #include "dcmd_def.h"
 #include "dcmd_tss.h"
 
 namespace dcmd {
-
   class DcmdCenterTask;
   class DcmdCenterSubtask;
   class DcmdCenterAgent;
   class DcmdCenterSvrPool;
-
   // 命令对象，为数据库command表中的记录
-  class DcmdCenterCmd{
+  class DcmdCenterCmd {
   public:
     // 命令状态定义
     enum {
@@ -39,8 +35,7 @@ namespace dcmd {
       subtask_ = NULL;
       agent_ = NULL;
     }
-    ~DcmdCenterCmd() {
-    }
+    ~DcmdCenterCmd() { }
   public:
     // cmd的id
     uint64_t                cmd_id_;
@@ -69,9 +64,8 @@ namespace dcmd {
     // 命令对应的agent对象
     DcmdCenterAgent*        agent_;
   };
-
   // node对象的subtask定义，对应于task_node 表
-  class DcmdCenterSubtask{
+  class DcmdCenterSubtask {
   public:
     DcmdCenterSubtask() {
       subtask_id_ = 0;
@@ -116,9 +110,8 @@ namespace dcmd {
     // subtask所属的svr pool
     DcmdCenterSvrPool*       svr_pool_;
   };
-
   // Task svr pool 对象，对应于task_service_pool表
-  class DcmdCenterSvrPool{
+  class DcmdCenterSvrPool {
   public:
     DcmdCenterSvrPool(uint32_t task_id): task_id_(task_id) {
       svr_pool_id_ = 0;
@@ -129,9 +122,7 @@ namespace dcmd {
       ignored_doing_subtask_num_ = 0;
       ignored_failed_subtask_num_ = 0;
     }
-    ~DcmdCenterSvrPool(){
-    }
-
+    ~DcmdCenterSvrPool(){ }
   public:
     // 往池子中添加subtask；true：成功；false表示存在
     bool AddSubtask(DcmdCenterSubtask* subtask);
@@ -152,29 +143,19 @@ namespace dcmd {
       return true;
     }
     // 获取池子node的数量
-    uint32_t total_host_num() const {
-      return all_subtasks_.size();
-    }
+    uint32_t total_host_num() const { return all_subtasks_.size(); }
     // 获取未作node的数量
-    uint32_t undo_host_num() const {
-      return undo_subtasks_.size(); 
-    }
+    uint32_t undo_host_num() const { return undo_subtasks_.size(); }
     // 获取正在做的node的数量
-    uint32_t doing_host_num() const {
-      return doing_subtasks_.size();
-    }
+    uint32_t doing_host_num() const { return doing_subtasks_.size(); }
     // 获取ignore的正在做的node的数量
     uint32_t ignored_doing_host_num() const {
       return ignored_doing_subtasks_.size();
     }
     //获取已经完成的node的数量
-    uint32_t finished_host_num() const {
-      return finished_subtasks_.size();
-    }
+    uint32_t finished_host_num() const { return finished_subtasks_.size(); }
     // 获取失败的node的数量 
-    uint32_t failed_host_num() const {
-      return failed_subtasks_.size();
-    }
+    uint32_t failed_host_num() const { return failed_subtasks_.size(); }
     // 获取ignore的失败node的数量
     uint32_t ignored_failed_host_num() const {
       return ignored_failed_subtasks_.size();
@@ -216,7 +197,6 @@ namespace dcmd {
     map<uint64_t, DcmdCenterSubtask*>      ignored_failed_subtasks_;
     map<uint64_t, DcmdCenterSubtask*>      ignored_doing_subtasks_;
   };
-
   // 任务对象，对应数据库的task表
   class DcmdCenterTask {
   public:
@@ -340,22 +320,16 @@ namespace dcmd {
     // 任务的池子
     map<string, DcmdCenterSvrPool*>   pools_;
   };
-
   // agent节点命令对象，只有存在task命令的agent节点才存在
-  class DcmdCenterAgent{
+  class DcmdCenterAgent {
   public:
-    DcmdCenterAgent(string const& ip):ip_(ip) {
-    }
-    ~DcmdCenterAgent(){
-      cmds_.clear();
-    }
+    DcmdCenterAgent(string const& ip):ip_(ip) {}
+    ~DcmdCenterAgent(){  cmds_.clear(); }
   public:
     // 设备的ip地址
     string      ip_;  ///设备的ip地址
     // 节点上待发送的命令, key为cmd的id
     map<uint64_t, DcmdCenterCmd*>  cmds_;
   };
-
 }  // dcmd
-
 #endif

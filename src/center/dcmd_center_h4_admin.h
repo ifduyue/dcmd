@@ -1,13 +1,10 @@
-﻿#ifndef __DCMD_CENTER_H_4_ADMIN_H__
+#ifndef __DCMD_CENTER_H_4_ADMIN_H__
 #define __DCMD_CENTER_H_4_ADMIN_H__
-
 #include <CwxCommander.h>
-
-#include "../cmn/dcmd_tss.h"
+#include "dcmd_tss.h"
 #include "dcmd_center_def.h"
 
 namespace dcmd {
-
 class DcmdCenterApp;
 // 处理来自控制台的消息
 class DcmdCenterH4Admin: public CwxCmdOp {
@@ -15,8 +12,7 @@ class DcmdCenterH4Admin: public CwxCmdOp {
   DcmdCenterH4Admin(DcmdCenterApp* app):app_(app) {
     next_msg_task_id_ = 1;
   }
-  virtual ~DcmdCenterH4Admin(){
-  }
+  virtual ~DcmdCenterH4Admin(){ }
 
  public:
   // 处理收到来自控制台的事件

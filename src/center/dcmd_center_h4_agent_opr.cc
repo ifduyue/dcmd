@@ -1,4 +1,4 @@
-﻿#include "dcmd_center_h4_agent_opr.h"
+#include "dcmd_center_h4_agent_opr.h"
 
 #include "dcmd_center_app.h"
 

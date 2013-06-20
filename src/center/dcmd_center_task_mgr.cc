@@ -1,4 +1,4 @@
-﻿#include "dcmd_center_task_mgr.h"
+#include "dcmd_center_task_mgr.h"
 
 #include <CwxMd5.h>
 
