@@ -1,4 +1,4 @@
-﻿#include <CwxDate.h>
+#include <CwxDate.h>
 #include "dcmd_center_app.h"
 
 namespace dcmd {
@@ -18,11 +18,9 @@ DcmdCenterApp::DcmdCenterApp() {
   admin_thread_pool_ = NULL;
   check_thread_pool = NULL;
 }
-
 DcmdCenterApp::~DcmdCenterApp() {
   // 在析构函数不释放资源，资源的是否是在destroy函数中。
 }
-
 int DcmdCenterApp::init(int argc, char** argv) {
   string err_msg;
   // 首先调用架构的init api
@@ -44,7 +42,6 @@ int DcmdCenterApp::init(int argc, char** argv) {
   }
   return 0;
 }
-
 int DcmdCenterApp::initRunEnv(){
   // 设置系统的时钟间隔，最小刻度为1ms，此为1s。
   this->setClick(100);//0.1s
@@ -76,12 +73,11 @@ int DcmdCenterApp::initRunEnv(){
       admin_mysql_->getErrMsg()));
     return -1;
   }
-  admin_mysql_->setCharacterSet("utf-8");
   if (!ConnectMysql(admin_mysql_, 3)) {
     CWX_ERROR(("Failure to connect to admin mysql, error=%s", admin_mysql_->getErrMsg()));
     // 不能退出，这是常态
   } else {
-    admin_mysql_->setAutoCommit(true);
+    admin_mysql_->setAutoCommit(false);
   }
   // 创建task线程的mysql对象
   CWX_DEBUG(("Init task mysql connection...."));
@@ -90,7 +86,6 @@ int DcmdCenterApp::initRunEnv(){
     CWX_ERROR(("Failure to init task mysql connect. err=%s", task_mysql_->getErrMsg()));
     return -1;
   }
-  task_mysql_->setCharacterSet("utf-8");
   if (!ConnectMysql(task_mysql_, 3)) {
     CWX_ERROR(("Failure to connect to task mysql, error=%s",
       task_mysql_->getErrMsg()));
@@ -102,14 +97,11 @@ int DcmdCenterApp::initRunEnv(){
   CWX_DEBUG(("Init check mysql connection...."));
   check_mysql_ = new Mysql();
   if (!check_mysql_->init()) {// 此必须退出
-    CWX_ERROR(("Failure to init check mysql connect. err=%s",
-      check_mysql_->getErrMsg()));
+    CWX_ERROR(("Failure to init check mysql connect. err=%s", check_mysql_->getErrMsg()));
     return -1;
   }
-  check_mysql_->setCharacterSet("utf-8");
   if (!ConnectMysql(check_mysql_, 3)) {
-    CWX_ERROR(("Failure to connect to task mysql, error=%s",
-      check_mysql_->getErrMsg()));
+    CWX_ERROR(("Failure to connect to task mysql, error=%s", check_mysql_->getErrMsg()));
     // 不能退出，这是常态
   }else{
     check_mysql_->setAutoCommit(false);
@@ -167,7 +159,7 @@ int DcmdCenterApp::initRunEnv(){
   // 创建任务线程池
   CWX_INFO(("Start task thread pool...."));
   task_thread_pool_ = new CwxThreadPool(1, &getCommander());
-  ///创建线程的tss对象
+  // 创建线程的tss对象
   CwxTss** pTss = new CwxTss*[1];
   pTss[0] = new DcmdTss();
   ((DcmdTss*)pTss[0])->Init();
@@ -203,8 +195,6 @@ int DcmdCenterApp::initRunEnv(){
   CWX_INFO(("Finish to init environment."));
   return 0;
 }
-
-// 时钟函数
 void DcmdCenterApp::onTime(CwxTimeValue const& current) {
   // 调用基类的onTime函数
   CwxAppFramework::onTime(current);
@@ -216,25 +206,23 @@ void DcmdCenterApp::onTime(CwxTimeValue const& current) {
   static uint32_t base_time = 0;
   bool is_clock_back = IsClockBack(base_time, now);
   // 检查opr 指令超时
-  if (is_clock_back || (last_admin_timeout_check  < now)){
+  if (is_clock_back || (last_admin_timeout_check  < now)) {
     last_admin_timeout_check = now;
-    if (admin_thread_pool_){
+    if (admin_thread_pool_) {
       CwxMsgBlock* block = CwxMsgBlockAlloc::malloc(0);
       block->event().setSvrId(SVR_TYPE_ADMIN);
       block->event().setEvent(CwxEventInfo::TIMEOUT_CHECK);
       // 将超时检查事件，放入事件队列
       admin_thread_pool_->append(block);
     }
-    // 检查cache的opr cmd超时
-    opr_cmd_cache_->CheckTimeout(now);
   }
   // 检查agent的mysql的状态、新指令及非法agent
-  if (is_clock_back || (last_task_timeout_check < now)){
+  if (is_clock_back || (last_task_timeout_check < now)) {
     last_task_timeout_check = now;        
     // 检测agent的心跳，若没有心跳的将关闭
     agent_mgr_->CheckHeatbeat();
     // task线程的定时处理函数，数据库连接、新指令的检查
-    if (task_thread_pool_){
+    if (task_thread_pool_) {
       CwxMsgBlock* block = CwxMsgBlockAlloc::malloc(0);
       block->event().setSvrId(SVR_TYPE_AGENT);
       block->event().setEvent(CwxEventInfo::TIMEOUT_CHECK);
@@ -254,7 +242,6 @@ void DcmdCenterApp::onTime(CwxTimeValue const& current) {
     }
   }
 }
-
 void DcmdCenterApp::onSignal(int signum){
     switch(signum){
     case SIGQUIT: 
@@ -268,11 +255,7 @@ void DcmdCenterApp::onSignal(int signum){
         break;
     }
 }
-
-int DcmdCenterApp::onConnCreated(CwxAppHandler4Msg& conn,
-                          bool& ,
-                          bool& )
-{
+int DcmdCenterApp::onConnCreated(CwxAppHandler4Msg& conn, bool& , bool& ) {
   // 获取连接的ip
   char conn_ip[128];
   memset(conn_ip, 0x00, 128);

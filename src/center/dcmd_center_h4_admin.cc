@@ -51,6 +51,8 @@ int DcmdCenterH4Admin::onTimeoutCheck(CwxMsgBlock*& , CwxTss* pThrEnv) {
       ++iter;
     }
   }
+  // 检查cache的opr cmd超时
+  app_->GetOprCmdCache()->CheckTimeout(time(NULL));
   return 1;
 }
 
