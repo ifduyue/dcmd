@@ -296,20 +296,18 @@ int DcmdCenterApp::onConnCreated(CwxAppHandler4Msg& conn, bool& , bool& ) {
   }
   return 0;
 }
-
 int DcmdCenterApp::onConnClosed(CwxAppHandler4Msg& conn) {
   if (SVR_TYPE_AGENT == conn.getConnInfo().getSvrId()) {
     string conn_ip = "";
     string agent_ip = "";
     agent_mgr_->GetConnIp(conn.getConnInfo().getConnId(), conn_ip);
-    if (!agent_mgr_->GetAgentIp(conn.getConnInfo().getConnId(), agent_ip)){
+    if (!agent_mgr_->GetAgentIp(conn.getConnInfo().getConnId(), agent_ip))
       agent_ip = "";
-    }
-    CWX_INFO(("Agent[%s] for connect_ip:%s is closed",
+    CWX_INFO(("Agent[%s] for connect_ip[%s] is closed",
       agent_ip.c_str(), conn_ip.length()?conn_ip.c_str():"unknown"));
     // 从agent管理器中关闭此连接
     bool bool_ret = agent_mgr_->RemoveConn(conn.getConnInfo().getConnId());
-    if (!bool_ret){
+    if (!bool_ret) {
       // 必须存在，否则是个bug
       CWX_ERROR(("Agent connect is closed, it doesn't exist in agent mgr, i will abord"));
       ::exit(0);
@@ -335,12 +333,8 @@ int DcmdCenterApp::onConnClosed(CwxAppHandler4Msg& conn) {
   // 对于admin的连接无视
   return 0;
 }
-
-// 收到消息的响应函数
-int DcmdCenterApp::onRecvMsg(CwxMsgBlock* msg,
-                      CwxAppHandler4Msg& conn,
-                      CwxMsgHead const& header,
-                      bool& )
+int DcmdCenterApp::onRecvMsg(CwxMsgBlock* msg, CwxAppHandler4Msg& conn,
+                      CwxMsgHead const& header,  bool& )
 {
   // 如果是心跳信号，则直接由主线程处理
   if ((SVR_TYPE_AGENT == conn.getConnInfo().getSvrId()) &&
@@ -364,20 +358,18 @@ int DcmdCenterApp::onRecvMsg(CwxMsgBlock* msg,
   msg->event().setHostId(conn.getConnInfo().getHostId());
   msg->event().setConnId(conn.getConnInfo().getConnId());
   if (SVR_TYPE_ADMIN == conn.getConnInfo().getSvrId()) { // ui来的消息
-    if (msg->event().getMsgHeader().getMsgType() == dcmd_api::MTYPE_UI_EXEC_TASK){
+    if (msg->event().getMsgHeader().getMsgType() == dcmd_api::MTYPE_UI_EXEC_TASK)
       task_thread_pool_->append(msg);
-    } else {
+    else
       admin_thread_pool_->append(msg);
-    }
     return 0;
   }else if (SVR_TYPE_AGENT == conn.getConnInfo().getSvrId()){
-    // 其他消息由agent线程处理
     if ((header.getMsgType() == dcmd_api::MTYPE_CENTER_OPR_CMD_R) ||
       (header.getMsgType() == dcmd_api::MTYPE_CENTER_AGENT_SUBTASK_OUTPUT_R) ||
       (header.getMsgType() == dcmd_api::MTYPE_CENTER_AGENT_RUNNING_TASK_R) ||
       (header.getMsgType() == dcmd_api::MTYPE_CENTER_AGENT_RUNNING_OPR_R))
     {
-      ///设置新的svr类型
+      // 消息由admin线程处理
       msg->event().setSvrId(SVR_TYPE_AGENT_OPR);
       admin_thread_pool_->append(msg);
     } else {
@@ -386,11 +378,9 @@ int DcmdCenterApp::onRecvMsg(CwxMsgBlock* msg,
     return 0;
   }
   if (msg) CwxMsgBlockAlloc::free(msg);
-  CWX_ERROR(("Receive msg from unknown service type:%d",
-    conn.getConnInfo().getSvrId()));
+  CWX_ERROR(("Receive msg from unknown service type:%d", conn.getConnInfo().getSvrId()));
   return -1;
 }
-
 void DcmdCenterApp::onFailSendMsg(CwxMsgBlock*& msg) {
   ///只有opr及task result的指令才需要。
   if (SVR_TYPE_AGENT_OPR == msg->event().getSvrId()){
@@ -403,7 +393,6 @@ void DcmdCenterApp::onFailSendMsg(CwxMsgBlock*& msg) {
     CWX_ERROR(("Invalid fail-send-msg, svr_id=%d", msg->event().getSvrId()));
   }
 }
-
 CWX_UINT32 DcmdCenterApp::onEndSendMsg(CwxMsgBlock*& msg, CwxAppHandler4Msg& conn) {
   // 只有Opr及task result的指令，才需要。
   if (SVR_TYPE_AGENT_OPR == msg->event().getSvrId()){
@@ -466,7 +455,6 @@ void DcmdCenterApp::destroy() {
 
   CwxAppFramework::destroy();
 }
-
 bool DcmdCenterApp::ConnectMysql(Mysql* my, uint32_t timeout) {
   if (my->IsConnected()) return true;
   my->setOption(MYSQL_OPT_CONNECT_TIMEOUT, (const char *)&timeout);
@@ -479,8 +467,7 @@ bool DcmdCenterApp::ConnectMysql(Mysql* my, uint32_t timeout) {
     return false;
   }
   return true;
-};
-
+}
 bool DcmdCenterApp::CheckMysql(Mysql* my) {
   if (!my->ping()) {
     my->disconnect();
@@ -492,7 +479,6 @@ bool DcmdCenterApp::CheckMysql(Mysql* my) {
   }
   return true;
 }
-
 bool DcmdCenterApp::IsClockBack(uint32_t& last_time, uint32_t now) {
   if (last_time > now){
     last_time = now;
@@ -501,5 +487,4 @@ bool DcmdCenterApp::IsClockBack(uint32_t& last_time, uint32_t now) {
   last_time = now;
   return false;
 }
-
 }  // dcmd
