@@ -130,7 +130,7 @@ CREATE TABLE `dcmd_service` (
   `ctime`          datetime NOT NULL,
   `opr_uid`        int(10) unsigned NOT NULL,
   PRIMARY KEY (`svr_id`),
-  UNIQUE KEY (`service`)
+  UNIQUE KEY (`svr_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `dcmd_service_pool`;
@@ -245,7 +245,7 @@ CREATE TABLE `dcmd_task_template_service_pool` (
   `ctime`        datetime NOT NULL,
   `opr_uid`      int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
-  unique KEY (`task_tmpt_id`,`svr_pool_id`),
+  unique KEY (`task_tmpt_id`,`svr_pool_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 
@@ -465,7 +465,7 @@ DROP TABLE IF EXISTS `dcmd_opr_cmd`;
 CREATE TABLE `dcmd_opr_cmd` (
   `opr_cmd_id`     int(10) unsigned NOT NULL AUTO_INCREMENT,
   `opr_cmd`        varchar(64) NOT NULL,
-  `ui_name`        varchar(256) NOT NULL,
+  `ui_name`        varchar(255) NOT NULL,
   `run_user`       varchar(64) NOT NULL,
   `script_md5`     varchar(32) DEFAULT '',
   `agent_mutable`        int(11) NOT NULL,
@@ -530,7 +530,8 @@ CREATE TABLE `dcmd_opr_cmd_exec_history` (
   `utime`        datetime NOT NULL,
   `ctime`        datetime NOT NULL,
   `opr_uid`      int(10) unsigned NOT NULL,
-  PRIMARY KEY (`exec_id`)
+  PRIMARY KEY (`id`),
+  KEY `idx_exec_id` (`exec_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 
