@@ -14,7 +14,7 @@ int DcmdCenterH4Check::onTimeoutCheck(CwxMsgBlock*& , CwxTss* pThrEnv) {
 
 bool DcmdCenterH4Check::GetMasterHost(Mysql* my, string& master_host, DcmdTss* tss) {
   CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
-    "select host from center where master=1 and UNIX_TIMESTAMP() < UNIX_TIMESTAMP(update_time) + %d "\
+    "select host from dcmd_center where master=1 and UNIX_TIMESTAMP() < UNIX_TIMESTAMP(update_time) + %d "\
     "order by update_time desc, host asc",
     kCenterMasterSwitchTimeoutSecond);
   if (!my->query(tss->sql_)){
