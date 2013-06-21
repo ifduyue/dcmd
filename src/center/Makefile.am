@@ -6,9 +6,9 @@ pkgconfigdir =
 BUILD_DATE=$(shell date +%F)
 
 
-bin_PROGRAMS = dcmd_agent
-dcmd_agent_CPPFLAGS = -D_BUILD_DATE="$(BUILD_DATE)" -W -Wall
-dcmd_agent_SOURCES =dcmd_center_agent_mgr.cc\
+bin_PROGRAMS = dcmd_center
+dcmd_center_CPPFLAGS = -D_BUILD_DATE="$(BUILD_DATE)" -W -Wall
+dcmd_center_SOURCES =dcmd_center_agent_mgr.cc\
 		dcmd_center_h4_admin.cc\
 		dcmd_center_opr_task.cc\
 		dcmd_center_watch_mgr.cc\
@@ -31,8 +31,8 @@ dcmd_agent_SOURCES =dcmd_center_agent_mgr.cc\
 		../cmn/dcmd_ui.pb.cc\
 		../cmn/dcmd_agent.pb.cc\
 		../cmn/dcmd_tss.cc
-dcmd_agent_LDADD=
-dcmd_agent_LDFLAGS=
+dcmd_center_LDADD=
+dcmd_center_LDFLAGS=
 LIBS=-lcwxapp -lcwxnet -lcwxcmn -lprotobuf -lmysqlclient -lexpat -lpthread -ldl -lrt 
 INCLUDES=-I@cwinux_dir@/app -I@cwinux_dir@/cmn -I@cwinux_dir@/net -I@protobuf_dir@ -I@mysql_dir@ -I@expat_dir@ -I. -I../cmn
 

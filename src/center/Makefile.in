@@ -36,7 +36,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-bin_PROGRAMS = dcmd_agent$(EXEEXT)
+bin_PROGRAMS = dcmd_center$(EXEEXT)
 DIST_COMMON = README $(am__configure_deps) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in $(top_srcdir)/configure AUTHORS COPYING \
 	ChangeLog INSTALL NEWS config.guess config.sub depcomp \
@@ -54,30 +54,31 @@ CONFIG_CLEAN_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS)
-am_dcmd_agent_OBJECTS = dcmd_agent-dcmd_center_agent_mgr.$(OBJEXT) \
-	dcmd_agent-dcmd_center_h4_admin.$(OBJEXT) \
-	dcmd_agent-dcmd_center_opr_task.$(OBJEXT) \
-	dcmd_agent-dcmd_center_watch_mgr.$(OBJEXT) \
-	dcmd_agent-dcmd_center_app.$(OBJEXT) \
-	dcmd_agent-dcmd_center_h4_agent_opr.$(OBJEXT) \
-	dcmd_agent-dcmd_center_run_opr_task.$(OBJEXT) \
-	dcmd_agent-dcmd_mysql.$(OBJEXT) \
-	dcmd_agent-dcmd_center.$(OBJEXT) \
-	dcmd_agent-dcmd_center_h4_agent_task.$(OBJEXT) \
-	dcmd_agent-dcmd_center_run_subtask_task.$(OBJEXT) \
-	dcmd_agent-dcmd_xml_parse.$(OBJEXT) \
-	dcmd_agent-dcmd_center_config.$(OBJEXT) \
-	dcmd_agent-dcmd_center_h4_check.$(OBJEXT) \
-	dcmd_agent-dcmd_center_subtask_output_task.$(OBJEXT) \
-	dcmd_agent-dcmd_center_def.$(OBJEXT) \
-	dcmd_agent-dcmd_center_opr_cache.$(OBJEXT) \
-	dcmd_agent-dcmd_center_task_mgr.$(OBJEXT) \
-	dcmd_agent-dcmd_def.$(OBJEXT) dcmd_agent-dcmd_cmn.pb.$(OBJEXT) \
-	dcmd_agent-dcmd_ui.pb.$(OBJEXT) \
-	dcmd_agent-dcmd_agent.pb.$(OBJEXT) \
-	dcmd_agent-dcmd_tss.$(OBJEXT)
-dcmd_agent_OBJECTS = $(am_dcmd_agent_OBJECTS)
-dcmd_agent_DEPENDENCIES =
+am_dcmd_center_OBJECTS = dcmd_center-dcmd_center_agent_mgr.$(OBJEXT) \
+	dcmd_center-dcmd_center_h4_admin.$(OBJEXT) \
+	dcmd_center-dcmd_center_opr_task.$(OBJEXT) \
+	dcmd_center-dcmd_center_watch_mgr.$(OBJEXT) \
+	dcmd_center-dcmd_center_app.$(OBJEXT) \
+	dcmd_center-dcmd_center_h4_agent_opr.$(OBJEXT) \
+	dcmd_center-dcmd_center_run_opr_task.$(OBJEXT) \
+	dcmd_center-dcmd_mysql.$(OBJEXT) \
+	dcmd_center-dcmd_center.$(OBJEXT) \
+	dcmd_center-dcmd_center_h4_agent_task.$(OBJEXT) \
+	dcmd_center-dcmd_center_run_subtask_task.$(OBJEXT) \
+	dcmd_center-dcmd_xml_parse.$(OBJEXT) \
+	dcmd_center-dcmd_center_config.$(OBJEXT) \
+	dcmd_center-dcmd_center_h4_check.$(OBJEXT) \
+	dcmd_center-dcmd_center_subtask_output_task.$(OBJEXT) \
+	dcmd_center-dcmd_center_def.$(OBJEXT) \
+	dcmd_center-dcmd_center_opr_cache.$(OBJEXT) \
+	dcmd_center-dcmd_center_task_mgr.$(OBJEXT) \
+	dcmd_center-dcmd_def.$(OBJEXT) \
+	dcmd_center-dcmd_cmn.pb.$(OBJEXT) \
+	dcmd_center-dcmd_ui.pb.$(OBJEXT) \
+	dcmd_center-dcmd_agent.pb.$(OBJEXT) \
+	dcmd_center-dcmd_tss.$(OBJEXT)
+dcmd_center_OBJECTS = $(am_dcmd_center_OBJECTS)
+dcmd_center_DEPENDENCIES =
 DEFAULT_INCLUDES = -I. -I$(srcdir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -89,8 +90,8 @@ LTCXXCOMPILE = $(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) \
 CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --tag=CXX --mode=link $(CXXLD) $(AM_CXXFLAGS) \
 	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-SOURCES = $(dcmd_agent_SOURCES)
-DIST_SOURCES = $(dcmd_agent_SOURCES)
+SOURCES = $(dcmd_center_SOURCES)
+DIST_SOURCES = $(dcmd_center_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -207,8 +208,8 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 pkgconfigdir = 
 BUILD_DATE = $(shell date +%F)
-dcmd_agent_CPPFLAGS = -D_BUILD_DATE="$(BUILD_DATE)" -W -Wall
-dcmd_agent_SOURCES = dcmd_center_agent_mgr.cc\
+dcmd_center_CPPFLAGS = -D_BUILD_DATE="$(BUILD_DATE)" -W -Wall
+dcmd_center_SOURCES = dcmd_center_agent_mgr.cc\
 		dcmd_center_h4_admin.cc\
 		dcmd_center_opr_task.cc\
 		dcmd_center_watch_mgr.cc\
@@ -232,8 +233,8 @@ dcmd_agent_SOURCES = dcmd_center_agent_mgr.cc\
 		../cmn/dcmd_agent.pb.cc\
 		../cmn/dcmd_tss.cc
 
-dcmd_agent_LDADD = 
-dcmd_agent_LDFLAGS = 
+dcmd_center_LDADD = 
+dcmd_center_LDFLAGS = 
 INCLUDES = -I@cwinux_dir@/app -I@cwinux_dir@/cmn -I@cwinux_dir@/net -I@protobuf_dir@ -I@mysql_dir@ -I@expat_dir@ -I. -I../cmn
 all: all-am
 
@@ -300,9 +301,9 @@ clean-binPROGRAMS:
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
-dcmd_agent$(EXEEXT): $(dcmd_agent_OBJECTS) $(dcmd_agent_DEPENDENCIES) 
-	@rm -f dcmd_agent$(EXEEXT)
-	$(CXXLINK) $(dcmd_agent_LDFLAGS) $(dcmd_agent_OBJECTS) $(dcmd_agent_LDADD) $(LIBS)
+dcmd_center$(EXEEXT): $(dcmd_center_OBJECTS) $(dcmd_center_DEPENDENCIES) 
+	@rm -f dcmd_center$(EXEEXT)
+	$(CXXLINK) $(dcmd_center_LDFLAGS) $(dcmd_center_OBJECTS) $(dcmd_center_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -310,29 +311,29 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_agent-dcmd_agent.pb.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_agent-dcmd_center.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_agent-dcmd_center_agent_mgr.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_agent-dcmd_center_app.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_agent-dcmd_center_config.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_agent-dcmd_center_def.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_agent-dcmd_center_h4_admin.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_agent-dcmd_center_h4_agent_opr.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_agent-dcmd_center_h4_agent_task.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_agent-dcmd_center_h4_check.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_agent-dcmd_center_opr_cache.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_agent-dcmd_center_opr_task.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_agent-dcmd_center_run_opr_task.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_agent-dcmd_center_run_subtask_task.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_agent-dcmd_center_subtask_output_task.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_agent-dcmd_center_task_mgr.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_agent-dcmd_center_watch_mgr.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_agent-dcmd_cmn.pb.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_agent-dcmd_def.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_agent-dcmd_mysql.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_agent-dcmd_tss.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_agent-dcmd_ui.pb.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_agent-dcmd_xml_parse.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_center-dcmd_agent.pb.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_center-dcmd_center.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_center-dcmd_center_agent_mgr.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_center-dcmd_center_app.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_center-dcmd_center_config.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_center-dcmd_center_def.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_center-dcmd_center_h4_admin.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_center-dcmd_center_h4_agent_opr.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_center-dcmd_center_h4_agent_task.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_center-dcmd_center_h4_check.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_center-dcmd_center_opr_cache.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_center-dcmd_center_opr_task.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_center-dcmd_center_run_opr_task.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_center-dcmd_center_run_subtask_task.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_center-dcmd_center_subtask_output_task.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_center-dcmd_center_task_mgr.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_center-dcmd_center_watch_mgr.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_center-dcmd_cmn.pb.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_center-dcmd_def.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_center-dcmd_mysql.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_center-dcmd_tss.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_center-dcmd_ui.pb.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_center-dcmd_xml_parse.Po@am__quote@
 
 .cc.o:
 @am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
@@ -355,327 +356,327 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LTCXXCOMPILE) -c -o $@ $<
 
-dcmd_agent-dcmd_center_agent_mgr.o: dcmd_center_agent_mgr.cc
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_center_agent_mgr.o -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_center_agent_mgr.Tpo" -c -o dcmd_agent-dcmd_center_agent_mgr.o `test -f 'dcmd_center_agent_mgr.cc' || echo '$(srcdir)/'`dcmd_center_agent_mgr.cc; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_center_agent_mgr.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_center_agent_mgr.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_center_agent_mgr.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_agent_mgr.cc' object='dcmd_agent-dcmd_center_agent_mgr.o' libtool=no @AMDEPBACKSLASH@
+dcmd_center-dcmd_center_agent_mgr.o: dcmd_center_agent_mgr.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_center-dcmd_center_agent_mgr.o -MD -MP -MF "$(DEPDIR)/dcmd_center-dcmd_center_agent_mgr.Tpo" -c -o dcmd_center-dcmd_center_agent_mgr.o `test -f 'dcmd_center_agent_mgr.cc' || echo '$(srcdir)/'`dcmd_center_agent_mgr.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_center-dcmd_center_agent_mgr.Tpo" "$(DEPDIR)/dcmd_center-dcmd_center_agent_mgr.Po"; else rm -f "$(DEPDIR)/dcmd_center-dcmd_center_agent_mgr.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_agent_mgr.cc' object='dcmd_center-dcmd_center_agent_mgr.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_center_agent_mgr.o `test -f 'dcmd_center_agent_mgr.cc' || echo '$(srcdir)/'`dcmd_center_agent_mgr.cc
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_center-dcmd_center_agent_mgr.o `test -f 'dcmd_center_agent_mgr.cc' || echo '$(srcdir)/'`dcmd_center_agent_mgr.cc
 
-dcmd_agent-dcmd_center_agent_mgr.obj: dcmd_center_agent_mgr.cc
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_center_agent_mgr.obj -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_center_agent_mgr.Tpo" -c -o dcmd_agent-dcmd_center_agent_mgr.obj `if test -f 'dcmd_center_agent_mgr.cc'; then $(CYGPATH_W) 'dcmd_center_agent_mgr.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_agent_mgr.cc'; fi`; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_center_agent_mgr.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_center_agent_mgr.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_center_agent_mgr.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_agent_mgr.cc' object='dcmd_agent-dcmd_center_agent_mgr.obj' libtool=no @AMDEPBACKSLASH@
+dcmd_center-dcmd_center_agent_mgr.obj: dcmd_center_agent_mgr.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_center-dcmd_center_agent_mgr.obj -MD -MP -MF "$(DEPDIR)/dcmd_center-dcmd_center_agent_mgr.Tpo" -c -o dcmd_center-dcmd_center_agent_mgr.obj `if test -f 'dcmd_center_agent_mgr.cc'; then $(CYGPATH_W) 'dcmd_center_agent_mgr.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_agent_mgr.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_center-dcmd_center_agent_mgr.Tpo" "$(DEPDIR)/dcmd_center-dcmd_center_agent_mgr.Po"; else rm -f "$(DEPDIR)/dcmd_center-dcmd_center_agent_mgr.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_agent_mgr.cc' object='dcmd_center-dcmd_center_agent_mgr.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_center_agent_mgr.obj `if test -f 'dcmd_center_agent_mgr.cc'; then $(CYGPATH_W) 'dcmd_center_agent_mgr.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_agent_mgr.cc'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_center-dcmd_center_agent_mgr.obj `if test -f 'dcmd_center_agent_mgr.cc'; then $(CYGPATH_W) 'dcmd_center_agent_mgr.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_agent_mgr.cc'; fi`
 
-dcmd_agent-dcmd_center_h4_admin.o: dcmd_center_h4_admin.cc
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_center_h4_admin.o -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_center_h4_admin.Tpo" -c -o dcmd_agent-dcmd_center_h4_admin.o `test -f 'dcmd_center_h4_admin.cc' || echo '$(srcdir)/'`dcmd_center_h4_admin.cc; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_center_h4_admin.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_center_h4_admin.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_center_h4_admin.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_h4_admin.cc' object='dcmd_agent-dcmd_center_h4_admin.o' libtool=no @AMDEPBACKSLASH@
+dcmd_center-dcmd_center_h4_admin.o: dcmd_center_h4_admin.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_center-dcmd_center_h4_admin.o -MD -MP -MF "$(DEPDIR)/dcmd_center-dcmd_center_h4_admin.Tpo" -c -o dcmd_center-dcmd_center_h4_admin.o `test -f 'dcmd_center_h4_admin.cc' || echo '$(srcdir)/'`dcmd_center_h4_admin.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_center-dcmd_center_h4_admin.Tpo" "$(DEPDIR)/dcmd_center-dcmd_center_h4_admin.Po"; else rm -f "$(DEPDIR)/dcmd_center-dcmd_center_h4_admin.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_h4_admin.cc' object='dcmd_center-dcmd_center_h4_admin.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_center_h4_admin.o `test -f 'dcmd_center_h4_admin.cc' || echo '$(srcdir)/'`dcmd_center_h4_admin.cc
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_center-dcmd_center_h4_admin.o `test -f 'dcmd_center_h4_admin.cc' || echo '$(srcdir)/'`dcmd_center_h4_admin.cc
 
-dcmd_agent-dcmd_center_h4_admin.obj: dcmd_center_h4_admin.cc
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_center_h4_admin.obj -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_center_h4_admin.Tpo" -c -o dcmd_agent-dcmd_center_h4_admin.obj `if test -f 'dcmd_center_h4_admin.cc'; then $(CYGPATH_W) 'dcmd_center_h4_admin.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_h4_admin.cc'; fi`; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_center_h4_admin.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_center_h4_admin.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_center_h4_admin.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_h4_admin.cc' object='dcmd_agent-dcmd_center_h4_admin.obj' libtool=no @AMDEPBACKSLASH@
+dcmd_center-dcmd_center_h4_admin.obj: dcmd_center_h4_admin.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_center-dcmd_center_h4_admin.obj -MD -MP -MF "$(DEPDIR)/dcmd_center-dcmd_center_h4_admin.Tpo" -c -o dcmd_center-dcmd_center_h4_admin.obj `if test -f 'dcmd_center_h4_admin.cc'; then $(CYGPATH_W) 'dcmd_center_h4_admin.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_h4_admin.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_center-dcmd_center_h4_admin.Tpo" "$(DEPDIR)/dcmd_center-dcmd_center_h4_admin.Po"; else rm -f "$(DEPDIR)/dcmd_center-dcmd_center_h4_admin.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_h4_admin.cc' object='dcmd_center-dcmd_center_h4_admin.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_center_h4_admin.obj `if test -f 'dcmd_center_h4_admin.cc'; then $(CYGPATH_W) 'dcmd_center_h4_admin.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_h4_admin.cc'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_center-dcmd_center_h4_admin.obj `if test -f 'dcmd_center_h4_admin.cc'; then $(CYGPATH_W) 'dcmd_center_h4_admin.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_h4_admin.cc'; fi`
 
-dcmd_agent-dcmd_center_opr_task.o: dcmd_center_opr_task.cc
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_center_opr_task.o -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_center_opr_task.Tpo" -c -o dcmd_agent-dcmd_center_opr_task.o `test -f 'dcmd_center_opr_task.cc' || echo '$(srcdir)/'`dcmd_center_opr_task.cc; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_center_opr_task.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_center_opr_task.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_center_opr_task.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_opr_task.cc' object='dcmd_agent-dcmd_center_opr_task.o' libtool=no @AMDEPBACKSLASH@
+dcmd_center-dcmd_center_opr_task.o: dcmd_center_opr_task.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_center-dcmd_center_opr_task.o -MD -MP -MF "$(DEPDIR)/dcmd_center-dcmd_center_opr_task.Tpo" -c -o dcmd_center-dcmd_center_opr_task.o `test -f 'dcmd_center_opr_task.cc' || echo '$(srcdir)/'`dcmd_center_opr_task.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_center-dcmd_center_opr_task.Tpo" "$(DEPDIR)/dcmd_center-dcmd_center_opr_task.Po"; else rm -f "$(DEPDIR)/dcmd_center-dcmd_center_opr_task.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_opr_task.cc' object='dcmd_center-dcmd_center_opr_task.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_center_opr_task.o `test -f 'dcmd_center_opr_task.cc' || echo '$(srcdir)/'`dcmd_center_opr_task.cc
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_center-dcmd_center_opr_task.o `test -f 'dcmd_center_opr_task.cc' || echo '$(srcdir)/'`dcmd_center_opr_task.cc
 
-dcmd_agent-dcmd_center_opr_task.obj: dcmd_center_opr_task.cc
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_center_opr_task.obj -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_center_opr_task.Tpo" -c -o dcmd_agent-dcmd_center_opr_task.obj `if test -f 'dcmd_center_opr_task.cc'; then $(CYGPATH_W) 'dcmd_center_opr_task.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_opr_task.cc'; fi`; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_center_opr_task.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_center_opr_task.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_center_opr_task.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_opr_task.cc' object='dcmd_agent-dcmd_center_opr_task.obj' libtool=no @AMDEPBACKSLASH@
+dcmd_center-dcmd_center_opr_task.obj: dcmd_center_opr_task.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_center-dcmd_center_opr_task.obj -MD -MP -MF "$(DEPDIR)/dcmd_center-dcmd_center_opr_task.Tpo" -c -o dcmd_center-dcmd_center_opr_task.obj `if test -f 'dcmd_center_opr_task.cc'; then $(CYGPATH_W) 'dcmd_center_opr_task.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_opr_task.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_center-dcmd_center_opr_task.Tpo" "$(DEPDIR)/dcmd_center-dcmd_center_opr_task.Po"; else rm -f "$(DEPDIR)/dcmd_center-dcmd_center_opr_task.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_opr_task.cc' object='dcmd_center-dcmd_center_opr_task.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_center_opr_task.obj `if test -f 'dcmd_center_opr_task.cc'; then $(CYGPATH_W) 'dcmd_center_opr_task.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_opr_task.cc'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_center-dcmd_center_opr_task.obj `if test -f 'dcmd_center_opr_task.cc'; then $(CYGPATH_W) 'dcmd_center_opr_task.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_opr_task.cc'; fi`
 
-dcmd_agent-dcmd_center_watch_mgr.o: dcmd_center_watch_mgr.cc
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_center_watch_mgr.o -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_center_watch_mgr.Tpo" -c -o dcmd_agent-dcmd_center_watch_mgr.o `test -f 'dcmd_center_watch_mgr.cc' || echo '$(srcdir)/'`dcmd_center_watch_mgr.cc; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_center_watch_mgr.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_center_watch_mgr.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_center_watch_mgr.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_watch_mgr.cc' object='dcmd_agent-dcmd_center_watch_mgr.o' libtool=no @AMDEPBACKSLASH@
+dcmd_center-dcmd_center_watch_mgr.o: dcmd_center_watch_mgr.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_center-dcmd_center_watch_mgr.o -MD -MP -MF "$(DEPDIR)/dcmd_center-dcmd_center_watch_mgr.Tpo" -c -o dcmd_center-dcmd_center_watch_mgr.o `test -f 'dcmd_center_watch_mgr.cc' || echo '$(srcdir)/'`dcmd_center_watch_mgr.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_center-dcmd_center_watch_mgr.Tpo" "$(DEPDIR)/dcmd_center-dcmd_center_watch_mgr.Po"; else rm -f "$(DEPDIR)/dcmd_center-dcmd_center_watch_mgr.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_watch_mgr.cc' object='dcmd_center-dcmd_center_watch_mgr.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_center_watch_mgr.o `test -f 'dcmd_center_watch_mgr.cc' || echo '$(srcdir)/'`dcmd_center_watch_mgr.cc
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_center-dcmd_center_watch_mgr.o `test -f 'dcmd_center_watch_mgr.cc' || echo '$(srcdir)/'`dcmd_center_watch_mgr.cc
 
-dcmd_agent-dcmd_center_watch_mgr.obj: dcmd_center_watch_mgr.cc
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_center_watch_mgr.obj -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_center_watch_mgr.Tpo" -c -o dcmd_agent-dcmd_center_watch_mgr.obj `if test -f 'dcmd_center_watch_mgr.cc'; then $(CYGPATH_W) 'dcmd_center_watch_mgr.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_watch_mgr.cc'; fi`; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_center_watch_mgr.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_center_watch_mgr.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_center_watch_mgr.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_watch_mgr.cc' object='dcmd_agent-dcmd_center_watch_mgr.obj' libtool=no @AMDEPBACKSLASH@
+dcmd_center-dcmd_center_watch_mgr.obj: dcmd_center_watch_mgr.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_center-dcmd_center_watch_mgr.obj -MD -MP -MF "$(DEPDIR)/dcmd_center-dcmd_center_watch_mgr.Tpo" -c -o dcmd_center-dcmd_center_watch_mgr.obj `if test -f 'dcmd_center_watch_mgr.cc'; then $(CYGPATH_W) 'dcmd_center_watch_mgr.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_watch_mgr.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_center-dcmd_center_watch_mgr.Tpo" "$(DEPDIR)/dcmd_center-dcmd_center_watch_mgr.Po"; else rm -f "$(DEPDIR)/dcmd_center-dcmd_center_watch_mgr.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_watch_mgr.cc' object='dcmd_center-dcmd_center_watch_mgr.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_center_watch_mgr.obj `if test -f 'dcmd_center_watch_mgr.cc'; then $(CYGPATH_W) 'dcmd_center_watch_mgr.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_watch_mgr.cc'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_center-dcmd_center_watch_mgr.obj `if test -f 'dcmd_center_watch_mgr.cc'; then $(CYGPATH_W) 'dcmd_center_watch_mgr.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_watch_mgr.cc'; fi`
 
-dcmd_agent-dcmd_center_app.o: dcmd_center_app.cc
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_center_app.o -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_center_app.Tpo" -c -o dcmd_agent-dcmd_center_app.o `test -f 'dcmd_center_app.cc' || echo '$(srcdir)/'`dcmd_center_app.cc; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_center_app.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_center_app.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_center_app.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_app.cc' object='dcmd_agent-dcmd_center_app.o' libtool=no @AMDEPBACKSLASH@
+dcmd_center-dcmd_center_app.o: dcmd_center_app.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_center-dcmd_center_app.o -MD -MP -MF "$(DEPDIR)/dcmd_center-dcmd_center_app.Tpo" -c -o dcmd_center-dcmd_center_app.o `test -f 'dcmd_center_app.cc' || echo '$(srcdir)/'`dcmd_center_app.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_center-dcmd_center_app.Tpo" "$(DEPDIR)/dcmd_center-dcmd_center_app.Po"; else rm -f "$(DEPDIR)/dcmd_center-dcmd_center_app.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_app.cc' object='dcmd_center-dcmd_center_app.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_center_app.o `test -f 'dcmd_center_app.cc' || echo '$(srcdir)/'`dcmd_center_app.cc
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_center-dcmd_center_app.o `test -f 'dcmd_center_app.cc' || echo '$(srcdir)/'`dcmd_center_app.cc
 
-dcmd_agent-dcmd_center_app.obj: dcmd_center_app.cc
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_center_app.obj -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_center_app.Tpo" -c -o dcmd_agent-dcmd_center_app.obj `if test -f 'dcmd_center_app.cc'; then $(CYGPATH_W) 'dcmd_center_app.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_app.cc'; fi`; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_center_app.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_center_app.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_center_app.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_app.cc' object='dcmd_agent-dcmd_center_app.obj' libtool=no @AMDEPBACKSLASH@
+dcmd_center-dcmd_center_app.obj: dcmd_center_app.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_center-dcmd_center_app.obj -MD -MP -MF "$(DEPDIR)/dcmd_center-dcmd_center_app.Tpo" -c -o dcmd_center-dcmd_center_app.obj `if test -f 'dcmd_center_app.cc'; then $(CYGPATH_W) 'dcmd_center_app.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_app.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_center-dcmd_center_app.Tpo" "$(DEPDIR)/dcmd_center-dcmd_center_app.Po"; else rm -f "$(DEPDIR)/dcmd_center-dcmd_center_app.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_app.cc' object='dcmd_center-dcmd_center_app.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_center_app.obj `if test -f 'dcmd_center_app.cc'; then $(CYGPATH_W) 'dcmd_center_app.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_app.cc'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_center-dcmd_center_app.obj `if test -f 'dcmd_center_app.cc'; then $(CYGPATH_W) 'dcmd_center_app.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_app.cc'; fi`
 
-dcmd_agent-dcmd_center_h4_agent_opr.o: dcmd_center_h4_agent_opr.cc
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_center_h4_agent_opr.o -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_center_h4_agent_opr.Tpo" -c -o dcmd_agent-dcmd_center_h4_agent_opr.o `test -f 'dcmd_center_h4_agent_opr.cc' || echo '$(srcdir)/'`dcmd_center_h4_agent_opr.cc; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_center_h4_agent_opr.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_center_h4_agent_opr.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_center_h4_agent_opr.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_h4_agent_opr.cc' object='dcmd_agent-dcmd_center_h4_agent_opr.o' libtool=no @AMDEPBACKSLASH@
+dcmd_center-dcmd_center_h4_agent_opr.o: dcmd_center_h4_agent_opr.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_center-dcmd_center_h4_agent_opr.o -MD -MP -MF "$(DEPDIR)/dcmd_center-dcmd_center_h4_agent_opr.Tpo" -c -o dcmd_center-dcmd_center_h4_agent_opr.o `test -f 'dcmd_center_h4_agent_opr.cc' || echo '$(srcdir)/'`dcmd_center_h4_agent_opr.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_center-dcmd_center_h4_agent_opr.Tpo" "$(DEPDIR)/dcmd_center-dcmd_center_h4_agent_opr.Po"; else rm -f "$(DEPDIR)/dcmd_center-dcmd_center_h4_agent_opr.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_h4_agent_opr.cc' object='dcmd_center-dcmd_center_h4_agent_opr.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_center_h4_agent_opr.o `test -f 'dcmd_center_h4_agent_opr.cc' || echo '$(srcdir)/'`dcmd_center_h4_agent_opr.cc
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_center-dcmd_center_h4_agent_opr.o `test -f 'dcmd_center_h4_agent_opr.cc' || echo '$(srcdir)/'`dcmd_center_h4_agent_opr.cc
 
-dcmd_agent-dcmd_center_h4_agent_opr.obj: dcmd_center_h4_agent_opr.cc
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_center_h4_agent_opr.obj -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_center_h4_agent_opr.Tpo" -c -o dcmd_agent-dcmd_center_h4_agent_opr.obj `if test -f 'dcmd_center_h4_agent_opr.cc'; then $(CYGPATH_W) 'dcmd_center_h4_agent_opr.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_h4_agent_opr.cc'; fi`; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_center_h4_agent_opr.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_center_h4_agent_opr.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_center_h4_agent_opr.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_h4_agent_opr.cc' object='dcmd_agent-dcmd_center_h4_agent_opr.obj' libtool=no @AMDEPBACKSLASH@
+dcmd_center-dcmd_center_h4_agent_opr.obj: dcmd_center_h4_agent_opr.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_center-dcmd_center_h4_agent_opr.obj -MD -MP -MF "$(DEPDIR)/dcmd_center-dcmd_center_h4_agent_opr.Tpo" -c -o dcmd_center-dcmd_center_h4_agent_opr.obj `if test -f 'dcmd_center_h4_agent_opr.cc'; then $(CYGPATH_W) 'dcmd_center_h4_agent_opr.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_h4_agent_opr.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_center-dcmd_center_h4_agent_opr.Tpo" "$(DEPDIR)/dcmd_center-dcmd_center_h4_agent_opr.Po"; else rm -f "$(DEPDIR)/dcmd_center-dcmd_center_h4_agent_opr.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_h4_agent_opr.cc' object='dcmd_center-dcmd_center_h4_agent_opr.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_center_h4_agent_opr.obj `if test -f 'dcmd_center_h4_agent_opr.cc'; then $(CYGPATH_W) 'dcmd_center_h4_agent_opr.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_h4_agent_opr.cc'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_center-dcmd_center_h4_agent_opr.obj `if test -f 'dcmd_center_h4_agent_opr.cc'; then $(CYGPATH_W) 'dcmd_center_h4_agent_opr.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_h4_agent_opr.cc'; fi`
 
-dcmd_agent-dcmd_center_run_opr_task.o: dcmd_center_run_opr_task.cc
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_center_run_opr_task.o -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_center_run_opr_task.Tpo" -c -o dcmd_agent-dcmd_center_run_opr_task.o `test -f 'dcmd_center_run_opr_task.cc' || echo '$(srcdir)/'`dcmd_center_run_opr_task.cc; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_center_run_opr_task.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_center_run_opr_task.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_center_run_opr_task.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_run_opr_task.cc' object='dcmd_agent-dcmd_center_run_opr_task.o' libtool=no @AMDEPBACKSLASH@
+dcmd_center-dcmd_center_run_opr_task.o: dcmd_center_run_opr_task.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_center-dcmd_center_run_opr_task.o -MD -MP -MF "$(DEPDIR)/dcmd_center-dcmd_center_run_opr_task.Tpo" -c -o dcmd_center-dcmd_center_run_opr_task.o `test -f 'dcmd_center_run_opr_task.cc' || echo '$(srcdir)/'`dcmd_center_run_opr_task.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_center-dcmd_center_run_opr_task.Tpo" "$(DEPDIR)/dcmd_center-dcmd_center_run_opr_task.Po"; else rm -f "$(DEPDIR)/dcmd_center-dcmd_center_run_opr_task.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_run_opr_task.cc' object='dcmd_center-dcmd_center_run_opr_task.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_center_run_opr_task.o `test -f 'dcmd_center_run_opr_task.cc' || echo '$(srcdir)/'`dcmd_center_run_opr_task.cc
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_center-dcmd_center_run_opr_task.o `test -f 'dcmd_center_run_opr_task.cc' || echo '$(srcdir)/'`dcmd_center_run_opr_task.cc
 
-dcmd_agent-dcmd_center_run_opr_task.obj: dcmd_center_run_opr_task.cc
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_center_run_opr_task.obj -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_center_run_opr_task.Tpo" -c -o dcmd_agent-dcmd_center_run_opr_task.obj `if test -f 'dcmd_center_run_opr_task.cc'; then $(CYGPATH_W) 'dcmd_center_run_opr_task.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_run_opr_task.cc'; fi`; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_center_run_opr_task.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_center_run_opr_task.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_center_run_opr_task.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_run_opr_task.cc' object='dcmd_agent-dcmd_center_run_opr_task.obj' libtool=no @AMDEPBACKSLASH@
+dcmd_center-dcmd_center_run_opr_task.obj: dcmd_center_run_opr_task.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_center-dcmd_center_run_opr_task.obj -MD -MP -MF "$(DEPDIR)/dcmd_center-dcmd_center_run_opr_task.Tpo" -c -o dcmd_center-dcmd_center_run_opr_task.obj `if test -f 'dcmd_center_run_opr_task.cc'; then $(CYGPATH_W) 'dcmd_center_run_opr_task.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_run_opr_task.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_center-dcmd_center_run_opr_task.Tpo" "$(DEPDIR)/dcmd_center-dcmd_center_run_opr_task.Po"; else rm -f "$(DEPDIR)/dcmd_center-dcmd_center_run_opr_task.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_run_opr_task.cc' object='dcmd_center-dcmd_center_run_opr_task.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_center_run_opr_task.obj `if test -f 'dcmd_center_run_opr_task.cc'; then $(CYGPATH_W) 'dcmd_center_run_opr_task.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_run_opr_task.cc'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_center-dcmd_center_run_opr_task.obj `if test -f 'dcmd_center_run_opr_task.cc'; then $(CYGPATH_W) 'dcmd_center_run_opr_task.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_run_opr_task.cc'; fi`
 
-dcmd_agent-dcmd_mysql.o: dcmd_mysql.cc
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_mysql.o -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_mysql.Tpo" -c -o dcmd_agent-dcmd_mysql.o `test -f 'dcmd_mysql.cc' || echo '$(srcdir)/'`dcmd_mysql.cc; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_mysql.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_mysql.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_mysql.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_mysql.cc' object='dcmd_agent-dcmd_mysql.o' libtool=no @AMDEPBACKSLASH@
+dcmd_center-dcmd_mysql.o: dcmd_mysql.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_center-dcmd_mysql.o -MD -MP -MF "$(DEPDIR)/dcmd_center-dcmd_mysql.Tpo" -c -o dcmd_center-dcmd_mysql.o `test -f 'dcmd_mysql.cc' || echo '$(srcdir)/'`dcmd_mysql.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_center-dcmd_mysql.Tpo" "$(DEPDIR)/dcmd_center-dcmd_mysql.Po"; else rm -f "$(DEPDIR)/dcmd_center-dcmd_mysql.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_mysql.cc' object='dcmd_center-dcmd_mysql.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_mysql.o `test -f 'dcmd_mysql.cc' || echo '$(srcdir)/'`dcmd_mysql.cc
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_center-dcmd_mysql.o `test -f 'dcmd_mysql.cc' || echo '$(srcdir)/'`dcmd_mysql.cc
 
-dcmd_agent-dcmd_mysql.obj: dcmd_mysql.cc
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_mysql.obj -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_mysql.Tpo" -c -o dcmd_agent-dcmd_mysql.obj `if test -f 'dcmd_mysql.cc'; then $(CYGPATH_W) 'dcmd_mysql.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_mysql.cc'; fi`; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_mysql.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_mysql.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_mysql.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_mysql.cc' object='dcmd_agent-dcmd_mysql.obj' libtool=no @AMDEPBACKSLASH@
+dcmd_center-dcmd_mysql.obj: dcmd_mysql.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_center-dcmd_mysql.obj -MD -MP -MF "$(DEPDIR)/dcmd_center-dcmd_mysql.Tpo" -c -o dcmd_center-dcmd_mysql.obj `if test -f 'dcmd_mysql.cc'; then $(CYGPATH_W) 'dcmd_mysql.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_mysql.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_center-dcmd_mysql.Tpo" "$(DEPDIR)/dcmd_center-dcmd_mysql.Po"; else rm -f "$(DEPDIR)/dcmd_center-dcmd_mysql.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_mysql.cc' object='dcmd_center-dcmd_mysql.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_mysql.obj `if test -f 'dcmd_mysql.cc'; then $(CYGPATH_W) 'dcmd_mysql.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_mysql.cc'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_center-dcmd_mysql.obj `if test -f 'dcmd_mysql.cc'; then $(CYGPATH_W) 'dcmd_mysql.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_mysql.cc'; fi`
 
-dcmd_agent-dcmd_center.o: dcmd_center.cc
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_center.o -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_center.Tpo" -c -o dcmd_agent-dcmd_center.o `test -f 'dcmd_center.cc' || echo '$(srcdir)/'`dcmd_center.cc; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_center.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_center.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_center.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center.cc' object='dcmd_agent-dcmd_center.o' libtool=no @AMDEPBACKSLASH@
+dcmd_center-dcmd_center.o: dcmd_center.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_center-dcmd_center.o -MD -MP -MF "$(DEPDIR)/dcmd_center-dcmd_center.Tpo" -c -o dcmd_center-dcmd_center.o `test -f 'dcmd_center.cc' || echo '$(srcdir)/'`dcmd_center.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_center-dcmd_center.Tpo" "$(DEPDIR)/dcmd_center-dcmd_center.Po"; else rm -f "$(DEPDIR)/dcmd_center-dcmd_center.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center.cc' object='dcmd_center-dcmd_center.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_center.o `test -f 'dcmd_center.cc' || echo '$(srcdir)/'`dcmd_center.cc
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_center-dcmd_center.o `test -f 'dcmd_center.cc' || echo '$(srcdir)/'`dcmd_center.cc
 
-dcmd_agent-dcmd_center.obj: dcmd_center.cc
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_center.obj -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_center.Tpo" -c -o dcmd_agent-dcmd_center.obj `if test -f 'dcmd_center.cc'; then $(CYGPATH_W) 'dcmd_center.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center.cc'; fi`; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_center.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_center.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_center.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center.cc' object='dcmd_agent-dcmd_center.obj' libtool=no @AMDEPBACKSLASH@
+dcmd_center-dcmd_center.obj: dcmd_center.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_center-dcmd_center.obj -MD -MP -MF "$(DEPDIR)/dcmd_center-dcmd_center.Tpo" -c -o dcmd_center-dcmd_center.obj `if test -f 'dcmd_center.cc'; then $(CYGPATH_W) 'dcmd_center.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_center-dcmd_center.Tpo" "$(DEPDIR)/dcmd_center-dcmd_center.Po"; else rm -f "$(DEPDIR)/dcmd_center-dcmd_center.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center.cc' object='dcmd_center-dcmd_center.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_center.obj `if test -f 'dcmd_center.cc'; then $(CYGPATH_W) 'dcmd_center.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center.cc'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_center-dcmd_center.obj `if test -f 'dcmd_center.cc'; then $(CYGPATH_W) 'dcmd_center.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center.cc'; fi`
 
-dcmd_agent-dcmd_center_h4_agent_task.o: dcmd_center_h4_agent_task.cc
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_center_h4_agent_task.o -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_center_h4_agent_task.Tpo" -c -o dcmd_agent-dcmd_center_h4_agent_task.o `test -f 'dcmd_center_h4_agent_task.cc' || echo '$(srcdir)/'`dcmd_center_h4_agent_task.cc; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_center_h4_agent_task.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_center_h4_agent_task.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_center_h4_agent_task.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_h4_agent_task.cc' object='dcmd_agent-dcmd_center_h4_agent_task.o' libtool=no @AMDEPBACKSLASH@
+dcmd_center-dcmd_center_h4_agent_task.o: dcmd_center_h4_agent_task.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_center-dcmd_center_h4_agent_task.o -MD -MP -MF "$(DEPDIR)/dcmd_center-dcmd_center_h4_agent_task.Tpo" -c -o dcmd_center-dcmd_center_h4_agent_task.o `test -f 'dcmd_center_h4_agent_task.cc' || echo '$(srcdir)/'`dcmd_center_h4_agent_task.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_center-dcmd_center_h4_agent_task.Tpo" "$(DEPDIR)/dcmd_center-dcmd_center_h4_agent_task.Po"; else rm -f "$(DEPDIR)/dcmd_center-dcmd_center_h4_agent_task.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_h4_agent_task.cc' object='dcmd_center-dcmd_center_h4_agent_task.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_center_h4_agent_task.o `test -f 'dcmd_center_h4_agent_task.cc' || echo '$(srcdir)/'`dcmd_center_h4_agent_task.cc
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_center-dcmd_center_h4_agent_task.o `test -f 'dcmd_center_h4_agent_task.cc' || echo '$(srcdir)/'`dcmd_center_h4_agent_task.cc
 
-dcmd_agent-dcmd_center_h4_agent_task.obj: dcmd_center_h4_agent_task.cc
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_center_h4_agent_task.obj -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_center_h4_agent_task.Tpo" -c -o dcmd_agent-dcmd_center_h4_agent_task.obj `if test -f 'dcmd_center_h4_agent_task.cc'; then $(CYGPATH_W) 'dcmd_center_h4_agent_task.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_h4_agent_task.cc'; fi`; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_center_h4_agent_task.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_center_h4_agent_task.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_center_h4_agent_task.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_h4_agent_task.cc' object='dcmd_agent-dcmd_center_h4_agent_task.obj' libtool=no @AMDEPBACKSLASH@
+dcmd_center-dcmd_center_h4_agent_task.obj: dcmd_center_h4_agent_task.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_center-dcmd_center_h4_agent_task.obj -MD -MP -MF "$(DEPDIR)/dcmd_center-dcmd_center_h4_agent_task.Tpo" -c -o dcmd_center-dcmd_center_h4_agent_task.obj `if test -f 'dcmd_center_h4_agent_task.cc'; then $(CYGPATH_W) 'dcmd_center_h4_agent_task.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_h4_agent_task.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_center-dcmd_center_h4_agent_task.Tpo" "$(DEPDIR)/dcmd_center-dcmd_center_h4_agent_task.Po"; else rm -f "$(DEPDIR)/dcmd_center-dcmd_center_h4_agent_task.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_h4_agent_task.cc' object='dcmd_center-dcmd_center_h4_agent_task.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_center_h4_agent_task.obj `if test -f 'dcmd_center_h4_agent_task.cc'; then $(CYGPATH_W) 'dcmd_center_h4_agent_task.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_h4_agent_task.cc'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_center-dcmd_center_h4_agent_task.obj `if test -f 'dcmd_center_h4_agent_task.cc'; then $(CYGPATH_W) 'dcmd_center_h4_agent_task.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_h4_agent_task.cc'; fi`
 
-dcmd_agent-dcmd_center_run_subtask_task.o: dcmd_center_run_subtask_task.cc
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_center_run_subtask_task.o -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_center_run_subtask_task.Tpo" -c -o dcmd_agent-dcmd_center_run_subtask_task.o `test -f 'dcmd_center_run_subtask_task.cc' || echo '$(srcdir)/'`dcmd_center_run_subtask_task.cc; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_center_run_subtask_task.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_center_run_subtask_task.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_center_run_subtask_task.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_run_subtask_task.cc' object='dcmd_agent-dcmd_center_run_subtask_task.o' libtool=no @AMDEPBACKSLASH@
+dcmd_center-dcmd_center_run_subtask_task.o: dcmd_center_run_subtask_task.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_center-dcmd_center_run_subtask_task.o -MD -MP -MF "$(DEPDIR)/dcmd_center-dcmd_center_run_subtask_task.Tpo" -c -o dcmd_center-dcmd_center_run_subtask_task.o `test -f 'dcmd_center_run_subtask_task.cc' || echo '$(srcdir)/'`dcmd_center_run_subtask_task.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_center-dcmd_center_run_subtask_task.Tpo" "$(DEPDIR)/dcmd_center-dcmd_center_run_subtask_task.Po"; else rm -f "$(DEPDIR)/dcmd_center-dcmd_center_run_subtask_task.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_run_subtask_task.cc' object='dcmd_center-dcmd_center_run_subtask_task.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_center_run_subtask_task.o `test -f 'dcmd_center_run_subtask_task.cc' || echo '$(srcdir)/'`dcmd_center_run_subtask_task.cc
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_center-dcmd_center_run_subtask_task.o `test -f 'dcmd_center_run_subtask_task.cc' || echo '$(srcdir)/'`dcmd_center_run_subtask_task.cc
 
-dcmd_agent-dcmd_center_run_subtask_task.obj: dcmd_center_run_subtask_task.cc
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_center_run_subtask_task.obj -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_center_run_subtask_task.Tpo" -c -o dcmd_agent-dcmd_center_run_subtask_task.obj `if test -f 'dcmd_center_run_subtask_task.cc'; then $(CYGPATH_W) 'dcmd_center_run_subtask_task.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_run_subtask_task.cc'; fi`; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_center_run_subtask_task.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_center_run_subtask_task.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_center_run_subtask_task.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_run_subtask_task.cc' object='dcmd_agent-dcmd_center_run_subtask_task.obj' libtool=no @AMDEPBACKSLASH@
+dcmd_center-dcmd_center_run_subtask_task.obj: dcmd_center_run_subtask_task.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_center-dcmd_center_run_subtask_task.obj -MD -MP -MF "$(DEPDIR)/dcmd_center-dcmd_center_run_subtask_task.Tpo" -c -o dcmd_center-dcmd_center_run_subtask_task.obj `if test -f 'dcmd_center_run_subtask_task.cc'; then $(CYGPATH_W) 'dcmd_center_run_subtask_task.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_run_subtask_task.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_center-dcmd_center_run_subtask_task.Tpo" "$(DEPDIR)/dcmd_center-dcmd_center_run_subtask_task.Po"; else rm -f "$(DEPDIR)/dcmd_center-dcmd_center_run_subtask_task.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_run_subtask_task.cc' object='dcmd_center-dcmd_center_run_subtask_task.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_center_run_subtask_task.obj `if test -f 'dcmd_center_run_subtask_task.cc'; then $(CYGPATH_W) 'dcmd_center_run_subtask_task.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_run_subtask_task.cc'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_center-dcmd_center_run_subtask_task.obj `if test -f 'dcmd_center_run_subtask_task.cc'; then $(CYGPATH_W) 'dcmd_center_run_subtask_task.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_run_subtask_task.cc'; fi`
 
-dcmd_agent-dcmd_xml_parse.o: dcmd_xml_parse.cc
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_xml_parse.o -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_xml_parse.Tpo" -c -o dcmd_agent-dcmd_xml_parse.o `test -f 'dcmd_xml_parse.cc' || echo '$(srcdir)/'`dcmd_xml_parse.cc; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_xml_parse.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_xml_parse.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_xml_parse.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_xml_parse.cc' object='dcmd_agent-dcmd_xml_parse.o' libtool=no @AMDEPBACKSLASH@
+dcmd_center-dcmd_xml_parse.o: dcmd_xml_parse.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_center-dcmd_xml_parse.o -MD -MP -MF "$(DEPDIR)/dcmd_center-dcmd_xml_parse.Tpo" -c -o dcmd_center-dcmd_xml_parse.o `test -f 'dcmd_xml_parse.cc' || echo '$(srcdir)/'`dcmd_xml_parse.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_center-dcmd_xml_parse.Tpo" "$(DEPDIR)/dcmd_center-dcmd_xml_parse.Po"; else rm -f "$(DEPDIR)/dcmd_center-dcmd_xml_parse.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_xml_parse.cc' object='dcmd_center-dcmd_xml_parse.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_xml_parse.o `test -f 'dcmd_xml_parse.cc' || echo '$(srcdir)/'`dcmd_xml_parse.cc
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_center-dcmd_xml_parse.o `test -f 'dcmd_xml_parse.cc' || echo '$(srcdir)/'`dcmd_xml_parse.cc
 
-dcmd_agent-dcmd_xml_parse.obj: dcmd_xml_parse.cc
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_xml_parse.obj -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_xml_parse.Tpo" -c -o dcmd_agent-dcmd_xml_parse.obj `if test -f 'dcmd_xml_parse.cc'; then $(CYGPATH_W) 'dcmd_xml_parse.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_xml_parse.cc'; fi`; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_xml_parse.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_xml_parse.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_xml_parse.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_xml_parse.cc' object='dcmd_agent-dcmd_xml_parse.obj' libtool=no @AMDEPBACKSLASH@
+dcmd_center-dcmd_xml_parse.obj: dcmd_xml_parse.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_center-dcmd_xml_parse.obj -MD -MP -MF "$(DEPDIR)/dcmd_center-dcmd_xml_parse.Tpo" -c -o dcmd_center-dcmd_xml_parse.obj `if test -f 'dcmd_xml_parse.cc'; then $(CYGPATH_W) 'dcmd_xml_parse.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_xml_parse.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_center-dcmd_xml_parse.Tpo" "$(DEPDIR)/dcmd_center-dcmd_xml_parse.Po"; else rm -f "$(DEPDIR)/dcmd_center-dcmd_xml_parse.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_xml_parse.cc' object='dcmd_center-dcmd_xml_parse.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_xml_parse.obj `if test -f 'dcmd_xml_parse.cc'; then $(CYGPATH_W) 'dcmd_xml_parse.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_xml_parse.cc'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_center-dcmd_xml_parse.obj `if test -f 'dcmd_xml_parse.cc'; then $(CYGPATH_W) 'dcmd_xml_parse.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_xml_parse.cc'; fi`
 
-dcmd_agent-dcmd_center_config.o: dcmd_center_config.cc
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_center_config.o -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_center_config.Tpo" -c -o dcmd_agent-dcmd_center_config.o `test -f 'dcmd_center_config.cc' || echo '$(srcdir)/'`dcmd_center_config.cc; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_center_config.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_center_config.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_center_config.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_config.cc' object='dcmd_agent-dcmd_center_config.o' libtool=no @AMDEPBACKSLASH@
+dcmd_center-dcmd_center_config.o: dcmd_center_config.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_center-dcmd_center_config.o -MD -MP -MF "$(DEPDIR)/dcmd_center-dcmd_center_config.Tpo" -c -o dcmd_center-dcmd_center_config.o `test -f 'dcmd_center_config.cc' || echo '$(srcdir)/'`dcmd_center_config.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_center-dcmd_center_config.Tpo" "$(DEPDIR)/dcmd_center-dcmd_center_config.Po"; else rm -f "$(DEPDIR)/dcmd_center-dcmd_center_config.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_config.cc' object='dcmd_center-dcmd_center_config.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_center_config.o `test -f 'dcmd_center_config.cc' || echo '$(srcdir)/'`dcmd_center_config.cc
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_center-dcmd_center_config.o `test -f 'dcmd_center_config.cc' || echo '$(srcdir)/'`dcmd_center_config.cc
 
-dcmd_agent-dcmd_center_config.obj: dcmd_center_config.cc
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_center_config.obj -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_center_config.Tpo" -c -o dcmd_agent-dcmd_center_config.obj `if test -f 'dcmd_center_config.cc'; then $(CYGPATH_W) 'dcmd_center_config.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_config.cc'; fi`; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_center_config.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_center_config.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_center_config.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_config.cc' object='dcmd_agent-dcmd_center_config.obj' libtool=no @AMDEPBACKSLASH@
+dcmd_center-dcmd_center_config.obj: dcmd_center_config.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_center-dcmd_center_config.obj -MD -MP -MF "$(DEPDIR)/dcmd_center-dcmd_center_config.Tpo" -c -o dcmd_center-dcmd_center_config.obj `if test -f 'dcmd_center_config.cc'; then $(CYGPATH_W) 'dcmd_center_config.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_config.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_center-dcmd_center_config.Tpo" "$(DEPDIR)/dcmd_center-dcmd_center_config.Po"; else rm -f "$(DEPDIR)/dcmd_center-dcmd_center_config.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_config.cc' object='dcmd_center-dcmd_center_config.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_center_config.obj `if test -f 'dcmd_center_config.cc'; then $(CYGPATH_W) 'dcmd_center_config.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_config.cc'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_center-dcmd_center_config.obj `if test -f 'dcmd_center_config.cc'; then $(CYGPATH_W) 'dcmd_center_config.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_config.cc'; fi`
 
-dcmd_agent-dcmd_center_h4_check.o: dcmd_center_h4_check.cc
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_center_h4_check.o -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_center_h4_check.Tpo" -c -o dcmd_agent-dcmd_center_h4_check.o `test -f 'dcmd_center_h4_check.cc' || echo '$(srcdir)/'`dcmd_center_h4_check.cc; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_center_h4_check.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_center_h4_check.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_center_h4_check.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_h4_check.cc' object='dcmd_agent-dcmd_center_h4_check.o' libtool=no @AMDEPBACKSLASH@
+dcmd_center-dcmd_center_h4_check.o: dcmd_center_h4_check.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_center-dcmd_center_h4_check.o -MD -MP -MF "$(DEPDIR)/dcmd_center-dcmd_center_h4_check.Tpo" -c -o dcmd_center-dcmd_center_h4_check.o `test -f 'dcmd_center_h4_check.cc' || echo '$(srcdir)/'`dcmd_center_h4_check.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_center-dcmd_center_h4_check.Tpo" "$(DEPDIR)/dcmd_center-dcmd_center_h4_check.Po"; else rm -f "$(DEPDIR)/dcmd_center-dcmd_center_h4_check.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_h4_check.cc' object='dcmd_center-dcmd_center_h4_check.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_center_h4_check.o `test -f 'dcmd_center_h4_check.cc' || echo '$(srcdir)/'`dcmd_center_h4_check.cc
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_center-dcmd_center_h4_check.o `test -f 'dcmd_center_h4_check.cc' || echo '$(srcdir)/'`dcmd_center_h4_check.cc
 
-dcmd_agent-dcmd_center_h4_check.obj: dcmd_center_h4_check.cc
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_center_h4_check.obj -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_center_h4_check.Tpo" -c -o dcmd_agent-dcmd_center_h4_check.obj `if test -f 'dcmd_center_h4_check.cc'; then $(CYGPATH_W) 'dcmd_center_h4_check.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_h4_check.cc'; fi`; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_center_h4_check.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_center_h4_check.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_center_h4_check.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_h4_check.cc' object='dcmd_agent-dcmd_center_h4_check.obj' libtool=no @AMDEPBACKSLASH@
+dcmd_center-dcmd_center_h4_check.obj: dcmd_center_h4_check.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_center-dcmd_center_h4_check.obj -MD -MP -MF "$(DEPDIR)/dcmd_center-dcmd_center_h4_check.Tpo" -c -o dcmd_center-dcmd_center_h4_check.obj `if test -f 'dcmd_center_h4_check.cc'; then $(CYGPATH_W) 'dcmd_center_h4_check.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_h4_check.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_center-dcmd_center_h4_check.Tpo" "$(DEPDIR)/dcmd_center-dcmd_center_h4_check.Po"; else rm -f "$(DEPDIR)/dcmd_center-dcmd_center_h4_check.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_h4_check.cc' object='dcmd_center-dcmd_center_h4_check.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_center_h4_check.obj `if test -f 'dcmd_center_h4_check.cc'; then $(CYGPATH_W) 'dcmd_center_h4_check.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_h4_check.cc'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_center-dcmd_center_h4_check.obj `if test -f 'dcmd_center_h4_check.cc'; then $(CYGPATH_W) 'dcmd_center_h4_check.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_h4_check.cc'; fi`
 
-dcmd_agent-dcmd_center_subtask_output_task.o: dcmd_center_subtask_output_task.cc
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_center_subtask_output_task.o -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_center_subtask_output_task.Tpo" -c -o dcmd_agent-dcmd_center_subtask_output_task.o `test -f 'dcmd_center_subtask_output_task.cc' || echo '$(srcdir)/'`dcmd_center_subtask_output_task.cc; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_center_subtask_output_task.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_center_subtask_output_task.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_center_subtask_output_task.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_subtask_output_task.cc' object='dcmd_agent-dcmd_center_subtask_output_task.o' libtool=no @AMDEPBACKSLASH@
+dcmd_center-dcmd_center_subtask_output_task.o: dcmd_center_subtask_output_task.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_center-dcmd_center_subtask_output_task.o -MD -MP -MF "$(DEPDIR)/dcmd_center-dcmd_center_subtask_output_task.Tpo" -c -o dcmd_center-dcmd_center_subtask_output_task.o `test -f 'dcmd_center_subtask_output_task.cc' || echo '$(srcdir)/'`dcmd_center_subtask_output_task.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_center-dcmd_center_subtask_output_task.Tpo" "$(DEPDIR)/dcmd_center-dcmd_center_subtask_output_task.Po"; else rm -f "$(DEPDIR)/dcmd_center-dcmd_center_subtask_output_task.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_subtask_output_task.cc' object='dcmd_center-dcmd_center_subtask_output_task.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_center_subtask_output_task.o `test -f 'dcmd_center_subtask_output_task.cc' || echo '$(srcdir)/'`dcmd_center_subtask_output_task.cc
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_center-dcmd_center_subtask_output_task.o `test -f 'dcmd_center_subtask_output_task.cc' || echo '$(srcdir)/'`dcmd_center_subtask_output_task.cc
 
-dcmd_agent-dcmd_center_subtask_output_task.obj: dcmd_center_subtask_output_task.cc
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_center_subtask_output_task.obj -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_center_subtask_output_task.Tpo" -c -o dcmd_agent-dcmd_center_subtask_output_task.obj `if test -f 'dcmd_center_subtask_output_task.cc'; then $(CYGPATH_W) 'dcmd_center_subtask_output_task.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_subtask_output_task.cc'; fi`; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_center_subtask_output_task.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_center_subtask_output_task.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_center_subtask_output_task.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_subtask_output_task.cc' object='dcmd_agent-dcmd_center_subtask_output_task.obj' libtool=no @AMDEPBACKSLASH@
+dcmd_center-dcmd_center_subtask_output_task.obj: dcmd_center_subtask_output_task.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_center-dcmd_center_subtask_output_task.obj -MD -MP -MF "$(DEPDIR)/dcmd_center-dcmd_center_subtask_output_task.Tpo" -c -o dcmd_center-dcmd_center_subtask_output_task.obj `if test -f 'dcmd_center_subtask_output_task.cc'; then $(CYGPATH_W) 'dcmd_center_subtask_output_task.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_subtask_output_task.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_center-dcmd_center_subtask_output_task.Tpo" "$(DEPDIR)/dcmd_center-dcmd_center_subtask_output_task.Po"; else rm -f "$(DEPDIR)/dcmd_center-dcmd_center_subtask_output_task.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_subtask_output_task.cc' object='dcmd_center-dcmd_center_subtask_output_task.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_center_subtask_output_task.obj `if test -f 'dcmd_center_subtask_output_task.cc'; then $(CYGPATH_W) 'dcmd_center_subtask_output_task.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_subtask_output_task.cc'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_center-dcmd_center_subtask_output_task.obj `if test -f 'dcmd_center_subtask_output_task.cc'; then $(CYGPATH_W) 'dcmd_center_subtask_output_task.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_subtask_output_task.cc'; fi`
 
-dcmd_agent-dcmd_center_def.o: dcmd_center_def.cc
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_center_def.o -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_center_def.Tpo" -c -o dcmd_agent-dcmd_center_def.o `test -f 'dcmd_center_def.cc' || echo '$(srcdir)/'`dcmd_center_def.cc; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_center_def.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_center_def.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_center_def.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_def.cc' object='dcmd_agent-dcmd_center_def.o' libtool=no @AMDEPBACKSLASH@
+dcmd_center-dcmd_center_def.o: dcmd_center_def.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_center-dcmd_center_def.o -MD -MP -MF "$(DEPDIR)/dcmd_center-dcmd_center_def.Tpo" -c -o dcmd_center-dcmd_center_def.o `test -f 'dcmd_center_def.cc' || echo '$(srcdir)/'`dcmd_center_def.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_center-dcmd_center_def.Tpo" "$(DEPDIR)/dcmd_center-dcmd_center_def.Po"; else rm -f "$(DEPDIR)/dcmd_center-dcmd_center_def.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_def.cc' object='dcmd_center-dcmd_center_def.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_center_def.o `test -f 'dcmd_center_def.cc' || echo '$(srcdir)/'`dcmd_center_def.cc
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_center-dcmd_center_def.o `test -f 'dcmd_center_def.cc' || echo '$(srcdir)/'`dcmd_center_def.cc
 
-dcmd_agent-dcmd_center_def.obj: dcmd_center_def.cc
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_center_def.obj -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_center_def.Tpo" -c -o dcmd_agent-dcmd_center_def.obj `if test -f 'dcmd_center_def.cc'; then $(CYGPATH_W) 'dcmd_center_def.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_def.cc'; fi`; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_center_def.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_center_def.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_center_def.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_def.cc' object='dcmd_agent-dcmd_center_def.obj' libtool=no @AMDEPBACKSLASH@
+dcmd_center-dcmd_center_def.obj: dcmd_center_def.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_center-dcmd_center_def.obj -MD -MP -MF "$(DEPDIR)/dcmd_center-dcmd_center_def.Tpo" -c -o dcmd_center-dcmd_center_def.obj `if test -f 'dcmd_center_def.cc'; then $(CYGPATH_W) 'dcmd_center_def.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_def.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_center-dcmd_center_def.Tpo" "$(DEPDIR)/dcmd_center-dcmd_center_def.Po"; else rm -f "$(DEPDIR)/dcmd_center-dcmd_center_def.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_def.cc' object='dcmd_center-dcmd_center_def.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_center_def.obj `if test -f 'dcmd_center_def.cc'; then $(CYGPATH_W) 'dcmd_center_def.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_def.cc'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_center-dcmd_center_def.obj `if test -f 'dcmd_center_def.cc'; then $(CYGPATH_W) 'dcmd_center_def.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_def.cc'; fi`
 
-dcmd_agent-dcmd_center_opr_cache.o: dcmd_center_opr_cache.cc
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_center_opr_cache.o -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_center_opr_cache.Tpo" -c -o dcmd_agent-dcmd_center_opr_cache.o `test -f 'dcmd_center_opr_cache.cc' || echo '$(srcdir)/'`dcmd_center_opr_cache.cc; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_center_opr_cache.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_center_opr_cache.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_center_opr_cache.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_opr_cache.cc' object='dcmd_agent-dcmd_center_opr_cache.o' libtool=no @AMDEPBACKSLASH@
+dcmd_center-dcmd_center_opr_cache.o: dcmd_center_opr_cache.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_center-dcmd_center_opr_cache.o -MD -MP -MF "$(DEPDIR)/dcmd_center-dcmd_center_opr_cache.Tpo" -c -o dcmd_center-dcmd_center_opr_cache.o `test -f 'dcmd_center_opr_cache.cc' || echo '$(srcdir)/'`dcmd_center_opr_cache.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_center-dcmd_center_opr_cache.Tpo" "$(DEPDIR)/dcmd_center-dcmd_center_opr_cache.Po"; else rm -f "$(DEPDIR)/dcmd_center-dcmd_center_opr_cache.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_opr_cache.cc' object='dcmd_center-dcmd_center_opr_cache.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_center_opr_cache.o `test -f 'dcmd_center_opr_cache.cc' || echo '$(srcdir)/'`dcmd_center_opr_cache.cc
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_center-dcmd_center_opr_cache.o `test -f 'dcmd_center_opr_cache.cc' || echo '$(srcdir)/'`dcmd_center_opr_cache.cc
 
-dcmd_agent-dcmd_center_opr_cache.obj: dcmd_center_opr_cache.cc
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_center_opr_cache.obj -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_center_opr_cache.Tpo" -c -o dcmd_agent-dcmd_center_opr_cache.obj `if test -f 'dcmd_center_opr_cache.cc'; then $(CYGPATH_W) 'dcmd_center_opr_cache.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_opr_cache.cc'; fi`; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_center_opr_cache.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_center_opr_cache.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_center_opr_cache.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_opr_cache.cc' object='dcmd_agent-dcmd_center_opr_cache.obj' libtool=no @AMDEPBACKSLASH@
+dcmd_center-dcmd_center_opr_cache.obj: dcmd_center_opr_cache.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_center-dcmd_center_opr_cache.obj -MD -MP -MF "$(DEPDIR)/dcmd_center-dcmd_center_opr_cache.Tpo" -c -o dcmd_center-dcmd_center_opr_cache.obj `if test -f 'dcmd_center_opr_cache.cc'; then $(CYGPATH_W) 'dcmd_center_opr_cache.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_opr_cache.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_center-dcmd_center_opr_cache.Tpo" "$(DEPDIR)/dcmd_center-dcmd_center_opr_cache.Po"; else rm -f "$(DEPDIR)/dcmd_center-dcmd_center_opr_cache.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_opr_cache.cc' object='dcmd_center-dcmd_center_opr_cache.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_center_opr_cache.obj `if test -f 'dcmd_center_opr_cache.cc'; then $(CYGPATH_W) 'dcmd_center_opr_cache.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_opr_cache.cc'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_center-dcmd_center_opr_cache.obj `if test -f 'dcmd_center_opr_cache.cc'; then $(CYGPATH_W) 'dcmd_center_opr_cache.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_opr_cache.cc'; fi`
 
-dcmd_agent-dcmd_center_task_mgr.o: dcmd_center_task_mgr.cc
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_center_task_mgr.o -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_center_task_mgr.Tpo" -c -o dcmd_agent-dcmd_center_task_mgr.o `test -f 'dcmd_center_task_mgr.cc' || echo '$(srcdir)/'`dcmd_center_task_mgr.cc; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_center_task_mgr.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_center_task_mgr.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_center_task_mgr.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_task_mgr.cc' object='dcmd_agent-dcmd_center_task_mgr.o' libtool=no @AMDEPBACKSLASH@
+dcmd_center-dcmd_center_task_mgr.o: dcmd_center_task_mgr.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_center-dcmd_center_task_mgr.o -MD -MP -MF "$(DEPDIR)/dcmd_center-dcmd_center_task_mgr.Tpo" -c -o dcmd_center-dcmd_center_task_mgr.o `test -f 'dcmd_center_task_mgr.cc' || echo '$(srcdir)/'`dcmd_center_task_mgr.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_center-dcmd_center_task_mgr.Tpo" "$(DEPDIR)/dcmd_center-dcmd_center_task_mgr.Po"; else rm -f "$(DEPDIR)/dcmd_center-dcmd_center_task_mgr.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_task_mgr.cc' object='dcmd_center-dcmd_center_task_mgr.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_center_task_mgr.o `test -f 'dcmd_center_task_mgr.cc' || echo '$(srcdir)/'`dcmd_center_task_mgr.cc
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_center-dcmd_center_task_mgr.o `test -f 'dcmd_center_task_mgr.cc' || echo '$(srcdir)/'`dcmd_center_task_mgr.cc
 
-dcmd_agent-dcmd_center_task_mgr.obj: dcmd_center_task_mgr.cc
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_center_task_mgr.obj -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_center_task_mgr.Tpo" -c -o dcmd_agent-dcmd_center_task_mgr.obj `if test -f 'dcmd_center_task_mgr.cc'; then $(CYGPATH_W) 'dcmd_center_task_mgr.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_task_mgr.cc'; fi`; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_center_task_mgr.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_center_task_mgr.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_center_task_mgr.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_task_mgr.cc' object='dcmd_agent-dcmd_center_task_mgr.obj' libtool=no @AMDEPBACKSLASH@
+dcmd_center-dcmd_center_task_mgr.obj: dcmd_center_task_mgr.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_center-dcmd_center_task_mgr.obj -MD -MP -MF "$(DEPDIR)/dcmd_center-dcmd_center_task_mgr.Tpo" -c -o dcmd_center-dcmd_center_task_mgr.obj `if test -f 'dcmd_center_task_mgr.cc'; then $(CYGPATH_W) 'dcmd_center_task_mgr.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_task_mgr.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_center-dcmd_center_task_mgr.Tpo" "$(DEPDIR)/dcmd_center-dcmd_center_task_mgr.Po"; else rm -f "$(DEPDIR)/dcmd_center-dcmd_center_task_mgr.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dcmd_center_task_mgr.cc' object='dcmd_center-dcmd_center_task_mgr.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_center_task_mgr.obj `if test -f 'dcmd_center_task_mgr.cc'; then $(CYGPATH_W) 'dcmd_center_task_mgr.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_task_mgr.cc'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_center-dcmd_center_task_mgr.obj `if test -f 'dcmd_center_task_mgr.cc'; then $(CYGPATH_W) 'dcmd_center_task_mgr.cc'; else $(CYGPATH_W) '$(srcdir)/dcmd_center_task_mgr.cc'; fi`
 
-dcmd_agent-dcmd_def.o: ../cmn/dcmd_def.cc
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_def.o -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_def.Tpo" -c -o dcmd_agent-dcmd_def.o `test -f '../cmn/dcmd_def.cc' || echo '$(srcdir)/'`../cmn/dcmd_def.cc; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_def.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_def.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_def.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_def.cc' object='dcmd_agent-dcmd_def.o' libtool=no @AMDEPBACKSLASH@
+dcmd_center-dcmd_def.o: ../cmn/dcmd_def.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_center-dcmd_def.o -MD -MP -MF "$(DEPDIR)/dcmd_center-dcmd_def.Tpo" -c -o dcmd_center-dcmd_def.o `test -f '../cmn/dcmd_def.cc' || echo '$(srcdir)/'`../cmn/dcmd_def.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_center-dcmd_def.Tpo" "$(DEPDIR)/dcmd_center-dcmd_def.Po"; else rm -f "$(DEPDIR)/dcmd_center-dcmd_def.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_def.cc' object='dcmd_center-dcmd_def.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_def.o `test -f '../cmn/dcmd_def.cc' || echo '$(srcdir)/'`../cmn/dcmd_def.cc
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_center-dcmd_def.o `test -f '../cmn/dcmd_def.cc' || echo '$(srcdir)/'`../cmn/dcmd_def.cc
 
-dcmd_agent-dcmd_def.obj: ../cmn/dcmd_def.cc
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_def.obj -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_def.Tpo" -c -o dcmd_agent-dcmd_def.obj `if test -f '../cmn/dcmd_def.cc'; then $(CYGPATH_W) '../cmn/dcmd_def.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_def.cc'; fi`; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_def.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_def.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_def.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_def.cc' object='dcmd_agent-dcmd_def.obj' libtool=no @AMDEPBACKSLASH@
+dcmd_center-dcmd_def.obj: ../cmn/dcmd_def.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_center-dcmd_def.obj -MD -MP -MF "$(DEPDIR)/dcmd_center-dcmd_def.Tpo" -c -o dcmd_center-dcmd_def.obj `if test -f '../cmn/dcmd_def.cc'; then $(CYGPATH_W) '../cmn/dcmd_def.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_def.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_center-dcmd_def.Tpo" "$(DEPDIR)/dcmd_center-dcmd_def.Po"; else rm -f "$(DEPDIR)/dcmd_center-dcmd_def.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_def.cc' object='dcmd_center-dcmd_def.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_def.obj `if test -f '../cmn/dcmd_def.cc'; then $(CYGPATH_W) '../cmn/dcmd_def.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_def.cc'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_center-dcmd_def.obj `if test -f '../cmn/dcmd_def.cc'; then $(CYGPATH_W) '../cmn/dcmd_def.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_def.cc'; fi`
 
-dcmd_agent-dcmd_cmn.pb.o: ../cmn/dcmd_cmn.pb.cc
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_cmn.pb.o -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_cmn.pb.Tpo" -c -o dcmd_agent-dcmd_cmn.pb.o `test -f '../cmn/dcmd_cmn.pb.cc' || echo '$(srcdir)/'`../cmn/dcmd_cmn.pb.cc; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_cmn.pb.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_cmn.pb.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_cmn.pb.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_cmn.pb.cc' object='dcmd_agent-dcmd_cmn.pb.o' libtool=no @AMDEPBACKSLASH@
+dcmd_center-dcmd_cmn.pb.o: ../cmn/dcmd_cmn.pb.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_center-dcmd_cmn.pb.o -MD -MP -MF "$(DEPDIR)/dcmd_center-dcmd_cmn.pb.Tpo" -c -o dcmd_center-dcmd_cmn.pb.o `test -f '../cmn/dcmd_cmn.pb.cc' || echo '$(srcdir)/'`../cmn/dcmd_cmn.pb.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_center-dcmd_cmn.pb.Tpo" "$(DEPDIR)/dcmd_center-dcmd_cmn.pb.Po"; else rm -f "$(DEPDIR)/dcmd_center-dcmd_cmn.pb.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_cmn.pb.cc' object='dcmd_center-dcmd_cmn.pb.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_cmn.pb.o `test -f '../cmn/dcmd_cmn.pb.cc' || echo '$(srcdir)/'`../cmn/dcmd_cmn.pb.cc
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_center-dcmd_cmn.pb.o `test -f '../cmn/dcmd_cmn.pb.cc' || echo '$(srcdir)/'`../cmn/dcmd_cmn.pb.cc
 
-dcmd_agent-dcmd_cmn.pb.obj: ../cmn/dcmd_cmn.pb.cc
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_cmn.pb.obj -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_cmn.pb.Tpo" -c -o dcmd_agent-dcmd_cmn.pb.obj `if test -f '../cmn/dcmd_cmn.pb.cc'; then $(CYGPATH_W) '../cmn/dcmd_cmn.pb.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_cmn.pb.cc'; fi`; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_cmn.pb.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_cmn.pb.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_cmn.pb.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_cmn.pb.cc' object='dcmd_agent-dcmd_cmn.pb.obj' libtool=no @AMDEPBACKSLASH@
+dcmd_center-dcmd_cmn.pb.obj: ../cmn/dcmd_cmn.pb.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_center-dcmd_cmn.pb.obj -MD -MP -MF "$(DEPDIR)/dcmd_center-dcmd_cmn.pb.Tpo" -c -o dcmd_center-dcmd_cmn.pb.obj `if test -f '../cmn/dcmd_cmn.pb.cc'; then $(CYGPATH_W) '../cmn/dcmd_cmn.pb.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_cmn.pb.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_center-dcmd_cmn.pb.Tpo" "$(DEPDIR)/dcmd_center-dcmd_cmn.pb.Po"; else rm -f "$(DEPDIR)/dcmd_center-dcmd_cmn.pb.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_cmn.pb.cc' object='dcmd_center-dcmd_cmn.pb.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_cmn.pb.obj `if test -f '../cmn/dcmd_cmn.pb.cc'; then $(CYGPATH_W) '../cmn/dcmd_cmn.pb.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_cmn.pb.cc'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_center-dcmd_cmn.pb.obj `if test -f '../cmn/dcmd_cmn.pb.cc'; then $(CYGPATH_W) '../cmn/dcmd_cmn.pb.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_cmn.pb.cc'; fi`
 
-dcmd_agent-dcmd_ui.pb.o: ../cmn/dcmd_ui.pb.cc
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_ui.pb.o -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_ui.pb.Tpo" -c -o dcmd_agent-dcmd_ui.pb.o `test -f '../cmn/dcmd_ui.pb.cc' || echo '$(srcdir)/'`../cmn/dcmd_ui.pb.cc; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_ui.pb.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_ui.pb.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_ui.pb.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_ui.pb.cc' object='dcmd_agent-dcmd_ui.pb.o' libtool=no @AMDEPBACKSLASH@
+dcmd_center-dcmd_ui.pb.o: ../cmn/dcmd_ui.pb.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_center-dcmd_ui.pb.o -MD -MP -MF "$(DEPDIR)/dcmd_center-dcmd_ui.pb.Tpo" -c -o dcmd_center-dcmd_ui.pb.o `test -f '../cmn/dcmd_ui.pb.cc' || echo '$(srcdir)/'`../cmn/dcmd_ui.pb.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_center-dcmd_ui.pb.Tpo" "$(DEPDIR)/dcmd_center-dcmd_ui.pb.Po"; else rm -f "$(DEPDIR)/dcmd_center-dcmd_ui.pb.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_ui.pb.cc' object='dcmd_center-dcmd_ui.pb.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_ui.pb.o `test -f '../cmn/dcmd_ui.pb.cc' || echo '$(srcdir)/'`../cmn/dcmd_ui.pb.cc
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_center-dcmd_ui.pb.o `test -f '../cmn/dcmd_ui.pb.cc' || echo '$(srcdir)/'`../cmn/dcmd_ui.pb.cc
 
-dcmd_agent-dcmd_ui.pb.obj: ../cmn/dcmd_ui.pb.cc
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_ui.pb.obj -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_ui.pb.Tpo" -c -o dcmd_agent-dcmd_ui.pb.obj `if test -f '../cmn/dcmd_ui.pb.cc'; then $(CYGPATH_W) '../cmn/dcmd_ui.pb.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_ui.pb.cc'; fi`; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_ui.pb.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_ui.pb.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_ui.pb.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_ui.pb.cc' object='dcmd_agent-dcmd_ui.pb.obj' libtool=no @AMDEPBACKSLASH@
+dcmd_center-dcmd_ui.pb.obj: ../cmn/dcmd_ui.pb.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_center-dcmd_ui.pb.obj -MD -MP -MF "$(DEPDIR)/dcmd_center-dcmd_ui.pb.Tpo" -c -o dcmd_center-dcmd_ui.pb.obj `if test -f '../cmn/dcmd_ui.pb.cc'; then $(CYGPATH_W) '../cmn/dcmd_ui.pb.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_ui.pb.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_center-dcmd_ui.pb.Tpo" "$(DEPDIR)/dcmd_center-dcmd_ui.pb.Po"; else rm -f "$(DEPDIR)/dcmd_center-dcmd_ui.pb.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_ui.pb.cc' object='dcmd_center-dcmd_ui.pb.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_ui.pb.obj `if test -f '../cmn/dcmd_ui.pb.cc'; then $(CYGPATH_W) '../cmn/dcmd_ui.pb.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_ui.pb.cc'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_center-dcmd_ui.pb.obj `if test -f '../cmn/dcmd_ui.pb.cc'; then $(CYGPATH_W) '../cmn/dcmd_ui.pb.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_ui.pb.cc'; fi`
 
-dcmd_agent-dcmd_agent.pb.o: ../cmn/dcmd_agent.pb.cc
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_agent.pb.o -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_agent.pb.Tpo" -c -o dcmd_agent-dcmd_agent.pb.o `test -f '../cmn/dcmd_agent.pb.cc' || echo '$(srcdir)/'`../cmn/dcmd_agent.pb.cc; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_agent.pb.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_agent.pb.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_agent.pb.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_agent.pb.cc' object='dcmd_agent-dcmd_agent.pb.o' libtool=no @AMDEPBACKSLASH@
+dcmd_center-dcmd_agent.pb.o: ../cmn/dcmd_agent.pb.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_center-dcmd_agent.pb.o -MD -MP -MF "$(DEPDIR)/dcmd_center-dcmd_agent.pb.Tpo" -c -o dcmd_center-dcmd_agent.pb.o `test -f '../cmn/dcmd_agent.pb.cc' || echo '$(srcdir)/'`../cmn/dcmd_agent.pb.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_center-dcmd_agent.pb.Tpo" "$(DEPDIR)/dcmd_center-dcmd_agent.pb.Po"; else rm -f "$(DEPDIR)/dcmd_center-dcmd_agent.pb.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_agent.pb.cc' object='dcmd_center-dcmd_agent.pb.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_agent.pb.o `test -f '../cmn/dcmd_agent.pb.cc' || echo '$(srcdir)/'`../cmn/dcmd_agent.pb.cc
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_center-dcmd_agent.pb.o `test -f '../cmn/dcmd_agent.pb.cc' || echo '$(srcdir)/'`../cmn/dcmd_agent.pb.cc
 
-dcmd_agent-dcmd_agent.pb.obj: ../cmn/dcmd_agent.pb.cc
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_agent.pb.obj -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_agent.pb.Tpo" -c -o dcmd_agent-dcmd_agent.pb.obj `if test -f '../cmn/dcmd_agent.pb.cc'; then $(CYGPATH_W) '../cmn/dcmd_agent.pb.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_agent.pb.cc'; fi`; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_agent.pb.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_agent.pb.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_agent.pb.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_agent.pb.cc' object='dcmd_agent-dcmd_agent.pb.obj' libtool=no @AMDEPBACKSLASH@
+dcmd_center-dcmd_agent.pb.obj: ../cmn/dcmd_agent.pb.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_center-dcmd_agent.pb.obj -MD -MP -MF "$(DEPDIR)/dcmd_center-dcmd_agent.pb.Tpo" -c -o dcmd_center-dcmd_agent.pb.obj `if test -f '../cmn/dcmd_agent.pb.cc'; then $(CYGPATH_W) '../cmn/dcmd_agent.pb.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_agent.pb.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_center-dcmd_agent.pb.Tpo" "$(DEPDIR)/dcmd_center-dcmd_agent.pb.Po"; else rm -f "$(DEPDIR)/dcmd_center-dcmd_agent.pb.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_agent.pb.cc' object='dcmd_center-dcmd_agent.pb.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_agent.pb.obj `if test -f '../cmn/dcmd_agent.pb.cc'; then $(CYGPATH_W) '../cmn/dcmd_agent.pb.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_agent.pb.cc'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_center-dcmd_agent.pb.obj `if test -f '../cmn/dcmd_agent.pb.cc'; then $(CYGPATH_W) '../cmn/dcmd_agent.pb.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_agent.pb.cc'; fi`
 
-dcmd_agent-dcmd_tss.o: ../cmn/dcmd_tss.cc
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_tss.o -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_tss.Tpo" -c -o dcmd_agent-dcmd_tss.o `test -f '../cmn/dcmd_tss.cc' || echo '$(srcdir)/'`../cmn/dcmd_tss.cc; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_tss.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_tss.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_tss.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_tss.cc' object='dcmd_agent-dcmd_tss.o' libtool=no @AMDEPBACKSLASH@
+dcmd_center-dcmd_tss.o: ../cmn/dcmd_tss.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_center-dcmd_tss.o -MD -MP -MF "$(DEPDIR)/dcmd_center-dcmd_tss.Tpo" -c -o dcmd_center-dcmd_tss.o `test -f '../cmn/dcmd_tss.cc' || echo '$(srcdir)/'`../cmn/dcmd_tss.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_center-dcmd_tss.Tpo" "$(DEPDIR)/dcmd_center-dcmd_tss.Po"; else rm -f "$(DEPDIR)/dcmd_center-dcmd_tss.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_tss.cc' object='dcmd_center-dcmd_tss.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_tss.o `test -f '../cmn/dcmd_tss.cc' || echo '$(srcdir)/'`../cmn/dcmd_tss.cc
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_center-dcmd_tss.o `test -f '../cmn/dcmd_tss.cc' || echo '$(srcdir)/'`../cmn/dcmd_tss.cc
 
-dcmd_agent-dcmd_tss.obj: ../cmn/dcmd_tss.cc
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent-dcmd_tss.obj -MD -MP -MF "$(DEPDIR)/dcmd_agent-dcmd_tss.Tpo" -c -o dcmd_agent-dcmd_tss.obj `if test -f '../cmn/dcmd_tss.cc'; then $(CYGPATH_W) '../cmn/dcmd_tss.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_tss.cc'; fi`; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent-dcmd_tss.Tpo" "$(DEPDIR)/dcmd_agent-dcmd_tss.Po"; else rm -f "$(DEPDIR)/dcmd_agent-dcmd_tss.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_tss.cc' object='dcmd_agent-dcmd_tss.obj' libtool=no @AMDEPBACKSLASH@
+dcmd_center-dcmd_tss.obj: ../cmn/dcmd_tss.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_center-dcmd_tss.obj -MD -MP -MF "$(DEPDIR)/dcmd_center-dcmd_tss.Tpo" -c -o dcmd_center-dcmd_tss.obj `if test -f '../cmn/dcmd_tss.cc'; then $(CYGPATH_W) '../cmn/dcmd_tss.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_tss.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_center-dcmd_tss.Tpo" "$(DEPDIR)/dcmd_center-dcmd_tss.Po"; else rm -f "$(DEPDIR)/dcmd_center-dcmd_tss.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_tss.cc' object='dcmd_center-dcmd_tss.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent-dcmd_tss.obj `if test -f '../cmn/dcmd_tss.cc'; then $(CYGPATH_W) '../cmn/dcmd_tss.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_tss.cc'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_center_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_center-dcmd_tss.obj `if test -f '../cmn/dcmd_tss.cc'; then $(CYGPATH_W) '../cmn/dcmd_tss.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_tss.cc'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo
