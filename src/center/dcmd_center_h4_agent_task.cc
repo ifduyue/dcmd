@@ -59,12 +59,14 @@ int DcmdCenterH4AgentTask::onTimeoutCheck(CwxMsgBlock*& , CwxTss* pThrEnv) {
   bool is_clock_back = app_->IsClockBack(base_time, now);
   if (!is_clock_back && (now <= last_check_time)) return 1;
   last_check_time = now;
+  CWX_INFO(("Agent thread timeout check...."));
   if (app_->is_master()) {
     if (!is_master_) {
       CWX_INFO(("I becomes master, startup task manager......"));
       is_master_ = app_->GetTaskMgr()->Start(tss);
       if (!is_master_) {
         CWX_ERROR(("Failed to start task manager."));
+        app_->GetTaskMgr()->Stop(tss);
       } else {
         // 通知所有agent，自己是master
         CWX_INFO(("Notice all agent that i becomes master......"));
