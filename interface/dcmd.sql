@@ -368,7 +368,7 @@ CREATE TABLE `dcmd_task_service_pool_history` (
 
 DROP TABLE IF EXISTS `dcmd_task_node`;
 CREATE TABLE `dcmd_task_node` (
-  `sub_task_id`      bigint(20) NOT NULL AUTO_INCREMENT,
+  `subtask_id`      bigint(20) NOT NULL AUTO_INCREMENT,
   `task_id`          int(10) unsigned NOT NULL,
   `task_cmd`        varchar(64) NOT NULL,
   `svr_pool`         varchar(64) NOT NULL,
@@ -379,11 +379,11 @@ CREATE TABLE `dcmd_task_node` (
   `start_time`       datetime NOT NULL,
   `finish_time`      datetime NOT NULL,
   `process`         varchar(32) DEFAULT NULL,
-  `errmsg`            varchar(512) DEFAULT NULL,
+  `err_msg`            varchar(512) DEFAULT NULL,
   `utime`        datetime NOT NULL,
   `ctime`        datetime NOT NULL,
   `opr_uid`      int(10) unsigned NOT NULL,
-  PRIMARY KEY (`sub_task_id`),
+  PRIMARY KEY (`subtask_id`),
   UNIQUE KEY (`task_id`,`ip`),
   KEY `idx_task_node` (`ip`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -391,7 +391,7 @@ CREATE TABLE `dcmd_task_node` (
 
 DROP TABLE IF EXISTS `dcmd_task_node_history`;
 CREATE TABLE `dcmd_task_node_history` (
-  `sub_task_id`      bigint(20) NOT NULL AUTO_INCREMENT,
+  `subtask_id`      bigint(20) NOT NULL AUTO_INCREMENT,
   `task_id`          int(10) unsigned NOT NULL,
   `task_cmd`        varchar(64) NOT NULL,
   `svr_pool`         varchar(64) NOT NULL,
@@ -402,11 +402,11 @@ CREATE TABLE `dcmd_task_node_history` (
   `start_time`       datetime NOT NULL,
   `finish_time`      datetime NOT NULL,
   `process`         varchar(32) DEFAULT NULL,
-  `errmsg`            varchar(512) DEFAULT NULL,
+  `err_msg`            varchar(512) DEFAULT NULL,
   `utime`        datetime NOT NULL,
   `ctime`        datetime NOT NULL,
   `opr_uid`      int(10) unsigned NOT NULL,
-  PRIMARY KEY (`sub_task_id`),
+  PRIMARY KEY (`subtask_id`),
   UNIQUE KEY (`task_id`,`ip`),
   KEY `idx_task_node` (`ip`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -417,14 +417,14 @@ DROP TABLE IF EXISTS `dcmd_command`;
 CREATE TABLE `dcmd_command` (
   `cmd_id`            bigint(20) NOT NULL AUTO_INCREMENT,
   `task_id`           int(10) unsigned NOT NULL,
-  `sub_task_id`       bigint(20) NOT NULL,
+  `subtask_id`       bigint(20) NOT NULL,
   `svr_pool`          varchar(64) NOT NULL,
   `svr_pool_id`  int(10)  unsigned NOT NULL,
   `svr_name`               varchar(64) NOT NULL,
   `ip`                varchar(16) NOT NULL,
   `cmd_type`          int(11) NOT NULL,
   `state`             int(11) NOT NULL,
-  `errmsg`             varchar(512) DEFAULT NULL,
+  `err_msg`             varchar(512) DEFAULT NULL,
   `utime`        datetime NOT NULL,
   `ctime`        datetime NOT NULL,
   `opr_uid`      int(10) unsigned NOT NULL,
@@ -437,14 +437,14 @@ DROP TABLE IF EXISTS `dcmd_command_history`;
 CREATE TABLE `dcmd_command_history` (
   `cmd_id`            bigint(20) NOT NULL AUTO_INCREMENT,
   `task_id`           int(10) unsigned NOT NULL,
-  `sub_task_id`       bigint(20) NOT NULL,
+  `subtask_id`       bigint(20) NOT NULL,
   `svr_pool`          varchar(64) NOT NULL,
   `svr_pool_id`  int(10)  unsigned NOT NULL,
   `svr_name`               varchar(64) NOT NULL,
   `ip`                varchar(16) NOT NULL,
   `cmd_type`          int(11) NOT NULL,
   `state`             int(11) NOT NULL,
-  `errmsg`             varchar(512) DEFAULT NULL,
+  `err_msg`             varchar(512) DEFAULT NULL,
   `utime`        datetime NOT NULL,
   `ctime`        datetime NOT NULL,
   `opr_uid`      int(10) unsigned NOT NULL,
