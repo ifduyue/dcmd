@@ -63,6 +63,7 @@ int DcmdCenterH4AgentTask::onTimeoutCheck(CwxMsgBlock*& , CwxTss* pThrEnv) {
   if (app_->is_master()) {
     if (!is_master_) {
       CWX_INFO(("I becomes master, startup task manager......"));
+      app_->GetTaskMgr()->Stop(tss);
       is_master_ = app_->GetTaskMgr()->Start(tss);
       if (!is_master_) {
         CWX_ERROR(("Failed to start task manager."));
@@ -102,9 +103,11 @@ int DcmdCenterH4AgentTask::onUserEvent(CwxMsgBlock*& , CwxTss* pThrEnv){
     }
     if (!is_master_){
       CWX_INFO(("Startup task manager......."));
+      app_->GetTaskMgr()->Stop(tss);
       is_master_ = app_->GetTaskMgr()->Start(tss);
       if (!is_master_){
         CWX_ERROR(("Failure to start task manager."));
+        app_->GetTaskMgr()->Stop(tss);
       }else{
         ///通知所有agent，自己是master
         CWX_INFO(("Notice all agent that i am master......"));
