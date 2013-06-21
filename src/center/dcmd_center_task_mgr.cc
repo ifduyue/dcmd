@@ -295,7 +295,7 @@ bool DcmdCenterTaskMgr::LoadNewTask(DcmdTss* tss, bool is_first) {
   CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, "select task_id, task_name, task_cmd, depend_task_id,"\
     "svr_id, svr_name, gid, group_name, tag, update_env, update_tag, state,"\
     "freeze, valid, pause, concurrent_num, concurrent_rate, timeout, auto, process, task_arg, "\
-    "errmsg from dcmd_task where task_id > %d order by task_id asc", next_task_id_);
+    "err_msg from dcmd_task where task_id > %d order by task_id asc", next_task_id_);
   if (!mysql_->query(tss->sql_)){
     CwxCommon::snprintf(tss->m_szBuf2K, 2047, "Failure to fetch new tasks. err:%s; sql:%s", mysql_->getErrMsg(), tss->sql_);
     tss->err_msg_ = tss->m_szBuf2K;
@@ -1065,7 +1065,7 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdAddTaskNode(DcmdTss* tss, uint32_t
   dcmd_escape_mysql_string(str_ip);
   CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
     "insert into dcmd_task_node(task_id, task_cmd, svr_pool, svr_name, ip,"\
-    "state, ignored, start_time, finish_time, process, errmsg, utime, ctime, opr_uid) "\
+    "state, ignored, start_time, finish_time, process, err_msg, utime, ctime, opr_uid) "\
     "values(%s, %u, '%s', '%s', '%s', '%s', %u, 0, now(), now(), '', '', now(), now(), %u)",
     task_id, str_task_cmd.c_str(), str_svr_pool.c_str(), str_service.c_str(), str_ip.c_str(),
     dcmd_api::SUBTASK_INIT, uid);
@@ -1281,7 +1281,7 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdRedoTask(DcmdTss* tss, uint32_t ta
   }
   // 更新tasknode
   CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
-    "update dcmd_task_node set state=0, ignore=0, start_time=now(), finish_time=now(), process='', errmsg='' "\
+    "update dcmd_task_node set state=0, ignore=0, start_time=now(), finish_time=now(), process='', err_msg='' "\
     "where task_id = %d", task_id);
   if (!ExecSql(tss, false)) {
     mysql_->disconnect();
@@ -1385,7 +1385,7 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdRedoSvrPool(DcmdTss* tss, uint32_t
   string escape_svr_pool_name(pool->svr_pool_);
   dcmd_escape_mysql_string(escape_svr_pool_name);
   CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
-    "update dcmd_task_node set state=0, ignore=0, start_time=now(), finish_time=now(), process='', errmsg='' "\
+    "update dcmd_task_node set state=0, ignore=0, start_time=now(), finish_time=now(), process='', err_msg='' "\
     "where task_id = %d and svr_pool='%s'", task_id, escape_svr_pool_name.c_str());
   if (!ExecSql(tss, false)) {
     mysql_->disconnect();

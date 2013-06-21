@@ -313,7 +313,7 @@ namespace dcmd {
         ++iter;
       }
       if (!ips.length()) return false;
-      string sql = "select ip from node where ip in (";
+      string sql = "select ip from dcmd_node where ip in (";
       sql += ips + ")";
       Mysql* my = app_->GetTaskMysql();
       if (!app_->CheckMysql(my)) return false;
@@ -374,7 +374,7 @@ namespace dcmd {
     if (!app_->CheckMysql(my)) return;
     set<string>* ip_table= NULL;
     bool is_null = false;
-    if (!my->query("select ip from node")) {
+    if (!my->query("select ip from dcmd_node")) {
       CWX_ERROR(("Failure to query node from node. err:%s", my->getErrMsg()));
       return;
     }

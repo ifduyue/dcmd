@@ -20,7 +20,7 @@ namespace dcmd {
     string str_tmp = err_msg?string(err_msg):"";
     dcmd_escape_mysql_string(str_tmp);
     CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
-      "update dcmd_task set valid=%d, errmsg='%s' where task_id=%d",
+      "update dcmd_task set valid=%d, err_msg='%s' where task_id=%d",
       is_valid?1:0, is_valid?"":str_tmp.c_str(), task_id);
     return ExecSql(tss, is_commit);
   }
@@ -38,7 +38,7 @@ namespace dcmd {
     string str_tmp = string(err_msg);
     dcmd_escape_mysql_string(str_tmp);
     CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
-      "update dcmd_task_node set state=%d , errmsg = '%s' where subtask_id=%s",
+      "update dcmd_task_node set state=%d , err_msg = '%s' where subtask_id=%s",
       state, str_tmp.c_str(), CwxCommon::toString(subtask_id, buf, 10));
     return ExecSql(tss, is_commit);
   }
@@ -49,7 +49,7 @@ namespace dcmd {
     string str_tmp = string(err_msg);
     dcmd_escape_mysql_string(str_tmp);
     CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
-      "update dcmd_command set state=%d, errmsg = '%s' where cmd_id=%s",
+      "update dcmd_command set state=%d, err_msg = '%s' where cmd_id=%s",
       state, str_tmp.c_str(), CwxCommon::toString(cmd_id, buf, 10));
     return ExecSql(tss, is_commit);
   }
@@ -73,7 +73,7 @@ namespace dcmd {
     if (!ExecSql(tss, false)) return false;
     CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
       "insert into dcmd_task_node(task_id, task_cmd, svr_pool, svr_name, ip, state, ignored,"\
-      "start_time, finished_time, process, errmsg, utime, ctime, opr_uid) "\
+      "start_time, finished_time, process, err_msg, utime, ctime, opr_uid) "\
       "select t.task_id, t.task_cmd, p.svr_pool, t.svr_name, n.ip, 0, 0, now(), now(), "", "", now(), now(), %u " \
       "from dcmd_task as t, dcmd_task_service_pool as p, dcmd_service_pool_node as n "\
       "where t.task_id = %u and p.task_id=%u "\
@@ -99,7 +99,7 @@ namespace dcmd {
     uint64_t cmd_id = ++next_cmd_id_;
     CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
       "insert into dcmd_command(cmd_id, task_id, subtask_id, svr_pool, svr_pool_id, service, ip,"\
-      "cmd_type, state, errmsg, utime, ctime, opr_uid) "\
+      "cmd_type, state, err_msg, utime, ctime, opr_uid) "\
       " values (%s, %u, %s, '%s', %u, '%s', %u, %u, '%s', now(), now(), %u)",
       CwxCommon::toString(cmd_id, cmd_id_sz,10), task_id,
       CwxCommon::toString(subtask_id, subtask_id_sz, 10),svr_pool_str.c_str(),
@@ -188,7 +188,7 @@ namespace dcmd {
       value = err_msg;
       dcmd_escape_mysql_string(value);
       CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
-        " errmsg='%s' ", value.c_str());
+        " err_msg='%s' ", value.c_str());
       if (sql.length() != init_len) sql += ",";
       sql += tss->sql_;
     }
