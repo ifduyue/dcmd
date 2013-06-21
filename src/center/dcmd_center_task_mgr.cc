@@ -364,7 +364,7 @@ bool DcmdCenterTaskMgr::LoadNewTask(DcmdTss* tss, bool is_first) {
 bool DcmdCenterTaskMgr::LoadNewSubtask(DcmdTss* tss) {
   CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
     "select subtask_id, task_id, task_cmd, svr_pool, svr_name, ip, state, ignored,"\
-    "UNIX_TIMESTAMP(start_time), UNIX_TIMESTAMP(finish_time), process, errmsg "\
+    "UNIX_TIMESTAMP(start_time), UNIX_TIMESTAMP(finish_time), process, err_msg "\
     " from dcmd_task_node where subtask_id >= %s order by subtask_id desc ",
     CwxCommon::toString(next_subtask_id_, tss->m_szBuf2K, 10));
   if (!mysql_->query(tss->sql_)) {
