@@ -1,4 +1,4 @@
-﻿#include "dcmd_center_h4_check.h"
+#include "dcmd_center_h4_check.h"
 
 #include "dcmd_center_app.h"
 namespace dcmd {
@@ -38,18 +38,18 @@ bool DcmdCenterH4Check::GetMasterHost(Mysql* my, string& master_host, DcmdTss* t
 
 bool DcmdCenterH4Check::SetHeatbeat(Mysql* my, bool is_master, DcmdTss* tss) {
   CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
-    "insert into center(host, master, update_time) values('%s', %d, now()) \
+    "insert into dcmd_center(host, master, update_time) values('%s', %d, now()) \
     ON DUPLICATE KEY UPDATE master=%d, update_time=now()",
     app_->config().common().host_id_.c_str(),
     is_master?1:0,
     is_master?1:0);
   if (-1 == my->execute(tss->sql_)){
-    CWX_ERROR(("Failure to update center table,sql=%s, err=%s", tss->sql_, my->getErrMsg()));
+    CWX_ERROR(("Failure to update dcmd_center table,sql=%s, err=%s", tss->sql_, my->getErrMsg()));
     my->rollback();
     return false;
   }
   if (!my->commit()){
-    CWX_ERROR(("Failure to commit center table update, sql=%s, err=%s",
+    CWX_ERROR(("Failure to commit dcmd_center table update, sql=%s, err=%s",
       tss->sql_, my->getErrMsg()));
     my->rollback();
     return false;
@@ -58,9 +58,9 @@ bool DcmdCenterH4Check::SetHeatbeat(Mysql* my, bool is_master, DcmdTss* tss) {
 }
 
 bool DcmdCenterH4Check::LockCenterTable(Mysql* my, DcmdTss* tss) {
-  CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, "lock tables center write");
+  CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, "lock tables dcmd_center write");
   if (-1 == my->execute(tss->sql_)){
-    CWX_ERROR(("Failure to lock center table,  sql=%s, err=%s", tss->sql_, my->getErrMsg()));
+    CWX_ERROR(("Failure to lock dcmd_center table,  sql=%s, err=%s", tss->sql_, my->getErrMsg()));
     return false;
   }
   return true;

@@ -126,6 +126,8 @@ namespace dcmd {
     return true;
   }
   inline void DcmdCenterTaskMgr::RemoveTaskFromMem(DcmdCenterTask* task) {
+    // 加此锁是为了防止与获取subtask process的admin线程冲突
+    CwxMutexGuard<CwxMutexLock> lock(&lock_);
     all_tasks_.erase(task->task_id_);
     map<uint64_t, DcmdCenterSubtask*>* subtasks;
     map<uint64_t, DcmdCenterSubtask*>::iterator subtasks_iter;
@@ -240,4 +242,45 @@ namespace dcmd {
     cmd.set_svr_name(svr_name);
     cmd.set_svr_pool("");
   }
+  // 计算任务及svr_pool的信息
+  inline bool DcmdCenterTaskMgr::CalcTaskStatsInfo(DcmdTss* tss, bool is_commit, 
+    DcmdCenterTask* task)
+  {
+    uint8_t task_state = task->CalcTaskState();
+    bool is_exec_sql = false;
+    if (task_state != task->state_) {
+      is_exec_sql = true;
+      if (!UpdateTaskState(tss, false, task->task_id_, task_state)) return false;
+      task->state_ = task_state;
+    }
+    map<string, DcmdCenterSvrPool*>::iterator iter = task->pools_.begin();
+    while (iter != task->pools_.end()) {
+      if (iter->second->IsSubtaskStatsChanged()) {
+        is_exec_sql = true;
+        iter->second->UpdateSubtaskStats();
+        CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
+          "update dcmd_task_service_pool set undo_node=%d, doing_node=%d,finish_node=%d,"\
+          "fail_node=%d, ignored_fail_node=%d, ignored_doing_node=%d "\
+          "where task_id=%d and svr_pool_id=%d",
+          iter->second->undo_host_num(),
+          iter->second->doing_host_num(),
+          iter->second->finished_host_num(),
+          iter->second->failed_host_num(),
+          iter->second->ignored_failed_host_num(),
+          iter->second->ignored_doing_host_num(),
+          task->task_id_,
+          iter->second->svr_pool_id_);
+        if (ExecSql(tss, false)) return false;
+      }
+      ++iter;
+    }
+    if (is_exec_sql && is_commit && !mysql_->commit()){
+      tss->err_msg_ = string("Failure to commit, err:") + mysql_->getErrMsg();
+      CWX_ERROR((tss->err_msg_.c_str()));
+      mysql_->rollback();
+      return false;
+    }
+    return true;
+  }
+
 }  // dcmd

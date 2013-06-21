@@ -90,6 +90,7 @@ CREATE TABLE `dcmd_node` (
   `ip`             varchar(16) NOT NULL,
   `nid`            int(10) unsigned NOT NULL,
   `nodename`       varchar(128) NOT NULL,
+  `comment`      varchar(512) NOT NULL,
   `utime`        datetime NOT NULL,
   `ctime`        datetime NOT NULL,
   `opr_uid`      int(10) unsigned NOT NULL,

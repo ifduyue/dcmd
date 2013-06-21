@@ -168,6 +168,8 @@ class DcmdCenterTaskMgr{
    inline bool ExecSql(DcmdTss* tss, bool is_commit);
    // 将任务的相关信息从内存中删除
    inline void RemoveTaskFromMem(DcmdCenterTask* task);
+   // 计算任务及svr_pool的信息
+   inline bool CalcTaskStatsInfo(DcmdTss* tss, bool is_commit, DcmdCenterTask* task); 
    // 删除指定的cmd
    void RemoveCmd(DcmdCenterCmd* cmd);
    // 设置发送的cancel命令

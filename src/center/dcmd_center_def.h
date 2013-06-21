@@ -131,16 +131,36 @@ namespace dcmd {
       uint8_t state,
       bool is_ignored);
   public:
+    // 是否subtask的统计信息改变
+    bool IsSubtaskStatsChanged() const;
+    // 更新subtask的统计信息
+    void UpdateSubtaskStats();
+    // 获取任务池子的状态，其具有TASK_DOING，TASK_FAILED，TASK_FINISHED，TASK_FINISHED_WITH_FAILED四中状态
+    uint8_t GetState(uint32_t cont_num, // 最大并发的数量
+      uint32_t doing_rate // 做的最大比率
+      ) const;
     // 是否可以调度
-    inline bool EnableSchedule(uint32_t doing_num, // 当前正在做的数量
-      uint32_t cont_num, // 最大并发的数量
+    inline bool EnableSchedule(uint32_t cont_num, // 最大并发的数量
       uint32_t doing_rate // 做的最大比率
       ) const
     {
-      if (doing_num >= cont_num) return false;
+      if (!undo_subtasks_.size()) return false;
+      if (doing_host_num() + failed_host_num() >= cont_num) return false;
       // doing_num加1的原因是计算若增加一台是否超过规定
-      if ((doing_num + 1) * 100 > all_subtasks_.size() * doing_rate) return false;
+      if ((doing_host_num() + failed_host_num() + 1) * 100 > all_subtasks_.size() * doing_rate)
+        return false;
       return true;
+    }
+    // 是否达到失败的上限
+    inline bool IsReachFailedThreshold(uint32_t cont_num, // 最大并发的数量
+      uint32_t doing_rate // 做的最大比率
+      ) const
+    {
+      if (failed_host_num() >= cont_num) return true;
+      // doing_num加1的原因是计算若增加一台是否超过规定
+      if ((failed_host_num() + 1) * 100 > all_subtasks_.size() * doing_rate)
+        return true;
+      return false;
     }
     // 获取池子node的数量
     uint32_t total_host_num() const { return all_subtasks_.size(); }
@@ -261,6 +281,30 @@ namespace dcmd {
         ++iter;
       }
       return num;
+    }
+    // 计算任务的状态
+    inline uint8_t CalcTaskState() const {
+      uint8_t calc_state = dcmd_api::TASK_FINISHED;
+      uint8_t pool_state = 0;
+      map<string, DcmdCenterSvrPool*>::const_iterator iter = pools_.begin();
+      while(iter != pools_.end()) {
+        pool_state = iter->second->GetState(max_current_num_, max_current_rate_);
+        if (pool_state == dcmd_api::TASK_DOING) {
+          return dcmd_api::TASK_DOING;
+        } else if (pool_state == dcmd_api::TASK_FAILED) {
+          if ((calc_state == dcmd_api::TASK_FINISHED) || 
+            (calc_state == dcmd_api::TASK_FINISHED_WITH_FAILED))
+          {
+            calc_state == dcmd_api::TASK_FINISHED_WITH_FAILED;
+          }
+        } else if (pool_state == dcmd_api::TASK_FINISHED_WITH_FAILED) {
+          if ((calc_state == dcmd_api::TASK_FINISHED)){
+            calc_state == dcmd_api::TASK_FINISHED_WITH_FAILED;
+          }
+        }
+        ++iter;
+      }
+      return calc_state;
     }
   public:
     // 任务的id

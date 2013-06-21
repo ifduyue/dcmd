@@ -79,6 +79,36 @@ bool DcmdCenterSvrPool::ChangeSubtaskState(uint64_t subtask_id,
   subtask->state_ = state;
   return AddSubtask(subtask);
 }
+bool DcmdCenterSvrPool::IsSubtaskStatsChanged() const {
+  if (undo_subtask_num_ != undo_subtasks_.size()) return true;
+  if (doing_subtask_num_ != doing_subtasks_.size()) return true;
+  if (failed_subtask_num_ != failed_subtasks_.size()) return true;
+  if (finished_subtask_num_ != finished_subtasks_.size()) return true;
+  if (ignored_doing_subtask_num_ != ignored_doing_subtasks_.size()) return true;
+  if (ignored_failed_subtask_num_ != ignored_failed_subtasks_.size()) return true;
+  return false;
+}
+void DcmdCenterSvrPool::UpdateSubtaskStats() {
+  undo_subtask_num_ = undo_subtasks_.size();
+  doing_subtask_num_ = doing_subtasks_.size();
+  failed_subtask_num_ = failed_subtasks_.size();
+  finished_subtask_num_ = finished_subtasks_.size();
+  ignored_doing_subtask_num_ = ignored_doing_subtasks_.size();
+  ignored_failed_subtask_num_ = ignored_failed_subtasks_.size();
+}
+
+uint8_t DcmdCenterSvrPool::GetState(uint32_t cont_num, uint32_t doing_rate) const {
+  if (EnableSchedule(cont_num, doing_rate)) return dcmd_api::TASK_DOING;
+  // 已经不能调度了.
+  // 若还有没有完成的任务，则处于正在做的状态
+  if (doing_subtasks_.size()) return dcmd_api::TASK_DOING;
+  // 若达到了失败的上限，则失败
+  if (IsReachFailedThreshold(cont_num, doing_rate)) return dcmd_api::TASK_FAILED;
+  CWX_ASSERT(!undo_subtasks_.size());
+  if (failed_subtasks_.size() || ignored_failed_subtasks_.size() || ignored_doing_subtasks_.size())
+    return dcmd_api::TASK_FINISHED_WITH_FAILED;
+  return dcmd_api::TASK_FINISHED;
+}
 
 bool DcmdCenterTask::AddSvrPool(DcmdCenterSvrPool* pool) {
   if (pools_.find(pool->svr_pool_) != pools_.end()) return false;
