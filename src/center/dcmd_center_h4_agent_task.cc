@@ -1,7 +1,5 @@
 #include "dcmd_center_h4_agent_task.h"
-
 #include <CwxMd5.h>
-
 #include "dcmd_center_app.h"
 #include "dcmd_center_h4_check.h"
 
@@ -53,8 +51,6 @@ int DcmdCenterH4AgentTask::onConnClosed(CwxMsgBlock*& msg, CwxTss* pThrEnv) {
   }
   return 1;
 }
-
-// 检查同步的超时
 int DcmdCenterH4AgentTask::onTimeoutCheck(CwxMsgBlock*& , CwxTss* pThrEnv) {
   DcmdTss* tss = (DcmdTss*)pThrEnv;
   static uint32_t last_check_time = time(NULL);
@@ -83,7 +79,6 @@ int DcmdCenterH4AgentTask::onTimeoutCheck(CwxMsgBlock*& , CwxTss* pThrEnv) {
   }
   return 1;
 }
-
 int DcmdCenterH4AgentTask::onUserEvent(CwxMsgBlock*& , CwxTss* pThrEnv){
   DcmdTss* tss = (DcmdTss*)pThrEnv;
   CWX_INFO(("Receive master change event. app master:%s, handle master:%s",
@@ -122,7 +117,6 @@ int DcmdCenterH4AgentTask::onUserEvent(CwxMsgBlock*& , CwxTss* pThrEnv){
   }
   return 1;
 }
-
 void DcmdCenterH4AgentTask::ReplyAgentReport(DcmdCenterApp* app,
   DcmdTss*      tss,
   uint32_t      conn_id,
@@ -154,8 +148,6 @@ void DcmdCenterH4AgentTask::ReplyAgentReport(DcmdCenterApp* app,
     app->noticeCloseConn(conn_id);
   }
 }
-
-// false：发送失败；true：发送成功。
 bool DcmdCenterH4AgentTask::SendAgentCmd(DcmdCenterApp* app,
   DcmdTss* tss,
   string const& agent_ip,
@@ -186,8 +178,6 @@ bool DcmdCenterH4AgentTask::SendAgentCmd(DcmdCenterApp* app,
   }
   return true;
 }
-
-// false：发送失败；true：发送成功
 bool DcmdCenterH4AgentTask::ReplyAgentCmdResult(DcmdCenterApp* app,
                                  DcmdTss* tss,
                                  string const& agent_ip,
@@ -218,8 +208,6 @@ bool DcmdCenterH4AgentTask::ReplyAgentCmdResult(DcmdCenterApp* app,
   }
   return true;
 }
-
-// agent报告自己的状态
 void  DcmdCenterH4AgentTask::AgentReport(CwxMsgBlock*& msg, DcmdTss* tss){
   string agent_ips;
   string conn_ip="";
@@ -319,8 +307,6 @@ void  DcmdCenterH4AgentTask::AgentReport(CwxMsgBlock*& msg, DcmdTss* tss){
   if (is_success && app_->is_master())  NoticeMaster(tss, &agent_ip);
   return;
 }
-
-///agent报告自己的任务处理状态
 void  DcmdCenterH4AgentTask::AgentMasterReply(CwxMsgBlock*& msg, DcmdTss* tss){
   string conn_ip;
   string agent_ip;
@@ -367,8 +353,6 @@ void  DcmdCenterH4AgentTask::AgentMasterReply(CwxMsgBlock*& msg, DcmdTss* tss){
       notice_reply.subtask_process(i).process().c_str());
   }
 }
-
-///agent报告自己已经接受子任务
 void  DcmdCenterH4AgentTask::AgentSubtaskAccept(CwxMsgBlock*& msg, DcmdTss* tss) {
   if (!app_->is_master()) return; // 若不是master，直接忽略
   string agent_ip;
@@ -386,8 +370,6 @@ void  DcmdCenterH4AgentTask::AgentSubtaskAccept(CwxMsgBlock*& msg, DcmdTss* tss)
     cmd_reply.cmd().c_str()));
   app_->GetTaskMgr()->ReceiveAgentSubtaskConfirm(tss, agent_ip, cmd_reply.cmd());
 }
-
-// agent回复任务的处理结果
 void  DcmdCenterH4AgentTask::AgentSubtaskResult(CwxMsgBlock*& msg, DcmdTss* tss){
   if (!app_->is_master()) return; // 若不是master，直接忽略
   string agent_ip="";
@@ -408,8 +390,6 @@ void  DcmdCenterH4AgentTask::AgentSubtaskResult(CwxMsgBlock*& msg, DcmdTss* tss)
   if (!app_->GetTaskMgr()->ReceiveAgentSubtaskResult(tss, msg->event().getMsgHeader().getTaskId(), result))
     app_->noticeCloseConn(msg->event().getConnId()); // 关闭连接以便再处理
 }
-
-// agent报告任务的处理进度
 void DcmdCenterH4AgentTask::AgentSubtaskProcess(CwxMsgBlock*& msg, DcmdTss* tss){
   if (!app_->is_master()) return; //若不是master，直接忽略
   string agent_ip ;
@@ -429,8 +409,6 @@ void DcmdCenterH4AgentTask::AgentSubtaskProcess(CwxMsgBlock*& msg, DcmdTss* tss)
     process.process().c_str()));
   app_->GetTaskMgr()->SetAgentTaskProcess(process.subtask_id(), process.process().c_str());
 }
-
-// 接收到UI命令
 void DcmdCenterH4AgentTask::UiExecTaskCmd(CwxMsgBlock*& msg, DcmdTss* tss){
   if (!app_->is_master()) return; //若不是master，直接忽略
   dcmd_api::UiTaskCmd task_cmd;
@@ -445,7 +423,6 @@ void DcmdCenterH4AgentTask::UiExecTaskCmd(CwxMsgBlock*& msg, DcmdTss* tss){
     task_cmd.cmd_type()));
   app_->GetTaskMgr()->ReceiveCmd(tss, task_cmd, msg->event().getConnId(), msg->event().getMsgHeader().getTaskId());
 }
-
 void DcmdCenterH4AgentTask::NoticeMaster(DcmdTss* , string const* agent_ip) {
   CwxMsgBlock* msg = NULL;
   CWX_DEBUG(("I am master, notice agent[%s]", agent_ip?agent_ip->c_str():"all"));

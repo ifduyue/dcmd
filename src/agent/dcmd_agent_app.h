@@ -1,8 +1,6 @@
-﻿#ifndef __DCMD_AGENT_APP_H__
+#ifndef __DCMD_AGENT_APP_H__
 #define __DCMD_AGENT_APP_H__
-
 #include <CwxAppFramework.h>
-
 #include "dcmd_macro.h"
 #include "dcmd_agent_config.h"
 #include "dcmd_agent_def.h"
@@ -11,8 +9,7 @@
 
 namespace dcmd {
 const char* const kDcmdAgentVersion = "0.1.0";
-const char* const kDcmdAgentModifyDate = "2013-03-08 08:08:08";
-
+const char* const kDcmdAgentModifyDate = "2013-06-22 08:08:08";
 // agent的app对象
 class DcmdAgentApp : public CwxAppFramework{
  public:
@@ -22,31 +19,25 @@ class DcmdAgentApp : public CwxAppFramework{
    };
 
   DcmdAgentApp();
-
-  virtual ~DcmdAgentApp();
-
-  virtual int init(int argc, char** argv);
- 
+  virtual ~DcmdAgentApp(); 
  public:
+   virtual int init(int argc, char** argv);
   // 时钟响应函数
   virtual void onTime(CwxTimeValue const& current);
   // signal响应函数
   virtual void onSignal(int signum);
   // 连接建立通知
   virtual int onConnCreated(CwxAppHandler4Msg& conn,
-    bool& bSuspendConn,
-    bool& bSuspendListen);
+    bool& bSuspendConn, bool& bSuspendListen);
   // 连接关闭
   virtual int onConnClosed(CwxAppHandler4Msg& conn);
   // 收到消息的响应函数
-  virtual int onRecvMsg(CwxMsgBlock* msg,
-    CwxAppHandler4Msg& conn,
-    CwxMsgHead const& header,
-    bool& bSuspendConn);
+  virtual int onRecvMsg(CwxMsgBlock* msg, CwxAppHandler4Msg& conn,
+    CwxMsgHead const& header, bool& bSuspendConn);
 
  public:
   // 计算机的时钟是否回调
-  inline bool IsClockBack(uint32_t& last_time, uint32_t now) const{
+  inline bool IsClockBack(uint32_t& last_time, uint32_t now) const {
     if (last_time > now + 1){
       last_time = now;
       return true;
@@ -194,11 +185,8 @@ class DcmdAgentApp : public CwxAppFramework{
   // 检查service当前命令的进度信息
   void CheckSubTaskProcess(AgentSvrObj* svr_obj);
   // 获取app任务执行的输出文件内容
-  void LoadSubTaskResult(string const& svr_name,
-    string const& task_cmd,
-    string& out_process,
-    bool& is_success,
-    string& err_msg,
+  void LoadSubTaskResult(string const& svr_name, string const& task_cmd,
+    string& out_process, bool& is_success, string& err_msg,
     bool is_process_only);
   // 获取一个service的运行任务信息
   void DumpRuningAppSubTask(AgentSvrObj* svr_obj, string& dump);
@@ -244,7 +232,5 @@ class DcmdAgentApp : public CwxAppFramework{
    // 错误buf
   char                                       err_2k_[kDcmd2kBufLen];
 };
-
 }  // dcmd
 #endif
-

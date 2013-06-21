@@ -1,10 +1,8 @@
-﻿#ifndef __DCMD_AGENT_CONFIG_H__
+#ifndef __DCMD_AGENT_CONFIG_H__
 #define __DCMD_AGENT_CONFIG_H__
-
 #include <CwxCommon.h>
 #include <CwxIniParse.h>
 #include <CwxHostInfo.h>
-
 #include "dcmd_agent_def.h"
 
 namespace dcmd{
@@ -29,14 +27,11 @@ class DcmdAgentConfigData{
   // 是否打开调试开关
   bool                 is_debug_;
 };
-
-// 配置文件加载对象
 class DcmdAgentConfig{
  public:
   DcmdAgentConfig(){
     err_2k[0] = 0x00;
   }
-
   ~DcmdAgentConfig(){
   }
  public:
@@ -61,6 +56,5 @@ class DcmdAgentConfig{
   // 错误信息
   char                   err_2k[kDcmd2kBufLen];
 };
-
 } // dcmd
 #endif

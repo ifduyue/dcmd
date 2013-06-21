@@ -1,4 +1,4 @@
-﻿#include "dcmd_agent_def.h"
+#include "dcmd_agent_def.h"
 
 namespace dcmd {
 AgentCenter::AgentCenter(){

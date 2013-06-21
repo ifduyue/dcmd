@@ -1,11 +1,9 @@
-﻿#ifndef __DCMD_CENTER_OPR_CACHE_H__
+#ifndef __DCMD_CENTER_OPR_CACHE_H__
 #define __DCMD_CENTER_OPR_CACHE_H__
-
 #include <CwxAppConnInfo.h>
 #include <CwxMutexLock.h>
 #include <CwxLockGuard.h>
 #include <CwxMsgBlock.h>
-
 #include "dcmd_center_def.h"
 
 namespace dcmd {

@@ -746,10 +746,8 @@ bool DcmdCenterTaskMgr::Schedule(DcmdTss* tss,
   return true;
 }
 
-
-bool DcmdCenterTaskMgr::FinishTaskCmd(DcmdTss* tss,
-  dcmd_api::AgentTaskResult const& result, string& agent_ip, DcmdCenterTask*& task
-  )
+bool DcmdCenterTaskMgr::FinishTaskCmd(DcmdTss* tss, dcmd_api::AgentTaskResult const& result,
+  string& agent_ip, DcmdCenterTask*& task )
 {
   map<CWX_UINT64, DcmdCenterCmd*>::iterator iter;
   uint64_t cmd_id = strtoul(result.cmd().c_str(), NULL, 10);
@@ -786,7 +784,6 @@ bool DcmdCenterTaskMgr::FinishTaskCmd(DcmdTss* tss,
   RemoveCmd(iter->second);
   return true;
 }
-
 
 dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdStartTask(DcmdTss* tss, uint32_t task_id,
   uint32_t uid)
@@ -862,7 +859,7 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdPauseTask(DcmdTss* tss, uint32_t t
   }
   // 更新任务状态
   CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
-    "update task set pause=1 where task_id = %u", task->task_id_);
+    "update dcmd_task set pause=1 where task_id = %u", task->task_id_);
   if (!ExecSql(tss, true)) {
     mysql_->disconnect();
     return dcmd_api::DCMD_STATE_FAILED;
@@ -958,62 +955,61 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdFinishTask(DcmdTss* tss, uint32_t 
     return dcmd_api::DCMD_STATE_FAILED;
   }
   if (task->depended_tasks_.size()) {
-    tss->err_msg_ = "Task is depend by other task.";
+    tss->err_msg_ = "Task is depended by other task.";
     return dcmd_api::DCMD_STATE_FAILED;
   }
   bool is_success = false;
   do {
     CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
-      "delete from task_history where task_id = %u", task_id);
+      "delete from dcmd_task_history where task_id = %u", task_id);
     if (-1 == mysql_->execute(tss->sql_)) break;
 
     CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
-      "insert into task_history select * from task where task_id = %u", task_id);
+      "insert into dcmd_task_history select * from dcmd_task where task_id = %u", task_id);
     if (-1 == mysql_->execute(tss->sql_)) break;
 
     CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
-      "delete from task where task_id = %u", task_id);
+      "delete from dcmd_task where task_id = %u", task_id);
     if (-1 == mysql_->execute(tss->sql_)) break;
 
     CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
-      "delete from task_service_pool_history where task_id = %u", task_id);
+      "delete from dcmd_task_service_pool_history where task_id = %u", task_id);
     if (-1 == mysql_->execute(tss->sql_)) break;
 
     CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
-      "insert into task_service_pool_history select * from  task_service_pool where task_id = %u", task_id);
+      "insert into dcmd_task_service_pool_history select * from dcmd_task_service_pool where task_id = %u", task_id);
     if (-1 == mysql_->execute(tss->sql_)) break;
 
     CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
-      "delete from task_service_pool where task_id = %u", task_id);
+      "delete from dcmd_task_service_pool where task_id = %u", task_id);
     if (-1 == mysql_->execute(tss->sql_)) break;
 
     CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
-      "delete from task_node_history where task_id = %u", task_id);
+      "delete from dcmd_task_node_history where task_id = %u", task_id);
     if (-1 == mysql_->execute(tss->sql_)) break;
 
     CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
-      "insert into task_node_history select * from task_node where task_id = %u", task_id);
+      "insert into dcmd_task_node_history select * from dcmd_task_node where task_id = %u", task_id);
     if (-1 == mysql_->execute(tss->sql_)) break;
 
     CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
-      "delete from task_node where task_id = %u", task_id);
+      "delete dcmd_from task_node where task_id = %u", task_id);
     if (-1 == mysql_->execute(tss->sql_)) break;
     // 插入start的命令
     if (!InsertCommand(tss, false, uid, task->task_id_,
       0, "", 0, task->service_.c_str(), "", dcmd_api::CMD_RETRY_TASK,
       dcmd_api::COMMAND_SUCCESS, "")) break;
     CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
-      "delete from command_history where task_id = %u", task_id);
+      "delete from dcmd_command_history where task_id = %u", task_id);
     if (-1 == mysql_->execute(tss->sql_)) break;
 
     CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
-      "insert into command_history select * from command where task_id = %u", task_id);
+      "insert into dcmd_command_history select * from dcmd_command where task_id = %u", task_id);
     if (-1 == mysql_->execute(tss->sql_)) break;
 
     CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
-      "delete from command where task_id = %u", task_id);
+      "delete from dcmd_command where task_id = %u", task_id);
     if (-1 == mysql_->execute(tss->sql_)) break;
-
     is_success = true;
   }while(0);
   if (!is_success) {
@@ -1034,7 +1030,6 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdFinishTask(DcmdTss* tss, uint32_t 
   RemoveTaskFromMem(task);
   return dcmd_api::DCMD_STATE_SUCCESS;
 }
-
 dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdAddTaskNode(DcmdTss* tss, uint32_t task_id,
   char const* ip, char const* svr_pool, uint32_t uid)
 {
@@ -1069,14 +1064,13 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdAddTaskNode(DcmdTss* tss, uint32_t
   dcmd_escape_mysql_string(str_service);
   dcmd_escape_mysql_string(str_ip);
   CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
-    "insert into task_node(task_id, task_cmd, svr_pool, svr_name, ip,"\
+    "insert into dcmd_task_node(task_id, task_cmd, svr_pool, svr_name, ip,"\
     "state, ignored, start_time, finish_time, process, errmsg, utime, ctime, opr_uid) "\
     "values(%s, %u, '%s', '%s', '%s', '%s', %u, 0, now(), now(), '', '', now(), now(), %u)",
     task_id, str_task_cmd.c_str(), str_svr_pool.c_str(), str_service.c_str(), str_ip.c_str(),
     dcmd_api::SUBTASK_INIT, uid);
   if (!ExecSql(tss, false)) {
     CWX_ERROR((tss->err_msg_.c_str()));
-    mysql_->rollback();
     mysql_->disconnect();
     return dcmd_api::DCMD_STATE_FAILED;
   }
@@ -1086,7 +1080,6 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdAddTaskNode(DcmdTss* tss, uint32_t
     dcmd_api::COMMAND_SUCCESS, ""))
   {
     CWX_ERROR((tss->err_msg_.c_str()));
-    mysql_->rollback();
     mysql_->disconnect();
     return dcmd_api::DCMD_STATE_FAILED;
   }
@@ -1111,14 +1104,6 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdCancelSubtask(DcmdTss* tss, uint64
   }
   if (subtask->task_->is_freezed_) {
     tss->err_msg_ = "Task is in freezed state.";
-    return dcmd_api::DCMD_STATE_FAILED;
-  }
-  if (!subtask->task_->is_valid_) {
-    tss->err_msg_ = "Task is invalid.";
-    return dcmd_api::DCMD_STATE_FAILED;
-  }
-  if (subtask->task_->depend_task_ && subtask->task_->depend_task_->IsFinished()) {
-    tss->err_msg_ = "Depended task is not finished.";
     return dcmd_api::DCMD_STATE_FAILED;
   }
   if (!subtask->exec_cmd_) return dcmd_api::DCMD_STATE_SUCCESS;
@@ -1155,10 +1140,6 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdCancelSvrSubtask(DcmdTss* tss, uin
     tss->err_msg_ = "Task is in freezed state.";
     return dcmd_api::DCMD_STATE_FAILED;
   }
-  if (!task->is_valid_) {
-    tss->err_msg_ = "Task is invalid.";
-    return dcmd_api::DCMD_STATE_FAILED;
-  }
   // 将cancel命令插入数据库
   uint64_t cmd_id = InsertCommand(tss, true, uid, task_id, 0,
     "", 0, serivce, agent_ip, dcmd_api::CMD_CANCEL_SVR_SUBTASK,
@@ -1170,8 +1151,6 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdCancelSvrSubtask(DcmdTss* tss, uin
   DcmdCenterH4AgentTask::SendAgentCmd(app_, tss, agent_ip, 0, &cmd);
   return dcmd_api::DCMD_STATE_SUCCESS;
 }
-
-// 执行具体subtask的执行
 dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdExecSubtask(DcmdTss* tss, uint64_t subtask_id,
   uint32_t uid, DcmdCenterCmd** cmd)
 {
@@ -1249,7 +1228,6 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdExecSubtask(DcmdTss* tss, uint64_t
   DcmdCenterH4AgentTask::SendAgentCmd(app_, tss, subtask->ip_, 0, &task_cmd);
   return dcmd_api::DCMD_STATE_SUCCESS;
 }
-
 dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdRedoTask(DcmdTss* tss, uint32_t task_id,
   uint32_t uid)
 {
@@ -1283,7 +1261,7 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdRedoTask(DcmdTss* tss, uint32_t ta
   }
   // 更新任务的状态
   CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
-    "update task set state=%d, pause=0 where task_id = %d", dcmd_api::TASK_DOING, task_id);
+    "update dcmd_task set state=%d, pause=0 where task_id = %d", dcmd_api::TASK_DOING, task_id);
   if (!ExecSql(tss, false)) {
     mysql_->disconnect();
     return dcmd_api::DCMD_STATE_FAILED;
@@ -1292,7 +1270,7 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdRedoTask(DcmdTss* tss, uint32_t ta
   map<string, DcmdCenterSvrPool*>::iterator iter = task->pools_.begin();
   while (iter != task->pools_.end()) {
     CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
-      "update task_service_pool set undo_node=%d, doing_node=0, finish_node=0, fail_node=0, "\
+      "update dcmd_task_service_pool set undo_node=%d, doing_node=0, finish_node=0, fail_node=0, "\
       "ignored_fail_node=0, ignored_doing_node=0 where task_id = %d and svr_pool_id = %d",
       iter->second->all_subtasks_.size(), task_id, iter->second->svr_pool_id_);
     if (!ExecSql(tss, false)) {
@@ -1303,7 +1281,7 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdRedoTask(DcmdTss* tss, uint32_t ta
   }
   // 更新tasknode
   CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
-    "update task_node set state=0, ignore=0, start_time=now(), finish_time=now(), process='', errmsg='' "\
+    "update dcmd_task_node set state=0, ignore=0, start_time=now(), finish_time=now(), process='', errmsg='' "\
     "where task_id = %d", task_id);
   if (!ExecSql(tss, false)) {
     mysql_->disconnect();
@@ -1316,7 +1294,6 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdRedoTask(DcmdTss* tss, uint32_t ta
     mysql_->disconnect();
     return dcmd_api::DCMD_STATE_FAILED;
   }
-
   // 更新内存
   task->state_ = dcmd_api::TASK_DOING;
   task->is_pause_ = false;
@@ -1390,15 +1367,14 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdRedoSvrPool(DcmdTss* tss, uint32_t
   }
   // 更新任务的状态
   CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
-    "update task set state=%d, pause=0 where task_id = %d", dcmd_api::TASK_DOING, task_id);
+    "update dcmd_task set state=%d, pause=0 where task_id = %d", dcmd_api::TASK_DOING, task_id);
   if (!ExecSql(tss, false)) {
     mysql_->disconnect();
     return dcmd_api::DCMD_STATE_FAILED;
   }
-
   // 更新svr pool的信息
   CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
-    "update task_service_pool set undo_node=%d, doing_node=0, finish_node=0, fail_node=0, "\
+    "update dcmd_task_service_pool set undo_node=%d, doing_node=0, finish_node=0, fail_node=0, "\
     "ignored_fail_node=0, ignored_doing_node=0 where task_id = %d and ",
     pool->all_subtasks_.size(), task_id, pool->svr_pool_id_);
   if (!ExecSql(tss, false)) {
@@ -1409,7 +1385,7 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdRedoSvrPool(DcmdTss* tss, uint32_t
   string escape_svr_pool_name(pool->svr_pool_);
   dcmd_escape_mysql_string(escape_svr_pool_name);
   CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
-    "update task_node set state=0, ignore=0, start_time=now(), finish_time=now(), process='', errmsg='' "\
+    "update dcmd_task_node set state=0, ignore=0, start_time=now(), finish_time=now(), process='', errmsg='' "\
     "where task_id = %d and svr_pool='%s'", task_id, escape_svr_pool_name.c_str());
   if (!ExecSql(tss, false)) {
     mysql_->disconnect();
@@ -1417,7 +1393,7 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdRedoSvrPool(DcmdTss* tss, uint32_t
   }
   // 更新command
   CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
-    "update command set state=2 where state = 0 and task_id = %d and svr_pool_id",
+    "update dcmd_command set state=2 where state = 0 and task_id = %d and svr_pool_id",
     task_id, pool->svr_pool_id_);
   if (!ExecSql(tss, true)) {
     mysql_->disconnect();
@@ -1453,7 +1429,6 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdRedoSvrPool(DcmdTss* tss, uint32_t
   }
   return dcmd_api::DCMD_STATE_SUCCESS;
 }
-
 dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdRedoSubtask(DcmdTss* tss, uint64_t subtask_id,
   uint32_t uid)
 {
@@ -1474,13 +1449,8 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdRedoSubtask(DcmdTss* tss, uint64_t
     tss->err_msg_ = "Task is invalid.";
     return dcmd_api::DCMD_STATE_FAILED;
   }
-  if (subtask->task_->depend_task_ && subtask->task_->depend_task_->IsFinished()) {
-    tss->err_msg_ = "Depended task is not finished.";
-    return dcmd_api::DCMD_STATE_FAILED;
-  }
   return TaskCmdExecSubtask(tss, subtask_id, uid, NULL);
 }
-
 dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdIgnoreSubtask(DcmdTss* tss, uint64_t subtask_id,
   uint32_t uid)
 {
@@ -1503,7 +1473,7 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdIgnoreSubtask(DcmdTss* tss, uint64
   }
   if (subtask->is_ignored_) return dcmd_api::DCMD_STATE_SUCCESS;
   CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
-    "update task_node set ignored=1 where subtask_id = %s and opr_uid=%d",
+    "update dcmd_task_node set ignored=1 where subtask_id = %s and opr_uid=%d",
     CwxCommon::toString(subtask_id, tss->m_szBuf2K, 10), uid);
   if (!ExecSql(tss, true)) {
     mysql_->disconnect();
@@ -1512,7 +1482,6 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdIgnoreSubtask(DcmdTss* tss, uint64
   subtask->task_->ChangeSubtaskState(subtask, subtask->state_, true);
   return dcmd_api::DCMD_STATE_SUCCESS;
 }
-
 dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdFreezeTask(DcmdTss* tss,  uint32_t task_id,
   uint32_t uid)
 {
@@ -1530,10 +1499,9 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdFreezeTask(DcmdTss* tss,  uint32_t
   }
   if (task->is_freezed_) return dcmd_api::DCMD_STATE_SUCCESS;
   CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
-    "update task set freeze=1 where task_id = %u", task->task_id_);
+    "update dcmd_task set freeze=1 where task_id = %u", task->task_id_);
   if (!ExecSql(tss, false)) {
     CWX_ERROR((tss->err_msg_.c_str()));
-    mysql_->rollback();
     mysql_->disconnect();
     return dcmd_api::DCMD_STATE_FAILED;
   }
@@ -1543,7 +1511,6 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdFreezeTask(DcmdTss* tss,  uint32_t
     dcmd_api::COMMAND_SUCCESS, ""))
   {
     CWX_ERROR((tss->err_msg_.c_str()));
-    mysql_->rollback();
     mysql_->disconnect();
     return dcmd_api::DCMD_STATE_FAILED;
   }
@@ -1568,10 +1535,9 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdUnfreezeTask(DcmdTss* tss, uint32_
   }
   if (!task->is_freezed_) return dcmd_api::DCMD_STATE_SUCCESS;
   CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
-    "update task set freeze=0 where task_id = %u", task->task_id_);
+    "update dcmd_task set freeze=0 where task_id = %u", task->task_id_);
   if (!ExecSql(tss, false)) {
     CWX_ERROR((tss->err_msg_.c_str()));
-    mysql_->rollback();
     mysql_->disconnect();
     return dcmd_api::DCMD_STATE_FAILED;
   }
@@ -1581,7 +1547,6 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdUnfreezeTask(DcmdTss* tss, uint32_
     dcmd_api::COMMAND_SUCCESS, ""))
   {
     CWX_ERROR((tss->err_msg_.c_str()));
-    mysql_->rollback();
     mysql_->disconnect();
     return dcmd_api::DCMD_STATE_FAILED;
   }
@@ -1606,7 +1571,6 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdUpdateTask(DcmdTss* tss, uint32_t 
   }
   if (!UpdateTaskInfo(tss, false, task_id, con_num, con_rate, timeout, is_auto, uid)) {
     CWX_ERROR((tss->err_msg_.c_str()));
-    mysql_->rollback();
     mysql_->disconnect();
     return dcmd_api::DCMD_STATE_FAILED;
   }
@@ -1616,7 +1580,6 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdUpdateTask(DcmdTss* tss, uint32_t 
     dcmd_api::COMMAND_SUCCESS, ""))
   {
     CWX_ERROR((tss->err_msg_.c_str()));
-    mysql_->rollback();
     mysql_->disconnect();
     return dcmd_api::DCMD_STATE_FAILED;
   }

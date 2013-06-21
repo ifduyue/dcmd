@@ -1,4 +1,4 @@
-﻿#include "dcmd_agent_app.h"
+#include "dcmd_agent_app.h"
 
 #include <CwxDate.h>
 #include <CwxFile.h>
@@ -34,7 +34,6 @@ static int get_host_ip_addr(list<string>& ips){
   }
   return 0;
 }
-
 static bool OutputShellEnv(FILE* fd, char const* name, string const& value,
   char* szErr2K, char const* fileName)
 {
@@ -55,7 +54,6 @@ static bool OutputShellEnv(FILE* fd, char const* name, string const& value,
   }
   return true;
 }
-
 DcmdAgentApp::DcmdAgentApp() {
   master_ = NULL;
   next_opr_cmd_id_ = 0;
@@ -63,11 +61,7 @@ DcmdAgentApp::DcmdAgentApp() {
   data_buf_len_ = 0;
   err_2k_[0] = 0x00;
 }
-
-DcmdAgentApp::~DcmdAgentApp() {
-  // 所有资源在destroy()中释放，析构不做任何处理
-}
-
+DcmdAgentApp::~DcmdAgentApp() {}
 int DcmdAgentApp::init(int argc, char** argv) {
   string err_msg;
   // 首先调用架构的init api
@@ -90,7 +84,6 @@ int DcmdAgentApp::init(int argc, char** argv) {
   }
   return 0;
 }
-
 int DcmdAgentApp::initRunEnv(){
   // 设置系统的时钟间隔，最小刻度为1ms，此为0.2s。
   this->setClick(200);//0.2s
@@ -152,7 +145,6 @@ int DcmdAgentApp::initRunEnv(){
       return -1;
     }
   }
-
   { // 连接控制中心
     list<CwxHostInfo>::const_iterator iter = config_.conf().centers_.begin();
     uint32_t host_id = 1;
@@ -196,8 +188,7 @@ int DcmdAgentApp::initRunEnv(){
   }
   return 0;
 }
-
-void DcmdAgentApp::onTime(CwxTimeValue const& current){
+void DcmdAgentApp::onTime(CwxTimeValue const& current) {
   static uint32_t base_time = 0;
   static uint32_t last_check_time = 0;
   uint32_t  now = time(NULL);
@@ -212,7 +203,6 @@ void DcmdAgentApp::onTime(CwxTimeValue const& current){
   // 检查任务、操作指令
   CheckTaskAndOprCmd();
 }
-
 void DcmdAgentApp::onSignal(int signum){
   int status = 0;
   switch(signum){
@@ -231,11 +221,7 @@ void DcmdAgentApp::onSignal(int signum){
     break;
   }
 }
-
-int DcmdAgentApp::onConnCreated(CwxAppHandler4Msg& conn,
-                                 bool& ,
-                                 bool& )
-{
+int DcmdAgentApp::onConnCreated(CwxAppHandler4Msg& conn, bool& , bool& ) {
   map<uint32_t, AgentCenter*>::iterator iter;
   iter = center_map_.find(conn.getConnInfo().getConnId());
   CWX_ASSERT(iter != center_map_.end());
@@ -326,10 +312,8 @@ int DcmdAgentApp::onConnClosed(CwxAppHandler4Msg& conn) {
   return 0;
 }
 
-int DcmdAgentApp::onRecvMsg(CwxMsgBlock* msg,
-                             CwxAppHandler4Msg& conn,
-                             CwxMsgHead const& header,
-                             bool& )
+int DcmdAgentApp::onRecvMsg(CwxMsgBlock* msg,  CwxAppHandler4Msg& conn,
+                             CwxMsgHead const& header, bool& )
 {
   if (!msg) msg = CwxMsgBlockAlloc::malloc(0);
   msg->event().setMsgHeader(header);
@@ -340,12 +324,10 @@ int DcmdAgentApp::onRecvMsg(CwxMsgBlock* msg,
   if (msg) CwxMsgBlockAlloc::free(msg);
   return ret;
 }
-
 void DcmdAgentApp::destroy(){
   Reset();
   CwxAppFramework::destroy();
 }
-
 void DcmdAgentApp::Reset(){
   {// 释放控制中心对象map
     map<uint32_t, AgentCenter*>::iterator iter = center_map_.begin();
@@ -357,7 +339,6 @@ void DcmdAgentApp::Reset(){
   }
   // 将当前的master置为空
   master_ = NULL;
-
   {// 释放svr的task的map
     map<string, AgentSvrObj*>::iterator iter = svr_map_.begin();
     while(iter != svr_map_.end()){
@@ -366,7 +347,6 @@ void DcmdAgentApp::Reset(){
     }
     svr_map_.clear();
   }
-
   {// 释放等待回复的task执行结果
     map<uint64_t, AgentTaskResult*>::iterator iter = wait_reply_result_map_.begin();
     while(iter != wait_reply_result_map_.end()){
@@ -375,7 +355,6 @@ void DcmdAgentApp::Reset(){
     }
     wait_reply_result_map_.clear();
   }
-
   {// 释放等待发送的task执行结果
     map<uint64_t, AgentTaskResult*> ::iterator iter = wait_send_result_map_.begin();
     while(iter != wait_send_result_map_.end()){
@@ -412,7 +391,6 @@ void DcmdAgentApp::Reset(){
   data_buf_ = NULL;
   data_buf_len_ = 0;
 }
-
 bool DcmdAgentApp::InitPath(string const& path, bool is_clean_path) {
   if (!CwxFile::isDir(path.c_str())) {
     CWX_INFO(("create directory:%s", path.c_str()));
@@ -432,7 +410,6 @@ bool DcmdAgentApp::InitPath(string const& path, bool is_clean_path) {
   }
   return true;
 }
-
 void DcmdAgentApp::CheckExpiredTaskOutput(uint32_t now){
   CWX_INFO(("Begin remove task output file."));
   string path;
@@ -458,7 +435,6 @@ void DcmdAgentApp::CheckExpiredTaskOutput(uint32_t now){
   }
   CWX_INFO(("End remove task output file."));
 }
-
 void DcmdAgentApp::CheckTaskAndOprCmd(){
   // 检测心跳
   CheckHeatbeat();
@@ -585,7 +561,6 @@ void DcmdAgentApp::CheckTaskAndOprCmd(){
     }
   }
 }
-
 void DcmdAgentApp::CheckHeatbeat(){
   static uint32_t time_base = 0;
   static uint32_t last_check_heatbeat = time(NULL);
@@ -1971,5 +1946,4 @@ void DcmdAgentApp::LoadSubTaskResult(string const& svr_name,
     err_msg = item.second;
   }
 }
-
 }

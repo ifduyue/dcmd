@@ -1,34 +1,27 @@
-﻿#include "dcmd_center_subtask_output_task.h"
-
+#include "dcmd_center_subtask_output_task.h"
 #include "dcmd_center_app.h"
 namespace dcmd {
 void DcmdCenterSubtaskOutputTask::noticeTimeout(CwxTss* ) {
   err_msg_ = "Timeout";
   setTaskState(CwxTaskBoardTask::TASK_STATE_FINISH);
   CWX_DEBUG(("Subtask-output task is timeout , task_id=%u, ip=%s",
-    getTaskId(),
-    agent_ip_.c_str()));
+    getTaskId(), agent_ip_.c_str()));
 }
-
 void DcmdCenterSubtaskOutputTask::noticeRecvMsg(CwxMsgBlock*& msg, CwxTss* , bool& ) {
   recv_msg_ = msg;
   setTaskState(CwxTaskBoardTask::TASK_STATE_FINISH);
   msg = NULL;
 }
-
 void DcmdCenterSubtaskOutputTask::noticeFailSendMsg(CwxMsgBlock*& , CwxTss* ) {
   setTaskState(CwxTaskBoardTask::TASK_STATE_FINISH);
   err_msg_ = string("Failure to send msg to agent:") + agent_ip_;
 }
-
 void DcmdCenterSubtaskOutputTask::noticeEndSendMsg(CwxMsgBlock*& , CwxTss* , bool& ){
 }
-
 void DcmdCenterSubtaskOutputTask::noticeConnClosed(CWX_UINT32 , CWX_UINT32 , CWX_UINT32 , CwxTss*){
   setTaskState(CwxTaskBoardTask::TASK_STATE_FINISH);
   err_msg_ = string("Connection is closed. agent:") + agent_ip_;
 }
-
 int DcmdCenterSubtaskOutputTask::noticeActive(CwxTss* ThrEnv) {
   DcmdTss* tss= (DcmdTss*)ThrEnv;
   setTaskState(TASK_STATE_WAITING);
@@ -67,9 +60,8 @@ int DcmdCenterSubtaskOutputTask::noticeActive(CwxTss* ThrEnv) {
   }
   return 0;
 }
-
 void DcmdCenterSubtaskOutputTask::execute(CwxTss* pThrEnv) {
-  if (CwxTaskBoardTask::TASK_STATE_INIT == getTaskState()){
+  if (CwxTaskBoardTask::TASK_STATE_INIT == getTaskState()) {
     recv_msg_ = NULL;
     err_msg_ = "";
     uint64_t timestamp = 3;
@@ -83,8 +75,7 @@ void DcmdCenterSubtaskOutputTask::execute(CwxTss* pThrEnv) {
     delete this;
   }
 }
-
-void DcmdCenterSubtaskOutputTask::Reply(CwxTss* pThrEnv){
+void DcmdCenterSubtaskOutputTask::Reply(CwxTss* pThrEnv) {
   dcmd_api::UiTaskOutputReply reply;
   dcmd_api::AgentTaskOutputReply agent_reply;
   DcmdTss* tss = (DcmdTss*)pThrEnv;

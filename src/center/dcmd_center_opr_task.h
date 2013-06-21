@@ -1,11 +1,8 @@
 #ifndef __DCMD_CENTER_OPR_TASK_H__
 #define __DCMD_CENTER_OPR_TASK_H__
-
 #include <CwxTaskBoard.h>
-
 #include "dcmd_tss.h"
 #include "dcmd_center_def.h"
-
 namespace  dcmd {
   class DcmdCenterApp;
   // agent的操作指令执行结果的对象

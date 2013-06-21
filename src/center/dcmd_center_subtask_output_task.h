@@ -1,16 +1,12 @@
-﻿#ifndef __DCMD_CENTER_SUBTASK_OUTPUT_TASK_H__
+#ifndef __DCMD_CENTER_SUBTASK_OUTPUT_TASK_H__
 #define __DCMD_CENTER_SUBTASK_OUTPUT_TASK_H__
-
 #include <CwxTaskBoard.h>
-
-#include "../cmn/dcmd_tss.h"
+#include "dcmd_tss.h"
 #include "dcmd_center_def.h"
 #include "dcmd_center_agent_mgr.h"
 
 namespace dcmd {
 class DcmdCenterApp;
-
-
 //UI控制台获取任务执行结果的task对象
 class DcmdCenterSubtaskOutputTask : public CwxTaskBoardTask {
  public:
@@ -109,6 +105,5 @@ class DcmdCenterSubtaskOutputTask : public CwxTaskBoardTask {
   // 错误信息
   string                 err_msg_;
 };
-
 }  // dcmd
 #endif

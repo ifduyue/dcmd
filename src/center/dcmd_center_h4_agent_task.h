@@ -1,9 +1,7 @@
 #ifndef __DCMD_CENTER_H4_AGENT_TASK_H__
 #define __DCMD_CENTER_H4_AGENT_TASK_H__
-
 #include <CwxCommander.h>
-
-#include "../cmn/dcmd_tss.h"
+#include "dcmd_tss.h"
 #include "dcmd_center_def.h"
 
 namespace dcmd {
@@ -14,8 +12,7 @@ class DcmdCenterH4AgentTask: public CwxCmdOp{
   DcmdCenterH4AgentTask(DcmdCenterApp* app):app_(app) {
     is_master_ = false;
   }
-  virtual ~DcmdCenterH4AgentTask() {
-  }
+  virtual ~DcmdCenterH4AgentTask() { }
 
  public:
   // 处理收到消息的事件

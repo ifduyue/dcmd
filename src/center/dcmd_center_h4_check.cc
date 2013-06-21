@@ -1,17 +1,13 @@
 #include "dcmd_center_h4_check.h"
-
 #include "dcmd_center_app.h"
 namespace dcmd {
-
 // 检测shell的执行超时
 int DcmdCenterH4Check::onTimeoutCheck(CwxMsgBlock*& , CwxTss* pThrEnv) {
   CWX_INFO(("Start check master:%s:%s",
-    app_->config().common().host_id_.c_str(),
-    app_->is_master()?"true":"false"));
+    app_->config().common().host_id_.c_str(), app_->is_master()?"true":"false"));
   DcmdTss* tss = (DcmdTss*)pThrEnv;
   CheckMasterCenter(tss);
-  CWX_INFO(("End check master:%s:%s",
-     app_->config().common().host_id_.c_str(),
+  CWX_INFO(("End check master:%s:%s", app_->config().common().host_id_.c_str(),
      app_->is_master()?"true":"false"));
   return 1;
 }
@@ -35,7 +31,6 @@ bool DcmdCenterH4Check::GetMasterHost(Mysql* my, string& master_host, DcmdTss* t
   my->freeResult();
   return true;
 }
-
 bool DcmdCenterH4Check::SetHeatbeat(Mysql* my, bool is_master, DcmdTss* tss) {
   CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
     "insert into dcmd_center(host, master, update_time) values('%s', %d, now()) \
@@ -56,7 +51,6 @@ bool DcmdCenterH4Check::SetHeatbeat(Mysql* my, bool is_master, DcmdTss* tss) {
   }
   return true;
 }
-
 bool DcmdCenterH4Check::LockCenterTable(Mysql* my, DcmdTss* tss) {
   CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, "lock tables dcmd_center write");
   if (-1 == my->execute(tss->sql_)){
@@ -65,8 +59,6 @@ bool DcmdCenterH4Check::LockCenterTable(Mysql* my, DcmdTss* tss) {
   }
   return true;
 }
-
-///unlock table
 bool DcmdCenterH4Check::UnlockCenterTable(Mysql* my, DcmdTss* tss) {
   CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, "unlock tables");
   if (-1 == my->execute(tss->sql_)) {
@@ -75,7 +67,6 @@ bool DcmdCenterH4Check::UnlockCenterTable(Mysql* my, DcmdTss* tss) {
   }
   return true;
 }
-
 void DcmdCenterH4Check::CheckMasterCenter(DcmdTss* tss) {
   bool is_master = false; //是否是master
   string host;

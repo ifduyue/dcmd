@@ -1,6 +1,5 @@
-﻿#ifndef __DCMD_CENTER_H4_CHECK_H__
+#ifndef __DCMD_CENTER_H4_CHECK_H__
 #define __DCMD_CENTER_H4_CHECK_H__
-
 #include <CwxCommander.h>
 #include "../cmn/dcmd_tss.h"
 #include "dcmd_center_def.h"

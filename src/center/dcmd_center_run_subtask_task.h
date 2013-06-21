@@ -1,12 +1,9 @@
-﻿#ifndef __DCMD_CENTER_RUN_SUBTASK_TASK_H__
+#ifndef __DCMD_CENTER_RUN_SUBTASK_TASK_H__
 #define __DCMD_CENTER_RUN_SUBTASK_TASK_H__
-
 #include <CwxTaskBoard.h>
-
 #include "../cmn/dcmd_tss.h"
 #include "dcmd_center_def.h"
 #include "dcmd_center_agent_mgr.h"
-
 namespace dcmd {
 class DcmdCenterApp;
 // UI控制台的Running subtask的task对象

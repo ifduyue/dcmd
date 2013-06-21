@@ -1,8 +1,6 @@
-﻿#include "dcmd_center_run_opr_task.h"
+#include "dcmd_center_run_opr_task.h"
 #include "dcmd_center_agent_mgr.h"
-
 #include <CwxMd5.h>
-
 #include "dcmd_center_app.h"
 namespace dcmd {
 void DcmdCenterOprTask::noticeTimeout(CwxTss* ) {
@@ -10,7 +8,6 @@ void DcmdCenterOprTask::noticeTimeout(CwxTss* ) {
   setTaskState(CwxTaskBoardTask::TASK_STATE_FINISH);
   CWX_DEBUG(("Task is timeout , task_id=%u", getTaskId()));
 }
-
 void DcmdCenterOprTask::noticeRecvMsg(CwxMsgBlock*& msg, CwxTss* ThrEnv, bool& ){
   DcmdTss* tss = (DcmdTss*)ThrEnv;
   for (uint16_t i=0; i<agent_num_; i++) {
@@ -39,7 +36,6 @@ void DcmdCenterOprTask::noticeRecvMsg(CwxMsgBlock*& msg, CwxTss* ThrEnv, bool& )
   }
   CWX_ASSERT(0);
 }
-
 void DcmdCenterOprTask::noticeFailSendMsg(CwxMsgBlock*& msg, CwxTss* ) {
   for(uint32_t i=0; i<agent_num_; i++) {
     if (agent_conns_[i].conn_id_ == msg->send_ctrl().getConnId()) {
@@ -52,10 +48,8 @@ void DcmdCenterOprTask::noticeFailSendMsg(CwxMsgBlock*& msg, CwxTss* ) {
   }
   CWX_ASSERT(0);
 }
-
 void DcmdCenterOprTask::noticeEndSendMsg(CwxMsgBlock*& , CwxTss* , bool& ){
 }
-
 void DcmdCenterOprTask::noticeConnClosed(CWX_UINT32 , CWX_UINT32 , CWX_UINT32 uiConnId, CwxTss*){
   for (uint16_t i=0; i<agent_num_; i++) {
     if (uiConnId == agent_conns_[i].conn_id_) {
@@ -68,7 +62,6 @@ void DcmdCenterOprTask::noticeConnClosed(CWX_UINT32 , CWX_UINT32 , CWX_UINT32 ui
     }
   }
 }
-
 bool DcmdCenterOprTask::FetchOprCmd(DcmdTss* tss) {
   ///从db中获取
   Mysql* my = app_->GetAdminMysql();
@@ -85,7 +78,7 @@ bool DcmdCenterOprTask::FetchOprCmd(DcmdTss* tss) {
       DcmdTss::kMaxSqlBufSize,
       "select a.ui_name, a.opr_cmd, a.run_user,a.script_md5, a.agent_mutable,"\
       "b.timeout, b.ip, b.priority, b.arg, b.repeat, b.cache_time, b.arg_mutable "\
-      "from  opr_cmd as a, opr_cmd_exec as b"\
+      "from  dcmd_opr_cmd as a, dcmd_opr_cmd_exec as b"\
       "where b.exec_id =%s and a.opr_cmd = b.opr_cmd",
       CwxCommon::toString(opr_cmd_id_, tss->m_szBuf2K, 10));
     if (!my->query(tss->sql_)){
@@ -242,7 +235,7 @@ bool DcmdCenterOprTask::FetchOprCmd(DcmdTss* tss) {
   if (opr_cmd_.repeat_type_ != DcmdCenterOprCmd::DCMD_OPR_CMD_REPEAT_WITHOUT_HISTORY){
     ///记录操作历史
     CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
-      "insert into opr_cmd_exec_history(exec_id, opr_cmd_Id, opr_cmd, timeout, ip, priority, repeat,"\
+      "insert into dcmd_opr_cmd_exec_history(exec_id, opr_cmd_Id, opr_cmd, timeout, ip, priority, repeat,"\
       "cache_time, arg_mutable, arg, utime, ctime, opr_uid) "\
       "select exec_id, opr_cmd_Id, opr_cmd, timeout, ip, priority, repeat,"\
       "cache_time, arg_mutable, arg, now(), ctime, opr_uid from opr_cmd_exec \
@@ -274,8 +267,6 @@ bool DcmdCenterOprTask::FetchOprCmd(DcmdTss* tss) {
   if (is_exec_sql) my->commit();
   return true;
 }
-
-
 int DcmdCenterOprTask::noticeActive(CwxTss* ThrEnv) {
   DcmdTss* tss= (DcmdTss*)ThrEnv;
   setTaskState(TASK_STATE_WAITING);
@@ -356,9 +347,8 @@ int DcmdCenterOprTask::noticeActive(CwxTss* ThrEnv) {
   }
   return 0;
 }
-
 void DcmdCenterOprTask::execute(CwxTss* pThrEnv) {
-  if (CwxTaskBoardTask::TASK_STATE_INIT == getTaskState())    {
+  if (CwxTaskBoardTask::TASK_STATE_INIT == getTaskState()) {
     is_reply_timeout_ = false;
     is_failed_ = false;
     agent_num_ = 0;
@@ -372,7 +362,6 @@ void DcmdCenterOprTask::execute(CwxTss* pThrEnv) {
     delete this;
   }
 }
-
 void DcmdCenterOprTask::Reply(CwxTss* pThrEnv) {
   DcmdTss* tss = (DcmdTss*)pThrEnv;
   uint16_t index = 0;

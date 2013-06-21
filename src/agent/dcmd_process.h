@@ -1,6 +1,5 @@
 #ifndef __DCMD_PROCESS_H__
 #define __DCMD_PROCESS_H__
-
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <list>
@@ -8,14 +7,11 @@
 #include <stdint.h>
 #include <string>
 #include <unistd.h>
-
-#include "../cmn/dcmd_macro.h"
-
+#include "dcmd_macro.h"
 namespace dcmd {
 class DcmdProcess {
  public:
-  DcmdProcess(string const& exec_file) :
-      exec_file_(exec_file){
+  DcmdProcess(string const& exec_file) : exec_file_(exec_file){
     pid_ = -1;
     start_time_ = 0;
     status_ = 0;
@@ -45,21 +41,11 @@ class DcmdProcess {
   // 进程是否运行
   bool IsRuning() const;
   // 进程的exit()代码
-  inline int return_code() const {
-    return WEXITSTATUS(status_);
-  }
-  inline uint32_t start_time() const {
-    return start_time_;
-  }
-  inline pid_t pid() const {
-    return start_time_;
-  }
-  inline int status() const {
-    return status_;
-  }
-  inline string const& exec_file() const {
-    return exec_file_;
-  }
+  inline int return_code() const {  return WEXITSTATUS(status_);}
+  inline uint32_t start_time() const { return start_time_; }
+  inline pid_t pid() const { return start_time_; }
+  inline int status() const { return status_; }
+  inline string const& exec_file() const { return exec_file_; }
 
  private:
   // fork后执行的程序

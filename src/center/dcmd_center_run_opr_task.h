@@ -1,8 +1,6 @@
-﻿#ifndef __DCMD_CENTER_RUN_OPR_TASK_H__
+#ifndef __DCMD_CENTER_RUN_OPR_TASK_H__
 #define __DCMD_CENTER_RUN_OPR_TASK_H__
-
 #include <CwxTaskBoard.h>
-
 #include "../cmn/dcmd_tss.h"
 #include "dcmd_center_def.h"
 #include "dcmd_center_agent_mgr.h"
@@ -22,7 +20,6 @@ class DcmdCenterRunOprTask : public CwxTaskBoardTask {
     app_ = app;
     recv_msg_ = NULL;
   }
-
   ~DcmdCenterRunOprTask(){
     if (recv_msg_) CwxMsgBlockAlloc::free(recv_msg_);
   }

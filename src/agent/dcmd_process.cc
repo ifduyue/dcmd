@@ -1,17 +1,14 @@
 #include "dcmd_process.h"
-
 #include <errno.h>
 #include <stdio.h>
 #include <CwxCommon.h>
-
 // 此类的使用方式是针对一个exe创建一个process的实例，然后指定不同的参数
 // 环境变量运行。
 // 可以通过Wait等待进程的结束，也可以通过TryWait轮询等待进程的结束。
 namespace dcmd {
-bool DcmdProcess::Run(char const* user, 
-    list<string> const* process_arg,
-    list<string> const* process_env,
-    string* err_msg) {
+bool DcmdProcess::Run(char const* user, list<string> const* process_arg,
+    list<string> const* process_env, string* err_msg)
+{
   if (IsRuning()) return true;
   pid_t pid = -1;
   uint32_t index = 0;
@@ -82,7 +79,6 @@ bool DcmdProcess::Run(char const* user,
   // 若exec执行失败，则返回1
   _exit(127);
 }
-
 void DcmdProcess::Kill(bool is_kill_child) {
   int num_ret = 0;
   int status = 0;
@@ -105,8 +101,6 @@ void DcmdProcess::Kill(bool is_kill_child) {
   start_time_ = 0;
   status_ = 0;
 }
-
-// 返回值：-1：wait失败；1进程正常退出；2：进程异常退出
 int DcmdProcess::Wait(string& err_msg) {
   while (waitpid(pid_, &status_, 0) < 0) {
     if (errno != EINTR) {
@@ -120,8 +114,6 @@ int DcmdProcess::Wait(string& err_msg) {
   if (!WIFEXITED(status_)) return 2;
   return 1;
 }
-
-//返回值：-1：wait失败；0：进程还在运行；1：进程正常退出；2：进程异常退出
 int DcmdProcess::TryWait(string& err_msg) {
   int num_ret = waitpid(pid_, &status_, WNOHANG);
   if (0 > num_ret) {
@@ -137,7 +129,6 @@ int DcmdProcess::TryWait(string& err_msg) {
   if (!WIFEXITED(status_)) return 2;
   return 1;
 }
-
 bool DcmdProcess::IsRuning() const {
   return -1 != pid_;
 }

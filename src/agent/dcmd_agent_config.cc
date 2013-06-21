@@ -1,9 +1,7 @@
-﻿#include "dcmd_agent_config.h"
-
+#include "dcmd_agent_config.h"
 #include <CwxLogger.h>
-
 namespace dcmd {
-int DcmdAgentConfig::Init(string const& conf_file){
+int DcmdAgentConfig::Init(string const& conf_file) {
   string value;
   if (!parser_.load(conf_file)){
     strcpy(err_2k, parser_.getErrMsg());

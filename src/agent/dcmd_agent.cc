@@ -1,7 +1,5 @@
-﻿#include <CwxAppProcessMgr.h>
-
+#include <CwxAppProcessMgr.h>
 #include "dcmd_agent_app.h"
-
 int main(int argc, char** argv){
     //创建agent的app对象实例
     dcmd::DcmdAgentApp* pApp = new dcmd::DcmdAgentApp();

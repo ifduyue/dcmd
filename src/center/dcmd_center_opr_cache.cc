@@ -1,4 +1,4 @@
-﻿#include "dcmd_center_opr_cache.h"
+#include "dcmd_center_opr_cache.h"
 
 namespace dcmd {
 void DcmdCenterOprCache::AddOprCmd(uint64_t opr_cmd_id, DcmdCenterOprCmd const& cmd) {
@@ -13,7 +13,6 @@ void DcmdCenterOprCache::AddOprCmd(uint64_t opr_cmd_id, DcmdCenterOprCmd const& 
     cmd_cache_[opr_cmd_id] = pcmd;
   }
 }
-
 bool DcmdCenterOprCache::GetOprCmd(uint64_t opr_cmd_id, DcmdCenterOprCmd& cmd) {
   CwxMutexGuard<CwxMutexLock>  lock(&lock_);
   uint32_t now = time(NULL);
@@ -28,7 +27,6 @@ bool DcmdCenterOprCache::GetOprCmd(uint64_t opr_cmd_id, DcmdCenterOprCmd& cmd) {
   }
   return false;
 }
-
 void DcmdCenterOprCache::CheckTimeout(uint32_t now){
   CwxMutexGuard<CwxMutexLock>  lock(&lock_);
   uint64_t cur_opr_cmd_id = 0;

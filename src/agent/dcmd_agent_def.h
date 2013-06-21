@@ -1,12 +1,10 @@
-﻿#ifndef __DCMD_AGENT_DEF_H__
+#ifndef __DCMD_AGENT_DEF_H__
 #define __DCMD_AGENT_DEF_H__
-
 #include <CwxCommon.h>
 #include <CwxHostInfo.h>
-
-#include "../cmn/dcmd_def.h"
-#include "../cmn/dcmd_tss.h"
-#include "../cmn/dcmd_macro.h"
+#include "dcmd_def.h"
+#include "dcmd_tss.h"
+#include "dcmd_macro.h"
 #include "dcmd_process.h"
 
 namespace dcmd {
@@ -42,7 +40,6 @@ class AgentCenter{
   // 错误信息
   string          err_msg_;
 };
-
 class AgentTaskResult {
  public:
   AgentTaskResult() {
@@ -54,7 +51,6 @@ class AgentTaskResult {
   uint32_t                     msg_taskid_;
   uint64_t                     cmd_id_;
 };
-
 class AgentTaskCmd {
  public:
   AgentTaskCmd() {
@@ -74,7 +70,6 @@ class AgentTaskCmd {
   // 上一次检查的process
   string                       last_check_process_;
 };
-
 class AgentOprCmd {
  public:
    AgentOprCmd() {
@@ -85,9 +80,7 @@ class AgentOprCmd {
      agent_opr_id_ = 0;
      begin_time_ = 0;
    }
-   ~AgentOprCmd() {
-     if (processor_) delete processor_;
-   }
+   ~AgentOprCmd() { if (processor_) delete processor_; }
  public:
    // 通信接口的对象
    dcmd_api::AgentOprCmd        cmd_;
@@ -104,16 +97,13 @@ class AgentOprCmd {
    // 运行时间
    uint32_t                     begin_time_;
 };
-
 class AgentSvrObj{
  public:
   AgentSvrObj(){
     processor_ = NULL;
     running_cmd_ = NULL;
   }
-  ~AgentSvrObj() {
-    if (processor_) delete processor_;
-  }
+  ~AgentSvrObj() { if (processor_) delete processor_; }
  public:
   // service的名字
   string			                      svr_name_;
@@ -124,7 +114,5 @@ class AgentSvrObj{
   // 当前正在运行的任务名字
   AgentTaskCmd*                     running_cmd_;
 };
-
 }  // dcmd
-
 #endif

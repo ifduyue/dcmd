@@ -1,4 +1,4 @@
-﻿#include "dcmd_center_run_opr_task.h"
+#include "dcmd_center_run_opr_task.h"
 
 #include "dcmd_center_app.h"
 namespace dcmd {
@@ -6,29 +6,23 @@ void DcmdCenterRunOprTask::noticeTimeout(CwxTss* ) {
   err_msg_ = "Timeout";
   setTaskState(CwxTaskBoardTask::TASK_STATE_FINISH);
   CWX_DEBUG(("Run shell result Task is timeout , task_id=%u, ip=%s",
-    getTaskId(),
-    agent_ip_.c_str()));
+    getTaskId(), agent_ip_.c_str()));
 }
-
 void DcmdCenterRunOprTask::noticeRecvMsg(CwxMsgBlock*& msg, CwxTss* , bool& ){
   recv_msg_ = msg;
   setTaskState(CwxTaskBoardTask::TASK_STATE_FINISH);
   msg = NULL;
 }
-
 void DcmdCenterRunOprTask::noticeFailSendMsg(CwxMsgBlock*& , CwxTss* ){
   setTaskState(CwxTaskBoardTask::TASK_STATE_FINISH);
   err_msg_ = string("Failure to send msg to agent:") + agent_ip_;
 }
-
 void DcmdCenterRunOprTask::noticeEndSendMsg(CwxMsgBlock*& , CwxTss* , bool& ){
 }
-
 void DcmdCenterRunOprTask::noticeConnClosed(CWX_UINT32 , CWX_UINT32 , CWX_UINT32 , CwxTss*){
   setTaskState(CwxTaskBoardTask::TASK_STATE_FINISH);
   err_msg_ = string("Connection is closed. agent:") + agent_ip_;
 }
-
 int DcmdCenterRunOprTask::noticeActive(CwxTss* ThrEnv) {
   DcmdTss* tss= (DcmdTss*)ThrEnv;
   setTaskState(TASK_STATE_WAITING);
@@ -65,7 +59,6 @@ int DcmdCenterRunOprTask::noticeActive(CwxTss* ThrEnv) {
   }
   return 0;
 }
-
 void DcmdCenterRunOprTask::execute(CwxTss* pThrEnv){
   if (CwxTaskBoardTask::TASK_STATE_INIT == getTaskState()){
     recv_msg_ = NULL;
@@ -81,7 +74,6 @@ void DcmdCenterRunOprTask::execute(CwxTss* pThrEnv){
     delete this;
   }
 }
-
 void DcmdCenterRunOprTask::Reply(CwxTss* pThrEnv) {
   dcmd_api::UiAgentRunningOprReply reply;
   dcmd_api::AgentRunningOprReply agent_reply;
