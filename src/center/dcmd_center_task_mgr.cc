@@ -295,7 +295,7 @@ bool DcmdCenterTaskMgr::LoadNewTask(DcmdTss* tss, bool is_first) {
   CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, "select task_id, task_name, task_cmd, depend_task_id,"\
     "svr_id, svr_name, gid, group_name, tag, update_env, update_tag, state,"\
     "freeze, valid, pause, concurrent_num, concurrent_rate, timeout, auto, process, task_arg, "\
-    "errmsg from dcmd_task order by task_id asc where task_id > %d", next_task_id_);
+    "errmsg from dcmd_task where task_id > %d order by task_id asc", next_task_id_);
   if (!mysql_->query(tss->sql_)){
     CwxCommon::snprintf(tss->m_szBuf2K, 2047, "Failure to fetch new tasks. err:%s; sql:%s", mysql_->getErrMsg(), tss->sql_);
     tss->err_msg_ = tss->m_szBuf2K;
