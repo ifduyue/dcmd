@@ -79,7 +79,7 @@ namespace dcmd {
       "where t.task_id = %u and p.task_id=%u "\
       " and p.svr_pool_id = n.svr_pool_id",
       uid, task->task_id_, task->task_id_);
-    return ExecSql(tss, is_commit));
+    return ExecSql(tss, is_commit);
   }
   inline uint64_t DcmdCenterTaskMgr::InsertCommand(DcmdTss* tss, bool is_commit, uint32_t uid,
     uint32_t task_id, uint64_t subtask_id, char const* svr_pool,

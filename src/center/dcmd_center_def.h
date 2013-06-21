@@ -295,11 +295,11 @@ namespace dcmd {
           if ((calc_state == dcmd_api::TASK_FINISHED) || 
             (calc_state == dcmd_api::TASK_FINISHED_WITH_FAILED))
           {
-            calc_state == dcmd_api::TASK_FINISHED_WITH_FAILED;
+            calc_state = dcmd_api::TASK_FINISHED_WITH_FAILED;
           }
         } else if (pool_state == dcmd_api::TASK_FINISHED_WITH_FAILED) {
           if ((calc_state == dcmd_api::TASK_FINISHED)){
-            calc_state == dcmd_api::TASK_FINISHED_WITH_FAILED;
+            calc_state = dcmd_api::TASK_FINISHED_WITH_FAILED;
           }
         }
         ++iter;
