@@ -45,7 +45,7 @@ bool DcmdCenterTaskMgr::ReceiveCmd(DcmdTss* tss, dcmd_api::UiTaskCmd const& cmd,
   if (!is_start_ || !app_->is_master()) {
     if (!master_host.length() || master_host == app_->config().common().host_id_) {
       state = dcmd_api::DCMD_STATE_NO_MASTER;
-      strcpy(tss->err_msg_, "No master.");
+      tss->err_msg_ = "No master.";
     } else {
       state = dcmd_api::DCMD_STATE_WRONG_MASTER;
       tss->err_msg_ = master_host.c_str();
@@ -408,7 +408,7 @@ bool DcmdCenterTaskMgr::LoadNewSubtask(DcmdTss* tss) {
       ++iter;
     }
   }
-  list<DcmdCenterSubtask*>::iterator iter = new_subtasks.begin();
+  iter = new_subtasks.begin();
   while (iter != new_subtasks.end()) {
     subtask = *iter;
     subtask->task_ = GetTask(subtask->subtask_id_);
@@ -458,7 +458,7 @@ bool DcmdCenterTaskMgr::LoadNewSubtask(DcmdTss* tss) {
   {
     map<uint32_t, DcmdCenterTask*>::iterator task_iter = changed_task.begin();
     while(task_iter != changed_task.end()) {
-      if (!CalcTaskStatsInfo(tss, true, iter->second)) return false;
+      if (!CalcTaskStatsInfo(tss, true, task_iter->second)) return false;
       ++iter;
     }
   }
@@ -1587,7 +1587,7 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdUpdateTask(DcmdTss* tss, uint32_t 
   task->max_current_rate_ = con_rate;
   task->timeout_ = timeout;
   task->is_auto_ = is_auto;
-  if (!CalcTaskStatsInfo(tss, true, iter->second)) {
+  if (!CalcTaskStatsInfo(tss, true, task)) {
     mysql_->disconnect();
     return dcmd_api::DCMD_STATE_FAILED;
   }
