@@ -52,7 +52,10 @@ const uint32_t kDefIpTableRefreshSecond = 300;
 const uint32_t kMaxIpTableRefreshSecond = 1800;
 // 最小的设备ip表的刷新间隔
 const uint32_t kMinIpTableRefreshSecond = 30;
-
+// 操作指令的最小优先级
+const uint32_t kMinOprCmdPriority = 1;
+// 操作指令的最大优先级
+const uint32_t kMaxOprCmdPriority = 10;
 // 缺省的illegal agent的block的时间
 const uint32_t kDefIlegalAgentBlockSecond = 180;
 // 最小的illegal agnet的block的时间
