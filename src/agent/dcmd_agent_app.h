@@ -133,6 +133,14 @@ class DcmdAgentApp : public CwxAppFramework{
   void CheckExpiredTaskOutput(uint32_t now);
   // 检查任务、操作指令
   void CheckTaskAndOprCmd();
+  // 检查新收到的命令
+  void CheckNewReceivedCmd();
+  // 检查task的运行状态
+  void CheckTasks();
+  // 检查需要回复的命令
+  void CheckTaskWaitingToReply();
+  // 调度opr 命令
+  void DispatchOprCmd();
   // 心跳检测
 	void CheckHeatbeat();
   // 检查app的task指令

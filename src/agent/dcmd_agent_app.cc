@@ -439,6 +439,37 @@ void DcmdAgentApp::CheckTaskAndOprCmd(){
   // 检测心跳
   CheckHeatbeat();
   // 检查新收到的新指令
+  CheckNewReceivedCmd();
+  // 检查svr的task的运行状况
+  CheckTasks();
+  // 检查未发送给center的task处理结果，并发送给center
+  CheckTaskWaitingToReply();
+  // 检测操作命令
+  DispatchOprCmd();
+}
+
+void DcmdAgentApp::DispatchOprCmd() {
+  if (opr_cmd_map_.size()){
+    map<uint64_t, AgentOprCmd*> ::iterator iter =  opr_cmd_map_.begin();
+    uint64_t opr_id = 0;
+    AgentOprCmd* opr_cmd = NULL;
+    while(iter != opr_cmd_map_.end()) {
+      opr_cmd = iter->second;
+      // 检查或执行操作命令
+      if (CheckOprCmd(opr_cmd, false)) { 
+        // 如果认为已经完成
+        opr_id = iter->first;
+        opr_cmd_map_.erase(iter);
+        delete opr_cmd;
+        iter = opr_cmd_map_.upper_bound(opr_id);
+        continue;
+      }
+      iter++;
+    }
+  }
+}
+
+void DcmdAgentApp::CheckNewReceivedCmd() {
   if (recieved_subtasks_.begin() != recieved_subtasks_.end()){
     list<AgentTaskCmd*>::iterator iter = recieved_subtasks_.begin();
     AgentSvrObj* svr_obj = NULL;
@@ -473,8 +504,8 @@ void DcmdAgentApp::CheckTaskAndOprCmd(){
     }
     recieved_subtasks_.clear();
   }
-
-  // 检查svr的task的运行状况
+}
+void DcmdAgentApp::CheckTasks() {
   if (svr_map_.size()) {
     map<string, AgentSvrObj*>::iterator iter = svr_map_.begin();
     while(iter != svr_map_.end()){
@@ -496,7 +527,9 @@ void DcmdAgentApp::CheckTaskAndOprCmd(){
       iter++;
     }
   }
-  // 检查未发送给center的task处理结果，并发送给center
+}
+
+void DcmdAgentApp::CheckTaskWaitingToReply() {
   if (master_){
     CwxMsgBlock* block = NULL;
     AgentTaskResult* result = NULL;
@@ -523,7 +556,7 @@ void DcmdAgentApp::CheckTaskAndOprCmd(){
       block->send_ctrl().setMsgAttr(CwxMsgSendCtrl::NONE); 
       if (-1 == sendMsgByConn(block)) {
         CWX_ERROR(("Failure to send subtask result to center:%s,"\
-                   "cmd:%s, subtask:%s, conn_id:%d",
+          "cmd:%s, subtask:%s, conn_id:%d",
           master_->host_name_.c_str(),
           result->result_.cmd().c_str(),
           result->result_.subtask_id().c_str(),
@@ -541,26 +574,9 @@ void DcmdAgentApp::CheckTaskAndOprCmd(){
       iter = wait_send_result_map_.begin();
     }
   }
-  // 检测操作命令
-  if (opr_cmd_map_.size()){
-    map<uint64_t, AgentOprCmd*> ::iterator iter =  opr_cmd_map_.begin();
-    uint64_t opr_id = 0;
-    AgentOprCmd* opr_cmd = NULL;
-    while(iter != opr_cmd_map_.end()) {
-      opr_cmd = iter->second;
-      // 检查或执行操作命令
-      if (CheckOprCmd(opr_cmd, false)) { 
-        // 如果认为已经完成
-        opr_id = iter->first;
-        opr_cmd_map_.erase(iter);
-        delete opr_cmd;
-        iter = opr_cmd_map_.upper_bound(opr_id);
-        continue;
-      }
-      iter++;
-    }
-  }
 }
+
+
 void DcmdAgentApp::CheckHeatbeat(){
   static uint32_t time_base = 0;
   static uint32_t last_check_heatbeat = time(NULL);
@@ -1232,6 +1248,8 @@ int DcmdAgentApp::ReportReply(CwxMsgBlock*& msg, AgentCenter* center) {
   center->err_msg_ = "";
   center->heatbeat_internal_ = report_reply.heatbeat();
   center->max_package_size_ = report_reply.package_size();
+  center->opr_overflow_threshold_ = report_reply.opr_overflow_threshold();
+  center->opr_queue_threshold_ = report_reply.opr_queue_threshold();
   if (!center->heatbeat_internal_){
     center->heatbeat_internal_ = kDefHeatbeatSecond;
   }else if (center->heatbeat_internal_ > kMaxHeatbeatSecond){
@@ -1245,6 +1263,20 @@ int DcmdAgentApp::ReportReply(CwxMsgBlock*& msg, AgentCenter* center) {
     center->max_package_size_ = kMaxMaxPackageMSize;
   }else if (center->max_package_size_ < kMinMaxPackageMSize){
     center->max_package_size_ = kMinMaxPackageMSize;
+  }
+  if (!center->opr_queue_threshold_){
+    center->opr_queue_threshold_ = kDefOprQueueThreshold;
+  }else if (center->opr_queue_threshold_ > kMaxOprQueueThreshold){
+    center->opr_queue_threshold_ = kMaxOprQueueThreshold;
+  }else if (center->opr_queue_threshold_ < kMinOprQueueThreshold){
+    center->opr_queue_threshold_ = kMinOprQueueThreshold;
+  }
+  if (!center->opr_overflow_threshold_){
+    center->opr_overflow_threshold_ = kDefOprOverflowThreshold;
+  }else if (center->opr_overflow_threshold_ > KMaxOprOverflowThreshold){
+    center->opr_overflow_threshold_ = KMaxOprOverflowThreshold;
+  }else if (center->opr_overflow_threshold_ < kMinOprOverflowThreshold){
+    center->opr_overflow_threshold_ = kMinOprOverflowThreshold;
   }
   return 0;
 }
@@ -1563,9 +1595,9 @@ int DcmdAgentApp::SubTaskResultReply(CwxMsgBlock*& msg, AgentCenter* center){
 }
 
 int DcmdAgentApp::OprCmdRecieved(CwxMsgBlock*& msg, AgentCenter* center) {
-  if (opr_cmd_map_.size() > kAgentMaxConcurrentOprNum){// 待处理的命令太多
+  if (opr_cmd_map_.size() > center->opr_overflow_threshold_){// 待处理的命令太多
     sprintf(err_2k_, "Too many queuing opr cmd, max=%d",
-      kAgentMaxConcurrentOprNum);
+      center->opr_overflow_threshold_);
     CWX_INFO((err_2k_));
     return ReplyOprCmd(center,
       msg->event().getMsgHeader().getTaskId(),
