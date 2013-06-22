@@ -226,10 +226,9 @@ void protobuf_AssignDesc_dcmd_5fagent_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(AgentTaskResultReply));
   AgentOprCmd_descriptor_ = file->message_type(8);
-  static const int AgentOprCmd_offsets_[7] = {
+  static const int AgentOprCmd_offsets_[6] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentOprCmd, opr_id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentOprCmd, name_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentOprCmd, priority_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentOprCmd, run_user_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentOprCmd, timeout_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentOprCmd, script_),
@@ -476,24 +475,23 @@ void protobuf_AddDesc_dcmd_5fagent_2eproto() {
     "skResult\022\013\n\003cmd\030\001 \002(\t\022\017\n\007task_id\030\002 \002(\t\022\022"
     "\n\nsubtask_id\030\003 \002(\t\022\017\n\007success\030\004 \002(\010\022\013\n\003e"
     "rr\030\005 \001(\t\022\017\n\007process\030\006 \001(\t\"#\n\024AgentTaskRe"
-    "sultReply\022\013\n\003cmd\030\001 \002(\t\"\222\001\n\013AgentOprCmd\022\016"
-    "\n\006opr_id\030\001 \002(\t\022\014\n\004name\030\002 \002(\t\022\020\n\010priority"
-    "\030\003 \002(\005\022\020\n\010run_user\030\004 \002(\t\022\017\n\007timeout\030\005 \002("
-    "\005\022\016\n\006script\030\006 \002(\t\022 \n\004args\030\007 \003(\0132\022.dcmd_a"
-    "pi.KeyValue\"A\n\017AgentTaskOutput\022\022\n\nsubtas"
-    "k_id\030\001 \002(\t\022\016\n\006offset\030\002 \002(\005\022\n\n\002ip\030\003 \001(\t\"g"
-    "\n\024AgentTaskOutputReply\022\"\n\005state\030\001 \002(\0162\023."
-    "dcmd_api.DcmdState\022\016\n\006result\030\002 \002(\t\022\016\n\006of"
-    "fset\030\003 \002(\005\022\013\n\003err\030\004 \001(\t\"0\n\020AgentRunningT"
-    "ask\022\n\n\002ip\030\001 \001(\t\022\020\n\010svr_name\030\002 \001(\t\"o\n\025Age"
-    "ntRunningTaskReply\022\"\n\005state\030\001 \002(\0162\023.dcmd"
-    "_api.DcmdState\022%\n\006result\030\002 \003(\0132\025.dcmd_ap"
-    "i.SubTaskInfo\022\013\n\003err\030\003 \001(\t\"\035\n\017AgentRunni"
-    "ngOpr\022\n\n\002ip\030\001 \001(\t\"j\n\024AgentRunningOprRepl"
-    "y\022\"\n\005state\030\001 \002(\0162\023.dcmd_api.DcmdState\022!\n"
-    "\006result\030\002 \003(\0132\021.dcmd_api.OprInfo\022\013\n\003err\030"
-    "\003 \001(\t\"\036\n\nInvalidMsg\022\020\n\010msg_type\030\001 \002(\005B\021\n"
-    "\017com.cwinux.dcmd", 1656);
+    "sultReply\022\013\n\003cmd\030\001 \002(\t\"\200\001\n\013AgentOprCmd\022\016"
+    "\n\006opr_id\030\001 \002(\t\022\014\n\004name\030\002 \002(\t\022\020\n\010run_user"
+    "\030\003 \002(\t\022\017\n\007timeout\030\004 \002(\005\022\016\n\006script\030\005 \002(\t\022"
+    " \n\004args\030\006 \003(\0132\022.dcmd_api.KeyValue\"A\n\017Age"
+    "ntTaskOutput\022\022\n\nsubtask_id\030\001 \002(\t\022\016\n\006offs"
+    "et\030\002 \002(\005\022\n\n\002ip\030\003 \001(\t\"g\n\024AgentTaskOutputR"
+    "eply\022\"\n\005state\030\001 \002(\0162\023.dcmd_api.DcmdState"
+    "\022\016\n\006result\030\002 \002(\t\022\016\n\006offset\030\003 \002(\005\022\013\n\003err\030"
+    "\004 \001(\t\"0\n\020AgentRunningTask\022\n\n\002ip\030\001 \001(\t\022\020\n"
+    "\010svr_name\030\002 \001(\t\"o\n\025AgentRunningTaskReply"
+    "\022\"\n\005state\030\001 \002(\0162\023.dcmd_api.DcmdState\022%\n\006"
+    "result\030\002 \003(\0132\025.dcmd_api.SubTaskInfo\022\013\n\003e"
+    "rr\030\003 \001(\t\"\035\n\017AgentRunningOpr\022\n\n\002ip\030\001 \001(\t\""
+    "j\n\024AgentRunningOprReply\022\"\n\005state\030\001 \002(\0162\023"
+    ".dcmd_api.DcmdState\022!\n\006result\030\002 \003(\0132\021.dc"
+    "md_api.OprInfo\022\013\n\003err\030\003 \001(\t\"\036\n\nInvalidMs"
+    "g\022\020\n\010msg_type\030\001 \002(\005B\021\n\017com.cwinux.dcmd", 1638);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "dcmd_agent.proto", &protobuf_RegisterTypes);
   AgentReport::default_instance_ = new AgentReport();
@@ -3840,7 +3838,6 @@ void AgentTaskResultReply::Swap(AgentTaskResultReply* other) {
 #ifndef _MSC_VER
 const int AgentOprCmd::kOprIdFieldNumber;
 const int AgentOprCmd::kNameFieldNumber;
-const int AgentOprCmd::kPriorityFieldNumber;
 const int AgentOprCmd::kRunUserFieldNumber;
 const int AgentOprCmd::kTimeoutFieldNumber;
 const int AgentOprCmd::kScriptFieldNumber;
@@ -3865,7 +3862,6 @@ void AgentOprCmd::SharedCtor() {
   _cached_size_ = 0;
   opr_id_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   name_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
-  priority_ = 0;
   run_user_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   timeout_ = 0;
   script_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
@@ -3925,7 +3921,6 @@ void AgentOprCmd::Clear() {
         name_->clear();
       }
     }
-    priority_ = 0;
     if (has_run_user()) {
       if (run_user_ != &::google::protobuf::internal::kEmptyString) {
         run_user_->clear();
@@ -3978,28 +3973,12 @@ bool AgentOprCmd::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(24)) goto parse_priority;
+        if (input->ExpectTag(26)) goto parse_run_user;
         break;
       }
       
-      // required int32 priority = 3;
+      // required string run_user = 3;
       case 3: {
-        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
-         parse_priority:
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
-                 input, &priority_)));
-          set_has_priority();
-        } else {
-          goto handle_uninterpreted;
-        }
-        if (input->ExpectTag(34)) goto parse_run_user;
-        break;
-      }
-      
-      // required string run_user = 4;
-      case 4: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
          parse_run_user:
@@ -4011,12 +3990,12 @@ bool AgentOprCmd::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(40)) goto parse_timeout;
+        if (input->ExpectTag(32)) goto parse_timeout;
         break;
       }
       
-      // required int32 timeout = 5;
-      case 5: {
+      // required int32 timeout = 4;
+      case 4: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
          parse_timeout:
@@ -4027,12 +4006,12 @@ bool AgentOprCmd::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(50)) goto parse_script;
+        if (input->ExpectTag(42)) goto parse_script;
         break;
       }
       
-      // required string script = 6;
-      case 6: {
+      // required string script = 5;
+      case 5: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
          parse_script:
@@ -4044,12 +4023,12 @@ bool AgentOprCmd::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(58)) goto parse_args;
+        if (input->ExpectTag(50)) goto parse_args;
         break;
       }
       
-      // repeated .dcmd_api.KeyValue args = 7;
-      case 7: {
+      // repeated .dcmd_api.KeyValue args = 6;
+      case 6: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
          parse_args:
@@ -4058,7 +4037,7 @@ bool AgentOprCmd::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(58)) goto parse_args;
+        if (input->ExpectTag(50)) goto parse_args;
         if (input->ExpectAtEnd()) return true;
         break;
       }
@@ -4099,38 +4078,33 @@ void AgentOprCmd::SerializeWithCachedSizes(
       2, this->name(), output);
   }
   
-  // required int32 priority = 3;
-  if (has_priority()) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(3, this->priority(), output);
-  }
-  
-  // required string run_user = 4;
+  // required string run_user = 3;
   if (has_run_user()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->run_user().data(), this->run_user().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     ::google::protobuf::internal::WireFormatLite::WriteString(
-      4, this->run_user(), output);
+      3, this->run_user(), output);
   }
   
-  // required int32 timeout = 5;
+  // required int32 timeout = 4;
   if (has_timeout()) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(5, this->timeout(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(4, this->timeout(), output);
   }
   
-  // required string script = 6;
+  // required string script = 5;
   if (has_script()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->script().data(), this->script().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     ::google::protobuf::internal::WireFormatLite::WriteString(
-      6, this->script(), output);
+      5, this->script(), output);
   }
   
-  // repeated .dcmd_api.KeyValue args = 7;
+  // repeated .dcmd_api.KeyValue args = 6;
   for (int i = 0; i < this->args_size(); i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      7, this->args(i), output);
+      6, this->args(i), output);
   }
   
   if (!unknown_fields().empty()) {
@@ -4161,41 +4135,36 @@ void AgentOprCmd::SerializeWithCachedSizes(
         2, this->name(), target);
   }
   
-  // required int32 priority = 3;
-  if (has_priority()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(3, this->priority(), target);
-  }
-  
-  // required string run_user = 4;
+  // required string run_user = 3;
   if (has_run_user()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->run_user().data(), this->run_user().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        4, this->run_user(), target);
+        3, this->run_user(), target);
   }
   
-  // required int32 timeout = 5;
+  // required int32 timeout = 4;
   if (has_timeout()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(5, this->timeout(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(4, this->timeout(), target);
   }
   
-  // required string script = 6;
+  // required string script = 5;
   if (has_script()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->script().data(), this->script().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        6, this->script(), target);
+        5, this->script(), target);
   }
   
-  // repeated .dcmd_api.KeyValue args = 7;
+  // repeated .dcmd_api.KeyValue args = 6;
   for (int i = 0; i < this->args_size(); i++) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
-        7, this->args(i), target);
+        6, this->args(i), target);
   }
   
   if (!unknown_fields().empty()) {
@@ -4223,28 +4192,21 @@ int AgentOprCmd::ByteSize() const {
           this->name());
     }
     
-    // required int32 priority = 3;
-    if (has_priority()) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::Int32Size(
-          this->priority());
-    }
-    
-    // required string run_user = 4;
+    // required string run_user = 3;
     if (has_run_user()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::StringSize(
           this->run_user());
     }
     
-    // required int32 timeout = 5;
+    // required int32 timeout = 4;
     if (has_timeout()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::Int32Size(
           this->timeout());
     }
     
-    // required string script = 6;
+    // required string script = 5;
     if (has_script()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::StringSize(
@@ -4252,7 +4214,7 @@ int AgentOprCmd::ByteSize() const {
     }
     
   }
-  // repeated .dcmd_api.KeyValue args = 7;
+  // repeated .dcmd_api.KeyValue args = 6;
   total_size += 1 * this->args_size();
   for (int i = 0; i < this->args_size(); i++) {
     total_size +=
@@ -4293,9 +4255,6 @@ void AgentOprCmd::MergeFrom(const AgentOprCmd& from) {
     if (from.has_name()) {
       set_name(from.name());
     }
-    if (from.has_priority()) {
-      set_priority(from.priority());
-    }
     if (from.has_run_user()) {
       set_run_user(from.run_user());
     }
@@ -4322,7 +4281,7 @@ void AgentOprCmd::CopyFrom(const AgentOprCmd& from) {
 }
 
 bool AgentOprCmd::IsInitialized() const {
-  if ((_has_bits_[0] & 0x0000003f) != 0x0000003f) return false;
+  if ((_has_bits_[0] & 0x0000001f) != 0x0000001f) return false;
   
   for (int i = 0; i < args_size(); i++) {
     if (!this->args(i).IsInitialized()) return false;
@@ -4334,7 +4293,6 @@ void AgentOprCmd::Swap(AgentOprCmd* other) {
   if (other != this) {
     std::swap(opr_id_, other->opr_id_);
     std::swap(name_, other->name_);
-    std::swap(priority_, other->priority_);
     std::swap(run_user_, other->run_user_);
     std::swap(timeout_, other->timeout_);
     std::swap(script_, other->script_);

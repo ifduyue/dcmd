@@ -67,11 +67,10 @@ message AgentTaskResultReply {
 message AgentOprCmd {
   required  string   opr_id = 1; 
   required  string   name = 2;
-  required  int32    priority=3;
-  required  string   run_user = 4;
-  required  int32    timeout= 5;
-  required  string   script = 6;
-  repeated  KeyValue args= 7;
+  required  string   run_user = 3;
+  required  int32    timeout= 4;
+  required  string   script = 5;
+  repeated  KeyValue args= 6;
 }
 
 

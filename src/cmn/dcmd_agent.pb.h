@@ -1200,17 +1200,10 @@ class AgentOprCmd : public ::google::protobuf::Message {
   inline ::std::string* mutable_name();
   inline ::std::string* release_name();
   
-  // required int32 priority = 3;
-  inline bool has_priority() const;
-  inline void clear_priority();
-  static const int kPriorityFieldNumber = 3;
-  inline ::google::protobuf::int32 priority() const;
-  inline void set_priority(::google::protobuf::int32 value);
-  
-  // required string run_user = 4;
+  // required string run_user = 3;
   inline bool has_run_user() const;
   inline void clear_run_user();
-  static const int kRunUserFieldNumber = 4;
+  static const int kRunUserFieldNumber = 3;
   inline const ::std::string& run_user() const;
   inline void set_run_user(const ::std::string& value);
   inline void set_run_user(const char* value);
@@ -1218,17 +1211,17 @@ class AgentOprCmd : public ::google::protobuf::Message {
   inline ::std::string* mutable_run_user();
   inline ::std::string* release_run_user();
   
-  // required int32 timeout = 5;
+  // required int32 timeout = 4;
   inline bool has_timeout() const;
   inline void clear_timeout();
-  static const int kTimeoutFieldNumber = 5;
+  static const int kTimeoutFieldNumber = 4;
   inline ::google::protobuf::int32 timeout() const;
   inline void set_timeout(::google::protobuf::int32 value);
   
-  // required string script = 6;
+  // required string script = 5;
   inline bool has_script() const;
   inline void clear_script();
-  static const int kScriptFieldNumber = 6;
+  static const int kScriptFieldNumber = 5;
   inline const ::std::string& script() const;
   inline void set_script(const ::std::string& value);
   inline void set_script(const char* value);
@@ -1236,10 +1229,10 @@ class AgentOprCmd : public ::google::protobuf::Message {
   inline ::std::string* mutable_script();
   inline ::std::string* release_script();
   
-  // repeated .dcmd_api.KeyValue args = 7;
+  // repeated .dcmd_api.KeyValue args = 6;
   inline int args_size() const;
   inline void clear_args();
-  static const int kArgsFieldNumber = 7;
+  static const int kArgsFieldNumber = 6;
   inline const ::dcmd_api::KeyValue& args(int index) const;
   inline ::dcmd_api::KeyValue* mutable_args(int index);
   inline ::dcmd_api::KeyValue* add_args();
@@ -1254,8 +1247,6 @@ class AgentOprCmd : public ::google::protobuf::Message {
   inline void clear_has_opr_id();
   inline void set_has_name();
   inline void clear_has_name();
-  inline void set_has_priority();
-  inline void clear_has_priority();
   inline void set_has_run_user();
   inline void clear_has_run_user();
   inline void set_has_timeout();
@@ -1268,13 +1259,12 @@ class AgentOprCmd : public ::google::protobuf::Message {
   ::std::string* opr_id_;
   ::std::string* name_;
   ::std::string* run_user_;
-  ::google::protobuf::int32 priority_;
-  ::google::protobuf::int32 timeout_;
   ::std::string* script_;
   ::google::protobuf::RepeatedPtrField< ::dcmd_api::KeyValue > args_;
+  ::google::protobuf::int32 timeout_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(7 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(6 + 31) / 32];
   
   friend void  protobuf_AddDesc_dcmd_5fagent_2eproto();
   friend void protobuf_AssignDesc_dcmd_5fagent_2eproto();
@@ -3906,37 +3896,15 @@ inline ::std::string* AgentOprCmd::release_name() {
   }
 }
 
-// required int32 priority = 3;
-inline bool AgentOprCmd::has_priority() const {
+// required string run_user = 3;
+inline bool AgentOprCmd::has_run_user() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
-inline void AgentOprCmd::set_has_priority() {
+inline void AgentOprCmd::set_has_run_user() {
   _has_bits_[0] |= 0x00000004u;
 }
-inline void AgentOprCmd::clear_has_priority() {
-  _has_bits_[0] &= ~0x00000004u;
-}
-inline void AgentOprCmd::clear_priority() {
-  priority_ = 0;
-  clear_has_priority();
-}
-inline ::google::protobuf::int32 AgentOprCmd::priority() const {
-  return priority_;
-}
-inline void AgentOprCmd::set_priority(::google::protobuf::int32 value) {
-  set_has_priority();
-  priority_ = value;
-}
-
-// required string run_user = 4;
-inline bool AgentOprCmd::has_run_user() const {
-  return (_has_bits_[0] & 0x00000008u) != 0;
-}
-inline void AgentOprCmd::set_has_run_user() {
-  _has_bits_[0] |= 0x00000008u;
-}
 inline void AgentOprCmd::clear_has_run_user() {
-  _has_bits_[0] &= ~0x00000008u;
+  _has_bits_[0] &= ~0x00000004u;
 }
 inline void AgentOprCmd::clear_run_user() {
   if (run_user_ != &::google::protobuf::internal::kEmptyString) {
@@ -3986,15 +3954,15 @@ inline ::std::string* AgentOprCmd::release_run_user() {
   }
 }
 
-// required int32 timeout = 5;
+// required int32 timeout = 4;
 inline bool AgentOprCmd::has_timeout() const {
-  return (_has_bits_[0] & 0x00000010u) != 0;
+  return (_has_bits_[0] & 0x00000008u) != 0;
 }
 inline void AgentOprCmd::set_has_timeout() {
-  _has_bits_[0] |= 0x00000010u;
+  _has_bits_[0] |= 0x00000008u;
 }
 inline void AgentOprCmd::clear_has_timeout() {
-  _has_bits_[0] &= ~0x00000010u;
+  _has_bits_[0] &= ~0x00000008u;
 }
 inline void AgentOprCmd::clear_timeout() {
   timeout_ = 0;
@@ -4008,15 +3976,15 @@ inline void AgentOprCmd::set_timeout(::google::protobuf::int32 value) {
   timeout_ = value;
 }
 
-// required string script = 6;
+// required string script = 5;
 inline bool AgentOprCmd::has_script() const {
-  return (_has_bits_[0] & 0x00000020u) != 0;
+  return (_has_bits_[0] & 0x00000010u) != 0;
 }
 inline void AgentOprCmd::set_has_script() {
-  _has_bits_[0] |= 0x00000020u;
+  _has_bits_[0] |= 0x00000010u;
 }
 inline void AgentOprCmd::clear_has_script() {
-  _has_bits_[0] &= ~0x00000020u;
+  _has_bits_[0] &= ~0x00000010u;
 }
 inline void AgentOprCmd::clear_script() {
   if (script_ != &::google::protobuf::internal::kEmptyString) {
@@ -4066,7 +4034,7 @@ inline ::std::string* AgentOprCmd::release_script() {
   }
 }
 
-// repeated .dcmd_api.KeyValue args = 7;
+// repeated .dcmd_api.KeyValue args = 6;
 inline int AgentOprCmd::args_size() const {
   return args_.size();
 }

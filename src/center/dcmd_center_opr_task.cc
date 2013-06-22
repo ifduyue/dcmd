@@ -77,7 +77,7 @@ bool DcmdCenterOprTask::FetchOprCmd(DcmdTss* tss) {
     CwxCommon::snprintf(tss->sql_,
       DcmdTss::kMaxSqlBufSize,
       "select a.ui_name, a.opr_cmd, a.run_user,a.script_md5, a.agent_mutable,"\
-      "b.timeout, b.ip, b.priority, b.arg, b.repeat, b.cache_time, b.arg_mutable "\
+      "b.timeout, b.ip, b.arg, b.repeat, b.cache_time, b.arg_mutable "\
       "from  dcmd_opr_cmd as a, dcmd_opr_cmd_exec as b"\
       "where b.exec_id =%s and a.opr_cmd = b.opr_cmd",
       CwxCommon::toString(opr_cmd_id_, tss->m_szBuf2K, 10));
@@ -127,14 +127,10 @@ bool DcmdCenterOprTask::FetchOprCmd(DcmdTss* tss) {
       }
       ++iter;
     }
-    // 获取操作的优先级
-    opr_cmd_.priority_ = strtoul(my->fetch(6, bNull), NULL, 10);
-    if (opr_cmd_.priority_ < kMaxHighOprPriority) opr_cmd_.priority_ = kMaxHighOprPriority;
-    if (opr_cmd_.priority_ > kMaxLowOprPriority) opr_cmd_.priority_ = kMaxLowOprPriority;
     ///获取arg
-    opr_cmd_.opr_args_ = my->fetch(7, bNull);
+    opr_cmd_.opr_args_ = my->fetch(6, bNull);
     // 获取repeat
-    opr_cmd_.repeat_type_ = strtoul(my->fetch(8, bNull), NULL, 10);
+    opr_cmd_.repeat_type_ = strtoul(my->fetch(7, bNull), NULL, 10);
     if (opr_cmd_.repeat_type_ > DcmdCenterOprCmd::DCMD_OPR_CMD_REPEAT_MAX)
       opr_cmd_.repeat_type_ = DcmdCenterOprCmd::DCMD_OPR_CMD_NO_REPEAT;
     if (app_->config().common().is_opr_cmd_history_){
@@ -142,10 +138,10 @@ bool DcmdCenterOprTask::FetchOprCmd(DcmdTss* tss) {
         opr_cmd_.repeat_type_ = DcmdCenterOprCmd::DCMD_OPR_CMD_REPEAT_HISTORY;
     }
     ///获取cache
-    opr_cmd_.cache_time_ = strtoul(my->fetch(9, bNull), NULL, 10);
+    opr_cmd_.cache_time_ = strtoul(my->fetch(8, bNull), NULL, 10);
     opr_cmd_.expire_time_ =opr_cmd_.cache_time_?((uint32_t)time(NULL)) + opr_cmd_.cache_time_:0;
     ///获取arg mutable
-    opr_cmd_.is_arg_mutable_ = strtoul(my->fetch(10, bNull), NULL, 10)?true:false;
+    opr_cmd_.is_arg_mutable_ = strtoul(my->fetch(9, bNull), NULL, 10)?true:false;
     if (!app_->config().common().is_opr_cmd_arg_mutable_) opr_cmd_.is_arg_mutable_ = false;
     ///释放结果集
     my->freeResult();
@@ -235,9 +231,9 @@ bool DcmdCenterOprTask::FetchOprCmd(DcmdTss* tss) {
   if (opr_cmd_.repeat_type_ != DcmdCenterOprCmd::DCMD_OPR_CMD_REPEAT_WITHOUT_HISTORY){
     ///记录操作历史
     CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
-      "insert into dcmd_opr_cmd_exec_history(exec_id, opr_cmd_Id, opr_cmd, timeout, ip, priority, repeat,"\
+      "insert into dcmd_opr_cmd_exec_history(exec_id, opr_cmd_Id, opr_cmd, timeout, ip, repeat,"\
       "cache_time, arg_mutable, arg, utime, ctime, opr_uid) "\
-      "select exec_id, opr_cmd_Id, opr_cmd, timeout, ip, priority, repeat,"\
+      "select exec_id, opr_cmd_Id, opr_cmd, timeout, ip, repeat,"\
       "cache_time, arg_mutable, arg, now(), ctime, opr_uid from opr_cmd_exec \
       where exec_id=%s",
       CwxCommon::toString(opr_cmd_id_, tss->m_szBuf2K, 10));
@@ -284,7 +280,6 @@ int DcmdCenterOprTask::noticeActive(CwxTss* ThrEnv) {
   CwxCommon::toString(opr_cmd_id_, tss->m_szBuf2K, 10);
   opr_cmd.set_opr_id(tss->m_szBuf2K);
   opr_cmd.set_name(opr_cmd_.opr_name_);
-  opr_cmd.set_priority(opr_cmd_.priority_);
   opr_cmd.set_run_user(opr_cmd_.opr_run_user_);
   opr_cmd.set_timeout(opr_cmd_.opr_timeout_);
   opr_cmd.set_script(opr_cmd_.opr_script_content_);

@@ -54,14 +54,6 @@ int DcmdCenterConf::Init(string const& conf_file) {
     if (common_.heatbeat_internal_ > kMaxHeatbeatSecond)
       common_.heatbeat_internal_ = kMaxHeatbeatSecond;
   }
-  // load common:opr_queue_threshold
-  if (cnf.getAttr("common", "opr_queue_threshold", value) && value.length()){
-    common_.opr_queue_threshold_ = strtoul(value.c_str(), NULL, 10);
-    if (common_.opr_queue_threshold_ < kMinOprQueueThreshold)
-      common_.opr_queue_threshold_ = kMinOprQueueThreshold;
-    if (common_.opr_queue_threshold_ > kMaxOprQueueThreshold)
-      common_.opr_queue_threshold_ = kMaxOprQueueThreshold;
-  }
   // load common:opr_overflow_threshold
   if (cnf.getAttr("common", "opr_overflow_threshold", value) && value.length()){
     common_.opr_overflow_threshold_ = strtoul(value.c_str(), NULL, 10);

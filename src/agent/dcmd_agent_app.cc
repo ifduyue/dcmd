@@ -57,6 +57,7 @@ static bool OutputShellEnv(FILE* fd, char const* name, string const& value,
 DcmdAgentApp::DcmdAgentApp() {
   master_ = NULL;
   next_opr_cmd_id_ = 0;
+  opr_overflow_threshold_ = kDefOprOverflowThreshold;
   data_buf_ = NULL;
   data_buf_len_ = 0;
   err_2k_[0] = 0x00;
@@ -172,7 +173,6 @@ int DcmdAgentApp::initRunEnv(){
       center->host_name_ += err_2k_;
       center->host_port_ = iter->getPort();
       center->last_heatbeat_time_ = 0;
-      center->opr_queue_threshold_ = kDefOprOverflowThreshold;
       center->opr_overflow_threshold_ = kDefIpTableRefreshSecond;
       center->conn_id_ = ret;
       center->host_id_ = host_id;
@@ -1249,7 +1249,6 @@ int DcmdAgentApp::ReportReply(CwxMsgBlock*& msg, AgentCenter* center) {
   center->heatbeat_internal_ = report_reply.heatbeat();
   center->max_package_size_ = report_reply.package_size();
   center->opr_overflow_threshold_ = report_reply.opr_overflow_threshold();
-  center->opr_queue_threshold_ = report_reply.opr_queue_threshold();
   if (!center->heatbeat_internal_){
     center->heatbeat_internal_ = kDefHeatbeatSecond;
   }else if (center->heatbeat_internal_ > kMaxHeatbeatSecond){
@@ -1263,13 +1262,6 @@ int DcmdAgentApp::ReportReply(CwxMsgBlock*& msg, AgentCenter* center) {
     center->max_package_size_ = kMaxMaxPackageMSize;
   }else if (center->max_package_size_ < kMinMaxPackageMSize){
     center->max_package_size_ = kMinMaxPackageMSize;
-  }
-  if (!center->opr_queue_threshold_){
-    center->opr_queue_threshold_ = kDefOprQueueThreshold;
-  }else if (center->opr_queue_threshold_ > kMaxOprQueueThreshold){
-    center->opr_queue_threshold_ = kMaxOprQueueThreshold;
-  }else if (center->opr_queue_threshold_ < kMinOprQueueThreshold){
-    center->opr_queue_threshold_ = kMinOprQueueThreshold;
   }
   if (!center->opr_overflow_threshold_){
     center->opr_overflow_threshold_ = kDefOprOverflowThreshold;
@@ -1289,6 +1281,7 @@ int DcmdAgentApp::MasterChanged(CwxMsgBlock*& msg, AgentCenter* center) {
       center->host_name_.c_str()));
     master_ = center;
   }
+  opr_overflow_threshold_ = master_->opr_overflow_threshold_;
   // 将等待先前center master回复的消息，重新进入发送队列
   map<uint64_t, AgentTaskResult*>::iterator iter = wait_reply_result_map_.begin();
   while(iter != wait_reply_result_map_.end()){
@@ -1595,9 +1588,8 @@ int DcmdAgentApp::SubTaskResultReply(CwxMsgBlock*& msg, AgentCenter* center){
 }
 
 int DcmdAgentApp::OprCmdRecieved(CwxMsgBlock*& msg, AgentCenter* center) {
-  if (opr_cmd_map_.size() > center->opr_overflow_threshold_){// 待处理的命令太多
-    sprintf(err_2k_, "Too many queuing opr cmd, max=%d",
-      center->opr_overflow_threshold_);
+  if (opr_cmd_map_.size() > opr_overflow_threshold_){// 待处理的命令太多
+    sprintf(err_2k_, "Too many queuing opr cmd, max=%d", opr_overflow_threshold_);
     CWX_INFO((err_2k_));
     return ReplyOprCmd(center,
       msg->event().getMsgHeader().getTaskId(),

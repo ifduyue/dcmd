@@ -227,6 +227,8 @@ class DcmdAgentApp : public CwxAppFramework{
   map<uint64_t, AgentTaskCmd*>               subtask_map_;
   // 操作命令的map。
   map<uint64_t, AgentOprCmd*>                opr_cmd_map_;
+  // 操作数量的overflow 门限
+  uint32_t                                   opr_overflow_threshold_;
   // 下一个操作指令的id
   uint64_t                                   next_opr_cmd_id_;
   // agent服务器的ip列表，不包括127.0

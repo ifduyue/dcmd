@@ -302,7 +302,6 @@ void  DcmdCenterH4AgentTask::AgentReport(CwxMsgBlock*& msg, DcmdTss* tss){
   reply.set_heatbeat(app_->config().common().heatbeat_internal_);
   reply.set_package_size(app_->config().common().agent_package_size_);
   reply.set_opr_overflow_threshold(app_->config().common().opr_overflow_threshold_);
-  reply.set_opr_queue_threshold(app_->config().common().opr_queue_threshold_);
   ReplyAgentReport(app_,
     tss,
     msg->event().getConnId(),

@@ -25,8 +25,6 @@ class AgentCenter{
   uint32_t        last_heatbeat_time_;
   // center的心跳间隔
   uint32_t        heatbeat_internal_;
-  // queue的opr的threshold
-  uint32_t        opr_queue_threshold_;
   // overflow的opr的数量
   uint32_t        opr_overflow_threshold_;
   // center的通信数据包大小

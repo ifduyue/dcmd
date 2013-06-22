@@ -28,20 +28,8 @@ const uint32_t kDefOprCmdTimeoutSecond = 30;
 const uint32_t kMinOprCmdTimeoutSecond = 2;
 // 操作指令最大的超时时间
 const uint32_t kMaxOprCmdTimeoutSecond = 3600;
-// 操作的缺省优先级
-const uint32_t kDefOprPriority = 5;
-// 操作的最高优先级
-const uint32_t kMaxHighOprPriority = 1;
-// 操作的最低优先级
-const uint32_t kMaxLowOprPriority = 10;
 // opr开始排队的缺省门限
-const uint32_t kDefOprQueueThreshold = 250;
-// opr开始排队的门限最小值
-const uint32_t kMinOprQueueThreshold = 1;
-// opr开始排队的门限最大值
-const uint32_t kMaxOprQueueThreshold = 500;
-// opr overflow的缺省门限
-const uint32_t kDefOprOverflowThreshold = 500;
+const uint32_t kDefOprOverflowThreshold = 250;
 // opr overflow的最小门限
 const uint32_t kMinOprOverflowThreshold = 1;
 // opr overflow的最大门限
