@@ -78,6 +78,7 @@ void DcmdCenterRunOprTask::Reply(CwxTss* pThrEnv) {
   dcmd_api::UiAgentRunningOprReply reply;
   dcmd_api::AgentRunningOprReply agent_reply;
   DcmdTss* tss = (DcmdTss*)pThrEnv;
+  reply.set_client_msg_id(client_msg_id_);
   if (!recv_msg_) {
     reply.set_state(dcmd_api::DCMD_STATE_FAILED);
     reply.set_err(err_msg_);

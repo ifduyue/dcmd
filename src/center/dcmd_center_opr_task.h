@@ -45,6 +45,7 @@ class DcmdCenterOprTask : public CwxTaskBoardTask {
     TASK_STATE_WAITING = CwxTaskBoardTask::TASK_STATE_USER
   };
   DcmdCenterOprTask(DcmdCenterApp* app, CwxTaskBoard* taskboard):CwxTaskBoardTask(taskboard) {
+    client_msg_id_ = 0;
     reply_conn_id_ = 0;
     msg_task_id_ = 0;
     opr_cmd_id_ = 0;
@@ -123,6 +124,8 @@ class DcmdCenterOprTask : public CwxTaskBoardTask {
     ///从数据库中获取opr指令信息；true：成功；false：失败
     bool FetchOprCmd(DcmdTss* tss);
  public:
+  // client的消息id
+  uint32_t                     client_msg_id_;
   // 回复的连接ID
   uint32_t                     reply_conn_id_;
   // 接收到消息的TaskId

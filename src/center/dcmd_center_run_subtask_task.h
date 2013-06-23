@@ -84,6 +84,8 @@ class DcmdCenterRunSubtaskTask : public CwxTaskBoardTask{
   void Reply(CwxTss* pThrEnv);
  
  public:
+  // client的消息id
+  uint32_t             client_msg_id_;
   // 回复的连接id
   uint32_t              reply_conn_id_;
   // 回复消息的task id

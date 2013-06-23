@@ -79,6 +79,7 @@ void DcmdCenterSubtaskOutputTask::Reply(CwxTss* pThrEnv) {
   dcmd_api::UiTaskOutputReply reply;
   dcmd_api::AgentTaskOutputReply agent_reply;
   DcmdTss* tss = (DcmdTss*)pThrEnv;
+  reply.set_client_msg_id(client_msg_id_);
   if (!recv_msg_) {
     reply.set_state(dcmd_api::DCMD_STATE_FAILED);
     reply.set_result("");

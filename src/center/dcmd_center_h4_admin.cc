@@ -58,19 +58,16 @@ void DcmdCenterH4Admin::ExecOprCmd(CwxMsgBlock*& msg, DcmdTss* tss) {
   DcmdCenterOprTask* opr_task = NULL;
   dcmd_api::UiExecOprCmdReply  opr_cmd_reply;
   dcmd_api::UiExecOprCmd       opr_cmd;
-  if (!app_->config().common().is_allow_opr_cmd_) {
-    opr_cmd_reply.set_err("Exec opr-cmd is disable.");
-    opr_cmd_reply.set_state(dcmd_api::DCMD_STATE_FAILED);
-    DcmdCenterH4Admin::ReplyExecOprCmd(app_,
-      tss,
-      msg->event().getConnId(),
-      msg->event().getMsgHeader().getTaskId(),
-      &opr_cmd_reply);
-    return;
-  }
   tss->proto_str_.assign(msg->rd_ptr(), msg->length());
   if (!opr_cmd.ParseFromString(tss->proto_str_)) {
-    opr_cmd_reply.set_err("Failed to parse opr cmd.");
+    CWX_ERROR(("Failed to parse opr cmd from conn_id:%u, close it.",
+      msg->event().getConnId()));
+    app_->noticeCloseConn(msg->event().getConnId());
+    return;
+  }
+  opr_cmd.set_client_msg_id(opr_cmd_reply.clear_client_msg_id());
+  if (!app_->config().common().is_allow_opr_cmd_) {
+    opr_cmd_reply.set_err("Exec opr-cmd is disable.");
     opr_cmd_reply.set_state(dcmd_api::DCMD_STATE_FAILED);
     DcmdCenterH4Admin::ReplyExecOprCmd(app_,
       tss,
@@ -97,6 +94,7 @@ void DcmdCenterH4Admin::ExecOprCmd(CwxMsgBlock*& msg, DcmdTss* tss) {
     return;
   }
   opr_task = new DcmdCenterOprTask(app_, &app_->getTaskBoard());
+  opr_task->client_msg_id_ = opr_cmd.clear_client_msg_id();
   opr_task->reply_conn_id_ = msg->event().getConnId();
   opr_task->msg_task_id_ = msg->event().getMsgHeader().getTaskId();
   opr_task->opr_cmd_id_ = strtoull(opr_cmd.opr_id().c_str(), NULL, 10);
@@ -121,15 +119,9 @@ void DcmdCenterH4Admin::QuerySubtaskOutput(CwxMsgBlock*& msg, DcmdTss* tss) {
   dcmd_api::UiTaskOutputReply   subtask_output_reply;
   tss->proto_str_.assign(msg->rd_ptr(), msg->length());
   if (!subtask_output.ParseFromString(tss->proto_str_)) {
-    subtask_output_reply.set_err("Failed to parse subtask-result command.");
-    subtask_output_reply.set_state(dcmd_api::DCMD_STATE_FAILED);
-    subtask_output_reply.set_offset(0);
-    subtask_output_reply.set_result("");
-    DcmdCenterH4Admin::ReplySubTaskOutput(app_,
-      tss,
-      msg->event().getConnId(),
-      msg->event().getMsgHeader().getTaskId(),
-      &subtask_output_reply);
+    CWX_ERROR(("Failed to parse subtask-result command from conn_id:%u, close it",
+      msg->event().getConnId()));
+    app_->noticeCloseConn(msg->event().getConnId());
     return;
   }
   CWX_DEBUG(("Receive a agent subtask-output command, agent=%s, subtask_id",
@@ -145,6 +137,7 @@ void DcmdCenterH4Admin::QuerySubtaskOutput(CwxMsgBlock*& msg, DcmdTss* tss) {
     subtask_output_reply.set_state(dcmd_api::DCMD_STATE_FAILED);
     subtask_output_reply.set_offset(0);
     subtask_output_reply.set_result("");
+    subtask_output_reply.set_client_msg_id(subtask_output.client_msg_id());
     DcmdCenterH4Admin::ReplySubTaskOutput(app_,
       tss,
       msg->event().getConnId(),
@@ -156,6 +149,7 @@ void DcmdCenterH4Admin::QuerySubtaskOutput(CwxMsgBlock*& msg, DcmdTss* tss) {
   output_task = new DcmdCenterSubtaskOutputTask(app_, &app_->getTaskBoard());
   output_task->reply_conn_id_ = msg->event().getConnId();
   output_task->msg_taskid_ = msg->event().getMsgHeader().getTaskId();
+  output_task->client_msg_id_ = subtask_output.client_msg_id();
   output_task->agent_ip_ = subtask_output.ip();
   output_task->subtask_id_ = subtask_output.subtask_id();
   output_task->output_offset_ = subtask_output.offset();
@@ -169,13 +163,9 @@ void DcmdCenterH4Admin::QueryAgentRunSubTask(CwxMsgBlock*& msg, DcmdTss* tss) {
   DcmdCenterRunSubtaskTask*  subtask_task = NULL;
   tss->proto_str_.assign(msg->rd_ptr(), msg->length());
   if (!running_subtask_query.ParseFromString(tss->proto_str_)) {
-    running_subtask_reply.set_err("Failed to parse running-subtask msg.");
-    running_subtask_reply.set_state(dcmd_api::DCMD_STATE_FAILED);
-    DcmdCenterH4Admin::ReplyAgentRunSubTask(app_,
-      tss,
-      msg->event().getConnId(),
-      msg->event().getMsgHeader().getTaskId(),
-      &running_subtask_reply);
+    CWX_ERROR(("Failed to parse running-subtask msg from conn_id:%u, close it.",
+      msg->event().getConnId()));
+    app_->noticeCloseConn(msg->event().getConnId());
     return;
   }
   CWX_DEBUG(("Receive a run agent task message, agent=%s",
@@ -189,6 +179,7 @@ void DcmdCenterH4Admin::QueryAgentRunSubTask(CwxMsgBlock*& msg, DcmdTss* tss) {
       running_subtask_query.passwd().c_str()));
     running_subtask_reply.set_err("User name or password is wrong.");
     running_subtask_reply.set_state(dcmd_api::DCMD_STATE_FAILED);
+    running_subtask_reply.set_client_msg_id(running_subtask_query.client_msg_id());
     DcmdCenterH4Admin::ReplyAgentRunSubTask(app_,
       tss,
       msg->event().getConnId(),
@@ -197,6 +188,7 @@ void DcmdCenterH4Admin::QueryAgentRunSubTask(CwxMsgBlock*& msg, DcmdTss* tss) {
     return;
   }
   subtask_task = new DcmdCenterRunSubtaskTask(app_, &app_->getTaskBoard());
+  subtask_task->client_msg_id_ = running_subtask_query.client_msg_id();
   subtask_task->reply_conn_id_ = msg->event().getConnId();
   subtask_task->msg_taskid_ = msg->event().getMsgHeader().getTaskId();
   subtask_task->agent_ip_ = running_subtask_query.ip();
@@ -212,13 +204,9 @@ void DcmdCenterH4Admin::QueryAgentRunOpr(CwxMsgBlock*& msg, DcmdTss* tss) {
   DcmdCenterRunOprTask*  opr_task = NULL;
   tss->proto_str_.assign(msg->rd_ptr(), msg->length());
   if (!running_opr_query.ParseFromString(tss->proto_str_)) {
-    running_opr_reply.set_err("Failed to parse running-opr msg.");
-    running_opr_reply.set_state(dcmd_api::DCMD_STATE_FAILED);
-    DcmdCenterH4Admin::ReplyAgentRunOprCmd(app_,
-      tss,
-      msg->event().getConnId(),
-      msg->event().getMsgHeader().getTaskId(),
-      &running_opr_reply);
+    CWX_ERROR(("Failed to parse running-opr msg from conn_id:%u, close it.",
+      msg->event().getConnId()));
+    app_->noticeCloseConn(msg->event().getConnId());
     return;
   }
   CWX_DEBUG(("Receive a query agent running opr-cmd message, agent=%s",
@@ -232,6 +220,7 @@ void DcmdCenterH4Admin::QueryAgentRunOpr(CwxMsgBlock*& msg, DcmdTss* tss) {
       running_opr_query.passwd().c_str()));
     running_opr_reply.set_err("User name or password is wrong.");
     running_opr_reply.set_state(dcmd_api::DCMD_STATE_FAILED);
+    running_opr_reply.set_client_msg_id(running_opr_query.client_msg_id());
     DcmdCenterH4Admin::ReplyAgentRunOprCmd(app_,
       tss,
       msg->event().getConnId(),
@@ -240,6 +229,7 @@ void DcmdCenterH4Admin::QueryAgentRunOpr(CwxMsgBlock*& msg, DcmdTss* tss) {
     return;
   }
   opr_task = new DcmdCenterRunOprTask(app_, &app_->getTaskBoard());
+  opr_task->client_msg_id_ = running_opr_query.client_msg_id();
   opr_task->reply_conn_id_ = msg->event().getConnId();
   opr_task->msg_taskid_ = msg->event().getMsgHeader().getTaskId();
   opr_task->agent_ip_ = running_opr_query.ip();
@@ -252,13 +242,9 @@ void DcmdCenterH4Admin::QueryAgentStatus(CwxMsgBlock*& msg, DcmdTss* tss){
   dcmd_api::UiAgentInfoReply  agent_info_reply;
   tss->proto_str_.assign(msg->rd_ptr(), msg->length());
   if (!agent_info_query.ParseFromString(tss->proto_str_)) {
-    agent_info_reply.set_err("Failed to parse agent-info msg.");
-    agent_info_reply.set_state(dcmd_api::DCMD_STATE_FAILED);
-    DcmdCenterH4Admin::ReplyAgentStatus(app_,
-      tss,
-      msg->event().getConnId(),
-      msg->event().getMsgHeader().getTaskId(),
-      &agent_info_reply);
+    CWX_ERROR(("Failed to parse agent-info msg from conn_id:%u, close it.",
+      msg->event().getConnId()));
+    app_->noticeCloseConn(msg->event().getConnId());
     return;
   }
   // 检查用户名与密码
@@ -267,6 +253,7 @@ void DcmdCenterH4Admin::QueryAgentStatus(CwxMsgBlock*& msg, DcmdTss* tss){
   {
     agent_info_reply.set_err("User or password is wrong.");
     agent_info_reply.set_state(dcmd_api::DCMD_STATE_FAILED);
+    agent_info_reply.set_client_msg_id(agent_info_query.client_msg_id());
     DcmdCenterH4Admin::ReplyAgentStatus(app_,
       tss,
       msg->event().getConnId(),
@@ -283,6 +270,7 @@ void DcmdCenterH4Admin::QueryAgentStatus(CwxMsgBlock*& msg, DcmdTss* tss){
   app_->GetAgentMgr()->GetAgentStatus(agent_ips,
     agent_info_query.version(),
     agent_info_reply);
+  agent_info_reply.set_client_msg_id(agent_info_query.client_msg_id());
   DcmdCenterH4Admin::ReplyAgentStatus(app_,
     tss,
     msg->event().getConnId(),
@@ -295,13 +283,9 @@ void DcmdCenterH4Admin::QueryIllegalAgent(CwxMsgBlock*& msg, DcmdTss* tss) {
   dcmd_api::UiInvalidAgentInfoReply  invalid_agent_reply;
   tss->proto_str_.assign(msg->rd_ptr(), msg->length());
   if (!invalid_agent_query.ParseFromString(tss->proto_str_)) {
-    invalid_agent_reply.set_err("Failed to parse invalid-agent msg.");
-    invalid_agent_reply.set_state(dcmd_api::DCMD_STATE_FAILED);
-    DcmdCenterH4Admin::ReplyIllegalAgent(app_,
-      tss,
-      msg->event().getConnId(),
-      msg->event().getMsgHeader().getTaskId(),
-      &invalid_agent_reply);
+    CWX_ERROR(("Failed to parse invalid-agent msg from conn_id:%u. close it.",
+      msg->event().getConnId()));
+    app_->noticeCloseConn(msg->event().getConnId());
     return;
   }
   // 检查用户名与密码
@@ -310,6 +294,7 @@ void DcmdCenterH4Admin::QueryIllegalAgent(CwxMsgBlock*& msg, DcmdTss* tss) {
   {
     invalid_agent_reply.set_err("User or password is wrong.");
     invalid_agent_reply.set_state(dcmd_api::DCMD_STATE_FAILED);
+    invalid_agent_reply.set_client_msg_id(invalid_agent_query.client_msg_id());
     DcmdCenterH4Admin::ReplyIllegalAgent(app_,
       tss,
       msg->event().getConnId(),
@@ -319,6 +304,7 @@ void DcmdCenterH4Admin::QueryIllegalAgent(CwxMsgBlock*& msg, DcmdTss* tss) {
   }
   CWX_DEBUG(("Receive a  illegal agent query"));
   app_->GetAgentMgr()->GetInvalidAgent(invalid_agent_reply);
+  invalid_agent_reply.set_client_msg_id(invalid_agent_query.client_msg_id());
   DcmdCenterH4Admin::ReplyIllegalAgent(app_,
     tss,
     msg->event().getConnId(),
@@ -331,21 +317,19 @@ void DcmdCenterH4Admin::QueryOprCmdScriptContent(CwxMsgBlock*& msg, DcmdTss* tss
   dcmd_api::UiOprScriptInfoReply  opr_script_reply;
   tss->proto_str_.assign(msg->rd_ptr(), msg->length());
   if (!opr_script_query.ParseFromString(tss->proto_str_)) {
-    opr_script_reply.set_err("Failed to parse opr script msg.");
-    opr_script_reply.set_state(dcmd_api::DCMD_STATE_FAILED);
-    DcmdCenterH4Admin::ReplyOprScriptContent(app_,
-      tss,
-      msg->event().getConnId(),
-      msg->event().getMsgHeader().getTaskId(),
-      &opr_script_reply);
+    CWX_ERROR(("Failed to parse opr script msg from conn_id:%u, close it.",
+      msg->event().getConnId()));
+    app_->noticeCloseConn(msg->event().getConnId());
     return;
   }
+  opr_script_reply.set_client_msg_id(opr_script_query.client_msg_id());
   // 检查用户名与密码
   if ((app_->config().common().ui_user_name_ != opr_script_query.user()) ||
     (app_->config().common().ui_user_passwd_ != opr_script_query.passwd()))
   {
     opr_script_reply.set_err("User or password is wrong.");
     opr_script_reply.set_state(dcmd_api::DCMD_STATE_FAILED);
+    opr_script_reply.set_client_msg_id(opr_script_query.client_msg_id());
     DcmdCenterH4Admin::ReplyOprScriptContent(app_,
       tss,
       msg->event().getConnId(),
@@ -392,15 +376,12 @@ void DcmdCenterH4Admin::QueryTaskCmdScriptContent(CwxMsgBlock*& msg, DcmdTss* ts
   dcmd_api::UiTaskScriptInfoReply  task_script_reply;
   tss->proto_str_.assign(msg->rd_ptr(), msg->length());
   if (!task_script_query.ParseFromString(tss->proto_str_)) {
-    task_script_reply.set_err("Failed to parse task script msg.");
-    task_script_reply.set_state(dcmd_api::DCMD_STATE_FAILED);
-    DcmdCenterH4Admin::ReplyTaskCmdScriptContent(app_,
-      tss,
-      msg->event().getConnId(),
-      msg->event().getMsgHeader().getTaskId(),
-      &task_script_reply);
+    CWX_ERROR(("Failed to parse task script msg from conn_id:%u, close it",
+      msg->event().getConnId()));
+    app_->noticeCloseConn(msg->event().getConnId());
     return;
   }
+  task_script_reply.set_client_msg_id(task_script_query.client_msg_id());
   // 检查用户名与密码
   if ((app_->config().common().ui_user_name_ != task_script_query.user()) ||
     (app_->config().common().ui_user_passwd_ != task_script_query.passwd()))
@@ -453,15 +434,12 @@ void DcmdCenterH4Admin::QuerySubTaskProcess(CwxMsgBlock*& msg, DcmdTss* tss) {
   dcmd_api::UiAgentTaskProcessReply  task_process_reply;
   tss->proto_str_.assign(msg->rd_ptr(), msg->length());
   if (!task_process_query.ParseFromString(tss->proto_str_)) {
-    task_process_reply.set_err("Failed to parse task process msg.");
-    task_process_reply.set_state(dcmd_api::DCMD_STATE_FAILED);
-    DcmdCenterH4Admin::ReplyAgentSubTaskProcess(app_,
-      tss,
-      msg->event().getConnId(),
-      msg->event().getMsgHeader().getTaskId(),
-      &task_process_reply);
+    CWX_ERROR(("Failed to parse task process msg from conn_id:%u, close it.",
+      msg->event().getConnId()));
+    app_->noticeCloseConn(msg->event().getConnId());
     return;
   }
+  task_process_reply.set_client_msg_id(task_process_query.client_msg_id());
   // 检查用户名与密码
   if ((app_->config().common().ui_user_name_ != task_process_query.user()) ||
     (app_->config().common().ui_user_passwd_ != task_process_query.passwd()))

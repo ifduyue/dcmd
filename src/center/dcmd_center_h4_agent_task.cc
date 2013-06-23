@@ -425,7 +425,9 @@ void DcmdCenterH4AgentTask::UiExecTaskCmd(CwxMsgBlock*& msg, DcmdTss* tss){
   CWX_DEBUG(("Receive task cmd, task_id=%s, cmd_type=%d",
     task_cmd.task_id().c_str(),
     task_cmd.cmd_type()));
-  app_->GetTaskMgr()->ReceiveCmd(tss, task_cmd, msg->event().getConnId(), msg->event().getMsgHeader().getTaskId());
+  if (!app_->GetTaskMgr()->ReceiveCmd(tss, task_cmd, msg->event().getConnId(), msg->event().getMsgHeader().getTaskId())) {
+    app_->GetTaskMgr()->Stop();
+  }
 }
 void DcmdCenterH4AgentTask::NoticeMaster(DcmdTss* , string const* agent_ip) {
   CwxMsgBlock* msg = NULL;

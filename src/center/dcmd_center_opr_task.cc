@@ -361,6 +361,7 @@ void DcmdCenterOprTask::Reply(CwxTss* pThrEnv) {
   DcmdTss* tss = (DcmdTss*)pThrEnv;
   uint16_t index = 0;
   dcmd_api::UiExecOprCmdReply reply;
+  reply.set_client_msg_id(client_msg_id_);
   if (is_failed_) {
     reply.set_state(dcmd_api::DCMD_STATE_FAILED);
     reply.set_err(err_msg_);

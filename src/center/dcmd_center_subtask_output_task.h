@@ -15,6 +15,7 @@ class DcmdCenterSubtaskOutputTask : public CwxTaskBoardTask {
    };
    ///构造函数
    DcmdCenterSubtaskOutputTask(DcmdCenterApp* app, CwxTaskBoard* taskboard):CwxTaskBoardTask(taskboard) {
+     client_msg_id_ = 0;
      reply_conn_id_ = 0;
      msg_taskid_ = 0;
      app_ = app;
@@ -87,6 +88,8 @@ class DcmdCenterSubtaskOutputTask : public CwxTaskBoardTask {
   void Reply(CwxTss* pThrEnv);
 
  public:
+  // client的消息id
+  uint32_t             client_msg_id_;
   // 回复的连接id
   uint32_t              reply_conn_id_;
   // 回复消息的task id
