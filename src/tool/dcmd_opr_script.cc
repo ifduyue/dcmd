@@ -16,7 +16,7 @@ int parse_arg(int argc, char**argv) {
   while( (option = cmd_option.next()) != -1) {
     switch (option) {
     case 'h':
-      printf("Get task cmd's infomation.\n");
+      printf("Get opr cmd's infomation.\n");
       printf("%s  -H host -P port -c client-id -o opr-cmd  .....\n", argv[0]);
       printf("-H: server host\n");
       printf("-P: server port\n");
