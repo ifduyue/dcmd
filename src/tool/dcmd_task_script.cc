@@ -166,7 +166,7 @@ int main(int argc ,char** argv) {
   if (dcmd_api::DCMD_STATE_SUCCESS != reply.state()) {
     printf("err:%s\n", reply.err().c_str());
   } else {
-    printf("md5:%d\n", reply.md5().c_str());
+    printf("md5:%s\n", reply.md5().c_str());
     printf("output:%s\n", reply.script().c_str());
   }
   return 0;
