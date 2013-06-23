@@ -65,7 +65,7 @@ void DcmdCenterH4Admin::ExecOprCmd(CwxMsgBlock*& msg, DcmdTss* tss) {
     app_->noticeCloseConn(msg->event().getConnId());
     return;
   }
-  opr_cmd.set_client_msg_id(opr_cmd_reply.clear_client_msg_id());
+  opr_cmd.set_client_msg_id(opr_cmd_reply.client_msg_id());
   if (!app_->config().common().is_allow_opr_cmd_) {
     opr_cmd_reply.set_err("Exec opr-cmd is disable.");
     opr_cmd_reply.set_state(dcmd_api::DCMD_STATE_FAILED);
@@ -94,7 +94,7 @@ void DcmdCenterH4Admin::ExecOprCmd(CwxMsgBlock*& msg, DcmdTss* tss) {
     return;
   }
   opr_task = new DcmdCenterOprTask(app_, &app_->getTaskBoard());
-  opr_task->client_msg_id_ = opr_cmd.clear_client_msg_id();
+  opr_task->client_msg_id_ = opr_cmd.client_msg_id();
   opr_task->reply_conn_id_ = msg->event().getConnId();
   opr_task->msg_task_id_ = msg->event().getMsgHeader().getTaskId();
   opr_task->opr_cmd_id_ = strtoull(opr_cmd.opr_id().c_str(), NULL, 10);
