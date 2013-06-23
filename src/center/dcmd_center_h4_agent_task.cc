@@ -426,6 +426,7 @@ void DcmdCenterH4AgentTask::UiExecTaskCmd(CwxMsgBlock*& msg, DcmdTss* tss){
     task_cmd.task_id().c_str(),
     task_cmd.cmd_type()));
   if (!app_->GetTaskMgr()->ReceiveCmd(tss, task_cmd, msg->event().getConnId(), msg->event().getMsgHeader().getTaskId())) {
+    // 操作数据库错误
     app_->GetTaskMgr()->Stop(tss);
   }
 }

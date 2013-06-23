@@ -18,11 +18,11 @@ class DcmdCenterTaskMgr{
   DcmdCenterTaskMgr(DcmdCenterApp* app);
   ~DcmdCenterTaskMgr();
  public:    
-  // 启动命令处理，若返回false是数据库操作失败
+  // 启动命令处理，若返回false是数据库操作失败，需要执行stop
   bool Start(DcmdTss* tss);
   // 停止命令处理，若返回false是数据库操作失败
   void Stop(DcmdTss* tss);
-  // 接收新指令
+  // 接收新指令。false：操作数据库错误。true：数据库没有错误
   bool ReceiveCmd(DcmdTss* tss,
     dcmd_api::UiTaskCmd const& cmd,
     uint32_t  conn_id,
