@@ -12,14 +12,11 @@ uint32_t   g_offset = 0;
 string     g_user;
 string     g_passwd;
 ///-1：失败；0：help；1：成功
-int parse_arg(int argc, char**argv)
-{
+int parse_arg(int argc, char**argv) {
   CwxGetOpt cmd_option(argc, argv, "H:P:c:s:i:f:u:p:h");
   int option;
-  while( (option = cmd_option.next()) != -1)
-  {
-    switch (option)
-    {
+  while( (option = cmd_option.next()) != -1) {
+    switch (option) {
     case 'h':
       printf("Get subtask's output content.\n");
       printf("%s  -H host -P port -c client-id -s subtask -i agent-ip .....\n", argv[0]);
