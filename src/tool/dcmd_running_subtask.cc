@@ -127,7 +127,7 @@ int main(int argc ,char** argv) {
   {
     list<string> subtask_ids;
     CwxCommon::split(g_subtask_ids, subtask_ids,dcmd::kItemSplitChar);
-    list<string>::iterator iter = subtask_ids.being();
+    list<string>::iterator iter = subtask_ids.begin();
     while (iter != subtask_ids.end()) {
       *query.add_subtask_id() = *iter;
       ++iter;
@@ -177,7 +177,7 @@ int main(int argc ,char** argv) {
     printf("err:%s\n", reply.err().c_str());
   } else {
     printf("subtask process:\n");
-    for (int i=0; i<reply.result_size(); i++) {
+    for (int i=0; i<reply.process_size(); i++) {
       printf("subtask_id:%s|process:%s\n",
         reply.process(i).subtask_id().c_str(),
         reply.process(i).process().c_str());
