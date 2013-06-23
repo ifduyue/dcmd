@@ -154,7 +154,7 @@ int main(int argc ,char** argv) {
   } else {
     printf("invalid agent info:\n");
     for (int i=0; i<reply.agentinfo_size(); i++) {
-      printf("*****************ip:%s********************\n", reply.agentinfo_size(i).ip().c_str());
+      printf("*****************ip:%s********************\n", reply.agentinfo(i).ip().c_str());
       printf("\tstate:%d\n", reply.agentinfo(i).state());
       printf("\tversion:%s\n", reply.agentinfo(i).version().c_str());
       printf("\tconnected_ip:%s\n", reply.agentinfo(i).connected_ip().c_str());
