@@ -215,7 +215,7 @@ int main(int argc ,char** argv) {
   query.set_concurrent_rate(g_concurrent_rate);
   query.set_task_timeout(g_timeout);
   query.set_auto_(g_is_auto);
-  query.set_cmd_type(g_cmd_type);
+  query.set_cmd_type((dcmd_api::CmdType)g_cmd_type);
   query.set_user(g_user);
   query.set_passwd(g_passwd);
   if (!query.SerializeToString(&query_msg)) {

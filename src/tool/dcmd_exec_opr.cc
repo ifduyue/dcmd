@@ -149,7 +149,7 @@ int main(int argc ,char** argv) {
   {
     list<string> ips;
     CwxCommon::split(g_agent_ips, ips,dcmd::kItemSplitChar);
-    list<string>::iterator iter = ips.being();
+    list<string>::iterator iter = ips.begin();
     while (iter != ips.end()) {
       *query.add_agents() = *iter;
       ++iter;
