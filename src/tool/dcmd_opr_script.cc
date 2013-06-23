@@ -6,22 +6,22 @@ using namespace cwinux;
 string     g_host;
 uint16_t   g_port = 0;
 int        g_client_id = 0;
-string     g_taskcmd;
+string     g_opr_file;
 string     g_user;
 string     g_passwd;
 ///-1：失败；0：help；1：成功
 int parse_arg(int argc, char**argv) {
-  CwxGetOpt cmd_option(argc, argv, "H:P:c:T:u:p:h");
+  CwxGetOpt cmd_option(argc, argv, "H:P:c:o:u:p:h");
   int option;
   while( (option = cmd_option.next()) != -1) {
     switch (option) {
     case 'h':
       printf("Get task cmd's infomation.\n");
-      printf("%s  -H host -P port -c client-id -T task-cmd  .....\n", argv[0]);
+      printf("%s  -H host -P port -c client-id -o opr-cmd  .....\n", argv[0]);
       printf("-H: server host\n");
       printf("-P: server port\n");
       printf("-c: client id\n");
-      printf("-T: task cmd name\n");
+      printf("-o: opr cmd name\n");
       printf("-u: user name.\n");
       printf("-p: user password.\n");
       printf("-h: help\n");
@@ -47,12 +47,12 @@ int parse_arg(int argc, char**argv) {
       }
       g_client_id = strtoul(cmd_option.opt_arg(), NULL, 10);
       break;
-    case 'T':
+    case 'o':
       if (!cmd_option.opt_arg() || (*cmd_option.opt_arg() == '-')) {
-        printf("-T requires an argument.\n");
+        printf("-o requires an argument.\n");
         return -1;
       }
-      g_taskcmd = cmd_option.opt_arg();
+      g_opr_file = cmd_option.opt_arg();
       break;
     case 'u':
       if (!cmd_option.opt_arg() || (*cmd_option.opt_arg() == '-')) {
@@ -92,8 +92,8 @@ int parse_arg(int argc, char**argv) {
     printf("No port, set by -P\n");
     return -1;
   }
-  if (!g_taskcmd.length()){
-    printf("No task cmd, set by -T\n");
+  if (!g_opr_file.length()){
+    printf("No opr cmd, set by -o\n");
     return -1;
   }
   return 1;
@@ -115,17 +115,17 @@ int main(int argc ,char** argv) {
   CwxPackageReaderEx reader;
   CwxMsgBlock* block=NULL;
   string query_msg;
-  dcmd_api::UiTaskScriptInfo query;
+  dcmd_api::UiOprScriptInfo query;
 
   query.set_client_msg_id(g_client_id);
-  query.set_task_cmd(g_taskcmd);
+  query.set_opr_file(g_opr_file);
   query.set_user(g_user);
   query.set_passwd(g_passwd);
   if (!query->SerializeToString(&query_msg)) {
     printf("Failure to serialize query-msg.\n");
     return 1;
   }
-  CwxMsgHead head(0, 0, dcmd_api::MTYPE_UI_TASK_CMD_INFO, 0, query_msg.length());
+  CwxMsgHead head(0, 0, dcmd_api::MTYPE_UI_OPR_CMD_INFO, 0, query_msg.length());
   block = CwxMsgBlockAlloc::pack(head, query_msg.c_str(), query_msg.length());
   if (!block) {
     printf("Failure to pack query-msg.\n");
@@ -144,7 +144,7 @@ int main(int argc ,char** argv) {
     printf("failed to read the reply, errno=%d\n", errno);
     return 1;
   }
-  if (dcmd_api::MTYPE_UI_TASK_CMD_INFO_R != head.getMsgType()) {
+  if (dcmd_api::MTYPE_UI_OPR_CMD_INFO_R != head.getMsgType()) {
     printf("receive a unknow msg type, msg_type=%u\n", head.getMsgType());
     if (block) CwxMsgBlockAlloc::free(block);
     return 1;
@@ -156,14 +156,14 @@ int main(int argc ,char** argv) {
     if (block) CwxMsgBlockAlloc::free(block);
     return 1;
   }
-  printf("task cmd info:\n");
+  printf("opr cmd info:\n");
   printf("client_id:%d\n", reply.client_msg_id());
   printf("state:%d\n", reply.state());
   if (dcmd_api::DCMD_STATE_SUCCESS != reply.state()) {
     printf("err:%s\n", reply.err().c_str());
   } else {
     printf("md5:%d\n", reply.md5().c_str());
-    printf("output:%s\n", reply.script().c_str());
+    printf("script:%s\n", reply.script().c_str());
   }
   return 0;
 }
