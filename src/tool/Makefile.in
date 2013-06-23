@@ -62,12 +62,14 @@ am_dcmd_agent_info_OBJECTS =  \
 	dcmd_agent_info-dcmd_agent_info.$(OBJEXT) \
 	dcmd_agent_info-dcmd_def.$(OBJEXT) \
 	dcmd_agent_info-dcmd_cmn.pb.$(OBJEXT) \
+	dcmd_agent_info-dcmd_ui.pb.$(OBJEXT) \
 	dcmd_agent_info-dcmd_tss.$(OBJEXT)
 dcmd_agent_info_OBJECTS = $(am_dcmd_agent_info_OBJECTS)
 dcmd_agent_info_DEPENDENCIES =
 am_dcmd_exec_opr_OBJECTS = dcmd_exec_opr-dcmd_exec_opr.$(OBJEXT) \
 	dcmd_exec_opr-dcmd_def.$(OBJEXT) \
 	dcmd_exec_opr-dcmd_cmn.pb.$(OBJEXT) \
+	dcmd_exec_opr-dcmd_ui.pb.$(OBJEXT) \
 	dcmd_exec_opr-dcmd_tss.$(OBJEXT)
 dcmd_exec_opr_OBJECTS = $(am_dcmd_exec_opr_OBJECTS)
 dcmd_exec_opr_DEPENDENCIES =
@@ -75,6 +77,7 @@ am_dcmd_invalid_agent_OBJECTS =  \
 	dcmd_invalid_agent-dcmd_invalid_agent.$(OBJEXT) \
 	dcmd_invalid_agent-dcmd_def.$(OBJEXT) \
 	dcmd_invalid_agent-dcmd_cmn.pb.$(OBJEXT) \
+	dcmd_invalid_agent-dcmd_ui.pb.$(OBJEXT) \
 	dcmd_invalid_agent-dcmd_tss.$(OBJEXT)
 dcmd_invalid_agent_OBJECTS = $(am_dcmd_invalid_agent_OBJECTS)
 dcmd_invalid_agent_DEPENDENCIES =
@@ -82,6 +85,7 @@ am_dcmd_opr_script_OBJECTS =  \
 	dcmd_opr_script-dcmd_opr_script.$(OBJEXT) \
 	dcmd_opr_script-dcmd_def.$(OBJEXT) \
 	dcmd_opr_script-dcmd_cmn.pb.$(OBJEXT) \
+	dcmd_opr_script-dcmd_ui.pb.$(OBJEXT) \
 	dcmd_opr_script-dcmd_tss.$(OBJEXT)
 dcmd_opr_script_OBJECTS = $(am_dcmd_opr_script_OBJECTS)
 dcmd_opr_script_DEPENDENCIES =
@@ -89,6 +93,7 @@ am_dcmd_running_opr_OBJECTS =  \
 	dcmd_running_opr-dcmd_running_opr.$(OBJEXT) \
 	dcmd_running_opr-dcmd_def.$(OBJEXT) \
 	dcmd_running_opr-dcmd_cmn.pb.$(OBJEXT) \
+	dcmd_running_opr-dcmd_ui.pb.$(OBJEXT) \
 	dcmd_running_opr-dcmd_tss.$(OBJEXT)
 dcmd_running_opr_OBJECTS = $(am_dcmd_running_opr_OBJECTS)
 dcmd_running_opr_DEPENDENCIES =
@@ -96,6 +101,7 @@ am_dcmd_running_subtask_OBJECTS =  \
 	dcmd_running_subtask-dcmd_running_subtask.$(OBJEXT) \
 	dcmd_running_subtask-dcmd_def.$(OBJEXT) \
 	dcmd_running_subtask-dcmd_cmn.pb.$(OBJEXT) \
+	dcmd_running_subtask-dcmd_ui.pb.$(OBJEXT) \
 	dcmd_running_subtask-dcmd_tss.$(OBJEXT)
 dcmd_running_subtask_OBJECTS = $(am_dcmd_running_subtask_OBJECTS)
 dcmd_running_subtask_DEPENDENCIES =
@@ -103,6 +109,7 @@ am_dcmd_subtask_output_OBJECTS =  \
 	dcmd_subtask_output-dcmd_subtask_output.$(OBJEXT) \
 	dcmd_subtask_output-dcmd_def.$(OBJEXT) \
 	dcmd_subtask_output-dcmd_cmn.pb.$(OBJEXT) \
+	dcmd_subtask_output-dcmd_ui.pb.$(OBJEXT) \
 	dcmd_subtask_output-dcmd_tss.$(OBJEXT)
 dcmd_subtask_output_OBJECTS = $(am_dcmd_subtask_output_OBJECTS)
 dcmd_subtask_output_DEPENDENCIES =
@@ -110,12 +117,14 @@ am_dcmd_subtask_process_OBJECTS =  \
 	dcmd_subtask_process-dcmd_subtask_process.$(OBJEXT) \
 	dcmd_subtask_process-dcmd_def.$(OBJEXT) \
 	dcmd_subtask_process-dcmd_cmn.pb.$(OBJEXT) \
+	dcmd_subtask_process-dcmd_ui.pb.$(OBJEXT) \
 	dcmd_subtask_process-dcmd_tss.$(OBJEXT)
 dcmd_subtask_process_OBJECTS = $(am_dcmd_subtask_process_OBJECTS)
 dcmd_subtask_process_DEPENDENCIES =
 am_dcmd_task_cmd_OBJECTS = dcmd_task_cmd-dcmd_task_cmd.$(OBJEXT) \
 	dcmd_task_cmd-dcmd_def.$(OBJEXT) \
 	dcmd_task_cmd-dcmd_cmn.pb.$(OBJEXT) \
+	dcmd_task_cmd-dcmd_ui.pb.$(OBJEXT) \
 	dcmd_task_cmd-dcmd_tss.$(OBJEXT)
 dcmd_task_cmd_OBJECTS = $(am_dcmd_task_cmd_OBJECTS)
 dcmd_task_cmd_DEPENDENCIES =
@@ -123,6 +132,7 @@ am_dcmd_task_script_OBJECTS =  \
 	dcmd_task_script-dcmd_task_script.$(OBJEXT) \
 	dcmd_task_script-dcmd_def.$(OBJEXT) \
 	dcmd_task_script-dcmd_cmn.pb.$(OBJEXT) \
+	dcmd_task_script-dcmd_ui.pb.$(OBJEXT) \
 	dcmd_task_script-dcmd_tss.$(OBJEXT)
 dcmd_task_script_OBJECTS = $(am_dcmd_task_script_OBJECTS)
 dcmd_task_script_DEPENDENCIES =
@@ -265,6 +275,7 @@ dcmd_task_script_CPPFLAGS = -D_BUILD_DATE="$(BUILD_DATE)" -W -Wall
 dcmd_task_script_SOURCES = dcmd_task_script.cc\
                 ../cmn/dcmd_def.cc\
                 ../cmn/dcmd_cmn.pb.cc\
+                ../cmn/dcmd_ui.pb.cc\
                 ../cmn/dcmd_tss.cc
 
 dcmd_task_script_LDADD = 
@@ -273,6 +284,7 @@ dcmd_subtask_process_CPPFLAGS = -D_BUILD_DATE="$(BUILD_DATE)" -W -Wall
 dcmd_subtask_process_SOURCES = dcmd_subtask_process.cc\
                 ../cmn/dcmd_def.cc\
                 ../cmn/dcmd_cmn.pb.cc\
+                ../cmn/dcmd_ui.pb.cc\
                 ../cmn/dcmd_tss.cc
 
 dcmd_subtask_process_LDADD = 
@@ -281,6 +293,7 @@ dcmd_running_subtask_CPPFLAGS = -D_BUILD_DATE="$(BUILD_DATE)" -W -Wall
 dcmd_running_subtask_SOURCES = dcmd_running_subtask.cc\
                 ../cmn/dcmd_def.cc\
                 ../cmn/dcmd_cmn.pb.cc\
+                ../cmn/dcmd_ui.pb.cc\
                 ../cmn/dcmd_tss.cc
 
 dcmd_running_subtask_LDADD = 
@@ -289,6 +302,7 @@ dcmd_opr_script_CPPFLAGS = -D_BUILD_DATE="$(BUILD_DATE)" -W -Wall
 dcmd_opr_script_SOURCES = dcmd_opr_script.cc\
                 ../cmn/dcmd_def.cc\
                 ../cmn/dcmd_cmn.pb.cc\
+                ../cmn/dcmd_ui.pb.cc\
                 ../cmn/dcmd_tss.cc
 
 dcmd_opr_script_LDADD = 
@@ -297,6 +311,7 @@ dcmd_task_cmd_CPPFLAGS = -D_BUILD_DATE="$(BUILD_DATE)" -W -Wall
 dcmd_task_cmd_SOURCES = dcmd_task_cmd.cc\
                 ../cmn/dcmd_def.cc\
                 ../cmn/dcmd_cmn.pb.cc\
+                ../cmn/dcmd_ui.pb.cc\
                 ../cmn/dcmd_tss.cc
 
 dcmd_task_cmd_LDADD = 
@@ -305,6 +320,7 @@ dcmd_exec_opr_CPPFLAGS = -D_BUILD_DATE="$(BUILD_DATE)" -W -Wall
 dcmd_exec_opr_SOURCES = dcmd_exec_opr.cc\
                 ../cmn/dcmd_def.cc\
                 ../cmn/dcmd_cmn.pb.cc\
+                ../cmn/dcmd_ui.pb.cc\
                 ../cmn/dcmd_tss.cc
 
 dcmd_exec_opr_LDADD = 
@@ -313,6 +329,7 @@ dcmd_agent_info_CPPFLAGS = -D_BUILD_DATE="$(BUILD_DATE)" -W -Wall
 dcmd_agent_info_SOURCES = dcmd_agent_info.cc\
 		../cmn/dcmd_def.cc\
 		../cmn/dcmd_cmn.pb.cc\
+                ../cmn/dcmd_ui.pb.cc\
 		../cmn/dcmd_tss.cc
 
 dcmd_agent_info_LDADD = 
@@ -321,6 +338,7 @@ dcmd_invalid_agent_CPPFLAGS = -D_BUILD_DATE="$(BUILD_DATE)" -W -Wall
 dcmd_invalid_agent_SOURCES = dcmd_invalid_agent.cc\
                 ../cmn/dcmd_def.cc\
                 ../cmn/dcmd_cmn.pb.cc\
+                ../cmn/dcmd_ui.pb.cc\
                 ../cmn/dcmd_tss.cc
 
 dcmd_invalid_agent_LDADD = 
@@ -329,6 +347,7 @@ dcmd_running_opr_CPPFLAGS = -D_BUILD_DATE="$(BUILD_DATE)" -W -Wall
 dcmd_running_opr_SOURCES = dcmd_running_opr.cc\
                 ../cmn/dcmd_def.cc\
                 ../cmn/dcmd_cmn.pb.cc\
+                ../cmn/dcmd_ui.pb.cc\
                 ../cmn/dcmd_tss.cc
 
 dcmd_running_opr_LDADD = 
@@ -337,6 +356,7 @@ dcmd_subtask_output_CPPFLAGS = -D_BUILD_DATE="$(BUILD_DATE)" -W -Wall
 dcmd_subtask_output_SOURCES = dcmd_subtask_output.cc\
                 ../cmn/dcmd_def.cc\
                 ../cmn/dcmd_cmn.pb.cc\
+                ../cmn/dcmd_ui.pb.cc\
                 ../cmn/dcmd_tss.cc
 
 dcmd_subtask_output_LDADD = 
@@ -448,42 +468,52 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_agent_info-dcmd_cmn.pb.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_agent_info-dcmd_def.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_agent_info-dcmd_tss.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_agent_info-dcmd_ui.pb.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_exec_opr-dcmd_cmn.pb.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_exec_opr-dcmd_def.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_exec_opr-dcmd_exec_opr.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_exec_opr-dcmd_tss.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_exec_opr-dcmd_ui.pb.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_invalid_agent-dcmd_cmn.pb.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_invalid_agent-dcmd_def.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_invalid_agent-dcmd_invalid_agent.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_invalid_agent-dcmd_tss.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_invalid_agent-dcmd_ui.pb.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_opr_script-dcmd_cmn.pb.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_opr_script-dcmd_def.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_opr_script-dcmd_opr_script.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_opr_script-dcmd_tss.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_opr_script-dcmd_ui.pb.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_running_opr-dcmd_cmn.pb.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_running_opr-dcmd_def.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_running_opr-dcmd_running_opr.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_running_opr-dcmd_tss.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_running_opr-dcmd_ui.pb.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_running_subtask-dcmd_cmn.pb.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_running_subtask-dcmd_def.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_running_subtask-dcmd_running_subtask.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_running_subtask-dcmd_tss.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_running_subtask-dcmd_ui.pb.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_subtask_output-dcmd_cmn.pb.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_subtask_output-dcmd_def.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_subtask_output-dcmd_subtask_output.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_subtask_output-dcmd_tss.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_subtask_output-dcmd_ui.pb.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_subtask_process-dcmd_cmn.pb.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_subtask_process-dcmd_def.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_subtask_process-dcmd_subtask_process.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_subtask_process-dcmd_tss.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_subtask_process-dcmd_ui.pb.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_task_cmd-dcmd_cmn.pb.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_task_cmd-dcmd_def.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_task_cmd-dcmd_task_cmd.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_task_cmd-dcmd_tss.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_task_cmd-dcmd_ui.pb.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_task_script-dcmd_cmn.pb.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_task_script-dcmd_def.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_task_script-dcmd_task_script.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_task_script-dcmd_tss.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dcmd_task_script-dcmd_ui.pb.Po@am__quote@
 
 .cc.o:
 @am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
@@ -548,6 +578,20 @@ dcmd_agent_info-dcmd_cmn.pb.obj: ../cmn/dcmd_cmn.pb.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_info_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent_info-dcmd_cmn.pb.obj `if test -f '../cmn/dcmd_cmn.pb.cc'; then $(CYGPATH_W) '../cmn/dcmd_cmn.pb.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_cmn.pb.cc'; fi`
 
+dcmd_agent_info-dcmd_ui.pb.o: ../cmn/dcmd_ui.pb.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_info_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent_info-dcmd_ui.pb.o -MD -MP -MF "$(DEPDIR)/dcmd_agent_info-dcmd_ui.pb.Tpo" -c -o dcmd_agent_info-dcmd_ui.pb.o `test -f '../cmn/dcmd_ui.pb.cc' || echo '$(srcdir)/'`../cmn/dcmd_ui.pb.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent_info-dcmd_ui.pb.Tpo" "$(DEPDIR)/dcmd_agent_info-dcmd_ui.pb.Po"; else rm -f "$(DEPDIR)/dcmd_agent_info-dcmd_ui.pb.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_ui.pb.cc' object='dcmd_agent_info-dcmd_ui.pb.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_info_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent_info-dcmd_ui.pb.o `test -f '../cmn/dcmd_ui.pb.cc' || echo '$(srcdir)/'`../cmn/dcmd_ui.pb.cc
+
+dcmd_agent_info-dcmd_ui.pb.obj: ../cmn/dcmd_ui.pb.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_info_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent_info-dcmd_ui.pb.obj -MD -MP -MF "$(DEPDIR)/dcmd_agent_info-dcmd_ui.pb.Tpo" -c -o dcmd_agent_info-dcmd_ui.pb.obj `if test -f '../cmn/dcmd_ui.pb.cc'; then $(CYGPATH_W) '../cmn/dcmd_ui.pb.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_ui.pb.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent_info-dcmd_ui.pb.Tpo" "$(DEPDIR)/dcmd_agent_info-dcmd_ui.pb.Po"; else rm -f "$(DEPDIR)/dcmd_agent_info-dcmd_ui.pb.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_ui.pb.cc' object='dcmd_agent_info-dcmd_ui.pb.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_info_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_agent_info-dcmd_ui.pb.obj `if test -f '../cmn/dcmd_ui.pb.cc'; then $(CYGPATH_W) '../cmn/dcmd_ui.pb.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_ui.pb.cc'; fi`
+
 dcmd_agent_info-dcmd_tss.o: ../cmn/dcmd_tss.cc
 @am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_agent_info_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_agent_info-dcmd_tss.o -MD -MP -MF "$(DEPDIR)/dcmd_agent_info-dcmd_tss.Tpo" -c -o dcmd_agent_info-dcmd_tss.o `test -f '../cmn/dcmd_tss.cc' || echo '$(srcdir)/'`../cmn/dcmd_tss.cc; \
 @am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_agent_info-dcmd_tss.Tpo" "$(DEPDIR)/dcmd_agent_info-dcmd_tss.Po"; else rm -f "$(DEPDIR)/dcmd_agent_info-dcmd_tss.Tpo"; exit 1; fi
@@ -603,6 +647,20 @@ dcmd_exec_opr-dcmd_cmn.pb.obj: ../cmn/dcmd_cmn.pb.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_cmn.pb.cc' object='dcmd_exec_opr-dcmd_cmn.pb.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_exec_opr_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_exec_opr-dcmd_cmn.pb.obj `if test -f '../cmn/dcmd_cmn.pb.cc'; then $(CYGPATH_W) '../cmn/dcmd_cmn.pb.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_cmn.pb.cc'; fi`
+
+dcmd_exec_opr-dcmd_ui.pb.o: ../cmn/dcmd_ui.pb.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_exec_opr_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_exec_opr-dcmd_ui.pb.o -MD -MP -MF "$(DEPDIR)/dcmd_exec_opr-dcmd_ui.pb.Tpo" -c -o dcmd_exec_opr-dcmd_ui.pb.o `test -f '../cmn/dcmd_ui.pb.cc' || echo '$(srcdir)/'`../cmn/dcmd_ui.pb.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_exec_opr-dcmd_ui.pb.Tpo" "$(DEPDIR)/dcmd_exec_opr-dcmd_ui.pb.Po"; else rm -f "$(DEPDIR)/dcmd_exec_opr-dcmd_ui.pb.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_ui.pb.cc' object='dcmd_exec_opr-dcmd_ui.pb.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_exec_opr_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_exec_opr-dcmd_ui.pb.o `test -f '../cmn/dcmd_ui.pb.cc' || echo '$(srcdir)/'`../cmn/dcmd_ui.pb.cc
+
+dcmd_exec_opr-dcmd_ui.pb.obj: ../cmn/dcmd_ui.pb.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_exec_opr_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_exec_opr-dcmd_ui.pb.obj -MD -MP -MF "$(DEPDIR)/dcmd_exec_opr-dcmd_ui.pb.Tpo" -c -o dcmd_exec_opr-dcmd_ui.pb.obj `if test -f '../cmn/dcmd_ui.pb.cc'; then $(CYGPATH_W) '../cmn/dcmd_ui.pb.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_ui.pb.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_exec_opr-dcmd_ui.pb.Tpo" "$(DEPDIR)/dcmd_exec_opr-dcmd_ui.pb.Po"; else rm -f "$(DEPDIR)/dcmd_exec_opr-dcmd_ui.pb.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_ui.pb.cc' object='dcmd_exec_opr-dcmd_ui.pb.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_exec_opr_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_exec_opr-dcmd_ui.pb.obj `if test -f '../cmn/dcmd_ui.pb.cc'; then $(CYGPATH_W) '../cmn/dcmd_ui.pb.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_ui.pb.cc'; fi`
 
 dcmd_exec_opr-dcmd_tss.o: ../cmn/dcmd_tss.cc
 @am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_exec_opr_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_exec_opr-dcmd_tss.o -MD -MP -MF "$(DEPDIR)/dcmd_exec_opr-dcmd_tss.Tpo" -c -o dcmd_exec_opr-dcmd_tss.o `test -f '../cmn/dcmd_tss.cc' || echo '$(srcdir)/'`../cmn/dcmd_tss.cc; \
@@ -660,6 +718,20 @@ dcmd_invalid_agent-dcmd_cmn.pb.obj: ../cmn/dcmd_cmn.pb.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_invalid_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_invalid_agent-dcmd_cmn.pb.obj `if test -f '../cmn/dcmd_cmn.pb.cc'; then $(CYGPATH_W) '../cmn/dcmd_cmn.pb.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_cmn.pb.cc'; fi`
 
+dcmd_invalid_agent-dcmd_ui.pb.o: ../cmn/dcmd_ui.pb.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_invalid_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_invalid_agent-dcmd_ui.pb.o -MD -MP -MF "$(DEPDIR)/dcmd_invalid_agent-dcmd_ui.pb.Tpo" -c -o dcmd_invalid_agent-dcmd_ui.pb.o `test -f '../cmn/dcmd_ui.pb.cc' || echo '$(srcdir)/'`../cmn/dcmd_ui.pb.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_invalid_agent-dcmd_ui.pb.Tpo" "$(DEPDIR)/dcmd_invalid_agent-dcmd_ui.pb.Po"; else rm -f "$(DEPDIR)/dcmd_invalid_agent-dcmd_ui.pb.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_ui.pb.cc' object='dcmd_invalid_agent-dcmd_ui.pb.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_invalid_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_invalid_agent-dcmd_ui.pb.o `test -f '../cmn/dcmd_ui.pb.cc' || echo '$(srcdir)/'`../cmn/dcmd_ui.pb.cc
+
+dcmd_invalid_agent-dcmd_ui.pb.obj: ../cmn/dcmd_ui.pb.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_invalid_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_invalid_agent-dcmd_ui.pb.obj -MD -MP -MF "$(DEPDIR)/dcmd_invalid_agent-dcmd_ui.pb.Tpo" -c -o dcmd_invalid_agent-dcmd_ui.pb.obj `if test -f '../cmn/dcmd_ui.pb.cc'; then $(CYGPATH_W) '../cmn/dcmd_ui.pb.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_ui.pb.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_invalid_agent-dcmd_ui.pb.Tpo" "$(DEPDIR)/dcmd_invalid_agent-dcmd_ui.pb.Po"; else rm -f "$(DEPDIR)/dcmd_invalid_agent-dcmd_ui.pb.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_ui.pb.cc' object='dcmd_invalid_agent-dcmd_ui.pb.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_invalid_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_invalid_agent-dcmd_ui.pb.obj `if test -f '../cmn/dcmd_ui.pb.cc'; then $(CYGPATH_W) '../cmn/dcmd_ui.pb.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_ui.pb.cc'; fi`
+
 dcmd_invalid_agent-dcmd_tss.o: ../cmn/dcmd_tss.cc
 @am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_invalid_agent_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_invalid_agent-dcmd_tss.o -MD -MP -MF "$(DEPDIR)/dcmd_invalid_agent-dcmd_tss.Tpo" -c -o dcmd_invalid_agent-dcmd_tss.o `test -f '../cmn/dcmd_tss.cc' || echo '$(srcdir)/'`../cmn/dcmd_tss.cc; \
 @am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_invalid_agent-dcmd_tss.Tpo" "$(DEPDIR)/dcmd_invalid_agent-dcmd_tss.Po"; else rm -f "$(DEPDIR)/dcmd_invalid_agent-dcmd_tss.Tpo"; exit 1; fi
@@ -715,6 +787,20 @@ dcmd_opr_script-dcmd_cmn.pb.obj: ../cmn/dcmd_cmn.pb.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_cmn.pb.cc' object='dcmd_opr_script-dcmd_cmn.pb.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_opr_script_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_opr_script-dcmd_cmn.pb.obj `if test -f '../cmn/dcmd_cmn.pb.cc'; then $(CYGPATH_W) '../cmn/dcmd_cmn.pb.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_cmn.pb.cc'; fi`
+
+dcmd_opr_script-dcmd_ui.pb.o: ../cmn/dcmd_ui.pb.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_opr_script_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_opr_script-dcmd_ui.pb.o -MD -MP -MF "$(DEPDIR)/dcmd_opr_script-dcmd_ui.pb.Tpo" -c -o dcmd_opr_script-dcmd_ui.pb.o `test -f '../cmn/dcmd_ui.pb.cc' || echo '$(srcdir)/'`../cmn/dcmd_ui.pb.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_opr_script-dcmd_ui.pb.Tpo" "$(DEPDIR)/dcmd_opr_script-dcmd_ui.pb.Po"; else rm -f "$(DEPDIR)/dcmd_opr_script-dcmd_ui.pb.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_ui.pb.cc' object='dcmd_opr_script-dcmd_ui.pb.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_opr_script_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_opr_script-dcmd_ui.pb.o `test -f '../cmn/dcmd_ui.pb.cc' || echo '$(srcdir)/'`../cmn/dcmd_ui.pb.cc
+
+dcmd_opr_script-dcmd_ui.pb.obj: ../cmn/dcmd_ui.pb.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_opr_script_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_opr_script-dcmd_ui.pb.obj -MD -MP -MF "$(DEPDIR)/dcmd_opr_script-dcmd_ui.pb.Tpo" -c -o dcmd_opr_script-dcmd_ui.pb.obj `if test -f '../cmn/dcmd_ui.pb.cc'; then $(CYGPATH_W) '../cmn/dcmd_ui.pb.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_ui.pb.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_opr_script-dcmd_ui.pb.Tpo" "$(DEPDIR)/dcmd_opr_script-dcmd_ui.pb.Po"; else rm -f "$(DEPDIR)/dcmd_opr_script-dcmd_ui.pb.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_ui.pb.cc' object='dcmd_opr_script-dcmd_ui.pb.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_opr_script_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_opr_script-dcmd_ui.pb.obj `if test -f '../cmn/dcmd_ui.pb.cc'; then $(CYGPATH_W) '../cmn/dcmd_ui.pb.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_ui.pb.cc'; fi`
 
 dcmd_opr_script-dcmd_tss.o: ../cmn/dcmd_tss.cc
 @am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_opr_script_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_opr_script-dcmd_tss.o -MD -MP -MF "$(DEPDIR)/dcmd_opr_script-dcmd_tss.Tpo" -c -o dcmd_opr_script-dcmd_tss.o `test -f '../cmn/dcmd_tss.cc' || echo '$(srcdir)/'`../cmn/dcmd_tss.cc; \
@@ -772,6 +858,20 @@ dcmd_running_opr-dcmd_cmn.pb.obj: ../cmn/dcmd_cmn.pb.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_running_opr_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_running_opr-dcmd_cmn.pb.obj `if test -f '../cmn/dcmd_cmn.pb.cc'; then $(CYGPATH_W) '../cmn/dcmd_cmn.pb.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_cmn.pb.cc'; fi`
 
+dcmd_running_opr-dcmd_ui.pb.o: ../cmn/dcmd_ui.pb.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_running_opr_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_running_opr-dcmd_ui.pb.o -MD -MP -MF "$(DEPDIR)/dcmd_running_opr-dcmd_ui.pb.Tpo" -c -o dcmd_running_opr-dcmd_ui.pb.o `test -f '../cmn/dcmd_ui.pb.cc' || echo '$(srcdir)/'`../cmn/dcmd_ui.pb.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_running_opr-dcmd_ui.pb.Tpo" "$(DEPDIR)/dcmd_running_opr-dcmd_ui.pb.Po"; else rm -f "$(DEPDIR)/dcmd_running_opr-dcmd_ui.pb.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_ui.pb.cc' object='dcmd_running_opr-dcmd_ui.pb.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_running_opr_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_running_opr-dcmd_ui.pb.o `test -f '../cmn/dcmd_ui.pb.cc' || echo '$(srcdir)/'`../cmn/dcmd_ui.pb.cc
+
+dcmd_running_opr-dcmd_ui.pb.obj: ../cmn/dcmd_ui.pb.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_running_opr_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_running_opr-dcmd_ui.pb.obj -MD -MP -MF "$(DEPDIR)/dcmd_running_opr-dcmd_ui.pb.Tpo" -c -o dcmd_running_opr-dcmd_ui.pb.obj `if test -f '../cmn/dcmd_ui.pb.cc'; then $(CYGPATH_W) '../cmn/dcmd_ui.pb.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_ui.pb.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_running_opr-dcmd_ui.pb.Tpo" "$(DEPDIR)/dcmd_running_opr-dcmd_ui.pb.Po"; else rm -f "$(DEPDIR)/dcmd_running_opr-dcmd_ui.pb.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_ui.pb.cc' object='dcmd_running_opr-dcmd_ui.pb.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_running_opr_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_running_opr-dcmd_ui.pb.obj `if test -f '../cmn/dcmd_ui.pb.cc'; then $(CYGPATH_W) '../cmn/dcmd_ui.pb.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_ui.pb.cc'; fi`
+
 dcmd_running_opr-dcmd_tss.o: ../cmn/dcmd_tss.cc
 @am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_running_opr_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_running_opr-dcmd_tss.o -MD -MP -MF "$(DEPDIR)/dcmd_running_opr-dcmd_tss.Tpo" -c -o dcmd_running_opr-dcmd_tss.o `test -f '../cmn/dcmd_tss.cc' || echo '$(srcdir)/'`../cmn/dcmd_tss.cc; \
 @am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_running_opr-dcmd_tss.Tpo" "$(DEPDIR)/dcmd_running_opr-dcmd_tss.Po"; else rm -f "$(DEPDIR)/dcmd_running_opr-dcmd_tss.Tpo"; exit 1; fi
@@ -827,6 +927,20 @@ dcmd_running_subtask-dcmd_cmn.pb.obj: ../cmn/dcmd_cmn.pb.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_cmn.pb.cc' object='dcmd_running_subtask-dcmd_cmn.pb.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_running_subtask_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_running_subtask-dcmd_cmn.pb.obj `if test -f '../cmn/dcmd_cmn.pb.cc'; then $(CYGPATH_W) '../cmn/dcmd_cmn.pb.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_cmn.pb.cc'; fi`
+
+dcmd_running_subtask-dcmd_ui.pb.o: ../cmn/dcmd_ui.pb.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_running_subtask_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_running_subtask-dcmd_ui.pb.o -MD -MP -MF "$(DEPDIR)/dcmd_running_subtask-dcmd_ui.pb.Tpo" -c -o dcmd_running_subtask-dcmd_ui.pb.o `test -f '../cmn/dcmd_ui.pb.cc' || echo '$(srcdir)/'`../cmn/dcmd_ui.pb.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_running_subtask-dcmd_ui.pb.Tpo" "$(DEPDIR)/dcmd_running_subtask-dcmd_ui.pb.Po"; else rm -f "$(DEPDIR)/dcmd_running_subtask-dcmd_ui.pb.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_ui.pb.cc' object='dcmd_running_subtask-dcmd_ui.pb.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_running_subtask_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_running_subtask-dcmd_ui.pb.o `test -f '../cmn/dcmd_ui.pb.cc' || echo '$(srcdir)/'`../cmn/dcmd_ui.pb.cc
+
+dcmd_running_subtask-dcmd_ui.pb.obj: ../cmn/dcmd_ui.pb.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_running_subtask_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_running_subtask-dcmd_ui.pb.obj -MD -MP -MF "$(DEPDIR)/dcmd_running_subtask-dcmd_ui.pb.Tpo" -c -o dcmd_running_subtask-dcmd_ui.pb.obj `if test -f '../cmn/dcmd_ui.pb.cc'; then $(CYGPATH_W) '../cmn/dcmd_ui.pb.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_ui.pb.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_running_subtask-dcmd_ui.pb.Tpo" "$(DEPDIR)/dcmd_running_subtask-dcmd_ui.pb.Po"; else rm -f "$(DEPDIR)/dcmd_running_subtask-dcmd_ui.pb.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_ui.pb.cc' object='dcmd_running_subtask-dcmd_ui.pb.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_running_subtask_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_running_subtask-dcmd_ui.pb.obj `if test -f '../cmn/dcmd_ui.pb.cc'; then $(CYGPATH_W) '../cmn/dcmd_ui.pb.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_ui.pb.cc'; fi`
 
 dcmd_running_subtask-dcmd_tss.o: ../cmn/dcmd_tss.cc
 @am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_running_subtask_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_running_subtask-dcmd_tss.o -MD -MP -MF "$(DEPDIR)/dcmd_running_subtask-dcmd_tss.Tpo" -c -o dcmd_running_subtask-dcmd_tss.o `test -f '../cmn/dcmd_tss.cc' || echo '$(srcdir)/'`../cmn/dcmd_tss.cc; \
@@ -884,6 +998,20 @@ dcmd_subtask_output-dcmd_cmn.pb.obj: ../cmn/dcmd_cmn.pb.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_subtask_output_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_subtask_output-dcmd_cmn.pb.obj `if test -f '../cmn/dcmd_cmn.pb.cc'; then $(CYGPATH_W) '../cmn/dcmd_cmn.pb.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_cmn.pb.cc'; fi`
 
+dcmd_subtask_output-dcmd_ui.pb.o: ../cmn/dcmd_ui.pb.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_subtask_output_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_subtask_output-dcmd_ui.pb.o -MD -MP -MF "$(DEPDIR)/dcmd_subtask_output-dcmd_ui.pb.Tpo" -c -o dcmd_subtask_output-dcmd_ui.pb.o `test -f '../cmn/dcmd_ui.pb.cc' || echo '$(srcdir)/'`../cmn/dcmd_ui.pb.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_subtask_output-dcmd_ui.pb.Tpo" "$(DEPDIR)/dcmd_subtask_output-dcmd_ui.pb.Po"; else rm -f "$(DEPDIR)/dcmd_subtask_output-dcmd_ui.pb.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_ui.pb.cc' object='dcmd_subtask_output-dcmd_ui.pb.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_subtask_output_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_subtask_output-dcmd_ui.pb.o `test -f '../cmn/dcmd_ui.pb.cc' || echo '$(srcdir)/'`../cmn/dcmd_ui.pb.cc
+
+dcmd_subtask_output-dcmd_ui.pb.obj: ../cmn/dcmd_ui.pb.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_subtask_output_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_subtask_output-dcmd_ui.pb.obj -MD -MP -MF "$(DEPDIR)/dcmd_subtask_output-dcmd_ui.pb.Tpo" -c -o dcmd_subtask_output-dcmd_ui.pb.obj `if test -f '../cmn/dcmd_ui.pb.cc'; then $(CYGPATH_W) '../cmn/dcmd_ui.pb.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_ui.pb.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_subtask_output-dcmd_ui.pb.Tpo" "$(DEPDIR)/dcmd_subtask_output-dcmd_ui.pb.Po"; else rm -f "$(DEPDIR)/dcmd_subtask_output-dcmd_ui.pb.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_ui.pb.cc' object='dcmd_subtask_output-dcmd_ui.pb.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_subtask_output_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_subtask_output-dcmd_ui.pb.obj `if test -f '../cmn/dcmd_ui.pb.cc'; then $(CYGPATH_W) '../cmn/dcmd_ui.pb.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_ui.pb.cc'; fi`
+
 dcmd_subtask_output-dcmd_tss.o: ../cmn/dcmd_tss.cc
 @am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_subtask_output_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_subtask_output-dcmd_tss.o -MD -MP -MF "$(DEPDIR)/dcmd_subtask_output-dcmd_tss.Tpo" -c -o dcmd_subtask_output-dcmd_tss.o `test -f '../cmn/dcmd_tss.cc' || echo '$(srcdir)/'`../cmn/dcmd_tss.cc; \
 @am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_subtask_output-dcmd_tss.Tpo" "$(DEPDIR)/dcmd_subtask_output-dcmd_tss.Po"; else rm -f "$(DEPDIR)/dcmd_subtask_output-dcmd_tss.Tpo"; exit 1; fi
@@ -939,6 +1067,20 @@ dcmd_subtask_process-dcmd_cmn.pb.obj: ../cmn/dcmd_cmn.pb.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_cmn.pb.cc' object='dcmd_subtask_process-dcmd_cmn.pb.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_subtask_process_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_subtask_process-dcmd_cmn.pb.obj `if test -f '../cmn/dcmd_cmn.pb.cc'; then $(CYGPATH_W) '../cmn/dcmd_cmn.pb.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_cmn.pb.cc'; fi`
+
+dcmd_subtask_process-dcmd_ui.pb.o: ../cmn/dcmd_ui.pb.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_subtask_process_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_subtask_process-dcmd_ui.pb.o -MD -MP -MF "$(DEPDIR)/dcmd_subtask_process-dcmd_ui.pb.Tpo" -c -o dcmd_subtask_process-dcmd_ui.pb.o `test -f '../cmn/dcmd_ui.pb.cc' || echo '$(srcdir)/'`../cmn/dcmd_ui.pb.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_subtask_process-dcmd_ui.pb.Tpo" "$(DEPDIR)/dcmd_subtask_process-dcmd_ui.pb.Po"; else rm -f "$(DEPDIR)/dcmd_subtask_process-dcmd_ui.pb.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_ui.pb.cc' object='dcmd_subtask_process-dcmd_ui.pb.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_subtask_process_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_subtask_process-dcmd_ui.pb.o `test -f '../cmn/dcmd_ui.pb.cc' || echo '$(srcdir)/'`../cmn/dcmd_ui.pb.cc
+
+dcmd_subtask_process-dcmd_ui.pb.obj: ../cmn/dcmd_ui.pb.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_subtask_process_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_subtask_process-dcmd_ui.pb.obj -MD -MP -MF "$(DEPDIR)/dcmd_subtask_process-dcmd_ui.pb.Tpo" -c -o dcmd_subtask_process-dcmd_ui.pb.obj `if test -f '../cmn/dcmd_ui.pb.cc'; then $(CYGPATH_W) '../cmn/dcmd_ui.pb.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_ui.pb.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_subtask_process-dcmd_ui.pb.Tpo" "$(DEPDIR)/dcmd_subtask_process-dcmd_ui.pb.Po"; else rm -f "$(DEPDIR)/dcmd_subtask_process-dcmd_ui.pb.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_ui.pb.cc' object='dcmd_subtask_process-dcmd_ui.pb.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_subtask_process_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_subtask_process-dcmd_ui.pb.obj `if test -f '../cmn/dcmd_ui.pb.cc'; then $(CYGPATH_W) '../cmn/dcmd_ui.pb.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_ui.pb.cc'; fi`
 
 dcmd_subtask_process-dcmd_tss.o: ../cmn/dcmd_tss.cc
 @am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_subtask_process_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_subtask_process-dcmd_tss.o -MD -MP -MF "$(DEPDIR)/dcmd_subtask_process-dcmd_tss.Tpo" -c -o dcmd_subtask_process-dcmd_tss.o `test -f '../cmn/dcmd_tss.cc' || echo '$(srcdir)/'`../cmn/dcmd_tss.cc; \
@@ -996,6 +1138,20 @@ dcmd_task_cmd-dcmd_cmn.pb.obj: ../cmn/dcmd_cmn.pb.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_task_cmd_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_task_cmd-dcmd_cmn.pb.obj `if test -f '../cmn/dcmd_cmn.pb.cc'; then $(CYGPATH_W) '../cmn/dcmd_cmn.pb.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_cmn.pb.cc'; fi`
 
+dcmd_task_cmd-dcmd_ui.pb.o: ../cmn/dcmd_ui.pb.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_task_cmd_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_task_cmd-dcmd_ui.pb.o -MD -MP -MF "$(DEPDIR)/dcmd_task_cmd-dcmd_ui.pb.Tpo" -c -o dcmd_task_cmd-dcmd_ui.pb.o `test -f '../cmn/dcmd_ui.pb.cc' || echo '$(srcdir)/'`../cmn/dcmd_ui.pb.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_task_cmd-dcmd_ui.pb.Tpo" "$(DEPDIR)/dcmd_task_cmd-dcmd_ui.pb.Po"; else rm -f "$(DEPDIR)/dcmd_task_cmd-dcmd_ui.pb.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_ui.pb.cc' object='dcmd_task_cmd-dcmd_ui.pb.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_task_cmd_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_task_cmd-dcmd_ui.pb.o `test -f '../cmn/dcmd_ui.pb.cc' || echo '$(srcdir)/'`../cmn/dcmd_ui.pb.cc
+
+dcmd_task_cmd-dcmd_ui.pb.obj: ../cmn/dcmd_ui.pb.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_task_cmd_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_task_cmd-dcmd_ui.pb.obj -MD -MP -MF "$(DEPDIR)/dcmd_task_cmd-dcmd_ui.pb.Tpo" -c -o dcmd_task_cmd-dcmd_ui.pb.obj `if test -f '../cmn/dcmd_ui.pb.cc'; then $(CYGPATH_W) '../cmn/dcmd_ui.pb.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_ui.pb.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_task_cmd-dcmd_ui.pb.Tpo" "$(DEPDIR)/dcmd_task_cmd-dcmd_ui.pb.Po"; else rm -f "$(DEPDIR)/dcmd_task_cmd-dcmd_ui.pb.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_ui.pb.cc' object='dcmd_task_cmd-dcmd_ui.pb.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_task_cmd_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_task_cmd-dcmd_ui.pb.obj `if test -f '../cmn/dcmd_ui.pb.cc'; then $(CYGPATH_W) '../cmn/dcmd_ui.pb.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_ui.pb.cc'; fi`
+
 dcmd_task_cmd-dcmd_tss.o: ../cmn/dcmd_tss.cc
 @am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_task_cmd_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_task_cmd-dcmd_tss.o -MD -MP -MF "$(DEPDIR)/dcmd_task_cmd-dcmd_tss.Tpo" -c -o dcmd_task_cmd-dcmd_tss.o `test -f '../cmn/dcmd_tss.cc' || echo '$(srcdir)/'`../cmn/dcmd_tss.cc; \
 @am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_task_cmd-dcmd_tss.Tpo" "$(DEPDIR)/dcmd_task_cmd-dcmd_tss.Po"; else rm -f "$(DEPDIR)/dcmd_task_cmd-dcmd_tss.Tpo"; exit 1; fi
@@ -1051,6 +1207,20 @@ dcmd_task_script-dcmd_cmn.pb.obj: ../cmn/dcmd_cmn.pb.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_cmn.pb.cc' object='dcmd_task_script-dcmd_cmn.pb.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_task_script_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_task_script-dcmd_cmn.pb.obj `if test -f '../cmn/dcmd_cmn.pb.cc'; then $(CYGPATH_W) '../cmn/dcmd_cmn.pb.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_cmn.pb.cc'; fi`
+
+dcmd_task_script-dcmd_ui.pb.o: ../cmn/dcmd_ui.pb.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_task_script_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_task_script-dcmd_ui.pb.o -MD -MP -MF "$(DEPDIR)/dcmd_task_script-dcmd_ui.pb.Tpo" -c -o dcmd_task_script-dcmd_ui.pb.o `test -f '../cmn/dcmd_ui.pb.cc' || echo '$(srcdir)/'`../cmn/dcmd_ui.pb.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_task_script-dcmd_ui.pb.Tpo" "$(DEPDIR)/dcmd_task_script-dcmd_ui.pb.Po"; else rm -f "$(DEPDIR)/dcmd_task_script-dcmd_ui.pb.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_ui.pb.cc' object='dcmd_task_script-dcmd_ui.pb.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_task_script_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_task_script-dcmd_ui.pb.o `test -f '../cmn/dcmd_ui.pb.cc' || echo '$(srcdir)/'`../cmn/dcmd_ui.pb.cc
+
+dcmd_task_script-dcmd_ui.pb.obj: ../cmn/dcmd_ui.pb.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_task_script_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_task_script-dcmd_ui.pb.obj -MD -MP -MF "$(DEPDIR)/dcmd_task_script-dcmd_ui.pb.Tpo" -c -o dcmd_task_script-dcmd_ui.pb.obj `if test -f '../cmn/dcmd_ui.pb.cc'; then $(CYGPATH_W) '../cmn/dcmd_ui.pb.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_ui.pb.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/dcmd_task_script-dcmd_ui.pb.Tpo" "$(DEPDIR)/dcmd_task_script-dcmd_ui.pb.Po"; else rm -f "$(DEPDIR)/dcmd_task_script-dcmd_ui.pb.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../cmn/dcmd_ui.pb.cc' object='dcmd_task_script-dcmd_ui.pb.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_task_script_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o dcmd_task_script-dcmd_ui.pb.obj `if test -f '../cmn/dcmd_ui.pb.cc'; then $(CYGPATH_W) '../cmn/dcmd_ui.pb.cc'; else $(CYGPATH_W) '$(srcdir)/../cmn/dcmd_ui.pb.cc'; fi`
 
 dcmd_task_script-dcmd_tss.o: ../cmn/dcmd_tss.cc
 @am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(dcmd_task_script_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT dcmd_task_script-dcmd_tss.o -MD -MP -MF "$(DEPDIR)/dcmd_task_script-dcmd_tss.Tpo" -c -o dcmd_task_script-dcmd_tss.o `test -f '../cmn/dcmd_tss.cc' || echo '$(srcdir)/'`../cmn/dcmd_tss.cc; \
