@@ -6,24 +6,20 @@ using namespace cwinux;
 string     g_host;
 uint16_t   g_port = 0;
 int        g_client_id = 0;
-string     g_agent_ips;
-bool       g_is_version = false;
 string     g_user;
 string     g_passwd;
 ///-1：失败；0：help；1：成功
 int parse_arg(int argc, char**argv) {
-  CwxGetOpt cmd_option(argc, argv, "H:P:c:I:u:p:hV");
+  CwxGetOpt cmd_option(argc, argv, "H:P:c:u:p:h");
   int option;
   while( (option = cmd_option.next()) != -1) {
     switch (option) {
     case 'h':
-      printf("Query agent's information.\n");
-      printf("%s  -H host -P port -c client-id -I agent-ips -o opr-id -A opr-args .....\n", argv[0]);
+      printf("Fetch invalid agent's information.\n");
+      printf("%s  -H host -P port -c client-id ....\n", argv[0]);
       printf("-H: server host\n");
       printf("-P: server port\n");
       printf("-c: client id\n");
-      printf("-I: agent ips, split by [%c] for multi-ip\n", dcmd::kItemSplitChar);
-      printf("-V: fetch agent version\n");
       printf("-u: user name.\n");
       printf("-p: user password.\n");
       printf("-h: help\n");
@@ -48,16 +44,6 @@ int parse_arg(int argc, char**argv) {
         return -1;
       }
       g_client_id = strtoul(cmd_option.opt_arg(), NULL, 10);
-      break;
-    case 'I':
-      if (!cmd_option.opt_arg() || (*cmd_option.opt_arg() == '-')) {
-        printf("-I requires an argument.\n");
-        return -1;
-      }
-      g_agent_ips = cmd_option.opt_arg();
-      break;
-    case 'V':
-      g_is_version = true;
       break;
     case 'u':
       if (!cmd_option.opt_arg() || (*cmd_option.opt_arg() == '-')) {
@@ -97,10 +83,6 @@ int parse_arg(int argc, char**argv) {
     printf("No port, set by -P\n");
     return -1;
   }
-  if (!g_agent_ips.length()){
-    printf("No agent ip, set by -I\n");
-    return -1;
-  }
   return 1;
 }
 
@@ -120,31 +102,19 @@ int main(int argc ,char** argv) {
   CwxPackageReaderEx reader;
   CwxMsgBlock* block=NULL;
   string query_msg;
-  dcmd_api::UiAgentInfo query;
+  dcmd_api::UiInvalidAgentInfo query;
 
   query.set_client_msg_id(g_client_id);
-  //add agent ip
-  {
-    list<string> ips;
-    CwxCommon::split(g_agent_ips, ips,dcmd::kItemSplitChar);
-    list<string>::iterator iter = ips.being();
-    while (iter != ips.end()) {
-      *query.add_agents() = *iter;
-      ++iter;
-    }
-  }
-  //add version
-  query.set_version(g_is_version);
   query.set_user(g_user);
   query.set_passwd(g_passwd);
   if (!query->SerializeToString(&query_msg)) {
     printf("Failure to serialize query-msg.\n");
     return 1;
   }
-  CwxMsgHead head(0, 0, dcmd_api::MTYPE_UI_AGENT_INFO, 0, query_msg.length());
+  CwxMsgHead head(0, 0, dcmd_api::MTYPE_UI_INVALID_AGENT, 0, query_msg.length());
   block = CwxMsgBlockAlloc::pack(head, query_msg.c_str(), query_msg.length());
   if (!block) {
-    printf("Failure to pack fetch-agent-info msg.\n");
+    printf("Failure to pack fetch-invalid-agent msg.\n");
     return 1;
   }
   if (block->length() != (CWX_UINT32)CwxSocket::write_n(stream.getHandle(),
@@ -160,13 +130,13 @@ int main(int argc ,char** argv) {
     printf("failed to read the reply, errno=%d\n", errno);
     return 1;
   }
-  if (dcmd_api::MTYPE_UI_AGENT_INFO_R != head.getMsgType()) {
+  if (dcmd_api::MTYPE_UI_INVALID_AGENT_R != head.getMsgType()) {
     printf("receive a unknow msg type, msg_type=%u\n", head.getMsgType());
     if (block) CwxMsgBlockAlloc::free(block);
     return 1;
   }
   query_msg.assign(block->rd_ptr(), block->length());
-  dcmd_api::UiAgentInfoReply reply;
+  dcmd_api::UiInvalidAgentInfoReply reply;
   if (!reply.ParseFromString(query_msg)) {
     printf("failed to parse reply-msg\n");
     if (block) CwxMsgBlockAlloc::free(block);
@@ -178,7 +148,7 @@ int main(int argc ,char** argv) {
   if (dcmd_api::DCMD_STATE_SUCCESS != reply.state()) {
     printf("err:%s\n", reply.err().c_str());
   } else {
-    printf("agent info:\n");
+    printf("invalid agent info:\n");
     for (int i=0; i<reply.agentinfo_size(); i++) {
       printf("*****************ip:%s********************\n", reply.agentinfo_size(i).ip().c_str());
       printf("\tstate:%d\n", reply.agentinfo(i).state());
