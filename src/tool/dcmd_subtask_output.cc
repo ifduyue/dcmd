@@ -149,7 +149,7 @@ int main(int argc ,char** argv) {
   query.set_offset(g_offset);
   query.set_user(g_user);
   query.set_passwd(g_passwd);
-  if (!query->SerializeToString(&query_msg)) {
+  if (!query.SerializeToString(&query_msg)) {
     printf("Failure to serialize query-msg.\n");
     return 1;
   }

@@ -132,9 +132,9 @@ int main(int argc ,char** argv) {
   {
     list<string> ips;
     CwxCommon::split(g_agent_ips, ips,dcmd::kItemSplitChar);
-    list<string>::iterator iter = ips.being();
+    list<string>::iterator iter = ips.begin();
     while (iter != ips.end()) {
-      *query.add_agents() = *iter;
+      *query.add_ips() = *iter;
       ++iter;
     }
   }
@@ -142,7 +142,7 @@ int main(int argc ,char** argv) {
   query.set_version(g_is_version);
   query.set_user(g_user);
   query.set_passwd(g_passwd);
-  if (!query->SerializeToString(&query_msg)) {
+  if (!query.SerializeToString(&query_msg)) {
     printf("Failure to serialize query-msg.\n");
     return 1;
   }
@@ -185,11 +185,11 @@ int main(int argc ,char** argv) {
   } else {
     printf("agent info:\n");
     for (int i=0; i<reply.agentinfo_size(); i++) {
-      printf("*****************ip:%s********************\n", reply.agentinfo_size(i).ip().c_str());
+      printf("*****************ip:%s********************\n", reply.agentinfo(i).ip().c_str());
       printf("\tstate:%d\n", reply.agentinfo(i).state());
-      printf("\tversion:%d\n", reply.agentinfo(i).version().c_str());
-      printf("\connected_ip:%d\n", reply.agentinfo(i).connected_ip().c_str());
-      printf("\reported_ip:%d\n", reply.agentinfo(i).reported_ip().c_str());
+      printf("\tversion:%s\n", reply.agentinfo(i).version().c_str());
+      printf("\connected_ip:%s\n", reply.agentinfo(i).connected_ip().c_str());
+      printf("\reported_ip:%s\n", reply.agentinfo(i).reported_ip().c_str());
     }
   }
   return 0;
