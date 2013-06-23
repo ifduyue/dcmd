@@ -1,3 +1,9 @@
+#include "CwxGetOpt.h"
+#include "CwxSockStream.h"
+#include "CwxINetAddr.h"
+#include "CwxSockConnector.h"
+#include "CwxMsgBlock.h"
+#include "CwxMsgHead.h"
 #include "dcmd_tss.h"
 #include "dcmd_cmn.pb.h"
 #include "dcmd_ui.pb.h"
@@ -133,8 +139,6 @@ int main(int argc ,char** argv) {
       g_host.c_str(), g_port, errno);
     return 1;
   }
-  CwxPackageWriterEx writer;
-  CwxPackageReaderEx reader;
   CwxMsgBlock* block=NULL;
   string query_msg;
   dcmd_api::UiTaskOutput query;
