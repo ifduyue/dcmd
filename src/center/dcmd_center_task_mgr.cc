@@ -645,7 +645,6 @@ bool DcmdCenterTaskMgr::AnalizeTask(DcmdTss* tss, DcmdCenterTask* task) {
 bool DcmdCenterTaskMgr::ReadTaskCmdContent(DcmdTss* tss, char const* task_cmd, string& content) {
   string script_file;
   script_file = DcmdCenterConf::task_cmd_file(task_cmd, script_file);
-  script_file = app_->config().common().task_script_path_ + "/" + script_file;
   bool ret =  CwxFile::readTxtFile(script_file, content);
   if (!ret){
     CwxCommon::snprintf(tss->m_szBuf2K, 2047, "Failure to read task-cmd[%s]'s script[%s], errno=%d",

@@ -104,12 +104,12 @@ class DcmdCenterConf {
   inline char const* err_msg() const { return err_msg_;}
   // 获取任务指令的文件名
   inline static string& task_cmd_file(string const& task_cmd, string& cmd_file) {
-    cmd_file = string(kTaskTypeFilePrex) + task_cmd + kTaskTypeFileSuffix;
+    cmd_file = common_.task_script_path_ + string(kTaskTypeFilePrex) + task_cmd + kTaskTypeFileSuffix;
     return cmd_file;
   }
   // 获取操作指令的文件名
   inline static string& opr_cmd_file(string const& opr_name, string& cmd_file) {
-    cmd_file = string(kOprCmdFilePrex) + opr_name + kOprCmdFileSuffix;
+    cmd_file = common_.opr_script_path_ + string(kOprCmdFilePrex) + opr_name + kOprCmdFileSuffix;
     return cmd_file;
   }
  private:
