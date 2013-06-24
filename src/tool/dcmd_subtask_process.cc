@@ -12,22 +12,23 @@ using namespace cwinux;
 string     g_host;
 uint16_t   g_port = 0;
 int        g_client_id = 0;
-string     g_agent_ip;
+string     g_subtask_ids;
 string     g_user;
 string     g_passwd;
 ///-1：失败；0：help；1：成功
-int parse_arg(int argc, char**argv) {
-  CwxGetOpt cmd_option(argc, argv, "H:P:c:i:u:p:h");
+int parse_arg(int argc, char**argv)
+{
+  CwxGetOpt cmd_option(argc, argv, "H:P:c:s:i:u:p:h");
   int option;
   while( (option = cmd_option.next()) != -1) {
     switch (option) {
     case 'h':
-      printf("Get running opr in specified agent.\n");
-      printf("%s  -H host -P port -c client-id -i agent-ip .....\n", argv[0]);
+      printf("Get subtask's process.\n");
+      printf("%s  -H host -P port -c client-id -s subtask_ids .....\n", argv[0]);
       printf("-H: server host\n");
       printf("-P: server port\n");
       printf("-c: client id\n");
-      printf("-i: agent ip\n");
+      printf("-s: subtask_ids, split by [%c] for multi-subtask_id\n", dcmd::kItemSplitChar);
       printf("-u: user name.\n");
       printf("-p: user password.\n");
       printf("-h: help\n");
@@ -53,12 +54,12 @@ int parse_arg(int argc, char**argv) {
       }
       g_client_id = strtoul(cmd_option.opt_arg(), NULL, 10);
       break;
-    case 'i':
+    case 's':
       if (!cmd_option.opt_arg() || (*cmd_option.opt_arg() == '-')) {
-        printf("-i requires an argument.\n");
+        printf("-s requires an argument.\n");
         return -1;
       }
-      g_agent_ip = cmd_option.opt_arg();
+      g_subtask_ids = cmd_option.opt_arg();
       break;
     case 'u':
       if (!cmd_option.opt_arg() || (*cmd_option.opt_arg() == '-')) {
@@ -98,8 +99,8 @@ int parse_arg(int argc, char**argv) {
     printf("No port, set by -P\n");
     return -1;
   }
-  if (!g_agent_ip.length()){
-    printf("No agent ip, set by -i\n");
+  if (!g_subtask_ids.length()){
+    printf("No subtask id, set by -s\n");
     return -1;
   }
   return 1;
@@ -119,24 +120,33 @@ int main(int argc ,char** argv) {
   }
   CwxMsgBlock* block=NULL;
   string query_msg;
-  dcmd_api::UiAgentRunningOpr query;
+  dcmd_api::UiAgentTaskProcess query;
 
   query.set_client_msg_id(g_client_id);
-  query.set_ip(g_agent_ip);
+  //add subtask id
+  {
+    list<string> subtask_ids;
+    CwxCommon::split(g_subtask_ids, subtask_ids,dcmd::kItemSplitChar);
+    list<string>::iterator iter = subtask_ids.begin();
+    while (iter != subtask_ids.end()) {
+      *query.add_subtask_id() = *iter;
+      ++iter;
+    }
+  } 
   query.set_user(g_user);
   query.set_passwd(g_passwd);
   if (!query.SerializeToString(&query_msg)) {
     printf("Failure to serialize query-msg.\n");
     return 1;
   }
-  CwxMsgHead head(0, 0, dcmd_api::MTYPE_UI_AGENT_RUNNING_OPR, 0, query_msg.length());
+  CwxMsgHead head(0, 0, dcmd_api::MTYPE_UI_SUBTASK_PROCESS, 0, query_msg.length());
   block = CwxMsgBlockAlloc::pack(head, query_msg.c_str(), query_msg.length());
   if (!block) {
-    printf("Failure to pack agent-running-opr msg.\n");
+    printf("Failure to pack fetch-subtask-process msg.\n");
     return 1;
   }
   if (block->length() != (CWX_UINT32)CwxSocket::write_n(stream.getHandle(),
-      block->rd_ptr(), block->length()))
+    block->rd_ptr(), block->length()))
   {
     CwxMsgBlockAlloc::free(block);
     printf("failed to send message, errno=%d\n", errno);
@@ -148,13 +158,13 @@ int main(int argc ,char** argv) {
     printf("failed to read the reply, errno=%d\n", errno);
     return 1;
   }
-  if (dcmd_api::MTYPE_UI_AGENT_RUNNING_OPR_R != head.getMsgType()) {
+  if (dcmd_api::MTYPE_UI_SUBTASK_PROCESS_R != head.getMsgType()) {
     printf("receive a unknow msg type, msg_type=%u\n", head.getMsgType());
     if (block) CwxMsgBlockAlloc::free(block);
     return 1;
   }
   query_msg.assign(block->rd_ptr(), block->length());
-  dcmd_api::UiAgentRunningOprReply reply;
+  dcmd_api::UiAgentTaskProcessReply reply;
   if (!reply.ParseFromString(query_msg)) {
     printf("failed to parse reply-msg\n");
     if (block) CwxMsgBlockAlloc::free(block);
@@ -166,12 +176,11 @@ int main(int argc ,char** argv) {
   if (dcmd_api::DCMD_STATE_SUCCESS != reply.state()) {
     printf("err:%s\n", reply.err().c_str());
   } else {
-    printf("running opr:\n");
-    for (int i=0; i<reply.result_size(); i++) {
-      printf("opr name:%s|start_time:%s|spend_time:%u\n",
-        reply.result(i).name().c_str(),
-        reply.result(i).start_time().c_str(),
-        reply.result(i).running_second());
+    printf("subtask process:\n");
+    for (int i=0; i<reply.process_size(); i++) {
+      printf("subtask_id:%s|process:%s\n",
+        reply.process(i).subtask_id().c_str(),
+        reply.process(i).process().c_str());
     }
   }
   return 0;
