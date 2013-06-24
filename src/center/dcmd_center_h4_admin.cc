@@ -476,7 +476,6 @@ void DcmdCenterH4Admin::ReplyExecOprCmd(DcmdCenterApp* app,
   uint32_t msg_task_id,
   dcmd_api::UiExecOprCmdReply* result)
 {
-    CwxMsgBlock* block = NULL;
     if (!result->SerializeToString(&tss->proto_str_)) {
       CWX_ERROR(("Failure to pack Opr cmd msg."));
       app->noticeCloseConn(conn_id);
@@ -490,7 +489,7 @@ void DcmdCenterH4Admin::ReplyExecOprCmd(DcmdCenterApp* app,
       CWX_ERROR(("Failure to pack opr cmd msg for no memory"));
       exit(1);
     }
-    ReplyAdmin(app, conn_id, block);
+    ReplyAdmin(app, conn_id, msg);
 }
 
 void DcmdCenterH4Admin::ReplySubTaskOutput(DcmdCenterApp* app,
@@ -499,7 +498,6 @@ void DcmdCenterH4Admin::ReplySubTaskOutput(DcmdCenterApp* app,
   uint32_t msg_task_id,
   dcmd_api::UiTaskOutputReply* result)
 {
-  CwxMsgBlock* block = NULL;
   if (!result->SerializeToString(&tss->proto_str_)) {
     CWX_ERROR(("Failure to pack subtask output msg."));
     app->noticeCloseConn(conn_id);
@@ -513,7 +511,7 @@ void DcmdCenterH4Admin::ReplySubTaskOutput(DcmdCenterApp* app,
     CWX_ERROR(("Failure to pack subtask output msg for no memory"));
     exit(1);
   }
-  ReplyAdmin(app, conn_id, block);
+  ReplyAdmin(app, conn_id, msg);
 }
 
 void DcmdCenterH4Admin::ReplyAgentRunSubTask(DcmdCenterApp* app,
@@ -522,7 +520,6 @@ void DcmdCenterH4Admin::ReplyAgentRunSubTask(DcmdCenterApp* app,
   uint32_t msg_task_id,
   dcmd_api::UiAgentRunningTaskReply* result)
 {
-  CwxMsgBlock* block = NULL;
   if (!result->SerializeToString(&tss->proto_str_)) {
     CWX_ERROR(("Failure to pack running subtask msg."));
     app->noticeCloseConn(conn_id);
@@ -536,7 +533,7 @@ void DcmdCenterH4Admin::ReplyAgentRunSubTask(DcmdCenterApp* app,
     CWX_ERROR(("Failure to pack running subtask msg for no memory"));
     exit(1);
   }
-  ReplyAdmin(app, conn_id, block);
+  ReplyAdmin(app, conn_id, msg);
 }
 
 ///回复run shell结果查询
@@ -568,7 +565,6 @@ void DcmdCenterH4Admin::ReplyAgentStatus(DcmdCenterApp* app,
   uint32_t msg_task_id,
   dcmd_api::UiAgentInfoReply* result)
 {
-  CwxMsgBlock* block = NULL;
   if (!result->SerializeToString(&tss->proto_str_)) {
     CWX_ERROR(("Failure to pack agent status msg."));
     app->noticeCloseConn(conn_id);
@@ -582,7 +578,7 @@ void DcmdCenterH4Admin::ReplyAgentStatus(DcmdCenterApp* app,
     CWX_ERROR(("Failure to pack agent status msg for no memory"));
     exit(1);
   }
-  ReplyAdmin(app, conn_id, block);
+  ReplyAdmin(app, conn_id, msg);
 }
 
 ///回复查询非法的agent
@@ -592,7 +588,6 @@ void DcmdCenterH4Admin::ReplyIllegalAgent(DcmdCenterApp* app,
   uint32_t msg_task_id,
   dcmd_api::UiInvalidAgentInfoReply* result)
 {
-  CwxMsgBlock* block = NULL;
   if (!result->SerializeToString(&tss->proto_str_)) {
     CWX_ERROR(("Failure to pack invalid agent msg."));
     app->noticeCloseConn(conn_id);
@@ -606,7 +601,7 @@ void DcmdCenterH4Admin::ReplyIllegalAgent(DcmdCenterApp* app,
     CWX_ERROR(("Failure to pack invalid agent for no memory"));
     exit(1);
   }
-  ReplyAdmin(app, conn_id, block);
+  ReplyAdmin(app, conn_id, msg);
 }
 
 void DcmdCenterH4Admin::ReplyOprScriptContent(DcmdCenterApp* app,
@@ -615,7 +610,6 @@ void DcmdCenterH4Admin::ReplyOprScriptContent(DcmdCenterApp* app,
   uint32_t msg_task_id,
   dcmd_api::UiOprScriptInfoReply* result)
 {
-  CwxMsgBlock* block = NULL;
   if (!result->SerializeToString(&tss->proto_str_)) {
     CWX_ERROR(("Failure to pack opr cmd script msg."));
     app->noticeCloseConn(conn_id);
@@ -629,7 +623,7 @@ void DcmdCenterH4Admin::ReplyOprScriptContent(DcmdCenterApp* app,
     CWX_ERROR(("Failure to pack opr script msg for no memory"));
     exit(1);
   }
-  ReplyAdmin(app, conn_id, block);
+  ReplyAdmin(app, conn_id, msg);
 }
 
 void DcmdCenterH4Admin::ReplyTaskCmdScriptContent(DcmdCenterApp* app,
@@ -638,7 +632,6 @@ void DcmdCenterH4Admin::ReplyTaskCmdScriptContent(DcmdCenterApp* app,
   uint32_t msg_task_id,
   dcmd_api::UiTaskScriptInfoReply* result)
 {
-  CwxMsgBlock* block = NULL;
   if (!result->SerializeToString(&tss->proto_str_)) {
     CWX_ERROR(("Failure to pack task cmd script msg."));
     app->noticeCloseConn(conn_id);
@@ -652,7 +645,7 @@ void DcmdCenterH4Admin::ReplyTaskCmdScriptContent(DcmdCenterApp* app,
     CWX_ERROR(("Failure to pack task cmd script msg for no memory"));
     exit(1);
   }
-  ReplyAdmin(app, conn_id, block);
+  ReplyAdmin(app, conn_id, msg);
 }
 
 void DcmdCenterH4Admin::ReplyAgentSubTaskProcess(DcmdCenterApp* app,
@@ -661,7 +654,6 @@ void DcmdCenterH4Admin::ReplyAgentSubTaskProcess(DcmdCenterApp* app,
   uint32_t msg_task_id,
   dcmd_api::UiAgentTaskProcessReply* result)
 {
-  CwxMsgBlock* block = NULL;
   if (!result->SerializeToString(&tss->proto_str_)) {
     CWX_ERROR(("Failure to pack task process msg."));
     app->noticeCloseConn(conn_id);
@@ -675,7 +667,7 @@ void DcmdCenterH4Admin::ReplyAgentSubTaskProcess(DcmdCenterApp* app,
     CWX_ERROR(("Failure to pack task process msg for no memory"));
     exit(1);
   }
-  ReplyAdmin(app, conn_id, block);
+  ReplyAdmin(app, conn_id, msg);
 }
 
 void DcmdCenterH4Admin::ReplyUiTaskCmd(DcmdCenterApp* app,
@@ -684,7 +676,6 @@ void DcmdCenterH4Admin::ReplyUiTaskCmd(DcmdCenterApp* app,
   uint32_t  msg_task_id,
   dcmd_api::UiTaskCmdReply* result) 
 {
-  CwxMsgBlock* block = NULL;
   if (!result->SerializeToString(&tss->proto_str_)) {
     CWX_ERROR(("Failure to pack ui task cmd msg."));
     app->noticeCloseConn(conn_id);
@@ -698,7 +689,7 @@ void DcmdCenterH4Admin::ReplyUiTaskCmd(DcmdCenterApp* app,
     CWX_ERROR(("Failure to pack ui task cmd msg for no memory"));
     exit(1);
   }
-  ReplyAdmin(app, conn_id, block);
+  ReplyAdmin(app, conn_id, msg);
 }
 
 
