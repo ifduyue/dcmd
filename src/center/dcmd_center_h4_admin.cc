@@ -546,7 +546,6 @@ void DcmdCenterH4Admin::ReplyAgentRunOprCmd(DcmdCenterApp* app,
   uint32_t msg_task_id,
   dcmd_api::UiAgentRunningOprReply* result)
 {
-  CwxMsgBlock* block = NULL;
   if (!result->SerializeToString(&tss->proto_str_)) {
     CWX_ERROR(("Failure to pack running opr msg."));
     app->noticeCloseConn(conn_id);
@@ -560,7 +559,7 @@ void DcmdCenterH4Admin::ReplyAgentRunOprCmd(DcmdCenterApp* app,
     CWX_ERROR(("Failure to pack running opr msg for no memory"));
     exit(1);
   }
-  ReplyAdmin(app, conn_id, block);
+  ReplyAdmin(app, conn_id, msg);
 }
 
 void DcmdCenterH4Admin::ReplyAgentStatus(DcmdCenterApp* app,
