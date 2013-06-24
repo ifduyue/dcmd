@@ -147,7 +147,7 @@ bool DcmdCenterOprTask::FetchOprCmd(DcmdTss* tss) {
     my->freeResult();
     ///获取脚本、检查md5
     string opr_file;
-    DcmdCenterConf::opr_cmd_file(app_->config().common().app_->config().common().opr_script_path_,
+    DcmdCenterConf::opr_cmd_file(app_->config().common().opr_script_path_,
       opr_cmd_.opr_file_, opr_file);
     if (!tss->ReadFile(opr_file.c_str(), opr_cmd_.opr_script_content_, err_msg_)){
       CWX_ERROR((err_msg_.c_str()));

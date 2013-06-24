@@ -339,7 +339,7 @@ void DcmdCenterH4Admin::QueryOprCmdScriptContent(CwxMsgBlock*& msg, DcmdTss* tss
   }
   // 获取文件内容
   string opr_cmd_file;
-  DcmdCenterConf::opr_cmd_file(app_->config().common().app_->config().common().opr_script_path_,
+  DcmdCenterConf::opr_cmd_file(app_->config().common().opr_script_path_,
     opr_script_query.opr_file(), opr_cmd_file);
   string content;
   string content_md5;
