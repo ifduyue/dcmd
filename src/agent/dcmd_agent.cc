@@ -10,3 +10,4 @@ int main(int argc, char** argv){
     CwxAppProcessMgr::start(argc, argv, 200, 300);
     return 0;
 }
+
