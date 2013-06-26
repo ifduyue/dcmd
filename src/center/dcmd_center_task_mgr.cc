@@ -1644,5 +1644,5 @@ void DcmdCenterTaskMgr::FillTaskCmd(dcmd_api::AgentTaskCmd& cmd,
     ++iter;
   }
 }
-
 }  // dcmd
+

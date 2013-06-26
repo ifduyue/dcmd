@@ -18,3 +18,4 @@ void dcmd_remove_spam(string& value);
 }  // dcmd
 
 #endif
+

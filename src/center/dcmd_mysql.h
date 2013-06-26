@@ -114,5 +114,5 @@ private:
     string	    m_strErrMsg;///<操作失败时的错误信息
 };
 
-
 #endif
+

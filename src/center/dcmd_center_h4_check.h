@@ -33,3 +33,4 @@ class DcmdCenterH4Check: public CwxCmdOp {
 };
 }  // dcmd
 #endif 
+

@@ -40,5 +40,5 @@ bool DcmdTss::ReadFile(char const* filename, string& file_content,
   file_content.assign(szBuf, file_size);
   return true;
 }
-
 }
+

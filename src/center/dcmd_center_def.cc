@@ -142,3 +142,4 @@ bool DcmdCenterTask::ChangeSubtaskState(DcmdCenterSubtask const* subtask,
   return subtask->svr_pool_->ChangeSubtaskState(subtask->subtask_id_, state, is_ignored);
 }
 }  // dcmd
+

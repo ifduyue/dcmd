@@ -694,4 +694,3 @@ bool XmlFileConfigParser::parse(string const& strFileName)
     return bResult;
 }
 
-

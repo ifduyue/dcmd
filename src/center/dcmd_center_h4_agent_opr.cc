@@ -45,3 +45,4 @@ bool DcmdCenterH4AgentOpr::SendAgentMsg(DcmdCenterApp* app,
   return app->GetAgentMgr()->SendMsg(agent_ip, msg, conn_id);
 }
 }  // dcmd
+

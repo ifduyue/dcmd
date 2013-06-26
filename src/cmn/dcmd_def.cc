@@ -40,3 +40,4 @@ void dcmd_remove_spam(string& value) {
   CwxCommon::replaceAll(value, ";", "");
 }
 }
+
