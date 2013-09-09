@@ -66,6 +66,9 @@ bool DcmdProcess::Run(char const* user, list<string> const* process_arg,
     status_ = 0;
     return true;
   }
+  for(int i=0; i<sysconf(_SC_OPEN_MAX); i++) {
+    fcntl(i, F_SETFD, 1);
+  }
   //子进程，并将进程设置为首进程
   if (-1 == setsid()) _exit(127);
   if (user) {
