@@ -78,7 +78,7 @@ bool DcmdCenterOprTask::FetchOprCmd(DcmdTss* tss) {
       DcmdTss::kMaxSqlBufSize,
       "select a.ui_name, a.opr_cmd, a.run_user,a.script_md5, a.agent_mutable,"\
       "b.timeout, b.ip, b.arg, b.repeat, b.cache_time, b.arg_mutable "\
-      "from  dcmd_opr_cmd as a, dcmd_opr_cmd_exec as b"\
+      "from  dcmd_opr_cmd as a, dcmd_opr_cmd_exec as b "\
       "where b.exec_id =%s and a.opr_cmd = b.opr_cmd",
       CwxCommon::toString(opr_cmd_id_, tss->m_szBuf2K, 10));
     if (!my->query(tss->sql_)){
