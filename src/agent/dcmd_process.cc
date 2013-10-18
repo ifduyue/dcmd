@@ -14,12 +14,17 @@ bool DcmdProcess::Run(char const* user, list<string> const* process_arg,
   uint32_t index = 0;
   uid_t self_uid = ::getuid();
   struct passwd *user_info = NULL;
+  bool is_change_uid = false;
   if (user) {
     //检测用户
     user_info = getpwnam(user);
     if (!user_info){
       if (err_msg) *err_msg = string("user[") + user + string("] doesn't exist.");
       return false;
+    }
+    if (self_uid != user_info->pw_uid) {
+      is_change_uid = true;
+      self_uid = user_info->pw_uid;
     }
   }
   list<string>::const_iterator iter;
@@ -66,17 +71,15 @@ bool DcmdProcess::Run(char const* user, list<string> const* process_arg,
     status_ = 0;
     return true;
   }
-  if (user) {
-    if (self_uid != user_info->pw_uid) {
-      if (-1 == setuid(user_info->pw_uid)){
-        _exit(127);
-      }
-    }
-  }
   //子进程，并将进程设置为首进程
   if (-1 == setsid()) _exit(127);
   for(int i=0; i<sysconf(_SC_OPEN_MAX); i++) {
     fcntl(i, F_SETFD, 1);
+  }
+  if (is_change_uid) {
+    if (-1 == setuid(self_uid)){
+      _exit(127);
+    }
   }
   execve(sz_cmd_ptr, process_args_, process_envs_);
   // 若exec执行失败，则返回1
