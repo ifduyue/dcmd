@@ -16,7 +16,7 @@ bool DcmdProcess::Run(char const* user, list<string> const* process_arg,
   struct passwd *user_info = NULL;
   if (user) {
     //检测用户
-    struct passwd *user_info = getpwnam(user);
+    user_info = getpwnam(user);
     if (!user_info){
       if (err_msg) *err_msg = string("user[") + user + string("] doesn't exist.");
       return false;
