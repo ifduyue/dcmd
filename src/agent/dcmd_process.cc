@@ -50,7 +50,7 @@ bool DcmdProcess::Run(char const* user, list<string> const* process_arg,
     }
     process_envs_[index] = NULL;
   } else {
-    process_env = NULL;
+    process_envs_ = NULL;
   }
   pid = ::vfork();
   if (-1 == pid) {
@@ -66,17 +66,17 @@ bool DcmdProcess::Run(char const* user, list<string> const* process_arg,
     status_ = 0;
     return true;
   }
-  for(int i=0; i<sysconf(_SC_OPEN_MAX); i++) {
-    fcntl(i, F_SETFD, 1);
-  }
-  //子进程，并将进程设置为首进程
-  if (-1 == setsid()) _exit(127);
   if (user) {
     if (self_uid != user_info->pw_uid) {
       if (-1 == setuid(user_info->pw_uid)){
         _exit(127);
       }
     }
+  }
+  //子进程，并将进程设置为首进程
+  if (-1 == setsid()) _exit(127);
+  for(int i=0; i<sysconf(_SC_OPEN_MAX); i++) {
+    fcntl(i, F_SETFD, 1);
   }
   execve(sz_cmd_ptr, process_args_, process_envs_);
   // 若exec执行失败，则返回1
