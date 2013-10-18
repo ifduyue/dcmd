@@ -109,15 +109,15 @@ bool DcmdCenterOprTask::FetchOprCmd(DcmdTss* tss) {
     // 获取opr file的md5
     opr_cmd_.opr_file_md5_ = my->fetch(3, bNull);
     // 获取 agent是否可变
-    opr_cmd_.is_agent_mutable_ = strtoul(my->fetch(3, bNull), NULL, 10);
+    opr_cmd_.is_agent_mutable_ = strtoul(my->fetch(4, bNull), NULL, 10);
     ///获取opr的timeout
-    opr_cmd_.opr_timeout_ = strtoul(my->fetch(4, bNull), NULL, 10);
+    opr_cmd_.opr_timeout_ = strtoul(my->fetch(5, bNull), NULL, 10);
     if (opr_cmd_.opr_timeout_ < kMinOprCmdTimeoutSecond) opr_cmd_.opr_timeout_ = kMinOprCmdTimeoutSecond;
     if (opr_cmd_.opr_timeout_ > kMaxOprCmdTimeoutSecond) opr_cmd_.opr_timeout_ = kMaxOprCmdTimeoutSecond;
     ///获取ip
     list<string> ips;
     string agent_ip;
-    CwxCommon::split(my->fetch(5, bNull), ips, kItemSplitChar);
+    CwxCommon::split(my->fetch(6, bNull), ips, kItemSplitChar);
     list<string>::iterator iter = ips.begin();
     while(iter != ips.end()) {
       agent_ip = *iter;
@@ -128,9 +128,9 @@ bool DcmdCenterOprTask::FetchOprCmd(DcmdTss* tss) {
       ++iter;
     }
     ///获取arg
-    opr_cmd_.opr_args_ = my->fetch(6, bNull);
+    opr_cmd_.opr_args_ = my->fetch(7, bNull);
     // 获取repeat
-    opr_cmd_.repeat_type_ = strtoul(my->fetch(7, bNull), NULL, 10);
+    opr_cmd_.repeat_type_ = strtoul(my->fetch(8, bNull), NULL, 10);
     if (opr_cmd_.repeat_type_ > DcmdCenterOprCmd::DCMD_OPR_CMD_REPEAT_MAX)
       opr_cmd_.repeat_type_ = DcmdCenterOprCmd::DCMD_OPR_CMD_NO_REPEAT;
     if (app_->config().common().is_opr_cmd_history_){
@@ -138,10 +138,10 @@ bool DcmdCenterOprTask::FetchOprCmd(DcmdTss* tss) {
         opr_cmd_.repeat_type_ = DcmdCenterOprCmd::DCMD_OPR_CMD_REPEAT_HISTORY;
     }
     ///获取cache
-    opr_cmd_.cache_time_ = strtoul(my->fetch(8, bNull), NULL, 10);
+    opr_cmd_.cache_time_ = strtoul(my->fetch(9, bNull), NULL, 10);
     opr_cmd_.expire_time_ =opr_cmd_.cache_time_?((uint32_t)time(NULL)) + opr_cmd_.cache_time_:0;
     ///获取arg mutable
-    opr_cmd_.is_arg_mutable_ = strtoul(my->fetch(9, bNull), NULL, 10)?true:false;
+    opr_cmd_.is_arg_mutable_ = strtoul(my->fetch(10, bNull), NULL, 10)?true:false;
     if (!app_->config().common().is_opr_cmd_arg_mutable_) opr_cmd_.is_arg_mutable_ = false;
     ///释放结果集
     my->freeResult();
