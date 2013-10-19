@@ -337,7 +337,7 @@ int DcmdCenterOprTask::noticeActive(CwxTss* ThrEnv) {
   }
   CwxMsgBlockAlloc::free(msg);
   if (send_block) CwxMsgBlockAlloc::free(send_block);
-  if (receive_num_ == receive_num_){
+  if (receive_num_ == agent_num_){
     setTaskState(TASK_STATE_FINISH);
   }
   return 0;
@@ -374,6 +374,8 @@ void DcmdCenterOprTask::Reply(CwxTss* pThrEnv) {
     for (index =0; index < agent_num_; index++){
       agent_reply = reply.add_result();
       agent_reply->set_ip(agent_conns_[index].agent_ip_);
+      agent_reply->set_result("");
+      agent_reply->set_err("");
       if (agent_replys_[index].is_send_failed_){
         agent_reply->set_err("Lost connected.");
         agent_reply->set_state(dcmd_api::DCMD_STATE_FAILED);
