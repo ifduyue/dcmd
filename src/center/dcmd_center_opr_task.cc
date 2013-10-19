@@ -17,7 +17,7 @@ void DcmdCenterOprTask::noticeRecvMsg(CwxMsgBlock*& msg, CwxTss* ThrEnv, bool& )
       receive_num_++;
       if (receive_num_ >= agent_num_) setTaskState(CwxTaskBoardTask::TASK_STATE_FINISH);
       dcmd_api::AgentOprCmdReply reply;
-      tss->proto_str_.assign(msg->rd_ptr(), msg->length());
+      tss->proto_str_.assign(agent_replys_[i].recv_msg_->rd_ptr(), agent_replys_[i].recv_msg_->length());
       if (!reply.ParseFromString(tss->proto_str_)) {
         CWX_ERROR(("Failed to unpack msg from %s.", agent_conns_[i].agent_ip_.c_str()));
         agent_replys_[i].is_exec_success = false;
