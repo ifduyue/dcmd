@@ -298,7 +298,7 @@ int DcmdCenterOprTask::noticeActive(CwxTss* ThrEnv) {
     is_failed_ = true;
     return -1;
   }
-  CwxMsgHead head(0, 0, dcmd_api::MTYPE_CENTER_OPR_CMD, msg_task_id_,
+  CwxMsgHead head(0, 0, dcmd_api::MTYPE_CENTER_OPR_CMD, getTaskId(),
     tss->proto_str_.length());
   CwxMsgBlock* msg = CwxMsgBlockAlloc::pack(head, tss->proto_str_.c_str(),
     tss->proto_str_.length());
