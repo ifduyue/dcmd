@@ -1210,6 +1210,7 @@ bool DcmdAgentApp::ExecSubTaskCmd(AgentTaskCmd* cmd, string& err_msg,
     NULL,
     &err_msg)) {
     delete process;
+    process = NULL;
     return false;
   }
   return true;
@@ -1443,6 +1444,7 @@ bool DcmdAgentApp::ExecOprCmd(AgentOprCmd* opr_cmd, string& err_msg, DcmdProcess
     &err_msg))
   {
     delete process;
+    process = NULL;
     return false;
   }
   return true;

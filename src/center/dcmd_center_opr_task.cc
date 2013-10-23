@@ -77,7 +77,7 @@ bool DcmdCenterOprTask::FetchOprCmd(DcmdTss* tss) {
     CwxCommon::snprintf(tss->sql_,
       DcmdTss::kMaxSqlBufSize,
       "select a.ui_name, a.opr_cmd, a.run_user,a.script_md5, a.agent_mutable,"\
-      "b.timeout, b.ip, b.arg, b.repeat, b.cache_time, b.arg_mutable "\
+      "b.timeout, b.ip, b.arg, b.is_repeat, b.cache_time, b.arg_mutable "\
       "from  dcmd_opr_cmd as a, dcmd_opr_cmd_exec as b "\
       "where b.exec_id =%s and a.opr_cmd = b.opr_cmd",
       CwxCommon::toString(opr_cmd_id_, tss->m_szBuf2K, 10));
@@ -90,7 +90,7 @@ bool DcmdCenterOprTask::FetchOprCmd(DcmdTss* tss) {
     ///获取sql的结果
     if (!my->next()) {
       CwxCommon::snprintf(tss->m_szBuf2K, 2047,
-        "Command[%s] doesn't exist in opr_cmd_exec table",
+        "Command[%s] doesn't exist in dcmd_opr_cmd_exec table",
         CwxCommon::toString(opr_cmd_id_, tss->sql_, 10));
       CWX_ERROR((tss->m_szBuf2K));
       err_msg_ = tss->m_szBuf2K;
@@ -231,10 +231,10 @@ bool DcmdCenterOprTask::FetchOprCmd(DcmdTss* tss) {
   if (opr_cmd_.repeat_type_ != DcmdCenterOprCmd::DCMD_OPR_CMD_REPEAT_WITHOUT_HISTORY){
     ///记录操作历史
     CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
-      "insert into dcmd_opr_cmd_exec_history(exec_id, opr_cmd_Id, opr_cmd, timeout, ip, repeat,"\
+      "insert into dcmd_opr_cmd_exec_history(exec_id, exec_name, opr_cmd_Id, opr_cmd, timeout, ip, is_repeat,"\
       "cache_time, arg_mutable, arg, utime, ctime, opr_uid) "\
-      "select exec_id, opr_cmd_Id, opr_cmd, timeout, ip, repeat,"\
-      "cache_time, arg_mutable, arg, now(), ctime, opr_uid from opr_cmd_exec \
+      "select exec_id, exec_name, opr_cmd_Id, opr_cmd, timeout, ip, is_repeat,"\
+      "cache_time, arg_mutable, arg, now(), ctime, opr_uid from dcmd_opr_cmd_exec \
       where exec_id=%s",
       CwxCommon::toString(opr_cmd_id_, tss->m_szBuf2K, 10));
     if (-1 == my->execute(tss->sql_)){
@@ -250,7 +250,7 @@ bool DcmdCenterOprTask::FetchOprCmd(DcmdTss* tss) {
   if (DcmdCenterOprCmd::DCMD_OPR_CMD_NO_REPEAT == opr_cmd_.repeat_type_){
     is_exec_sql = true;
     CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
-      "delete from opr_cmd_exec where exec_id=%s",
+      "delete from dcmd_opr_cmd_exec where exec_id=%s",
       CwxCommon::toString(opr_cmd_id_, tss->m_szBuf2K, 10));
     if (-1 == my->execute(tss->sql_)){
       CwxCommon::snprintf(tss->m_szBuf2K, 2047, "Failure to delete opr , exec sql:%s",  tss->sql_);

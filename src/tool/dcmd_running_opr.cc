@@ -12,12 +12,12 @@ using namespace cwinux;
 string     g_host;
 uint16_t   g_port = 0;
 int        g_client_id = 0;
-string     g_opr_id;
+string     g_agent_ip;
 string     g_user;
 string     g_passwd;
 ///-1：失败；0：help；1：成功
 int parse_arg(int argc, char**argv) {
-  CwxGetOpt cmd_option(argc, argv, "H:P:c:e:u:p:h");
+  CwxGetOpt cmd_option(argc, argv, "H:P:c:i:u:p:h");
   int option;
   while( (option = cmd_option.next()) != -1) {
     switch (option) {
@@ -27,7 +27,7 @@ int parse_arg(int argc, char**argv) {
       printf("-H: server host\n");
       printf("-P: server port\n");
       printf("-c: client id\n");
-      printf("-o: opr id\n");
+      printf("-i: agent ip\n");
       printf("-u: user name.\n");
       printf("-p: user password.\n");
       printf("-h: help\n");
@@ -53,12 +53,12 @@ int parse_arg(int argc, char**argv) {
       }
       g_client_id = strtoul(cmd_option.opt_arg(), NULL, 10);
       break;
-    case 'o':
+    case 'i':
       if (!cmd_option.opt_arg() || (*cmd_option.opt_arg() == '-')) {
-        printf("-o requires an argument.\n");
+        printf("-i requires an argument.\n");
         return -1;
       }
-      g_opr_id = cmd_option.opt_arg();
+      g_agent_ip = cmd_option.opt_arg();
       break;
     case 'u':
       if (!cmd_option.opt_arg() || (*cmd_option.opt_arg() == '-')) {
@@ -98,8 +98,8 @@ int parse_arg(int argc, char**argv) {
     printf("No port, set by -P\n");
     return -1;
   }
-  if (!g_opr_id.length()){
-    printf("No opr id, set by -o\n");
+  if (!g_agent_ip.length()){
+    printf("No agent ip, set by -i\n");
     return -1;
   }
   return 1;
@@ -119,10 +119,10 @@ int main(int argc ,char** argv) {
   }
   CwxMsgBlock* block=NULL;
   string query_msg;
-  dcmd_api::UiExecOprCmd query;
+  dcmd_api::UiAgentRunningOpr query;
 
   query.set_client_msg_id(g_client_id);
-  query.set_opr_id(g_opr_id);
+  query.set_ip(g_agent_ip);
   query.set_user(g_user);
   query.set_passwd(g_passwd);
   if (!query.SerializeToString(&query_msg)) {
@@ -154,7 +154,7 @@ int main(int argc ,char** argv) {
     return 1;
   }
   query_msg.assign(block->rd_ptr(), block->length());
-  dcmd_api::UiExecOprCmdReply reply;
+  dcmd_api::UiAgentRunningOprReply reply;
   if (!reply.ParseFromString(query_msg)) {
     printf("failed to parse reply-msg\n");
     if (block) CwxMsgBlockAlloc::free(block);
@@ -176,4 +176,3 @@ int main(int argc ,char** argv) {
   }
   return 0;
 }
-
