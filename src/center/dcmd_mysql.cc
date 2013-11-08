@@ -92,7 +92,7 @@ int Mysql::execute(char const* szSql){
 }
 
 ///获取sql的count数量,-1表示失败
-bool Mysql::count(char const* szSql, CWX_UINT32& num){
+bool Mysql::count(char const* szSql, CWX_INT64& num){
     if (!query(szSql)){
         freeResult();
         return false;
@@ -104,7 +104,7 @@ bool Mysql::count(char const* szSql, CWX_UINT32& num){
         //fetch host
         szValue = fetch(0, bNull);
         if (bNull) break;
-        num = strtoul(szValue, NULL, 10);
+        num = strtoll(szValue, NULL, 10);
         break;
     }
     freeResult();

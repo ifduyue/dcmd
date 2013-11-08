@@ -77,7 +77,7 @@ public:
     ///执行非query的数据库操作，返回值：-1：失败，>=0：操作影响的数据记录数量
     int  execute(char const* szSql);
     ///获取sql的count数量,-1表示失败
-    bool count(char const* szSql, CWX_UINT32& num);
+    bool count(char const* szSql, CWX_INT64& num);
     ///执行数据查询操作。false：查询失败；true：查询成功
     bool query(char const* szSql);
     ///执行binary sql的查询。false：查询失败；true：查询成功

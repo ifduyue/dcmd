@@ -466,6 +466,17 @@ bool DcmdCenterTaskMgr::LoadNewSubtask(DcmdTss* tss) {
 }
 
 bool DcmdCenterTaskMgr::LoadAllCmd(DcmdTss* tss) {
+  // 获取最大的cmd id
+  CWX_INT64 num = 0;
+  if (!mysql_->count("select max(cmd_id) from dcmd_command", num)) {
+    CwxCommon::snprintf(tss->m_szBuf2K, 2047, "Failure to fetch max cmd_id. err:%s", mysql_->getErrMsg());
+    tss->err_msg_ = tss->m_szBuf2K;
+    CWX_ERROR((tss->m_szBuf2K));
+    mysql_->freeResult();
+    return false;
+  }
+  next_cmd_id_ = num + 1;
+
   CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
     "select cmd_id, task_id, subtask_id, svr_pool, svr_pool_id, svr_name, ip, state, cmd_type "\
     " from dcmd_command where state = 0 and cmd_type = %d order by cmd_id asc ",
@@ -480,7 +491,6 @@ bool DcmdCenterTaskMgr::LoadAllCmd(DcmdTss* tss) {
   }
   bool is_null = false;
   DcmdCenterCmd*  cmd = NULL;
-  next_cmd_id_ = 1;
   list<DcmdCenterCmd*> cmds;
   while(mysql_->next()){
     cmd = new DcmdCenterCmd();
@@ -493,7 +503,6 @@ bool DcmdCenterTaskMgr::LoadAllCmd(DcmdTss* tss) {
     cmd->agent_ip_ = mysql_->fetch(6, is_null);
     cmd->state_ = strtoul(mysql_->fetch(7, is_null), NULL, 10);
     cmd->cmd_type_ = strtoul(mysql_->fetch(8, is_null), NULL, 10);
-    next_cmd_id_ = cmd->cmd_id_ + 1;
     cmds.push_back(cmd);
   }
   mysql_->freeResult();
