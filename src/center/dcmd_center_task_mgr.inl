@@ -98,7 +98,7 @@ namespace dcmd {
     char subtask_id_sz[65];
     uint64_t cmd_id = ++next_cmd_id_;
     CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
-      "insert into dcmd_command(cmd_id, task_id, subtask_id, svr_pool, svr_pool_id, service, ip,"\
+      "insert into dcmd_command(cmd_id, task_id, subtask_id, svr_pool, svr_pool_id, svr_name, ip,"\
       "cmd_type, state, err_msg, utime, ctime, opr_uid) "\
       " values (%s, %u, %s, '%s', %u, '%s','%s', %u, %u, '%s', now(), now(), %u)",
       CwxCommon::toString(cmd_id, cmd_id_sz,10), task_id,
