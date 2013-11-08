@@ -365,7 +365,7 @@ bool DcmdCenterTaskMgr::LoadNewSubtask(DcmdTss* tss) {
   CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
     "select subtask_id, task_id, task_cmd, svr_pool, svr_name, ip, state, ignored,"\
     "UNIX_TIMESTAMP(start_time), UNIX_TIMESTAMP(finish_time), process, err_msg "\
-    " from dcmd_task_node where subtask_id >= %s order by subtask_id desc ",
+    " from dcmd_task_node where subtask_id >= %s order by subtask_id asc ",
     CwxCommon::toString(next_subtask_id_, tss->m_szBuf2K, 10));
   if (!mysql_->query(tss->sql_)) {
     mysql_->freeResult();
@@ -468,7 +468,7 @@ bool DcmdCenterTaskMgr::LoadNewSubtask(DcmdTss* tss) {
 bool DcmdCenterTaskMgr::LoadAllCmd(DcmdTss* tss) {
   CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
     "select cmd_id, task_id, subtask_id, svr_pool, svr_pool_id, svr_name, ip, state, cmd_type "\
-    " from dcmd_command where state = 0 and cmd_type = %d order by cmd_id desc ",
+    " from dcmd_command where state = 0 and cmd_type = %d order by cmd_id asc ",
     dcmd_api::CMD_DO_SUBTASK);
   if (!mysql_->query(tss->sql_)) {
     CwxCommon::snprintf(tss->m_szBuf2K, 2047, "Failure to fetch command. err:%s; sql:%s", mysql_->getErrMsg(),

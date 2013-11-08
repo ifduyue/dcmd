@@ -105,7 +105,7 @@ namespace dcmd {
       CwxCommon::toString(subtask_id, subtask_id_sz, 10),svr_pool_str.c_str(),
       svr_pool_id, service_str.c_str(), ip_str.c_str(), cmt_type, state,
       err_msg_str.c_str(), uid);
-    if (ExecSql(tss, is_commit)) return 0;
+    if (!ExecSql(tss, is_commit)) return 0;
     return cmd_id;
   }
   inline bool DcmdCenterTaskMgr::ExecSql(DcmdTss* tss, bool is_commit) {
@@ -270,7 +270,7 @@ namespace dcmd {
           iter->second->ignored_doing_host_num(),
           task->task_id_,
           iter->second->svr_pool_id_);
-        if (ExecSql(tss, false)) return false;
+        if (!ExecSql(tss, false)) return false;
       }
       ++iter;
     }
