@@ -358,10 +358,12 @@ int DcmdCenterApp::onRecvMsg(CwxMsgBlock* msg, CwxAppHandler4Msg& conn,
   msg->event().setHostId(conn.getConnInfo().getHostId());
   msg->event().setConnId(conn.getConnInfo().getConnId());
   if (SVR_TYPE_ADMIN == conn.getConnInfo().getSvrId()) { // ui来的消息
-    if (msg->event().getMsgHeader().getMsgType() == dcmd_api::MTYPE_UI_EXEC_TASK)
+    if (msg->event().getMsgHeader().getMsgType() == dcmd_api::MTYPE_UI_EXEC_TASK) {
+      msg->event().setSvrId(SVR_TYPE_AGENT);
       task_thread_pool_->append(msg);
-    else
+    } else {
       admin_thread_pool_->append(msg);
+    }
     return 0;
   }else if (SVR_TYPE_AGENT == conn.getConnInfo().getSvrId()){
     if ((header.getMsgType() == dcmd_api::MTYPE_CENTER_OPR_CMD_R) ||
