@@ -645,7 +645,7 @@ bool DcmdCenterTaskMgr::AnalizeTask(DcmdTss* tss, DcmdCenterTask* task) {
     }
   }while(0);
   if (!task->is_valid_ || (old_valid_state != task->is_valid_)){
-    if (!UpdateTaskValid(tss, true, task->task_id_, false, task->err_msg_.c_str()))
+    if (!UpdateTaskValid(tss, true, task->task_id_, task->is_valid_, task->err_msg_.c_str()))
       return false;
   }
   return true;
