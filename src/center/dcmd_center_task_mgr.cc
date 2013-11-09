@@ -1002,7 +1002,7 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdFinishTask(DcmdTss* tss, uint32_t 
     if (-1 == mysql_->execute(tss->sql_)) break;
 
     CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
-      "delete dcmd_from task_node where task_id = %u", task_id);
+      "delete from dcmd_task_node where task_id = %u", task_id);
     if (-1 == mysql_->execute(tss->sql_)) break;
     // 插入start的命令
     if (!InsertCommand(tss, false, uid, task->task_id_,
