@@ -900,14 +900,14 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdResumeTask(DcmdTss* tss, uint32_t 
     dcmd_api::COMMAND_SUCCESS, ""))
   {
     mysql_->disconnect();
-    return dcmd_api::DCMD_STATE_SUCCESS;
+    return dcmd_api::DCMD_STATE_FAILED;
   }
   // 更新任务状态
   CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
-    "update task set pause=0 where task_id = %u", task->task_id_);
+    "update dcmd_task set pause=0 where task_id = %u", task->task_id_);
   if (!ExecSql(tss, true)) {
     mysql_->disconnect();
-    return dcmd_api::DCMD_STATE_SUCCESS;
+    return dcmd_api::DCMD_STATE_FAILED;
   }
   task->is_pause_ = false;
   return dcmd_api::DCMD_STATE_SUCCESS;
