@@ -638,7 +638,7 @@ bool DcmdCenterTaskMgr::AnalizeTask(DcmdTss* tss, DcmdCenterTask* task) {
     if (strcasecmp(md5.c_str(), task->task_cmd_script_md5_.c_str()) != 0) {
       CwxCommon::snprintf(tss->m_szBuf2K, 2047, "task-cmd[%s]'s md5 is wrong,"\
         "task_cmd table's md5 is:%s, but file's md5:%s",
-        md5.c_str(), task->task_cmd_script_md5_.c_str());
+        task->task_cmd_.c_str(), md5.c_str(), task->task_cmd_script_md5_.c_str());
       task->is_valid_ = false;
       task->err_msg_ = tss->err_msg_ = tss->m_szBuf2K;
       break;
