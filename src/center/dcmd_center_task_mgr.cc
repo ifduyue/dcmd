@@ -1523,7 +1523,7 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdFreezeTask(DcmdTss* tss,  uint32_t
     mysql_->disconnect();
     return dcmd_api::DCMD_STATE_FAILED;
   }
-  task->is_freezed_ = false;
+  task->is_freezed_ = true;
   return dcmd_api::DCMD_STATE_SUCCESS;
 }
 
