@@ -246,35 +246,34 @@ namespace dcmd {
   inline bool DcmdCenterTaskMgr::CalcTaskStatsInfo(DcmdTss* tss, bool is_commit, 
     DcmdCenterTask* task)
   {
-    uint8_t task_state = task->CalcTaskState();
-    bool is_exec_sql = false;
-    if (task_state != task->state_) {
-      is_exec_sql = true;
-      if (!UpdateTaskState(tss, false, task->task_id_, task_state)) return false;
-      task->state_ = task_state;
-    }
-    map<string, DcmdCenterSvrPool*>::iterator iter = task->pools_.begin();
-    while (iter != task->pools_.end()) {
-      if (iter->second->IsSubtaskStatsChanged()) {
-        is_exec_sql = true;
-        iter->second->UpdateSubtaskStats();
-        CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
-          "update dcmd_task_service_pool set undo_node=%d, doing_node=%d,finish_node=%d,"\
-          "fail_node=%d, ignored_fail_node=%d, ignored_doing_node=%d "\
-          "where task_id=%d and svr_pool_id=%d",
-          iter->second->undo_host_num(),
-          iter->second->doing_host_num(),
-          iter->second->finished_host_num(),
-          iter->second->failed_host_num(),
-          iter->second->ignored_failed_host_num(),
-          iter->second->ignored_doing_host_num(),
-          task->task_id_,
-          iter->second->svr_pool_id_);
-        if (!ExecSql(tss, false)) return false;
+    if (dcmd_api::TASK_INIT != task->state_) {
+      uint8_t task_state = task->CalcTaskState();
+      if (task_state != task->state_) {
+        if (!UpdateTaskState(tss, false, task->task_id_, task_state)) return false;
+        task->state_ = task_state;
       }
-      ++iter;
+      map<string, DcmdCenterSvrPool*>::iterator iter = task->pools_.begin();
+      while (iter != task->pools_.end()) {
+        if (iter->second->IsSubtaskStatsChanged()) {
+          iter->second->UpdateSubtaskStats();
+          CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
+            "update dcmd_task_service_pool set undo_node=%d, doing_node=%d,finish_node=%d,"\
+            "fail_node=%d, ignored_fail_node=%d, ignored_doing_node=%d "\
+            "where task_id=%d and svr_pool_id=%d",
+            iter->second->undo_host_num(),
+            iter->second->doing_host_num(),
+            iter->second->finished_host_num(),
+            iter->second->failed_host_num(),
+            iter->second->ignored_failed_host_num(),
+            iter->second->ignored_doing_host_num(),
+            task->task_id_,
+            iter->second->svr_pool_id_);
+          if (!ExecSql(tss, false)) return false;
+        }
+        ++iter;
+      }
     }
-    if (is_exec_sql && is_commit && !mysql_->commit()){
+    if (is_commit && !mysql_->commit()){
       tss->err_msg_ = string("Failure to commit, err:") + mysql_->getErrMsg();
       CWX_ERROR((tss->err_msg_.c_str()));
       mysql_->rollback();
@@ -282,5 +281,4 @@ namespace dcmd {
     }
     return true;
   }
-
 }  // dcmd
