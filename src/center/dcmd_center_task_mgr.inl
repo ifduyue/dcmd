@@ -73,7 +73,7 @@ namespace dcmd {
     if (!ExecSql(tss, false)) return false;
     CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
       "insert into dcmd_task_node(task_id, task_cmd, svr_pool, svr_name, ip, state, ignored,"\
-      "start_time, finished_time, process, err_msg, utime, ctime, opr_uid) "\
+      "start_time, finish_time, process, err_msg, utime, ctime, opr_uid) "\
       "select t.task_id, t.task_cmd, p.svr_pool, t.svr_name, n.ip, 0, 0, now(), now(),'', '', now(), now(), %u " \
       "from dcmd_task as t, dcmd_task_service_pool as p, dcmd_service_pool_node as n "\
       "where t.task_id = %u and p.task_id=%u "\

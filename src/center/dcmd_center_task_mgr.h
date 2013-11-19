@@ -110,6 +110,8 @@ class DcmdCenterTaskMgr{
   bool LoadNewTask(DcmdTss* tss, bool is_first);
   // 从数据库中获取新的subtask
   bool LoadNewSubtask(DcmdTss* tss);
+  // 从数据库中获取指定的subtask。-2：数据库错误，-1：失败，0：不存在，1：成功
+  int LoadSubtaskFromDb(DcmdTss* tss, uint64_t subtask_id);
   // 初始化时，从数据库加载command
   bool LoadAllCmd(DcmdTss* tss);
   // 加载任务的service pool

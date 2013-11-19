@@ -394,7 +394,6 @@ bool DcmdCenterTaskMgr::LoadNewSubtask(DcmdTss* tss) {
     subtask->err_msg_ = mysql_->fetch(11, is_null);
     next_subtask_id_ = subtask->subtask_id_;
     new_subtasks.push_back(subtask);
-    all_subtasks_[subtask->subtask_id_] = subtask;
   }
   mysql_->freeResult();
   map<uint32_t, DcmdCenterTask*> changed_task;
@@ -411,7 +410,7 @@ bool DcmdCenterTaskMgr::LoadNewSubtask(DcmdTss* tss) {
   iter = new_subtasks.begin();
   while (iter != new_subtasks.end()) {
     subtask = *iter;
-    subtask->task_ = GetTask(subtask->subtask_id_);
+    subtask->task_ = GetTask(subtask->task_id_);
     if (!subtask->task_) {
       if (!UpdateSubtaskState(tss, true, subtask->subtask_id_,
         dcmd_api::SUBTASK_FAILED, "No task."))
@@ -424,6 +423,7 @@ bool DcmdCenterTaskMgr::LoadNewSubtask(DcmdTss* tss) {
         all_subtasks_.erase(subtask->subtask_id_);
       }
       delete subtask;
+      iter++;
       continue;
     }
     subtask->svr_pool_ = subtask->task_->GetSvrPool(subtask->svr_pool_name_);
@@ -439,6 +439,7 @@ bool DcmdCenterTaskMgr::LoadNewSubtask(DcmdTss* tss) {
         all_subtasks_.erase(subtask->subtask_id_);
       }
       delete subtask;
+      iter++;
       continue;
     }
     changed_task[subtask->task_->task_id_] = subtask->task_;
@@ -459,11 +460,86 @@ bool DcmdCenterTaskMgr::LoadNewSubtask(DcmdTss* tss) {
     map<uint32_t, DcmdCenterTask*>::iterator task_iter = changed_task.begin();
     while(task_iter != changed_task.end()) {
       if (!CalcTaskStatsInfo(tss, true, task_iter->second)) return false;
-      ++iter;
+      ++task_iter;
     }
   }
   return true;
 }
+
+// 从数据库中获取指定的subtask。-2：数据库错误，-1：失败，0：不存在，1：成功
+int DcmdCenterTaskMgr::LoadSubtaskFromDb(DcmdTss* tss, uint64_t subtask_id) {
+  CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
+    "select subtask_id, task_id, task_cmd, svr_pool, svr_name, ip, state, ignored,"\
+    "UNIX_TIMESTAMP(start_time), UNIX_TIMESTAMP(finish_time), process, err_msg "\
+    " from dcmd_task_node where subtask_id = %s",
+    CwxCommon::toString(subtask_id, tss->m_szBuf2K, 10));
+  if (!mysql_->query(tss->sql_)) {
+    mysql_->freeResult();
+    CwxCommon::snprintf(tss->m_szBuf2K, 2047, "Failure to fetch subtask. err:%s; sql:%s", mysql_->getErrMsg(),
+      tss->sql_);
+    tss->err_msg_ = tss->m_szBuf2K;
+    CWX_ERROR((tss->m_szBuf2K));
+    return -2;
+  }
+  bool is_null = false;
+  DcmdCenterSubtask*  subtask = NULL;
+  if (!mysql_->next()) return 0;
+  subtask = new DcmdCenterSubtask();
+  subtask->subtask_id_ = strtoull(mysql_->fetch(0, is_null), NULL, 0);
+  subtask->task_id_ = strtoull(mysql_->fetch(1, is_null), NULL, 0);
+  subtask->task_cmd_ = mysql_->fetch(2, is_null);
+  subtask->svr_pool_name_ = mysql_->fetch(3, is_null);
+  subtask->service_ = mysql_->fetch(4, is_null);
+  subtask->ip_ = mysql_->fetch(5, is_null);
+  subtask->state_ = strtoul(mysql_->fetch(6, is_null), NULL, 0);
+  subtask->is_ignored_ = strtoul(mysql_->fetch(7, is_null), NULL, 0)?true:false;
+  subtask->start_time_ = strtoul(mysql_->fetch(8, is_null), NULL, 0);
+  subtask->finish_time_ = strtoul(mysql_->fetch(9, is_null), NULL, 0);
+  subtask->process_ = mysql_->fetch(10, is_null);
+  subtask->err_msg_ = mysql_->fetch(11, is_null);
+  mysql_->freeResult();
+  subtask->task_ = GetTask(subtask->task_id_);
+  if (!subtask->task_) {
+    if (!UpdateSubtaskState(tss, true, subtask->subtask_id_,
+        dcmd_api::SUBTASK_FAILED, "No task."))
+    {
+      return -2;
+    }
+    delete subtask;
+    tss->err_msg_ = "No task.";
+    return -1;
+  }
+  subtask->svr_pool_ = subtask->task_->GetSvrPool(subtask->svr_pool_name_);
+  if (!subtask->svr_pool_) {
+    if (!UpdateSubtaskState(tss, true, subtask->subtask_id_,
+      dcmd_api::SUBTASK_FAILED, "No svr_pool."))
+    {
+      return -2;
+    }
+    delete subtask;
+    tss->err_msg_ = "No svr_pool.";
+    return -1;
+  }
+  {
+    // 加此锁是为了防止与admin线程冲突
+    CwxMutexGuard<CwxMutexLock> lock(&lock_);
+    all_subtasks_[subtask->subtask_id_] = subtask;
+  }
+  if (subtask->state_ > dcmd_api::SUBTASK_FAILED) {
+    CwxCommon::snprintf(tss->m_szBuf2K, 2047, "Invalid state[%d]", subtask->state_);
+    subtask->state_ = dcmd_api::SUBTASK_FAILED;
+    if (!UpdateSubtaskState(tss, true, subtask->subtask_id_, subtask->state_,
+      tss->m_szBuf2K))
+    {
+      return -2;
+    }
+  }
+  subtask->task_->AddSubtask(subtask);
+  // 检查任务的状态
+  if (!CalcTaskStatsInfo(tss, true, subtask)) return -2;
+  return 1;
+}
+
 
 bool DcmdCenterTaskMgr::LoadAllCmd(DcmdTss* tss) {
   // 获取最大的cmd id
@@ -1165,8 +1241,22 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdExecSubtask(DcmdTss* tss, uint64_t
 {
   DcmdCenterSubtask* subtask =  GetSubTask(subtask_id);
   if (!subtask) {
-    tss->err_msg_ = "No subtask.";
-    return dcmd_api::DCMD_STATE_NO_SUBTASK;
+    int ret = LoadSubtaskFromDb(tss, subtask_id);
+    if (-2 == ret) {
+      mysql_->disconnect();
+      return dcmd_api::DCMD_STATE_FAILED;
+    } else if (-1 == ret) {
+      return dcmd_api::DCMD_STATE_FAILED;
+    } else if (0 == ret) {
+      tss->err_msg_ = "No subtask.";
+      return dcmd_api::DCMD_STATE_NO_SUBTASK;
+    } else {
+      DcmdCenterSubtask* subtask =  GetSubTask(subtask_id);
+      if (!subtask) {
+        tss->err_msg_ = "No subtask.";
+        return dcmd_api::DCMD_STATE_NO_SUBTASK;
+      }
+    }
   }
   if (!subtask->task_) {
     tss->err_msg_ = "No task";
