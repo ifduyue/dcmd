@@ -551,6 +551,15 @@ bool DcmdCenterTaskMgr::LoadAllCmd(DcmdTss* tss) {
     mysql_->freeResult();
     return false;
   }
+  if (!num) {
+    if (!mysql_->count("select max(cmd_id) from dcmd_command_history", num)) {
+      CwxCommon::snprintf(tss->m_szBuf2K, 2047, "Failure to fetch max cmd_id. err:%s", mysql_->getErrMsg());
+      tss->err_msg_ = tss->m_szBuf2K;
+      CWX_ERROR((tss->m_szBuf2K));
+      mysql_->freeResult();
+      return false;
+    }
+  }
   next_cmd_id_ = num + 1;
 
   CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
