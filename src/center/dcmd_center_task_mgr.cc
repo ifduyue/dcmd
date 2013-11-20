@@ -1310,7 +1310,6 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdExecSubtask(DcmdTss* tss, uint64_t
       subtask_id, cmd_obj->svr_pool_.c_str(), cmd_obj->svr_pool_id_,
       cmd_obj->service_.c_str(), cmd_obj->agent_ip_.c_str(),
       cmd_obj->cmd_type_, dcmd_api::SUBTASK_DOING, "");
-    delete cmd_obj;
     if (!cmd_obj->cmd_id_) {
       mysql_->disconnect();
       return dcmd_api::DCMD_STATE_FAILED;

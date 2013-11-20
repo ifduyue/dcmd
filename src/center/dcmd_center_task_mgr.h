@@ -209,4 +209,3 @@ class DcmdCenterTaskMgr{
 }  // dcmd
 #include "dcmd_center_task_mgr.inl"
 #endif
-
