@@ -1322,6 +1322,11 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdExecSubtask(DcmdTss* tss, uint64_t
   }
   subtask->exec_cmd_ = *cmd;
   cmd = NULL;
+  subtask->state_ = dcmd_api::SUBTASK_FAILED;
+  if (!UpdateSubtaskState(tss, true, subtask->subtask_id_, dcmd_api::SUBTASK_DOING, "")) {
+    mysql_->disconnect();
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
   subtask->task_->ChangeSubtaskState(subtask, dcmd_api::SUBTASK_DOING, subtask->is_ignored_);
   waiting_cmds_[subtask->exec_cmd_->cmd_id_] = subtask->exec_cmd_;
   subtask->exec_cmd_->agent_ = GetAgent(subtask->ip_);
