@@ -536,7 +536,7 @@ int DcmdCenterTaskMgr::LoadSubtaskFromDb(DcmdTss* tss, uint64_t subtask_id) {
   }
   subtask->task_->AddSubtask(subtask);
   // 检查任务的状态
-  if (!CalcTaskStatsInfo(tss, true, subtask)) return -2;
+  if (!CalcTaskStatsInfo(tss, true, subtask->task_)) return -2;
   return 1;
 }
 
