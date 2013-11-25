@@ -230,12 +230,15 @@ void  DcmdCenterH4AgentTask::AgentReport(CwxMsgBlock*& msg, DcmdTss* tss){
       err_msg = "Failure unpack agent report msg";
       break;
     }
+    // 添加链接ip
+    ips.push_back(conn_ip);
+    agent_ips = conn_ip;
     for (int i=0; i<report.agent_ips_size(); i++) {
-      if (agent_ips.length()) {
-        agent_ips += ",";
+      agent_ips += ",";
+      if (conn_ip != report.agent_ips(i)) {
+        agent_ips += report.agent_ips(i);
+        ips.push_back(report.agent_ips(i));
       }
-      agent_ips += report.agent_ips(i);
-      ips.push_back(report.agent_ips(i));
     }
     CWX_DEBUG(("Receive agent[%s]'s report from %s", agent_ips.c_str(), conn_ip.c_str())); 
     if (!app_->GetAgentMgr()->ComfirmAgentIpByReportedIp(ips, agent_ip)){
