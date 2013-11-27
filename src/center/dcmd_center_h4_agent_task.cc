@@ -176,7 +176,7 @@ bool DcmdCenterH4AgentTask::SendAgentCmd(DcmdCenterApp* app,
   msg->send_ctrl().setSvrId(DcmdCenterApp::SVR_TYPE_AGENT);
   msg->send_ctrl().setMsgAttr(CwxMsgSendCtrl::NONE);
   uint32_t conn_id = 0;
-  if (0 != app->GetAgentMgr()->SendMsg(agent_ip, msg, conn_id)){
+  if (!app->GetAgentMgr()->SendMsg(agent_ip, msg, conn_id)){
     CwxMsgBlockAlloc::free(msg);
     CWX_ERROR(("Failure to send msg to agent:%s, close connect.", agent_ip.c_str()));
     return false;
