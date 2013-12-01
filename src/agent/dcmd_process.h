@@ -43,7 +43,7 @@ class DcmdProcess {
   // 进程的exit()代码
   inline int return_code() const {  return WEXITSTATUS(status_);}
   inline uint32_t start_time() const { return start_time_; }
-  inline pid_t pid() const { return start_time_; }
+  inline pid_t pid() const { return pid_; }
   inline int status() const { return status_; }
   inline string const& exec_file() const { return exec_file_; }
 

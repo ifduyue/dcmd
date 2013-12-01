@@ -1203,7 +1203,7 @@ void DcmdAgentApp::FillTaskResult(AgentTaskCmd const& cmd, AgentTaskResult& resu
 bool DcmdAgentApp::ExecSubTaskCmd(AgentTaskCmd* cmd, string& err_msg,
   DcmdProcess*& process) {
   string script_file;
-  GetTaskRunScriptFile(cmd->cmd_.svr_name(), cmd->cmd_.task_cmd(), script_file);
+  GetTaskRunScriptShellFile(cmd->cmd_.svr_name(), cmd->cmd_.task_cmd(), script_file);
   process = new DcmdProcess(script_file);
   if (!process->Run(cmd->cmd_.has_svr_user() && cmd->cmd_.svr_user().length()?cmd->cmd_.svr_user().c_str():NULL,
     NULL,
