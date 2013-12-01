@@ -1127,7 +1127,7 @@ bool DcmdAgentApp::PrepareSubtaskRunEnv(AgentTaskCmd* cmd, string& err_msg) {
       err_msg = err_2k_;
       break;
     }
-    if (fprintf(fd, "export DCMD_SVR_OUT_FILE=%s\n", output_file.c_str()) < 0){
+    if (fprintf(fd, "export DCMD_SVR_OUT_FILE=%s\n", result_file.c_str()) < 0){
       CwxCommon::snprintf(err_2k_, 2047, "Failure to write run shell file:%s, errno=%d",
         script_sh_file.c_str(), errno);
       err_msg = err_2k_;
