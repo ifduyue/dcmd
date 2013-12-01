@@ -1321,7 +1321,7 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdExecSubtask(DcmdTss* tss, uint64_t
     (*cmd)->agent_ = NULL;
   }
   subtask->exec_cmd_ = *cmd;
-  cmd = NULL;
+  *cmd = NULL;
   if (!UpdateSubtaskState(tss, true, subtask->subtask_id_, dcmd_api::SUBTASK_DOING, "")) {
     mysql_->disconnect();
     return dcmd_api::DCMD_STATE_FAILED;

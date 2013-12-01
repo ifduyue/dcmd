@@ -168,7 +168,7 @@ namespace dcmd {
     }
     if (is_skip){
       CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
-        " skip=%d ", *is_skip?1:0);
+        " ignored=%d ", *is_skip?1:0);
       if (sql.length() != init_len) sql += ",";
       sql += tss->sql_;
     }
@@ -207,7 +207,7 @@ namespace dcmd {
 
     if (-1 == mysql_->execute(sql.c_str())){
       tss->err_msg_ = string("Failure to exec sql, err:") + mysql_->getErrMsg();
-      tss->err_msg_ = string("; sql:") + sql;
+      tss->err_msg_ += string("; sql:") + sql;
       CWX_ERROR((tss->err_msg_.c_str()));
       mysql_->rollback();
       return false;
