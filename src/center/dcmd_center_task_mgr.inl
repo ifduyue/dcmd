@@ -201,7 +201,7 @@ namespace dcmd {
       sql += tss->sql_;
     }
     CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
-      ", update_time=now() where subtask_id = %s ", 
+      ", utime=now() where subtask_id = %s ", 
       CwxCommon::toString(subtask_id, tmp_buf, 10));
     sql += tss->sql_;
 
