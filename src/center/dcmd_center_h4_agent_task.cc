@@ -195,7 +195,7 @@ bool DcmdCenterH4AgentTask::ReplyAgentCmdResult(DcmdCenterApp* app,
     app->GetAgentMgr()->CloseAgent(agent_ip);
     return false;
   }
-  CwxMsgHead head(0, 0, dcmd_api::MTYPE_CENTER_SUBTASK_CMD, msg_taskid,
+  CwxMsgHead head(0, 0, dcmd_api::MTYPE_AGENT_SUBTASK_CMD_RESULT_R, msg_taskid,
     tss->proto_str_.length());
   msg = CwxMsgBlockAlloc::pack(head, tss->proto_str_.c_str(),
     tss->proto_str_.length());
