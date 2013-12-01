@@ -564,8 +564,8 @@ bool DcmdCenterTaskMgr::LoadAllCmd(DcmdTss* tss) {
 
   CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
     "select cmd_id, task_id, subtask_id, svr_pool, svr_pool_id, svr_name, ip, state, cmd_type "\
-    " from dcmd_command where state = 0 and cmd_type = %d order by cmd_id asc ",
-    dcmd_api::CMD_DO_SUBTASK);
+    " from dcmd_command where state = %d and cmd_type = %d order by cmd_id asc ",
+    dcmd_api::COMMAND_DOING, dcmd_api::CMD_DO_SUBTASK);
   if (!mysql_->query(tss->sql_)) {
     CwxCommon::snprintf(tss->m_szBuf2K, 2047, "Failure to fetch command. err:%s; sql:%s", mysql_->getErrMsg(),
       tss->sql_);
@@ -1309,7 +1309,7 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdExecSubtask(DcmdTss* tss, uint64_t
     cmd_obj->cmd_id_ = InsertCommand(tss, true, uid, subtask->task_id_,
       subtask_id, cmd_obj->svr_pool_.c_str(), cmd_obj->svr_pool_id_,
       cmd_obj->service_.c_str(), cmd_obj->agent_ip_.c_str(),
-      cmd_obj->cmd_type_, dcmd_api::SUBTASK_DOING, "");
+      cmd_obj->cmd_type_, dcmd_api::COMMAND_DOING, "");
     if (!cmd_obj->cmd_id_) {
       mysql_->disconnect();
       return dcmd_api::DCMD_STATE_FAILED;
