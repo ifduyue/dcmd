@@ -799,7 +799,7 @@ bool DcmdCenterTaskMgr::Schedule(DcmdTss* tss,
   DcmdCenterTask* task)
 {
   if (!task->is_auto_ || !task->is_valid_ || task->is_freezed_ || task->is_pause_) return true;
-  if (!task->state_ != dcmd_api::TASK_DOING) return true;
+  if (task->state_ != dcmd_api::TASK_DOING) return true;
   if (task->depend_task_ && !task->IsFinished()) return true;
 
   map<string, DcmdCenterSvrPool*>::iterator iter= task->pools_.begin();
