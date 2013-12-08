@@ -1322,11 +1322,16 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdExecSubtask(DcmdTss* tss, uint64_t
   }
   subtask->exec_cmd_ = *cmd;
   *cmd = NULL;
-  if (!UpdateSubtaskState(tss, true, subtask->subtask_id_, dcmd_api::SUBTASK_DOING, "")) {
+  if (!UpdateSubtaskState(tss, false, subtask->subtask_id_, dcmd_api::SUBTASK_DOING, "")) {
     mysql_->disconnect();
     return dcmd_api::DCMD_STATE_FAILED;
   }
   subtask->task_->ChangeSubtaskState(subtask, dcmd_api::SUBTASK_DOING, subtask->is_ignored_);
+  // 更新task的信息
+  if (!CalcTaskStatsInfo(tss, true, task)) {
+    mysql_->disconnect();
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
   waiting_cmds_[subtask->exec_cmd_->cmd_id_] = subtask->exec_cmd_;
   subtask->exec_cmd_->agent_ = GetAgent(subtask->ip_);
   if (!subtask->exec_cmd_->agent_) {
@@ -1586,11 +1591,16 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdIgnoreSubtask(DcmdTss* tss, uint64
   CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
     "update dcmd_task_node set ignored=1 where subtask_id = %s and opr_uid=%d",
     CwxCommon::toString(subtask_id, tss->m_szBuf2K, 10), uid);
-  if (!ExecSql(tss, true)) {
+  if (!ExecSql(tss, false)) {
     mysql_->disconnect();
     return dcmd_api::DCMD_STATE_FAILED;
   }
   subtask->task_->ChangeSubtaskState(subtask, subtask->state_, true);
+  // 更新task的信息
+  if (!CalcTaskStatsInfo(tss, true, task)) {
+    mysql_->disconnect();
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
   return dcmd_api::DCMD_STATE_SUCCESS;
 }
 dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdFreezeTask(DcmdTss* tss,  uint32_t task_id,
