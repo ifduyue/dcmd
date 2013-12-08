@@ -1328,7 +1328,7 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdExecSubtask(DcmdTss* tss, uint64_t
   }
   subtask->task_->ChangeSubtaskState(subtask, dcmd_api::SUBTASK_DOING, subtask->is_ignored_);
   // 更新task的信息
-  if (!CalcTaskStatsInfo(tss, true, task)) {
+  if (!CalcTaskStatsInfo(tss, true, subtask->task_)) {
     mysql_->disconnect();
     return dcmd_api::DCMD_STATE_FAILED;
   }
@@ -1597,7 +1597,7 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdIgnoreSubtask(DcmdTss* tss, uint64
   }
   subtask->task_->ChangeSubtaskState(subtask, subtask->state_, true);
   // 更新task的信息
-  if (!CalcTaskStatsInfo(tss, true, task)) {
+  if (!CalcTaskStatsInfo(tss, true, subtask->task_)) {
     mysql_->disconnect();
     return dcmd_api::DCMD_STATE_FAILED;
   }
