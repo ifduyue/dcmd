@@ -147,7 +147,7 @@ namespace dcmd {
       if (!undo_subtasks_.size()) return false;
       if (doing_host_num() + failed_host_num() >= cont_num) return false;
       // doing_num加1的原因是计算若增加一台是否超过规定
-      if ((doing_host_num() + failed_host_num() + 1) * 100 > all_subtasks_.size() * doing_rate)
+      if ((doing_host_num() + failed_host_num()) * 100 > all_subtasks_.size() * doing_rate)
         return false;
       return true;
     }
@@ -158,7 +158,7 @@ namespace dcmd {
     {
       if (failed_host_num() >= cont_num) return true;
       // doing_num加1的原因是计算若增加一台是否超过规定
-      if ((failed_host_num() + 1) * 100 > all_subtasks_.size() * doing_rate)
+      if (failed_host_num() * 100 > all_subtasks_.size() * doing_rate)
         return true;
       return false;
     }
@@ -284,27 +284,24 @@ namespace dcmd {
     }
     // 计算任务的状态
     inline uint8_t CalcTaskState() const {
-      uint8_t calc_state = dcmd_api::TASK_FINISHED;
       uint8_t pool_state = 0;
       map<string, DcmdCenterSvrPool*>::const_iterator iter = pools_.begin();
+      bool has_pool_failed = false;
+      bool has_pool_finished_with_failed = false;
       while(iter != pools_.end()) {
         pool_state = iter->second->GetState(max_current_num_, max_current_rate_);
         if (pool_state == dcmd_api::TASK_DOING) {
           return dcmd_api::TASK_DOING;
         } else if (pool_state == dcmd_api::TASK_FAILED) {
-          if ((calc_state == dcmd_api::TASK_FINISHED) || 
-            (calc_state == dcmd_api::TASK_FINISHED_WITH_FAILED))
-          {
-            calc_state = dcmd_api::TASK_FINISHED_WITH_FAILED;
-          }
+          has_pool_failed = true;
         } else if (pool_state == dcmd_api::TASK_FINISHED_WITH_FAILED) {
-          if ((calc_state == dcmd_api::TASK_FINISHED)){
-            calc_state = dcmd_api::TASK_FINISHED_WITH_FAILED;
-          }
+          has_pool_finished_with_failed = true;
         }
         ++iter;
       }
-      return calc_state;
+      if (has_pool_failed) return dcmd_api::TASK_FAILED;
+      if (has_pool_finished_with_failed) return dcmd_api::TASK_FINISHED_WITH_FAILED;
+      return dcmd_api::TASK_FINISHED;
     }
   public:
     // 任务的id

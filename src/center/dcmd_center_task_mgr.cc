@@ -1392,7 +1392,7 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdRedoTask(DcmdTss* tss, uint32_t ta
   }
   // 更新tasknode
   CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
-    "update dcmd_task_node set state=0, ignore=0, start_time=now(), finish_time=now(), process='', err_msg='' "\
+    "update dcmd_task_node set state=0, ignored=0, start_time=now(), finish_time=now(), process='', err_msg='' "\
     "where task_id = %d", task_id);
   if (!ExecSql(tss, false)) {
     mysql_->disconnect();
@@ -1400,7 +1400,7 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdRedoTask(DcmdTss* tss, uint32_t ta
   }
   // 更新command
   CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
-    "update command set state=2 where state = 0 and task_id = %d", task_id);
+    "update dcmd_command set state=2 where state = 0 and task_id = %d", task_id);
   if (!ExecSql(tss, true)) {
     mysql_->disconnect();
     return dcmd_api::DCMD_STATE_FAILED;
@@ -1496,7 +1496,7 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdRedoSvrPool(DcmdTss* tss, uint32_t
   string escape_svr_pool_name(pool->svr_pool_);
   dcmd_escape_mysql_string(escape_svr_pool_name);
   CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, 
-    "update dcmd_task_node set state=0, ignore=0, start_time=now(), finish_time=now(), process='', err_msg='' "\
+    "update dcmd_task_node set state=0, ignored=0, start_time=now(), finish_time=now(), process='', err_msg='' "\
     "where task_id = %d and svr_pool='%s'", task_id, escape_svr_pool_name.c_str());
   if (!ExecSql(tss, false)) {
     mysql_->disconnect();
