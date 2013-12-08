@@ -846,6 +846,7 @@ bool DcmdCenterTaskMgr::FinishTaskCmd(DcmdTss* tss, dcmd_api::AgentTaskResult co
   map<CWX_UINT64, DcmdCenterCmd*>::iterator iter;
   uint64_t cmd_id = strtoul(result.cmd().c_str(), NULL, 10);
   iter =  waiting_cmds_.find(cmd_id);
+  task = NULL;
   if (iter == waiting_cmds_.end()) return true;// 可能认为已经完成或者是ctrl命令
   uint32_t state = result.success()?dcmd_api::SUBTASK_FINISHED:dcmd_api::SUBTASK_FAILED;
   bool is_skip = false;
@@ -863,7 +864,7 @@ bool DcmdCenterTaskMgr::FinishTaskCmd(DcmdTss* tss, dcmd_api::AgentTaskResult co
     return false;
   }
   if (!UpdateCmdState(tss,
-    true,
+    false,
     cmd_id,
     result.success()?dcmd_api::COMMAND_SUCCESS:dcmd_api::COMMAND_FAILED,
     result.success()?"":result.err().c_str()))
@@ -873,6 +874,11 @@ bool DcmdCenterTaskMgr::FinishTaskCmd(DcmdTss* tss, dcmd_api::AgentTaskResult co
   }
   agent_ip = iter->second->subtask_->ip_;
   task = iter->second->subtask_->task_;
+  // 更新task的信息
+  if (!CalcTaskStatsInfo(tss, true, task)) {
+    mysql_->disconnect();
+    return false;
+  }
   task->ChangeSubtaskState(iter->second->subtask_, state,
     iter->second->subtask_->is_ignored_);
   RemoveCmd(iter->second);
