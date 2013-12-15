@@ -874,13 +874,13 @@ bool DcmdCenterTaskMgr::FinishTaskCmd(DcmdTss* tss, dcmd_api::AgentTaskResult co
   }
   agent_ip = iter->second->subtask_->ip_;
   task = iter->second->subtask_->task_;
+  task->ChangeSubtaskState(iter->second->subtask_, state,
+    iter->second->subtask_->is_ignored_);
   // 更新task的信息
   if (!CalcTaskStatsInfo(tss, true, task)) {
     mysql_->disconnect();
     return false;
   }
-  task->ChangeSubtaskState(iter->second->subtask_, state,
-    iter->second->subtask_->is_ignored_);
   RemoveCmd(iter->second);
   return true;
 }
@@ -1328,6 +1328,21 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdExecSubtask(DcmdTss* tss, uint64_t
   }
   subtask->exec_cmd_ = *cmd;
   *cmd = NULL;
+  uint32_t state = dcmd_api::SUBTASK_DOING;
+  if (!UpdateSubtaskInfo(tss,
+    subtask->subtask_id_,
+    false,
+    &state,
+    NULL,
+    true,
+    true,
+    NULL,
+    NULL))
+  {
+    mysql_->disconnect();
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
+
   if (!UpdateSubtaskState(tss, false, subtask->subtask_id_, dcmd_api::SUBTASK_DOING, "")) {
     mysql_->disconnect();
     return dcmd_api::DCMD_STATE_FAILED;

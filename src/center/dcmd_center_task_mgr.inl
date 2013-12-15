@@ -42,6 +42,7 @@ namespace dcmd {
       state, str_tmp.c_str(), CwxCommon::toString(subtask_id, buf, 10));
     return ExecSql(tss, is_commit);
   }
+
   inline bool DcmdCenterTaskMgr::UpdateCmdState(DcmdTss* tss, bool is_commit,
     uint64_t cmd_id, uint8_t state, char const* err_msg)
   {
