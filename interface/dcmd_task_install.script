@@ -6,6 +6,7 @@ import sys
 
 
 INSTALL_BASE_PATH="/var/dcmd/"
+RESERVE_PACKAGE_NUM = 5
 
 
 class DcmdInstall():
@@ -17,23 +18,60 @@ class DcmdInstall():
     self.svr_repo_ = os.environ.get('DCMD_SVR_REPO')
     self.svr_user_ = os.environ.get('DCMD_SVR_USER')
     self.svr_ip_ = os.environ.get('DCMD_SVR_IP')
-    self.is_svr_update_env_ = (int)os.environ.get('DCMD_SVR_UPDATE_ENV')
-    self.is_svr-update_tag_ = (int)os.environ.get('DCMD_SVR_UPDATE_TAG')
+    self.is_svr_update_env_ = (int)(os.environ.get('DCMD_SVR_UPDATE_ENV'))
+    self.is_svr_update_tag_ = (int)(os.environ.get('DCMD_SVR_UPDATE_TAG'))
     self.svr_env_v_ = os.environ.get('DCMD_SVR_ENV_V')
     self.svr_out_file_ = os.environ.get('DCMD_SVR_OUT_FILE')
-    self.is_svr_process_ = (int)os.environ.get('DCMD_SVR_PROCESS')
-    self.svr_package_ = self.svr_name_ + "_" + self.svr_version_ + ".tar.gz"
+    self.is_svr_process_ = (int)(os.environ.get('DCMD_SVR_PROCESS'))
+    self.svr_package_main_name_ = self.svr_name_ + "_" + self.svr_version_
+    self.svr_package_ = self.svr_package_main_name_ + ".tar.gz"
     self.svr_home_ = INSTALL_BASE_PATH + self.svr_name_
-    self.svr_package_path_ = self.svr_home_ + "/package"
-    self.svr_running_home_ = self.svr_home_ + "/running"
-    self.svr_version_file_ = self.svr_home_ + "/version"
-    self.svr_back_path_ = self.svr_home_ + "/back"
+    self.svr_package_path_ = os.path.join(self.svr_home_, "package")
+    self.svr_running_home_ = os.path.join(self.svr_home_, "running")
+    self.svr_version_file_ = os.path.join(self.svr_home_, "version")
+    self.svr_back_path_ = os.path.join(self.svr_home_, "back")
+    self.svr_back_running_ = os.path.join(self.svr_back_path_, "running")
+    self.svr_tmp_path_ = os.path.join(self.svr_home, "tmp")
     self.svr_online_version_ = ""
+    self.is_backup_running = False
+    self.svr_packages_ = []
     self.install_errmsg_ = ""
     self.install_success_ = False
 
+  #init the service path
+  def init_service_env(self):
+    print("Check service home:%s" % self.svr_home_)
+    self._check_and_mk_missed_path(self.svr_home_)
+    print("Check service package path:%s" % self.svr_package_path_)
+    self._check_and_mk_missed_path(self.svr_package_path_)
+    print("Check service back path:%s" % self.svr_back_path_)
+    self._check_and_mk_missed_path(self.svr_back_path_)
+    print("Check service tmp path:%s" % self.svr_tmp_path_)
+    self._check_and_mk_missed_path(self.svr_tmp_path_)
+    print("Remove service backup-running:%s" % self.svr_back_running_)
+    self._remove(self.svr_back_running_)
+    print("Clear tmp path:%s" % self.svr_tmp_path_)
+    package_files = os.listdir(self.svr_tmp_path_)
+    for f in package_files:
+      rm_file = os.path.join(self.svr_tmp_path_, f)
+      self._remove(rm_file)
+    print("Remove old package file...............")
+    package_files = os.listdir(self.svr_package_path_)
+    packages = []
+    for f in package_files:
+      if os.path.isdir(f):
+        rm_file = os.path.join(self.svr_package_path_, f)
+        shutil.rmtree(rm_file)
+        continue
+      statinfo=os.stat(os.path.join(self.svr_package_path_, f))
+      packages.append(((int)(statinfo.st_ctime), f))
+    packages.sort(lambda x,y:cmp(x[0],y[0]))
+    while len(packages) > RESERVE_PACKAGE_NUM:
+      self._remove(self.svr_package_path_, packages[0][1])
+      del packages[0]
+    
   #check current version
-  def check_svr_version(self):
+  def check_version(self):
     print "Check service [%s]'s version....." % self.svr_name_
     if os.path.isfile(self.svr_version_file_):
       print "Version file exists, file:%s." % self.svr_version_file_
@@ -49,19 +87,19 @@ class DcmdInstall():
     print "Version file doesn't exist, version file:%s" % self.svr_version_file_
     return False
   
-  #save version to version file
-  def save_svr_version(self):
+  #create version file to save version
+  def create_version_file(self):
     print "Save version[%s] to %s" % (self.svr_version_, self.svr_version_file_)
     with open(self.svr_version_file, 'w') as f:
       f.write(self.svr_version_)
   
   #remove current version file
-  def delete_version_file(self):
+  def remove_version_file(self):
     print "Remove current verision file:%s" % self.svr_version_file_
-    self.remove(self.svr_version_file_)
-    
+    self._remove(self.svr_version_file_)
+
   #out result to out_file
-  def output_install_result(self):
+  def output_result(self):
     if self.install_success_:
       with open(self.svr_out_file_, 'w') as f:
         f.write("state=success\n")
@@ -70,7 +108,68 @@ class DcmdInstall():
       with open(self.svr_out_file_, 'w') as f:
         f.write("state=failuer\n")
         f.write("errmsg=%s" % self.install_errmsg_)
-  
+
+  #download service package
+  def download_package(self):
+    save_file = os.path.join(self.svr_package_path_, self.svr_package_)
+    tmp_file = os.path.join(self.svr_tmp_path_, self.svr_package_)
+    is_download = True
+    if os.path.isfile(save_file):
+      if not self.is_svr_update_tag_:
+        print "Pachage file:%s exist, doesn't download" % self.svr_package_
+        shutil.copyfile(save_file, tmp_file)
+        is_download = False
+      else:
+        self._remove(save_file)
+    if is_download:
+      if os.path.isfile(tmp_file):
+          self._remove(tmp_file)
+      download_path_file = self.svr_repo_ + "/" + self.svr_name_ + "/" + self.svr_package_
+      print "wget package file:%s" % download_path_file
+      wget_cmd = "wget " + download_path_file + " -P " + self.svr_tmp_path_
+      if not self._run_cmd(wget_cmd):
+        self.install_errmsg_ = "Failure to download package:%s" % download_path_file
+        self.install_success_ = False
+        return False
+      shutil.copy(tmp_file, save_file)
+    unzip_cmd = "tar -zxvf " + tmp_file + " -C " + self.svr_tmp_path_
+    if not self._run_cmd(unzip_cmd):
+      self.install_errmsg_ = "Failure to unpack package:%s" % tmp_file
+      self.install_success_ = False
+      return False
+    tmp_conf_dir = os.path.join(self.svr_tmp_path_, self.svr_package_main_name_)
+    if not os.path.isdir(tmp_conf_dir):
+      os.mkdir(tmp_conf_dir)
+    return True
+
+  #download service config
+  def download_config(self):
+    return True
+
+  #stop service
+  def stop_service(self):
+    return True
+
+  #backup running servcie
+  def backup_service(self):
+    return True
+
+  #move service package to running dir
+  def move_package_to_running(self):
+    return True
+
+  #install service
+  def install_service(self):
+    return True
+
+  #start service
+  def start_service(self):
+    return True
+
+  #remove backup
+  def remove_backup(self):
+    return True
+
   #run shell cmd
   def run_cmd(self, command, show=True):
     if show:
@@ -81,12 +180,6 @@ class DcmdInstall():
       return False
     return True
 
-  #remove file or dir
-  def remove(self, df):
-    if os.path.isfile(df):
-      os.remove(df)
-    elif os.path.isdir(df):
-      shutil.rmtree(df)
 
   #copy files or dir
   def copytree(self, src, dst):
@@ -123,7 +216,7 @@ class DcmdInstall():
   #download package
   def download_package(self):
     try:
-      check_file = self.save_path + self.app_bvid
+      check_file = self.save_path + self.svr_package_
       if os.path.isfile(check_file):
         print "==> have this version package:%s, not need download." % check_file
       else:
@@ -316,12 +409,33 @@ class DcmdInstall():
 
     if not self.check_server():
       return False
-    return True  
+    return True
+
+  #remove file or dir
+  def _remove(self, df):
+    if os.path.isfile(df):
+      os.remove(df)
+    elif os.path.isdir(df):
+      shutil.rmtree(df)
+
+  #check and create missing subpath
+  def _check_and_mk_missed_path(self, path):
+    if not os.path.isdir(path):
+      os.mkdir(path)
+
+  #runing system cmd
+  def _run_cmd(self, cmd):
+    ret = os.system(cmd)
+    ret >>= 8
+    return ret == 0
 
 def main():
   install = DcmdInstall()
   #1.check version
   try:
+    print("\nSTEP 0: init svr enviroment.......\n")
+    install.init_service_env()
+
     print("\nSTEP 1: Check version.............\n")
     if install.check_version():
       print "==>The package version to be installed is same as current versionm, install succeed."
@@ -345,9 +459,7 @@ def main():
       return
 
     print("\STEP 5: Remove version file............\n")
-    if not install.remove_version_file():
-      install.output_result()
-      return
+    install.remove_version_file()
 
     print("\nSTEP 6: Backup running service to back........\n")
     if not install.backup_service():
@@ -375,9 +487,7 @@ def main():
       return
 
     print("\nSTEP 11: Create service version file............\n")
-    if not install.create_version_file()
-      install.output_result()
-      return
+    install.create_version_file()
 
     print("Success to install serivice.\n")
     install.install_success_ = True
