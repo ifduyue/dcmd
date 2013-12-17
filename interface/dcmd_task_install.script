@@ -33,7 +33,6 @@ class DcmdInstall():
     self.svr_back_running_ = os.path.join(self.svr_back_path_, "running")
     self.svr_tmp_path_ = os.path.join(self.svr_home, "tmp")
     self.svr_online_version_ = ""
-    self.is_backup_running = False
     self.svr_packages_ = []
     self.install_errmsg_ = ""
     self.install_success_ = False
@@ -144,270 +143,84 @@ class DcmdInstall():
 
   #download service config
   def download_config(self):
+    tmp_conf_path = os.path.join(self.svr_tmp_path_, "conf")
+    running_conf_path = os.path.join(self.svr_running_home_, "conf")
+    if not os.path.isdir(tmp_conf_dir):
+        os.mkdir(tmp_conf_dir)
+    if not self.is_svr_update_env_:
+      if os.path.isdir(self.running_conf_path):
+        #copy config to tmp conf
+        if not self._run_cmd("rm -fr %s" % tmp_conf_path):
+          self.install_success_ = False
+          self.install_errmsg_ = "Failed to clean tmp conf"
+          return False
+        if not self._run_cmd("cp -r %s/*  %s" % (running_conf_path, tmp_conf_path)):
+          self.install_success_ = False
+          self.install_errmsg_ = "Failed to copy running config to tmp_config"
+          return False
+      return True
+    # download conf from svn
+    svn_path = self.svr_repo_ + "/conf/" + self.svr_name_ + "/" + self.svr_pool_ + "/" + self.svr_env_v_
+    if not self._run_cmd("svn export %s %s" % (svr_path, tmp_conf_path)):
+      self.install_success_ = False
+      self.install_errmsg_ = "Failed to get conf from svn:%s" % svn_path
+      return False
     return True
 
   #stop service
   def stop_service(self):
+    stop_cmd = os.path.join(os.path.join(self.svr_running_home_,"bin"), "stop.sh")
+    stop_cmd = stop_cmd + " "  + self.svr_running_home_
+    if not self._run_cmd(stop_cmd):
+      self.install_success_ = False
+      self.install_errmsg_ = "Failed to stop service, cmd:%s" % stop_cmd
+      return False
     return True
 
   #backup running servcie
   def backup_service(self):
+    backup_cmd = "mv -r %s/* %s" % (self.svr_running_home_, self.svr_back_running_)
+    if not self._run_cmd(backup_cmd):
+      self.install_success_ = False
+      self.install_errmsg_ = "Failed to backup running path, cmd:%s" % backup_cmd
+      return False
     return True
 
   #move service package to running dir
   def move_package_to_running(self):
+    move_cmd = "mv -r %s/%s/* %s" % (self.svr_tmp_path_, self.svr_package_main_name_, self.svr_running_home_)
+    if not self._run_cmd(move_cmd):
+      self.install_success_ = False
+      self.install_errmsg_ = "Failed to move package to  running path, cmd:%s" % move_cmd
+      return False
     return True
 
   #install service
   def install_service(self):
+    install_cmd = os.path.join(os.path.join(self.svr_running_home_,"bin"), "install.sh")
+    install_cmd = install_cmd + " "  + self.svr_running_home_ + " " + self.svr_back_running_
+    if not self._run_cmd(install_cmd):
+      self.install_success_ = False
+      self.install_errmsg_ = "Failed to install service, cmd:%s" % install_cmd
+      return False
     return True
 
   #start service
   def start_service(self):
+    start_cmd = os.path.join(os.path.join(self.svr_running_home_,"bin"), "start.sh")
+    start_cmd = start_cmd + " "  + self.svr_running_home_
+    if not self._run_cmd(start_cmd):
+      self.install_success_ = False
+      self.install_errmsg_ = "Failed to start service, cmd:%s" % start_cmd
+      return False
     return True
 
   #remove backup
   def remove_backup(self):
-    return True
-
-  #run shell cmd
-  def run_cmd(self, command, show=True):
-    if show:
-      print "==> run command : %s" % (command)
-    status, output = commands.getstatusoutput(command)
-    if status != 0:
-      print "==> failed[%s] : %s" % (status, output)
-      return False
-    return True
-
-
-  #copy files or dir
-  def copytree(self, src, dst):
-    name = []
-    if os.path.isdir(src):
-      names = os.listdir(src)  
-    if not os.path.isdir(dst):
-      os.makedirs(dst)
-    
-    for name in names:
-      srcname = os.path.join(src, name)
-      dstname = os.path.join(dst, name)  
-      try:
-        if os.path.isdir(srcname):
-          self.copytree(srcname, dstname)  
-        else:
-          if os.path.isdir(dstname):
-            os.rmdir(dstname)
-          elif os.path.isfile(dstname):
-            os.remove(dstname)
-          shutil.copy2(srcname, dstname)
-      except (IOError, os.error) as why:
-        print "copy %s to %s exception :%s" % (srcname, dstname, str(why))
-        return False
-        #errors.append((srcname, dstname, str(why)))  
-        # catch the Error from the recursive copytree so that we can  
-        # continue with other files
-      except OSError as err:  
-        #errors.extend(err.args[0])
-        print "copytree exception :%s" % err.args[0]
-        return False
-    return True
-
-  #download package
-  def download_package(self):
-    try:
-      check_file = self.save_path + self.svr_package_
-      if os.path.isfile(check_file):
-        print "==> have this version package:%s, not need download." % check_file
-      else:
-        #mkdir path
-        print "==> need download, make download path : %s" % self.save_path
-        self.remove(self.save_path)
-        os.makedirs(self.save_path)
-        
-        wfile = self.app_svn_path + self.app_name + "/" + self.app_bvid
-        print "==> begin wget package : %s" % wfile
-        wget_cmd = "wget " + wfile + " -P " + self.save_path
-        if not self.run_cmd(wget_cmd):
-          return False
- 
-      self.upload_path = self.save_path
-      #check whether need unzip
-      if self.app_bvid.find(".tar.gz") > 0:
-        print "==> need unzip..."
-        unzip_file = self.save_path + self.app_bvid[:self.app_bvid.find(".tar.gz")]
-        self.remove(unzip_file)
-        unzip_cmd = "tar -zxvf " + self.save_path + self.app_bvid + " -C " + self.save_path + " && rm " + self.save_path + self.app_bvid
-        if not self.run_cmd(unzip_cmd):
-          return False
-        if os.path.isdir(unzip_file):
-          self.upload_path = unzip_file
-    except Exception, e:
-      print "==> catch exception :", str(e)
-      return False
-    return True
-
-  def download_conf(self):
-    try:
-      if not self.app_env:
-        print "==> app environment is not specified. used default conf file!"
-        return True
-      print "==> download config file!"
-      fp = open(self.app_env_file, 'r')
-      all_lines = fp.readlines()
-      fp.close()
-      for line in all_lines:
-        line = line.strip()
-        items = line.split(' ')
-        for item in items:
-          config_file_path = item.strip()
-          config_file = config_file_path[config_file_path.rfind('/') + 1:]
-          dest_file = self.app_path + "/config/" + config_file
-          if os.path.isfile(dest_file):
-            os.remove(dest_file)
-          export_cmd = "wget -c " + item.strip() + " --http-user=guojun8 --http-password=123456 -P " + self.app_path + "/config/"
-          if not self.run_cmd(export_cmd):
-            return False
-
-    except Exception, e:
-      print "==> catch exception :", str(e)
-      return False
-    return True
-
-  def move_tree(self, src, dest):
-    try:
-      if src[-1] == '/':
-        src = src[0:len(src) - 1]
-      if dest[-1] == '/':
-        dest = dest[0:len(dest) - 1]
-      if os.path.exists(dest):
-        shutil.rmtree(dest)
-      shutil.move(src, dest)
-      return True
-    except Exception, e:
-      print "==> catch exception : %s" % str(e)
-      return False
-
-
-  #back up original files
-  def backup_original(self):
-    try: 
-      print "==> begin backup backup_path : %s" % self.backup_path
-      if os.path.exists(self.app_path):
-        print "==> need backup %s to %s" % (self.app_path, self.backup_path)
-        if not self.move_tree(self.app_path, self.backup_path):
-          return False
-    except Exception, e:
-      print "==> catch exception : %s" % str(e)
-      return False
-    return True
-
-  def clean_up(self):
-    try:
-      app_backup_path = LOCAL_STORE_PATH + self.app_name
-      print "==> begin clean_up backup_path : %s" % app_backup_path
-      if os.path.exists(app_backup_path):
-        remove_cmd = "rm -rf " + app_backup_path + "/*"
-        if not self.run_cmd(remove_cmd):
-          return False
-    except Exception, e:
-      print "==> catch exception : %s" % str(e)
-      return False
-    return True
-  
-  #stop func, child must release
-  def stop_func(self):
-    try:
-      stop_file = self.app_path + "/bin/scripts/dcmd_stop.sh"
-      if not os.path.isfile(stop_file):
-        print("==> Warning, Can't find %s" % stop_file)
-        return True
-      stop_cmd = "sh " + stop_file
-      if not self.run_cmd(stop_cmd):
-        return False
-    except Exception, e:
-      print "stop_server failed, catch exception :%s" % str(e)      
-      return False
-    return True
-  
-  #stop server
-  def stop_server(self):
-    global WD_APP_SHELL_PATH
-    if self.app_start == "1":
-      print "==> need stop server..."
-      #stop_cmd = "/bin/sh " + WD_APP_SHELL_PATH + self.app_name + "/stop.sh"
-      #print "==> begin stop cmd : %s" % stop_cmd
-      if not self.stop_func():
-        print "==> call stop func failed"
-        return False
-
-    return True
-
-  #install package
-  def install_package(self):
-    try:
-      print "==> begin install package %s to %s" % (self.upload_path, self.app_path)
-      #move to dest
-      if not self.copytree(self.upload_path, self.app_path):
-        return False
-    except Exception, e:
-      print "install_package catch exception :%s" % str(e)
-      return False
-    return True
-
-  def check_server(self):
-    try:
-      check_file = self.app_path + "/bin/scripts/dcmd_check.sh"
-      if not os.path.isfile(check_file):
-        print("==> Warning, Can't find %s" % check_file)
-        return True
-      start_cmd = "sh " + check_file
-      if not self.run_cmd(start_cmd):
-        return False
-
-    except Exception, e:
-      print "check_server catch exception : %s" % str(e)
-      return False
-    return True
-  
-  #start function , child must relase it
-  def start_func(self):
-    try:
-      start_file = self.app_path + "/bin/scripts/dcmd_start.sh"
-      if not os.path.isfile(start_file):
-        print("==> Warning, Can't find %s" % start_file)
-        return True
-      start_cmd = "sh " + start_file + " 1 > /dev/null 2>&1 \&"
-      if not self.run_cmd(start_cmd):
-        return False
-    except Exception, e:
-      print "Start_server failed, catch exception :%s" % str(e)      
-      return False
-    return True
-  
-  #start server
-  def start_server(self):
-    if self.app_start == "1":
-      print "==> need start server..."
-      if not self.start_func():
-        return False
-    return True
-  
-  #roll back package
-  def rollback(self):
-    print "==> begin roll_back code, copy %s to %s" % (self.backup_path, self.app_path)
-    #a.copy prv code back
-    if not self.copytree(self.backup_path, self.app_path):
-      print "==> backup online code failed!"
-      return False
-    #b.stop server
-    if not self.stop_server():
-      return False
-    #c.start server
-    if not self.start_server():
-      return False
-
-    if not self.check_server():
+    remove_cmd = "rm -rf %s/%s/* " % self.svr_back_running_
+    if not self._run_cmd(remove_cmd):
+      self.install_success_ = False
+      self.install_errmsg_ = "Failed to remove backup running, cmd:%s" % remove_cmd
       return False
     return True
 
@@ -467,7 +280,7 @@ def main():
       return
 
     print("\nSTEP 7: Move service package to running.........\n")
-    if not install.move_package_to_running()
+    if not install.move_package_to_running():
       install.output_result()
       return
 
@@ -493,7 +306,7 @@ def main():
     install.install_success_ = True
   except Exception, e:
     print "Failed to install in step:%d, Exception:%s" % (step, e)
-    install.install_errmsg_ = str(e)
+    install.install_errmsg_ = "Failed to install for exception: %s" % e
     install.install_success_ = False
  
   install.output_result()
