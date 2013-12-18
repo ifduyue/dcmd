@@ -3,9 +3,10 @@ import os
 import commands
 import shutil
 import sys
+import traceback
 
 
-INSTALL_BASE_PATH="/var/dcmd/"
+INSTALL_BASE_PATH="/home/diaowenbo/dcmd/"
 RESERVE_PACKAGE_NUM = 5
 
 
@@ -18,11 +19,14 @@ class DcmdInstall():
     self.svr_repo_ = os.environ.get('DCMD_SVR_REPO')
     self.svr_user_ = os.environ.get('DCMD_SVR_USER')
     self.svr_ip_ = os.environ.get('DCMD_SVR_IP')
-    self.is_svr_update_env_ = (int)(os.environ.get('DCMD_SVR_UPDATE_ENV'))
-    self.is_svr_update_tag_ = (int)(os.environ.get('DCMD_SVR_UPDATE_TAG'))
+    self.is_svr_update_env_ = os.environ.get('DCMD_SVR_UPDATE_ENV')
+    self.is_svr_update_env_ = int(self.is_svr_update_env_) if self.is_svr_update_env_ and len(self.is_svr_update_env_) else 0
+    self.is_svr_update_tag_ = os.environ.get('DCMD_SVR_UPDATE_TAG')
+    self.is_svr_update_tag_ = int(self.is_svr_update_tag_) if self.is_svr_update_tag_ and len(self.is_svr_update_tag_) else 0
     self.svr_env_v_ = os.environ.get('DCMD_SVR_ENV_V')
     self.svr_out_file_ = os.environ.get('DCMD_SVR_OUT_FILE')
-    self.is_svr_process_ = (int)(os.environ.get('DCMD_SVR_PROCESS'))
+    self.is_svr_process_ = os.environ.get('DCMD_SVR_PROCESS')
+    self.is_svr_process_ = int(self.is_svr_process_) if self.is_svr_process_ and len(self.is_svr_process_) else 0
     self.svr_package_main_name_ = self.svr_name_ + "_" + self.svr_version_
     self.svr_package_ = self.svr_package_main_name_ + ".tar.gz"
     self.svr_home_ = INSTALL_BASE_PATH + self.svr_name_
@@ -31,7 +35,8 @@ class DcmdInstall():
     self.svr_version_file_ = os.path.join(self.svr_home_, "version")
     self.svr_back_path_ = os.path.join(self.svr_home_, "back")
     self.svr_back_running_ = os.path.join(self.svr_back_path_, "running")
-    self.svr_tmp_path_ = os.path.join(self.svr_home, "tmp")
+    self.svr_tmp_path_ = os.path.join(self.svr_home_, "tmp")
+    self.svr_tmp_service_path_ = os.path.join(self.svr_tmp_path_, self.svr_package_main_name_)
     self.svr_online_version_ = ""
     self.svr_packages_ = []
     self.install_errmsg_ = ""
@@ -76,12 +81,12 @@ class DcmdInstall():
       print "Version file exists, file:%s." % self.svr_version_file_
       with open(self.svr_version_file_, 'r') as f:
         self.svr_online_version_ = f.read()
-        print "Online version is:%s" % svr_online_version_
-        if svr_online_version_ == self.svr_version_:
+        print "Online version is:%s" % self.svr_online_version_
+        if self.svr_online_version_ == self.svr_version_:
           print "Version is same, version:%s" % self.svr_version_
           return True
         else:
-          print "Version is not same, running version:%s, install version:%s" % (svr_online_version_, self.svr_version_)
+          print "Version is not same, running version:%s, install version:%s" % (self.svr_online_version_, self.svr_version_)
           return False
     print "Version file doesn't exist, version file:%s" % self.svr_version_file_
     return False
@@ -89,7 +94,7 @@ class DcmdInstall():
   #create version file to save version
   def create_version_file(self):
     print "Save version[%s] to %s" % (self.svr_version_, self.svr_version_file_)
-    with open(self.svr_version_file, 'w') as f:
+    with open(self.svr_version_file_, 'w') as f:
       f.write(self.svr_version_)
   
   #remove current version file
@@ -105,7 +110,7 @@ class DcmdInstall():
         f.write("errmsg=")
     else:
       with open(self.svr_out_file_, 'w') as f:
-        f.write("state=failuer\n")
+        f.write("state=failure\n")
         f.write("errmsg=%s" % self.install_errmsg_)
 
   #download service package
@@ -124,10 +129,10 @@ class DcmdInstall():
       if os.path.isfile(tmp_file):
           self._remove(tmp_file)
       download_path_file = self.svr_repo_ + "/" + self.svr_name_ + "/" + self.svr_package_
-      print "wget package file:%s" % download_path_file
-      wget_cmd = "wget " + download_path_file + " -P " + self.svr_tmp_path_
-      if not self._run_cmd(wget_cmd):
-        self.install_errmsg_ = "Failure to download package:%s" % download_path_file
+      print "svn package file:%s" % download_path_file
+      svn_cmd = "svn export %s %s" % (download_path_file, os.path.join(self.svr_tmp_path_,self.svr_package_))
+      if not self._run_cmd(svn_cmd):
+        self.install_errmsg_ = "Failure to download package, cmd:%s" % svn_cmd
         self.install_success_ = False
         return False
       shutil.copy(tmp_file, save_file)
@@ -136,40 +141,47 @@ class DcmdInstall():
       self.install_errmsg_ = "Failure to unpack package:%s" % tmp_file
       self.install_success_ = False
       return False
-    tmp_conf_dir = os.path.join(self.svr_tmp_path_, self.svr_package_main_name_)
-    if not os.path.isdir(tmp_conf_dir):
-      os.mkdir(tmp_conf_dir)
+    remove_cmd = "rm -f %s" % tmp_file
+    if not self._run_cmd(remove_cmd):
+      self.install_errmsg_ = "Failure to remove tmp package:%s" % tmp_file
+      self.install_success_ = False
+      return False
     return True
 
   #download service config
   def download_config(self):
-    tmp_conf_path = os.path.join(self.svr_tmp_path_, "conf")
+    tmp_conf_path = os.path.join(self.svr_tmp_service_path_, "conf")
     running_conf_path = os.path.join(self.svr_running_home_, "conf")
-    if not os.path.isdir(tmp_conf_dir):
-        os.mkdir(tmp_conf_dir)
+    print "tmp_conf_path:%s" % tmp_conf_path
+    if not os.path.isdir(tmp_conf_path):
+      os.mkdir(tmp_conf_path)
     if not self.is_svr_update_env_:
-      if os.path.isdir(self.running_conf_path):
+      if os.path.isdir(running_conf_path) and len(os.listdir(running_conf_path)):
         #copy config to tmp conf
-        if not self._run_cmd("rm -fr %s" % tmp_conf_path):
+        exec_cmd = "rm -fr %s" % tmp_conf_path
+        if not self._run_cmd(exec_cmd):
           self.install_success_ = False
-          self.install_errmsg_ = "Failed to clean tmp conf"
+          self.install_errmsg_ = "Failed to clean tmp conf, cmd=%s" % exec_cmd
           return False
-        if not self._run_cmd("cp -r %s/*  %s" % (running_conf_path, tmp_conf_path)):
+        exec_cmd = "cp -r %s  %s" % (running_conf_path, tmp_conf_path)
+        if not self._run_cmd(exec_cmd):
           self.install_success_ = False
-          self.install_errmsg_ = "Failed to copy running config to tmp_config"
+          self.install_errmsg_ = "Failed to copy running config to tmp_config, cmd:%s" % exec_cmd
           return False
       return True
     # download conf from svn
     svn_path = self.svr_repo_ + "/conf/" + self.svr_name_ + "/" + self.svr_pool_ + "/" + self.svr_env_v_
-    if not self._run_cmd("svn export %s %s" % (svr_path, tmp_conf_path)):
+    svn_cmd = "svn export %s %s" % (svr_path, tmp_conf_path)
+    if not self._run_cmd(svn_cmd):
       self.install_success_ = False
-      self.install_errmsg_ = "Failed to get conf from svn:%s" % svn_path
+      self.install_errmsg_ = "Failed to get conf from svn:%s, cmd:%s" % (svn_path, svn_cmd)
       return False
     return True
 
   #stop service
   def stop_service(self):
     stop_cmd = os.path.join(os.path.join(self.svr_running_home_,"bin"), "stop.sh")
+    if not os.path.isfile(stop_cmd): return True
     stop_cmd = stop_cmd + " "  + self.svr_running_home_
     if not self._run_cmd(stop_cmd):
       self.install_success_ = False
@@ -179,7 +191,8 @@ class DcmdInstall():
 
   #backup running servcie
   def backup_service(self):
-    backup_cmd = "mv -r %s/* %s" % (self.svr_running_home_, self.svr_back_running_)
+    if not os.path.isdir(self.svr_running_home_): return True
+    backup_cmd = "mv  %s %s" % (self.svr_running_home_, self.svr_back_running_)
     if not self._run_cmd(backup_cmd):
       self.install_success_ = False
       self.install_errmsg_ = "Failed to backup running path, cmd:%s" % backup_cmd
@@ -188,7 +201,7 @@ class DcmdInstall():
 
   #move service package to running dir
   def move_package_to_running(self):
-    move_cmd = "mv -r %s/%s/* %s" % (self.svr_tmp_path_, self.svr_package_main_name_, self.svr_running_home_)
+    move_cmd = "mv  %s %s" % (self.svr_tmp_service_path_, self.svr_running_home_)
     if not self._run_cmd(move_cmd):
       self.install_success_ = False
       self.install_errmsg_ = "Failed to move package to  running path, cmd:%s" % move_cmd
@@ -198,6 +211,7 @@ class DcmdInstall():
   #install service
   def install_service(self):
     install_cmd = os.path.join(os.path.join(self.svr_running_home_,"bin"), "install.sh")
+    if not os.path.isfile(install_cmd): return True
     install_cmd = install_cmd + " "  + self.svr_running_home_ + " " + self.svr_back_running_
     if not self._run_cmd(install_cmd):
       self.install_success_ = False
@@ -217,7 +231,7 @@ class DcmdInstall():
 
   #remove backup
   def remove_backup(self):
-    remove_cmd = "rm -rf %s/%s/* " % self.svr_back_running_
+    remove_cmd = "rm -rf %s " % self.svr_back_running_
     if not self._run_cmd(remove_cmd):
       self.install_success_ = False
       self.install_errmsg_ = "Failed to remove backup running, cmd:%s" % remove_cmd
@@ -271,7 +285,7 @@ def main():
       install.output_result()
       return
 
-    print("\STEP 5: Remove version file............\n")
+    print("\nSTEP 5: Remove version file............\n")
     install.remove_version_file()
 
     print("\nSTEP 6: Backup running service to back........\n")
@@ -305,7 +319,8 @@ def main():
     print("Success to install serivice.\n")
     install.install_success_ = True
   except Exception, e:
-    print "Failed to install in step:%d, Exception:%s" % (step, e)
+    print "Failed to install, Exception:%s" % (e)
+    traceback.print_exc()
     install.install_errmsg_ = "Failed to install for exception: %s" % e
     install.install_success_ = False
  
