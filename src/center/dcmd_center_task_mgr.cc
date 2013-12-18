@@ -13,7 +13,10 @@ DcmdCenterTaskMgr::DcmdCenterTaskMgr(DcmdCenterApp* app) {
   next_cmd_id_ = 0;
 //  watches_ = NULL;
 }
-DcmdCenterTaskMgr::~DcmdCenterTaskMgr() {  Reset(); }
+DcmdCenterTaskMgr::~DcmdCenterTaskMgr() {
+  Reset();
+}
+
 bool DcmdCenterTaskMgr::Start(DcmdTss* tss) {
   // 若已经启动则直接退出
   if (is_start_) return true;
@@ -171,6 +174,7 @@ bool DcmdCenterTaskMgr::ReceiveAgentMasterReply(DcmdTss* tss, ///<tss对象
   }
   return true;
 }
+
 bool DcmdCenterTaskMgr::ReceiveAgentClosed(DcmdTss* , string const& ) {
   // 当前什么也无需做
   return true;
@@ -181,7 +185,6 @@ bool DcmdCenterTaskMgr::ReceiveUiClosed(DcmdTss* , CWX_UINT32 ) {
 //  if (watches_) watches_->CancelWatch(conn_id);
   return true;
 }
-
 
 bool DcmdCenterTaskMgr::ReceiveAgentSubtaskConfirm(DcmdTss* , string const& , string )
 {
@@ -211,6 +214,7 @@ bool DcmdCenterTaskMgr::ReceiveAgentSubtaskResult(DcmdTss* tss,
   if (!task) return true;
   return Schedule(tss, task);
 }
+
 void DcmdCenterTaskMgr::SetAgentTaskProcess(string const& str_subtask_id,
   char const* process)
 {
@@ -1023,7 +1027,7 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdRetryTask(DcmdTss* tss, uint32_t t
   if (task->is_valid_) return dcmd_api::DCMD_STATE_SUCCESS;
   if (!AnalizeTask(tss, task)) return dcmd_api::DCMD_STATE_FAILED;
   // 插入start的命令
-  if (!InsertCommand(tss, false, uid, task->task_id_,
+  if (!InsertCommand(tss, true, uid, task->task_id_,
     0, "", 0, task->service_.c_str(), "", dcmd_api::CMD_RETRY_TASK,
     dcmd_api::COMMAND_SUCCESS, ""))
   {
@@ -1312,7 +1316,7 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdExecSubtask(DcmdTss* tss, uint64_t
     cmd_obj->task_ = subtask->task_;
     cmd_obj->subtask_ = subtask;
     cmd_obj->agent_ = NULL;
-    cmd_obj->cmd_id_ = InsertCommand(tss, true, uid, subtask->task_id_,
+    cmd_obj->cmd_id_ = InsertCommand(tss, false, uid, subtask->task_id_,
       subtask_id, cmd_obj->svr_pool_.c_str(), cmd_obj->svr_pool_id_,
       cmd_obj->service_.c_str(), cmd_obj->agent_ip_.c_str(),
       cmd_obj->cmd_type_, dcmd_api::COMMAND_DOING, "");
