@@ -76,6 +76,7 @@ int DcmdCenterH4AgentTask::onTimeoutCheck(CwxMsgBlock*& , CwxTss* pThrEnv) {
     }
     // 调度任务
     if (is_master_) {
+      app_->GetTaskMysql()->commit();
       is_master_ = app_->GetTaskMgr()->Schedule(tss);
       if (!is_master_) app_->GetTaskMgr()->Stop(tss);
     }
