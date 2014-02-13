@@ -13,7 +13,7 @@ CWINUX_USING_NAMESPACE
 
 namespace dcmd {
 // 操作指令的参数的前缀
-const char* const kAgentOprArgPrex = "DCMD";
+const char* const kAgentOprArgPrex = "DCMD_";
 // center的task type 文件的前缀
 const char* const kTaskTypeFilePrex = "dcmd_task_";
 // center的task type 文件的后缀

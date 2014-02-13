@@ -2,10 +2,10 @@
 #define __DCMD_AGENT_APP_H__
 #include <CwxAppFramework.h>
 #include "dcmd_macro.h"
+#include "dcmd_tss.h"
 #include "dcmd_agent_config.h"
 #include "dcmd_agent_def.h"
 #include "dcmd_process.h"
-#include "../cmn/dcmd_tss.h"
 
 namespace dcmd {
 const char* const kDcmdAgentVersion = "0.1.0";

@@ -65,14 +65,15 @@ void DcmdCenterOprTask::noticeConnClosed(CWX_UINT32 , CWX_UINT32 , CWX_UINT32 ui
 bool DcmdCenterOprTask::FetchOprCmd(DcmdTss* tss) {
   ///从db中获取
   Mysql* my = app_->GetAdminMysql();
+  if (!app_->CheckMysql(my)){
+    CwxCommon::snprintf(tss->m_szBuf2K, 2047, "Failure to connect mysql, error=%s", my->getErrMsg());
+    CWX_ERROR((tss->m_szBuf2K));
+    err_msg_ = tss->m_szBuf2K;
+    return false;
+  }
+  my->commit();
   // 首先从cache中获取
   if (!app_->GetOprCmdCache()->GetOprCmd(opr_cmd_id_, opr_cmd_)){
-    if (!app_->CheckMysql(my)){
-      CwxCommon::snprintf(tss->m_szBuf2K, 2047, "Failure to connect mysql, error=%s", my->getErrMsg());
-      CWX_ERROR((tss->m_szBuf2K));
-      err_msg_ = tss->m_szBuf2K;
-      return false;
-    }
     //从mysql获取opr指令的信息
     CwxCommon::snprintf(tss->sql_,
       DcmdTss::kMaxSqlBufSize,
@@ -85,6 +86,7 @@ bool DcmdCenterOprTask::FetchOprCmd(DcmdTss* tss) {
       CwxCommon::snprintf(tss->m_szBuf2K, 2047, "Failure to fetch opr cmd from mysql, Sql:%s error=%s", tss->sql_, my->getErrMsg());
       CWX_ERROR((tss->m_szBuf2K));
       err_msg_ = tss->m_szBuf2K;
+      my->disconnect();
       return false;
     }
     ///获取sql的结果
@@ -242,6 +244,7 @@ bool DcmdCenterOprTask::FetchOprCmd(DcmdTss* tss) {
       CWX_ERROR((tss->m_szBuf2K));
       err_msg_ = tss->m_szBuf2K;
       my->rollback();
+      my->disconnect();
       return false;
     }
     is_exec_sql = true;
@@ -257,6 +260,7 @@ bool DcmdCenterOprTask::FetchOprCmd(DcmdTss* tss) {
       CWX_ERROR((tss->m_szBuf2K));
       err_msg_ = tss->m_szBuf2K;
       my->rollback();
+      my->disconnect();
       return false;
     }
   }
