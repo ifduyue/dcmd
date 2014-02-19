@@ -200,6 +200,10 @@ void DcmdAgentApp::onTime(CwxTimeValue const& current) {
     // 清除失效的任务输出结果
     CheckExpiredTaskOutput(now);
   }
+  if (!subtask_map_.size() && !opr_cmd_map_.size()) {
+    int status = 0;
+    ::waitpid(pid_, &status, WNOHANG);
+  }
   // 检查任务、操作指令
   CheckTaskAndOprCmd();
 }
@@ -211,10 +215,10 @@ void DcmdAgentApp::onSignal(int signum){
     CWX_INFO(("Recieve exit signal, exit right now."));
     this->stop();
     break;
-  case SIGCHLD:
+//  case SIGCHLD:
     // cgi的进程退出，进行进程状态信息的回收，否则将形成僵尸进程
-    wait(&status);
-    break;
+//    wait(&status);
+//    break;
   default:
     // 其他信号，全部忽略
     CWX_INFO(("Recieve signal=%d, ignore it.", signum));
@@ -698,6 +702,7 @@ void DcmdAgentApp::CheckSvrTask(AgentSvrObj* svr_obj) {
 
 bool DcmdAgentApp::CheckOprCmd(AgentOprCmd* opr_cmd, bool is_cancel){
   int ret=0;
+  int status = 0;
   string out_file;
   string script_file;
   string err_msg;
@@ -752,6 +757,9 @@ bool DcmdAgentApp::CheckOprCmd(AgentOprCmd* opr_cmd, bool is_cancel){
       err_msg = "Timeout";
       break;
     }
+    if (2 == ret) {//进程非正常退出
+      status = opr_cmd->processor_->return_code();
+    }
     // 获取进程的输出
     off_t size = CwxFile::getFileSize(out_file.c_str());
     if (-1 == size) {
@@ -784,6 +792,7 @@ bool DcmdAgentApp::CheckOprCmd(AgentOprCmd* opr_cmd, bool is_cancel){
   ReplyOprCmd(opr_cmd->center_,
     opr_cmd->msg_taskid_,
     is_success,
+    status,
     content.c_str(),
     err_msg.c_str());
   CwxFile::rmFile(script_file.c_str());
@@ -1459,6 +1468,7 @@ bool DcmdAgentApp::ExecOprCmd(AgentOprCmd* opr_cmd, string& err_msg, DcmdProcess
 int DcmdAgentApp::ReplyOprCmd(AgentCenter* center,
   uint32_t msg_task_id,
   bool is_success,
+  int   status,
   char const* result,
   char const* err_msg)
 {
@@ -1467,6 +1477,7 @@ int DcmdAgentApp::ReplyOprCmd(AgentCenter* center,
   reply.set_state(is_success?dcmd_api::DCMD_STATE_SUCCESS:dcmd_api::DCMD_STATE_FAILED);
   reply.set_result(result?result:"", result?strlen(result):0);
   reply.set_err(err_msg?err_msg:"", err_msg?strlen(err_msg):0);
+  reply.set_status(status);
   if (!reply.SerializeToString(&proto_str_)) {
     CWX_ERROR(("Failure to pack opr reply message."));
     return -1; // 关闭连接
@@ -1602,6 +1613,7 @@ int DcmdAgentApp::OprCmdRecieved(CwxMsgBlock*& msg, AgentCenter* center) {
     return ReplyOprCmd(center,
       msg->event().getMsgHeader().getTaskId(),
       false,
+      0,
       "",
       err_2k_);
   }

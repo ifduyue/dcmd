@@ -172,6 +172,7 @@ class DcmdAgentApp : public CwxAppFramework{
   int ReplyOprCmd(AgentCenter* center,
     uint32_t msg_task_id,
     bool  is_success,
+    int   status,
     char const* result,
     char const* err_msg);
   // 处理report的结果。 -1：失败并关闭连接；0：成功

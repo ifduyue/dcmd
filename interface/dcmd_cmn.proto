@@ -158,6 +158,7 @@ message AgentOprCmdReply {
   required  string     result = 2;
   required  string     err= 3; 
   optional  string     ip=4;
+  optional  int32      status =5; 
 }
 
 

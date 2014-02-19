@@ -12,6 +12,7 @@ namespace  dcmd {
       recv_msg_ = NULL;
       is_send_failed_ = false;
       is_exec_success = true;
+      status_ = 0;
     }
     ~DcmdCenterAgentOprReply(){
       if (recv_msg_) CwxMsgBlockAlloc::free(recv_msg_);
@@ -24,6 +25,8 @@ namespace  dcmd {
     bool                is_send_failed_;
     // 对方执行是否成功
     bool                is_exec_success;
+    // 执行的退出代码
+    int                 status_;
     // 执行的结果
     string              result_;
     // 执行的错误信息

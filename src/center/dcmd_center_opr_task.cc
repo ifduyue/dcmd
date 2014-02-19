@@ -21,6 +21,7 @@ void DcmdCenterOprTask::noticeRecvMsg(CwxMsgBlock*& msg, CwxTss* ThrEnv, bool& )
       if (!reply.ParseFromString(tss->proto_str_)) {
         CWX_ERROR(("Failed to unpack msg from %s.", agent_conns_[i].agent_ip_.c_str()));
         agent_replys_[i].is_exec_success = false;
+        agent_replys_[i].status_ = 0;
         agent_replys_[i].err_msg_ = "Failed to unpack msg";
       } else {
         if (reply.state()==dcmd_api::DCMD_STATE_SUCCESS) {
@@ -30,6 +31,7 @@ void DcmdCenterOprTask::noticeRecvMsg(CwxMsgBlock*& msg, CwxTss* ThrEnv, bool& )
           agent_replys_[i].is_exec_success = false;
           agent_replys_[i].err_msg_ = reply.err();
         }
+        agent_replys_[i].status_ = reply.status();
       }
       return ;
     }
@@ -380,6 +382,7 @@ void DcmdCenterOprTask::Reply(CwxTss* pThrEnv) {
       agent_reply->set_ip(agent_conns_[index].agent_ip_);
       agent_reply->set_result("");
       agent_reply->set_err("");
+      agent_reply->set_status(agent_replys_[index].status_);
       if (agent_replys_[index].is_send_failed_){
         agent_reply->set_err("Lost connected.");
         agent_reply->set_state(dcmd_api::DCMD_STATE_FAILED);
