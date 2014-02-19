@@ -202,13 +202,13 @@ void DcmdAgentApp::onTime(CwxTimeValue const& current) {
   }
   if (!subtask_map_.size() && !opr_cmd_map_.size()) {
     int status = 0;
-    ::waitpid(pid_, &status, WNOHANG);
+    ::waitpid(-1, &status, WNOHANG);
   }
   // 检查任务、操作指令
   CheckTaskAndOprCmd();
 }
 void DcmdAgentApp::onSignal(int signum){
-  int status = 0;
+//  int status = 0;
   switch(signum){
   case SIGQUIT: 
     // 若监控进程通知退出，则推出
