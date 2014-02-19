@@ -1154,6 +1154,13 @@ class AgentOprCmdReply : public ::google::protobuf::Message {
   inline ::std::string* mutable_ip();
   inline ::std::string* release_ip();
   
+  // optional int32 status = 5;
+  inline bool has_status() const;
+  inline void clear_status();
+  static const int kStatusFieldNumber = 5;
+  inline ::google::protobuf::int32 status() const;
+  inline void set_status(::google::protobuf::int32 value);
+  
   // @@protoc_insertion_point(class_scope:dcmd_api.AgentOprCmdReply)
  private:
   inline void set_has_state();
@@ -1164,16 +1171,19 @@ class AgentOprCmdReply : public ::google::protobuf::Message {
   inline void clear_has_err();
   inline void set_has_ip();
   inline void clear_has_ip();
+  inline void set_has_status();
+  inline void clear_has_status();
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
   ::std::string* result_;
   ::std::string* err_;
-  ::std::string* ip_;
   int state_;
+  ::google::protobuf::int32 status_;
+  ::std::string* ip_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(4 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(5 + 31) / 32];
   
   friend void  protobuf_AddDesc_dcmd_5fcmn_2eproto();
   friend void protobuf_AssignDesc_dcmd_5fcmn_2eproto();
@@ -2776,6 +2786,28 @@ inline ::std::string* AgentOprCmdReply::release_ip() {
     ip_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
     return temp;
   }
+}
+
+// optional int32 status = 5;
+inline bool AgentOprCmdReply::has_status() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void AgentOprCmdReply::set_has_status() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void AgentOprCmdReply::clear_has_status() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void AgentOprCmdReply::clear_status() {
+  status_ = 0;
+  clear_has_status();
+}
+inline ::google::protobuf::int32 AgentOprCmdReply::status() const {
+  return status_;
+}
+inline void AgentOprCmdReply::set_status(::google::protobuf::int32 value) {
+  set_has_status();
+  status_ = value;
 }
 
 
