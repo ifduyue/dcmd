@@ -20,8 +20,8 @@
 
 namespace dcmd {
   // 服务版本信息定义
-  char const* const kDcmdCenterVersion = "0.1.0";
-  char const* const kDcmdCenterModifyDate = "2013-03-08 08:08:08";
+  char const* const kDcmdCenterVersion = "0.1.1";
+  char const* const kDcmdCenterModifyDate = "2014-03-01 08:08:08";
   uint32_t const kDcmdMysqlConnectTimeout = 3;
   // Center服务的app对象
   class DcmdCenterApp : public CwxAppFramework {

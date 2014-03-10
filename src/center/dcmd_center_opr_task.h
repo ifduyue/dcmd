@@ -126,6 +126,8 @@ class DcmdCenterOprTask : public CwxTaskBoardTask {
     void Reply(CwxTss* pThrEnv);
     ///从数据库中获取opr指令信息；true：成功；false：失败
     bool FetchOprCmd(DcmdTss* tss);
+    ///检查脚本是否改变
+    bool IsScriptChanged(DcmdTss* tss);
  public:
   // client的消息id
   uint32_t                     client_msg_id_;

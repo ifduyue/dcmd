@@ -75,7 +75,8 @@ bool DcmdCenterOprTask::FetchOprCmd(DcmdTss* tss) {
   }
   my->commit();
   // 首先从cache中获取
-  if (!app_->GetOprCmdCache()->GetOprCmd(opr_cmd_id_, opr_cmd_)){
+  if (!app_->GetOprCmdCache()->GetOprCmd(opr_cmd_id_, opr_cmd_) ||
+    IsScriptChanged(tss)){
     //从mysql获取opr指令的信息
     CwxCommon::snprintf(tss->sql_,
       DcmdTss::kMaxSqlBufSize,
@@ -269,6 +270,21 @@ bool DcmdCenterOprTask::FetchOprCmd(DcmdTss* tss) {
   if (is_exec_sql) my->commit();
   return true;
 }
+
+///检查脚本是否改变
+bool DcmdCenterOprTask::IsScriptChanged(DcmdTss* tss) {
+  string opr_file;
+  string file_content;
+  string err_msg;
+  DcmdCenterConf::opr_cmd_file(app_->config().common().opr_script_path_,
+    opr_cmd_.opr_file_, opr_file);
+  if (!tss->ReadFile(opr_file.c_str(), file_content, err_msg)){
+    CWX_ERROR((err_msg_.c_str()));
+    return true;
+  }
+  return file_content != opr_cmd_.opr_script_content_;
+}
+
 int DcmdCenterOprTask::noticeActive(CwxTss* ThrEnv) {
   DcmdTss* tss= (DcmdTss*)ThrEnv;
   setTaskState(TASK_STATE_WAITING);
@@ -290,8 +306,8 @@ int DcmdCenterOprTask::noticeActive(CwxTss* ThrEnv) {
   opr_cmd.set_timeout(opr_cmd_.opr_timeout_);
   opr_cmd.set_script(opr_cmd_.opr_script_content_);
   dcmd_api::KeyValue* kv;
-  map<string, string>::iterator iter = opr_cmd_.opr_args_map_.begin();
-  while(iter != opr_cmd_.opr_args_map_.end()) {
+  map<string, string>::iterator iter = opr_args_.begin();
+  while(iter != opr_args_.end()) {
     kv = opr_cmd.add_args();
     kv->set_key(iter->first);
     kv->set_value(iter->second);

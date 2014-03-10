@@ -116,10 +116,6 @@ int parse_arg(int argc, char**argv) {
     printf("No port, set by -P\n");
     return -1;
   }
-  if (!g_agent_ips.length()){
-    printf("No agent ip, set by -I\n");
-    return -1;
-  }
   if (!g_opr_id.length()) {
     printf("No opr id, set by -o\n");
     return -1;
@@ -150,8 +146,11 @@ int main(int argc ,char** argv) {
     list<string> ips;
     CwxCommon::split(g_agent_ips, ips,dcmd::kItemSplitChar);
     list<string>::iterator iter = ips.begin();
+    string agent_ip;
     while (iter != ips.end()) {
-      *query.add_agents() = *iter;
+      agent_ip = *iter;
+      CwxCommon::trim(agent_ip);
+      if (agent_ip.length()) *query.add_agents() = agent_ip;
       ++iter;
     }
   }
