@@ -86,8 +86,8 @@ bool DcmdCenterTaskMgr::ReceiveCmd(DcmdTss* tss, dcmd_api::UiTaskCmd const& cmd,
         cmd.uid());
       break;
     case dcmd_api::CMD_CANCEL_SVR_SUBTASK:
-      state = TaskCmdCancelSvrSubtask(tss, strtoul(cmd.task_id().c_str(), NULL, 10),
-        cmd.svr_name().c_str(), cmd.ip().c_str(), cmd.uid());
+      state = TaskCmdCancelSvrPoolSubtask(tss, strtoul(cmd.task_id().c_str(), NULL, 10),
+        cmd.svr_pool().c_str(), cmd.ip().c_str(), cmd.uid());
       break;
     case dcmd_api::CMD_DO_SUBTASK:
       state = TaskCmdExecSubtask(tss, strtoull(cmd.subtask_id().c_str(), NULL, 10),
@@ -297,7 +297,7 @@ bool DcmdCenterTaskMgr::LoadAllDataFromDb(DcmdTss* tss) {
 bool DcmdCenterTaskMgr::LoadNewTask(DcmdTss* tss, bool is_first) {
   list<DcmdCenterTask*> tasks;
   CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize, "select task_id, task_name, task_cmd, depend_task_id,"\
-    "svr_id, svr_name, gid, group_name, tag, update_env, update_tag, state,"\
+    "svr_id, svr_name, gid, group_name, svr_path, tag, update_env, update_tag, state,"\
     "freeze, valid, pause, concurrent_num, concurrent_rate, timeout, auto, process, task_arg, "\
     "err_msg from dcmd_task where task_id > %d order by task_id asc", next_task_id_);
   if (!mysql_->query(tss->sql_)){
@@ -319,20 +319,21 @@ bool DcmdCenterTaskMgr::LoadNewTask(DcmdTss* tss, bool is_first) {
     task->service_ = mysql_->fetch(5, is_null);
     task->group_id_ = strtoul(mysql_->fetch(6, is_null), NULL, 10);
     task->group_name_ = mysql_->fetch(7, is_null);
-    task->tag_ = mysql_->fetch(8, is_null);
-    task->update_env_ = strtoul(mysql_->fetch(9, is_null), NULL, 10)?true:false;
-    task->update_tag_ = strtoul(mysql_->fetch(10, is_null), NULL, 10)?true:false;
-    task->state_ = strtoul(mysql_->fetch(11, is_null), NULL, 10);
-    task->is_freezed_ = strtoul(mysql_->fetch(12, is_null), NULL, 10)?true:false;
-    task->is_valid_ = strtoul(mysql_->fetch(13, is_null), NULL, 10)?true:false;
-    task->is_pause_ = strtoul(mysql_->fetch(14, is_null), NULL, 10)?true:false;
-    task->max_current_num_ = strtoul(mysql_->fetch(15, is_null), NULL, 10);
-    task->max_current_rate_ = strtoul(mysql_->fetch(16, is_null), NULL, 10);
-    task->timeout_ = strtoul(mysql_->fetch(17, is_null), NULL, 10);
-    task->is_auto_ = strtoul(mysql_->fetch(18, is_null), NULL, 10)?true:false;
-    task->is_output_process_ = strtoul(mysql_->fetch(19, is_null), NULL, 10)?true:false;
-    task->arg_xml_ = mysql_->fetch(20, is_null);
-    task->err_msg_ = mysql_->fetch(21, is_null);
+    task->svr_path_ = mysql_->fetch(8, is_null);
+    task->tag_ = mysql_->fetch(9, is_null);
+    task->update_env_ = strtoul(mysql_->fetch(10, is_null), NULL, 10)?true:false;
+    task->update_tag_ = strtoul(mysql_->fetch(11, is_null), NULL, 10)?true:false;
+    task->state_ = strtoul(mysql_->fetch(12, is_null), NULL, 10);
+    task->is_freezed_ = strtoul(mysql_->fetch(13, is_null), NULL, 10)?true:false;
+    task->is_valid_ = strtoul(mysql_->fetch(14, is_null), NULL, 10)?true:false;
+    task->is_pause_ = strtoul(mysql_->fetch(15, is_null), NULL, 10)?true:false;
+    task->max_current_num_ = strtoul(mysql_->fetch(16, is_null), NULL, 10);
+    task->max_current_rate_ = strtoul(mysql_->fetch(17, is_null), NULL, 10);
+    task->timeout_ = strtoul(mysql_->fetch(18, is_null), NULL, 10);
+    task->is_auto_ = strtoul(mysql_->fetch(19, is_null), NULL, 10)?true:false;
+    task->is_output_process_ = strtoul(mysql_->fetch(20, is_null), NULL, 10)?true:false;
+    task->arg_xml_ = mysql_->fetch(21, is_null);
+    task->err_msg_ = mysql_->fetch(22, is_null);
     next_task_id_ = task->task_id_;
     // 将任务添加到任务列表中
     tasks.push_back(task);
@@ -1219,13 +1220,14 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdCancelSubtask(DcmdTss* tss, uint64
   if (!cmd_id) return dcmd_api::DCMD_STATE_FAILED;
   // 发送cancel命令
   dcmd_api::AgentTaskCmd cmd;
-  FillCtrlCmd(cmd, cmd_id, dcmd_api::CMD_CANCEL_SUBTASK, subtask->ip_, subtask->service_, subtask);
+  FillCtrlCmd(cmd, cmd_id, dcmd_api::CMD_CANCEL_SUBTASK, subtask->ip_,
+    subtask->service_, subtask->svr_pool_name_, subtask);
   DcmdCenterH4AgentTask::SendAgentCmd(app_, tss, subtask->ip_, 0, &cmd);
   return dcmd_api::DCMD_STATE_SUCCESS;
 }
 
-dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdCancelSvrSubtask(DcmdTss* tss, uint32_t task_id,
-  char const* serivce, char const* agent_ip, uint32_t uid)
+dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdCancelSvrPoolSubtask(DcmdTss* tss, uint32_t task_id,
+  char const* serivce_pool, char const* agent_ip, uint32_t uid)
 {
   DcmdCenterTask* task =  GetTask(task_id);
   // 加载任务
@@ -1244,14 +1246,16 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdCancelSvrSubtask(DcmdTss* tss, uin
     tss->err_msg_ = "Task is in freezed state.";
     return dcmd_api::DCMD_STATE_FAILED;
   }
+  uint32_t svr_pool_id = task->GetSvrPoolId(serivce_pool);
   // 将cancel命令插入数据库
-  uint64_t cmd_id = InsertCommand(tss, true, uid, task_id, 0,
-    "", 0, serivce, agent_ip, dcmd_api::CMD_CANCEL_SVR_SUBTASK,
+  uint64_t cmd_id = InsertCommand(tss, true, uid, task_id, 0, serivce_pool,
+    svr_pool_id, task->service_.c_str(), agent_ip, dcmd_api::CMD_CANCEL_SVR_SUBTASK,
     dcmd_api::COMMAND_SUCCESS, "");
   if (!cmd_id) return dcmd_api::DCMD_STATE_FAILED;
   // 发送cancel命令
   dcmd_api::AgentTaskCmd cmd;
-  FillCtrlCmd(cmd, cmd_id, dcmd_api::CMD_CANCEL_SVR_SUBTASK, agent_ip, serivce, NULL);
+  FillCtrlCmd(cmd, cmd_id, dcmd_api::CMD_CANCEL_SVR_SUBTASK, agent_ip,
+    task->service_, serivce_pool, NULL);
   DcmdCenterH4AgentTask::SendAgentCmd(app_, tss, agent_ip, 0, &cmd);
   return dcmd_api::DCMD_STATE_SUCCESS;
 }
@@ -1780,6 +1784,7 @@ void DcmdCenterTaskMgr::FillTaskCmd(dcmd_api::AgentTaskCmd& cmd,
   cmd.set_update_env(subtask.task_->update_env_);
   cmd.set_update_ver(subtask.task_->update_tag_);
   cmd.set_output_process(subtask.task_->is_output_process_);
+  cmd.set_svr_path(subtask.task_->svr_path_);
   cmd.set_script(subtask.task_->task_cmd_script_);
   dcmd_api::KeyValue* kv = NULL;
   map<string, string>::iterator iter = subtask.task_->args_.begin();

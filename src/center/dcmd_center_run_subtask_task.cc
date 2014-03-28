@@ -4,8 +4,8 @@ namespace dcmd {
 void DcmdCenterRunSubtaskTask::noticeTimeout(CwxTss* ) {
   err_msg_ = "Timeout";
   setTaskState(CwxTaskBoardTask::TASK_STATE_FINISH);
-  CWX_DEBUG(("Run-subtask Task is timeout , task_id=%u, ip=%s, service=%s",
-    getTaskId(),  agent_ip_.c_str(), svr_name_.length()?svr_name_.c_str():""));
+  CWX_DEBUG(("Run-subtask Task is timeout , task_id=%u, ip=%s, service_pool=%s",
+    getTaskId(),  agent_ip_.c_str(), svr_pool_name_.length()?svr_pool_name_.c_str():""));
 }
 void DcmdCenterRunSubtaskTask::noticeRecvMsg(CwxMsgBlock*& msg, CwxTss* , bool&) {
   recv_msg_ = msg;
@@ -28,7 +28,7 @@ int DcmdCenterRunSubtaskTask::noticeActive(CwxTss* ThrEnv) {
   CwxMsgBlock* msg=NULL;
   dcmd_api::AgentRunningTask query;
   query.set_ip(agent_ip_);
-  query.set_svr_name(svr_name_);
+  query.set_svr_pool(svr_pool_name_);
   if (!query.SerializeToString(&tss->proto_str_)) {
     err_msg_ = "Failure to package run subtask package";
     CWX_ERROR((err_msg_.c_str()));

@@ -82,10 +82,11 @@ message KeyValue {
 
 message SubTaskInfo {
   required  string   svr_name=1;
-  required  string   task_cmd=2;
-  required  string   task_id=3;
-  required  string   subtask_id=4;
-  required  string   cmd_id=5;
+  required  string   svr_pool=2;
+  required  string   task_cmd=3;
+  required  string   task_id=4;
+  required  string   subtask_id=5;
+  required  string   cmd_id=6;
 }
 
 message OprInfo {

@@ -76,9 +76,9 @@ class DcmdCenterTaskMgr{
   // cancel具体subtask的执行
   dcmd_api::DcmdState TaskCmdCancelSubtask(DcmdTss* tss, uint64_t subtask_id,
     uint32_t uid);
-  // cancel一个服务的所有任务的执行
-  dcmd_api::DcmdState TaskCmdCancelSvrSubtask(DcmdTss* tss, uint32_t task_id,
-    char const* serivce, char const* agent_ip, uint32_t uid);
+  // cancel一个服务池的所有任务的执行
+  dcmd_api::DcmdState TaskCmdCancelSvrPoolSubtask(DcmdTss* tss, uint32_t task_id,
+    char const* serivce_pool, char const* agent_ip, uint32_t uid);
   // 执行具体subtask的执行
   dcmd_api::DcmdState TaskCmdExecSubtask(DcmdTss* tss, uint64_t subtask_id,
     uint32_t uid, DcmdCenterCmd** cmd);
@@ -177,7 +177,7 @@ class DcmdCenterTaskMgr{
    // 设置发送的cancel命令
    inline void FillCtrlCmd(dcmd_api::AgentTaskCmd& cmd, uint64_t cmd_id,
      dcmd_api::CmdType cmd_type, string const& agent_ip,
-     string const& svr_name, DcmdCenterSubtask* subtask
+     string const& svr_name, string const& svr_pool, DcmdCenterSubtask* subtask
      );
  private:
   // app对象

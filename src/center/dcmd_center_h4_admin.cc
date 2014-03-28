@@ -192,7 +192,8 @@ void DcmdCenterH4Admin::QueryAgentRunSubTask(CwxMsgBlock*& msg, DcmdTss* tss) {
   subtask_task->reply_conn_id_ = msg->event().getConnId();
   subtask_task->msg_taskid_ = msg->event().getMsgHeader().getTaskId();
   subtask_task->agent_ip_ = running_subtask_query.ip();
-  subtask_task->svr_name_ = running_subtask_query.svr_name();
+  subtask_task->svr_pool_name_ = running_subtask_query.svr_pool();
+  subtask_task->svr_name_ = "";
   subtask_task->setTaskId(NextMsgTaskId());
   subtask_task->execute(tss);
 }

@@ -22,7 +22,7 @@ message UiTaskOutputReply {
 message UiAgentRunningTask {
   required  int32     client_msg_id=1;
   optional  string    ip=2;
-  optional  string    svr_name=3;
+  optional  string    svr_pool=3;
   required  string    user=4;
   required  string    passwd=5;
 }

@@ -13,7 +13,7 @@ string     g_host;
 uint16_t   g_port = 0;
 int        g_client_id = 0;
 string     g_agent_ip;
-string     g_svr_name;
+string     g_svr_pool;
 string     g_user;
 string     g_passwd;
 ///-1：失败；0：help；1：成功
@@ -30,7 +30,7 @@ int parse_arg(int argc, char**argv)
       printf("-P: server port\n");
       printf("-c: client id\n");
       printf("-i: agent ip.\n");
-      printf("-S: service name.\n");
+      printf("-S: service pool.\n");
       printf("-u: user name.\n");
       printf("-p: user password.\n");
       printf("-h: help\n");
@@ -68,7 +68,7 @@ int parse_arg(int argc, char**argv)
         printf("-S requires an argument.\n");
         return -1;
       }
-      g_svr_name = cmd_option.opt_arg();
+      g_svr_pool = cmd_option.opt_arg();
       break;
     case 'u':
       if (!cmd_option.opt_arg() || (*cmd_option.opt_arg() == '-')) {
@@ -133,7 +133,7 @@ int main(int argc ,char** argv) {
 
   query.set_client_msg_id(g_client_id);
   query.set_ip(g_agent_ip);
-  if (g_svr_name.length()) query.set_svr_name(g_svr_name);
+  if (g_svr_pool.length()) query.set_svr_pool(g_svr_pool);
   query.set_user(g_user);
   query.set_passwd(g_passwd);
   if (!query.SerializeToString(&query_msg)) {
@@ -179,8 +179,9 @@ int main(int argc ,char** argv) {
   } else {
     printf("subtask info:\n");
     for (int i=0; i<reply.result_size(); i++) {
-      printf("svr_name:%s|tasm_cmd:%s|task_id:%s|subtask_id:%s|cmd_id:%s\n",
+      printf("svr_name:%s|svr_pool:%s|tasm_cmd:%s|task_id:%s|subtask_id:%s|cmd_id:%s\n",
         reply.result(i).svr_name().c_str(),
+        reply.result(i).svr_pool().c_str(),
         reply.result(i).task_cmd().c_str(),
         reply.result(i).task_id().c_str(),
         reply.result(i).subtask_id().c_str(),

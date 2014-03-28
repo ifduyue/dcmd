@@ -225,7 +225,7 @@ namespace dcmd {
 
   inline void DcmdCenterTaskMgr::FillCtrlCmd(dcmd_api::AgentTaskCmd& cmd,
     uint64_t cmd_id, dcmd_api::CmdType cmd_type, string const& agent_ip,
-    string const& svr_name, DcmdCenterSubtask* subtask
+    string const& svr_name, string const& svr_pool, DcmdCenterSubtask* subtask
     )
   {
     char buf[64];
@@ -241,7 +241,7 @@ namespace dcmd {
     }
     cmd.set_ip(agent_ip);
     cmd.set_svr_name(svr_name);
-    cmd.set_svr_pool("");
+    cmd.set_svr_pool(svr_pool);
   }
   // 计算任务及svr_pool的信息
   inline bool DcmdCenterTaskMgr::CalcTaskStatsInfo(DcmdTss* tss, bool is_commit, 

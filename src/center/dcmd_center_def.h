@@ -324,6 +324,8 @@ namespace dcmd {
     uint32_t                    group_id_;
     // group的名字
     string                      group_name_;
+    // service的path
+    string                      svr_path_;
     // tag
     string                      tag_;
     // 是否更新环境

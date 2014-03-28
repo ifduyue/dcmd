@@ -8,8 +8,8 @@
 #include "dcmd_process.h"
 
 namespace dcmd {
-const char* const kDcmdAgentVersion = "0.1.1";
-const char* const kDcmdAgentModifyDate = "2014-03-1 08:08:08";
+const char* const kDcmdAgentVersion = "0.1.2";
+const char* const kDcmdAgentModifyDate = "2014-03-28 08:08:08";
 // agent的app对象
 class DcmdAgentApp : public CwxAppFramework{
  public:
@@ -71,24 +71,24 @@ class DcmdAgentApp : public CwxAppFramework{
     return file;
   }
   // 获取Task执行的结果文件
-  inline string& GetTaskResultFile(string const& svr, string const& task_cmd,
+  inline string& GetTaskResultFile(string const& svr_pool, string const& task_cmd,
     string& file) {
     GetTaskOutputPath(file);
-    file += string("/") + svr + string("_") + task_cmd + string(".result");
+    file += string("/") + svr_pool + string("_") + task_cmd + string(".result");
     return file;
   }
   // 获取任务执行的script文件
-  inline string& GetTaskRunScriptFile(string const& svr, string const& task_cmd,
+  inline string& GetTaskRunScriptFile(string const& svr_pool, string const& task_cmd,
     string& file) {
     GetTaskScriptPath(file);
-    file += string("/dcmd_task_") + svr + "_" + task_cmd + ".script";
+    file += string("/dcmd_task_") + svr_pool + "_" + task_cmd + ".script";
     return file;        
   }
   // 获取任务执行的脚本shell文件
-  inline string& GetTaskRunScriptShellFile(string const& svr, string const& task_cmd,
+  inline string& GetTaskRunScriptShellFile(string const& svr_pool, string const& task_cmd,
     string& file)
   {
-    GetTaskRunScriptFile(svr, task_cmd, file);
+    GetTaskRunScriptFile(svr_pool, task_cmd, file);
     file += ".sh";
     return file;        
   }
@@ -144,19 +144,19 @@ class DcmdAgentApp : public CwxAppFramework{
   // 心跳检测
 	void CheckHeatbeat();
   // 检查app的task指令
-  void CheckSvrTask(AgentSvrObj* svr_obj);
+  void CheckSvrTask(AgentSvrPoolObj* svr_pool_obj);
   // 执行操作整理。true：已经完成；false：正在执行
   bool CheckOprCmd(AgentOprCmd* opr_cmd, bool is_cancel=false);
 	// 处理收到的消息。 -1：失败并关闭连接；0：成功
 	int RecvMsg(CwxMsgBlock*& msg);
   // 检查正在运行的subtask
-  void CheckRuningSubTask(AgentSvrObj* svr_obj, bool is_cancel=false);
+  void CheckRuningSubTask(AgentSvrPoolObj* svr_pool_obj, bool is_cancel=false);
   // 处理控制指令
-  void ExecCtrlTaskCmdForCancelAll(AgentSvrObj* svr_obj, AgentTaskCmd* cmd);
+  void ExecCtrlTaskCmdForCancelAll(AgentSvrPoolObj* svr_pool_obj, AgentTaskCmd* cmd);
   // 处理控制指令
-  void ExecCtrlTaskCmdForCancelSubTask(AgentSvrObj* svr_obj, AgentTaskCmd* cmd);
+  void ExecCtrlTaskCmdForCancelSubTask(AgentSvrPoolObj* svr_pool_obj, AgentTaskCmd* cmd);
   // 处理控制指令
-  void ExecCancelSubTask(AgentSvrObj* svr_obj, string const& subtask_id);
+  void ExecCancelSubTask(AgentSvrPoolObj* svr_pool_obj, string const& subtask_id);
   // 准备subtask命令运行的环境
   bool PrepareSubtaskRunEnv(AgentTaskCmd* cmd, string& err_msg);
   // 基于subtask形成task result
@@ -192,13 +192,13 @@ class DcmdAgentApp : public CwxAppFramework{
   // 处理收到的获取运行操作指令。 -1：失败并关闭连接；0：成功
   int GetRunOprRecieved(CwxMsgBlock*& msg, AgentCenter* center);
   // 检查service当前命令的进度信息
-  void CheckSubTaskProcess(AgentSvrObj* svr_obj);
+  void CheckSubTaskProcess(AgentSvrPoolObj* svr_pool_obj);
   // 获取app任务执行的输出文件内容
-  void LoadSubTaskResult(string const& svr_name, string const& task_cmd,
+  void LoadSubTaskResult(string const& svr_pool, string const& task_cmd,
     string& out_process, bool& is_success, string& err_msg,
     bool is_process_only);
   // 获取一个service的运行任务信息
-  void DumpRuningAppSubTask(AgentSvrObj* svr_obj, string& dump);
+  void DumpRuningAppSubTask(AgentSvrPoolObj* svr_pool_obj, string& dump);
   // 获取package的buf，返回NULL表示失败
   inline char* GetBuf(uint32_t size){
     if (data_buf_len_ < size){
@@ -216,8 +216,8 @@ class DcmdAgentApp : public CwxAppFramework{
   AgentCenter*                                master_;
   // 配置文件
   DcmdAgentConfig                             config_;
-  // svr的指令，key为svr name
-  map<string, AgentSvrObj*>                   svr_map_;
+  // svr pool的指令，key为svr pool name
+  map<string, AgentSvrPoolObj*>               svr_pool_map_;
   // 等待回复的命令结果，key为cmd_id
   map<uint64_t, AgentTaskResult*>             wait_reply_result_map_;
   // 等待发送的处理结果，此是由于与center失去联系造成的,key为cmd_id。

@@ -38,7 +38,8 @@ optional  bool     update_env=13;
 optional  bool     update_ver=14;
 optional  bool     output_process=15;
 optional  string   script=16;
-repeated  KeyValue task_arg=17;
+optional  string   svr_path=17;
+repeated  KeyValue task_arg=18;
 }
 
 message AgentTaskCmdReply {
@@ -89,7 +90,7 @@ message AgentTaskOutputReply {
 
 message AgentRunningTask {
   optional  string  ip=1;
-  optional  string  svr_name=2;
+  optional  string  svr_pool=2;
 }
 
 message AgentRunningTaskReply {

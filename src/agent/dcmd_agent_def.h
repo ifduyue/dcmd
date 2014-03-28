@@ -95,16 +95,18 @@ class AgentOprCmd {
    // 运行时间
    uint32_t                     begin_time_;
 };
-class AgentSvrObj{
+class AgentSvrPoolObj{
  public:
-  AgentSvrObj(){
+  AgentSvrPoolObj(){
     processor_ = NULL;
     running_cmd_ = NULL;
   }
-  ~AgentSvrObj() { if (processor_) delete processor_; }
+  ~AgentSvrPoolObj() { if (processor_) delete processor_; }
  public:
   // service的名字
   string			                      svr_name_;
+  // 服务池子的名字
+  string                            svr_pool_name_;
   // service的命令
   list<AgentTaskCmd*>	              cmds_;
   // service当前执行的进程

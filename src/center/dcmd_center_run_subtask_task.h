@@ -94,7 +94,8 @@ class DcmdCenterRunSubtaskTask : public CwxTaskBoardTask{
   string                agent_ip_;
   // 查询的svr的名字
   string                svr_name_;
- 
+  // 查询svr pool的名字
+  string                svr_pool_name_;
  private:
   // app对象
   DcmdCenterApp*              app_;
