@@ -236,14 +236,14 @@ bool DcmdCenterOprTask::FetchOprCmd(DcmdTss* tss) {
   if (opr_cmd_.repeat_type_ != DcmdCenterOprCmd::DCMD_OPR_CMD_REPEAT_WITHOUT_HISTORY){
     ///记录操作历史
     CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
-      "insert into dcmd_opr_cmd_exec_history(exec_id, exec_name, opr_cmd_Id, opr_cmd, timeout, ip, is_repeat,"\
+      "insert into dcmd_opr_cmd_exec_history(exec_id, exec_name, opr_cmd_Id, opr_cmd, run_user, timeout, ip, is_repeat,"\
       "cache_time, arg_mutable, arg, utime, ctime, opr_uid) "\
-      "select exec_id, exec_name, opr_cmd_Id, opr_cmd, timeout, ip, is_repeat,"\
+      "select exec_id, exec_name, opr_cmd_Id, opr_cmd, run_user, timeout, ip, is_repeat,"\
       "cache_time, arg_mutable, arg, now(), ctime, opr_uid from dcmd_opr_cmd_exec \
       where exec_id=%s",
       CwxCommon::toString(opr_cmd_id_, tss->m_szBuf2K, 10));
     if (-1 == my->execute(tss->sql_)){
-      CwxCommon::snprintf(tss->m_szBuf2K, 2047, "Failure to exec sql:%s",  tss->sql_);
+      CwxCommon::snprintf(tss->m_szBuf2K, 2047, "Failure to exec sql:%s, err=%s",  tss->sql_, my->getErrMsg());
       CWX_ERROR((tss->m_szBuf2K));
       err_msg_ = tss->m_szBuf2K;
       my->rollback();
