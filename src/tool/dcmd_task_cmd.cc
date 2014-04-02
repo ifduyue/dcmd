@@ -241,7 +241,7 @@ int main(int argc ,char** argv) {
     printf("failed to read the reply, errno=%d\n", errno);
     return 1;
   }
-  if (dcmd_api::MTYPE_UI_EXEC_TASK != head.getMsgType()) {
+  if (dcmd_api::MTYPE_UI_EXEC_TASK_R != head.getMsgType()) {
     printf("receive a unknow msg type, msg_type=%u\n", head.getMsgType());
     if (block) CwxMsgBlockAlloc::free(block);
     return 1;

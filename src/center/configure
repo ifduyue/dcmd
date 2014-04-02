@@ -18966,7 +18966,7 @@ echo "$as_me: error: You need to specify the protobuf directory using --with-pro
    { (exit 1); exit 1; }; }
     else
         # make sure that a well known include file exists
-        if test -e $with_protobuf/message.h; then
+        if test -e $with_protobuf/google/protobuf/message.h; then
             protobuf_dir=$with_protobuf
             echo "$as_me:$LINENO: result: protobuf found!" >&5
 echo "${ECHO_T}protobuf found!" >&6

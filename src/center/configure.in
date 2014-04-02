@@ -59,7 +59,7 @@ AC_DEFUN([LIBEVENT_DIR],[
         AC_MSG_ERROR( You need to specify the protobuf directory using --with-protobuf)
     else
         # make sure that a well known include file exists
-        if test -e $with_protobuf/message.h; then
+        if test -e $with_protobuf/google/protobuf/message.h; then
             protobuf_dir=$with_protobuf
             AC_MSG_RESULT(protobuf found!)
         else
