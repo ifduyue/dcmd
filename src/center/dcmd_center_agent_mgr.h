@@ -150,7 +150,7 @@ namespace dcmd {
       string const & hostname, // 报告的主机名
       string& old_conn_ip, // 若agent ip存在，则返回存在agent ip对应的连接ip
       uint32_t& old_conn_id, // 若agent ip存在，则返回存在agent ip对应的连接id
-      string& old_hostname, // 若agent ip存在，则返回存在agent的主机名
+      string& old_hostname // 若agent ip存在，则返回存在agent的主机名
       );
     // 对取消对某个ip的auth动作
     void UnAuth(string const& agent_ip);
