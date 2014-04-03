@@ -159,3 +159,31 @@ message UiTaskCmdReply{
   required  DcmdState state=2;
   optional  string    err=4;
 }
+
+message UiAgentHostName {
+  required  int32   client_msg_id=1;
+  required  string  agent_ip =2;
+  required  string  user=3;
+  required  string  passwd=4;
+}
+
+message UiAgentHostNameReply{
+  required  int32       client_msg_id=1;
+  required  DcmdState   state=2;
+  required  bool        is_exist=3;
+  required  AgentState  hostname=4;
+  optional  string      err=5;
+}
+
+message UiAgentValid {
+  required  int32   client_msg_id=1;
+  required  string  agent_ip =2;
+  required  string  user=3;
+  required  string  passwd=4;
+}
+
+message UiAgentValidReply{
+  required  int32       client_msg_id=1;
+  required  DcmdState   state=2;
+  optional  string      err=3;
+}

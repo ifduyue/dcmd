@@ -40,6 +40,10 @@ enum DcmdMsgType {
    MTYPE_UI_SUBTASK_PROCESS_R = 68;
    MTYPE_UI_EXEC_TASK = 69;
    MTYPE_UI_EXEC_TASK_R = 70;
+   MTYPE_UI_FETCH_AGENT_HOSTNAME = 71;
+   MTYPE_UI_FETCH_AGENT_HOSTNAME_R = 72;
+   MTYPE_UI_AUTH_INVALID_AGENT = 73;
+   MTYPE_UI_AUTH_INVALID_AGENT_R = 74;
    MTYPE_INVALID_MTYPE = 101;
    MTYPE_CENTER_INTERNAL_CONN = 103;
    MTYPE_CENTER_INTERNAL_CONN_R = 104;
@@ -73,6 +77,7 @@ enum  CmdType {
    CMD_FREEZE_TASK=14;
    CMD_UNFREEZE_TASK=15;
    CMD_UPDATE_TASK = 16;
+   CMD_DEL_NODE = 17;
 }
 
 message KeyValue {
@@ -152,6 +157,7 @@ message AgentInfo {
   optional string     version=3;
   optional string     connected_ip=4;
   optional string     reported_ip=5;
+  optional string     hostname=6;
 }
 
 message AgentOprCmdReply {

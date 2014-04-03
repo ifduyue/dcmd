@@ -5,6 +5,7 @@ import "dcmd_cmn.proto";
 message AgentReport {
   required string      version = 1;
   repeated string      agent_ips = 2;
+  optional string      hostname = 3;
 }
 
 message AgentReportReply {
