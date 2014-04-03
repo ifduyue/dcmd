@@ -739,15 +739,15 @@ void protobuf_AddDesc_dcmd_5fui_2eproto() {
     "2\023.dcmd_api.DcmdState\022\013\n\003err\030\004 \001(\t\"X\n\017Ui"
     "AgentHostName\022\025\n\rclient_msg_id\030\001 \002(\005\022\020\n\010"
     "agent_ip\030\002 \002(\t\022\014\n\004user\030\003 \002(\t\022\016\n\006passwd\030\004"
-    " \002(\t\"\230\001\n\024UiAgentHostNameReply\022\025\n\rclient_"
+    " \002(\t\"\202\001\n\024UiAgentHostNameReply\022\025\n\rclient_"
     "msg_id\030\001 \002(\005\022\"\n\005state\030\002 \002(\0162\023.dcmd_api.D"
-    "cmdState\022\020\n\010is_exist\030\003 \002(\010\022&\n\010hostname\030\004"
-    " \002(\0162\024.dcmd_api.AgentState\022\013\n\003err\030\005 \001(\t\""
-    "U\n\014UiAgentValid\022\025\n\rclient_msg_id\030\001 \002(\005\022\020"
-    "\n\010agent_ip\030\002 \002(\t\022\014\n\004user\030\003 \002(\t\022\016\n\006passwd"
-    "\030\004 \002(\t\"[\n\021UiAgentValidReply\022\025\n\rclient_ms"
-    "g_id\030\001 \002(\005\022\"\n\005state\030\002 \002(\0162\023.dcmd_api.Dcm"
-    "dState\022\013\n\003err\030\003 \001(\tB\021\n\017com.cwinux.dcmd", 2958);
+    "cmdState\022\020\n\010is_exist\030\003 \002(\010\022\020\n\010hostname\030\004"
+    " \002(\t\022\013\n\003err\030\005 \001(\t\"U\n\014UiAgentValid\022\025\n\rcli"
+    "ent_msg_id\030\001 \002(\005\022\020\n\010agent_ip\030\002 \002(\t\022\014\n\004us"
+    "er\030\003 \002(\t\022\016\n\006passwd\030\004 \002(\t\"[\n\021UiAgentValid"
+    "Reply\022\025\n\rclient_msg_id\030\001 \002(\005\022\"\n\005state\030\002 "
+    "\002(\0162\023.dcmd_api.DcmdState\022\013\n\003err\030\003 \001(\tB\021\n"
+    "\017com.cwinux.dcmd", 2936);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "dcmd_ui.proto", &protobuf_RegisterTypes);
   UiTaskOutput::default_instance_ = new UiTaskOutput();
@@ -9406,7 +9406,7 @@ void UiAgentHostNameReply::SharedCtor() {
   client_msg_id_ = 0;
   state_ = 0;
   is_exist_ = false;
-  hostname_ = 0;
+  hostname_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   err_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
@@ -9416,6 +9416,9 @@ UiAgentHostNameReply::~UiAgentHostNameReply() {
 }
 
 void UiAgentHostNameReply::SharedDtor() {
+  if (hostname_ != &::google::protobuf::internal::kEmptyString) {
+    delete hostname_;
+  }
   if (err_ != &::google::protobuf::internal::kEmptyString) {
     delete err_;
   }
@@ -9449,7 +9452,11 @@ void UiAgentHostNameReply::Clear() {
     client_msg_id_ = 0;
     state_ = 0;
     is_exist_ = false;
-    hostname_ = 0;
+    if (has_hostname()) {
+      if (hostname_ != &::google::protobuf::internal::kEmptyString) {
+        hostname_->clear();
+      }
+    }
     if (has_err()) {
       if (err_ != &::google::protobuf::internal::kEmptyString) {
         err_->clear();
@@ -9514,24 +9521,20 @@ bool UiAgentHostNameReply::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(32)) goto parse_hostname;
+        if (input->ExpectTag(34)) goto parse_hostname;
         break;
       }
 
-      // required .dcmd_api.AgentState hostname = 4;
+      // required string hostname = 4;
       case 4: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
          parse_hostname:
-          int value;
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
-                 input, &value)));
-          if (::dcmd_api::AgentState_IsValid(value)) {
-            set_hostname(static_cast< ::dcmd_api::AgentState >(value));
-          } else {
-            mutable_unknown_fields()->AddVarint(4, value);
-          }
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_hostname()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+            this->hostname().data(), this->hostname().length(),
+            ::google::protobuf::internal::WireFormat::PARSE);
         } else {
           goto handle_uninterpreted;
         }
@@ -9590,9 +9593,12 @@ void UiAgentHostNameReply::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteBool(3, this->is_exist(), output);
   }
 
-  // required .dcmd_api.AgentState hostname = 4;
+  // required string hostname = 4;
   if (has_hostname()) {
-    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->hostname().data(), this->hostname().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    ::google::protobuf::internal::WireFormatLite::WriteString(
       4, this->hostname(), output);
   }
 
@@ -9629,10 +9635,14 @@ void UiAgentHostNameReply::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(3, this->is_exist(), target);
   }
 
-  // required .dcmd_api.AgentState hostname = 4;
+  // required string hostname = 4;
   if (has_hostname()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
-      4, this->hostname(), target);
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->hostname().data(), this->hostname().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        4, this->hostname(), target);
   }
 
   // optional string err = 5;
@@ -9674,10 +9684,11 @@ int UiAgentHostNameReply::ByteSize() const {
       total_size += 1 + 1;
     }
 
-    // required .dcmd_api.AgentState hostname = 4;
+    // required string hostname = 4;
     if (has_hostname()) {
       total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::EnumSize(this->hostname());
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->hostname());
     }
 
     // optional string err = 5;

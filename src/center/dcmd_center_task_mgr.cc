@@ -1221,13 +1221,13 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdDelTaskNode(DcmdTss* tss, uint32_t
   // 获取subtask
   map<uint64_t, DcmdCenterSubtask*>::iterator iter = all_subtasks_.find(subtask_id);
   if (iter == all_subtasks_.end()) {
-    CwxCommon::snprintf(tss->m_szBuf2K, "subtask[%s] doesn't exist.", subtask_str.c_str());
+    CwxCommon::snprintf(tss->m_szBuf2K, 2047, "subtask[%s] doesn't exist.", subtask_str.c_str());
     tss->err_msg_ = tss->m_szBuf2K;
     return dcmd_api::DCMD_STATE_FAILED;
   }
-  DcmdCenterSubtask* subtask;
+  DcmdCenterSubtask* subtask = iter->second;
   if (subtask->task_ != task) {
-    CwxCommon::snprintf(tss->m_szBuf2K, "subtask[%s]'s task-id is %u, isnt %u",
+    CwxCommon::snprintf(tss->m_szBuf2K, 2047, "subtask[%s]'s task-id is %u, isnt %u",
       subtask_str.c_str(), subtask->task_->task_id_, task_id);
     tss->err_msg_ = tss->m_szBuf2K;
     return dcmd_api::DCMD_STATE_FAILED;

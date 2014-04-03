@@ -2955,12 +2955,17 @@ class UiAgentHostNameReply : public ::google::protobuf::Message {
   inline bool is_exist() const;
   inline void set_is_exist(bool value);
 
-  // required .dcmd_api.AgentState hostname = 4;
+  // required string hostname = 4;
   inline bool has_hostname() const;
   inline void clear_hostname();
   static const int kHostnameFieldNumber = 4;
-  inline ::dcmd_api::AgentState hostname() const;
-  inline void set_hostname(::dcmd_api::AgentState value);
+  inline const ::std::string& hostname() const;
+  inline void set_hostname(const ::std::string& value);
+  inline void set_hostname(const char* value);
+  inline void set_hostname(const char* value, size_t size);
+  inline ::std::string* mutable_hostname();
+  inline ::std::string* release_hostname();
+  inline void set_allocated_hostname(::std::string* hostname);
 
   // optional string err = 5;
   inline bool has_err() const;
@@ -2991,9 +2996,9 @@ class UiAgentHostNameReply : public ::google::protobuf::Message {
 
   ::google::protobuf::int32 client_msg_id_;
   int state_;
-  bool is_exist_;
-  int hostname_;
+  ::std::string* hostname_;
   ::std::string* err_;
+  bool is_exist_;
 
   mutable int _cached_size_;
   ::google::protobuf::uint32 _has_bits_[(5 + 31) / 32];
@@ -8165,7 +8170,7 @@ inline void UiAgentHostNameReply::set_is_exist(bool value) {
   is_exist_ = value;
 }
 
-// required .dcmd_api.AgentState hostname = 4;
+// required string hostname = 4;
 inline bool UiAgentHostNameReply::has_hostname() const {
   return (_has_bits_[0] & 0x00000008u) != 0;
 }
@@ -8176,16 +8181,63 @@ inline void UiAgentHostNameReply::clear_has_hostname() {
   _has_bits_[0] &= ~0x00000008u;
 }
 inline void UiAgentHostNameReply::clear_hostname() {
-  hostname_ = 0;
+  if (hostname_ != &::google::protobuf::internal::kEmptyString) {
+    hostname_->clear();
+  }
   clear_has_hostname();
 }
-inline ::dcmd_api::AgentState UiAgentHostNameReply::hostname() const {
-  return static_cast< ::dcmd_api::AgentState >(hostname_);
+inline const ::std::string& UiAgentHostNameReply::hostname() const {
+  return *hostname_;
 }
-inline void UiAgentHostNameReply::set_hostname(::dcmd_api::AgentState value) {
-  assert(::dcmd_api::AgentState_IsValid(value));
+inline void UiAgentHostNameReply::set_hostname(const ::std::string& value) {
   set_has_hostname();
-  hostname_ = value;
+  if (hostname_ == &::google::protobuf::internal::kEmptyString) {
+    hostname_ = new ::std::string;
+  }
+  hostname_->assign(value);
+}
+inline void UiAgentHostNameReply::set_hostname(const char* value) {
+  set_has_hostname();
+  if (hostname_ == &::google::protobuf::internal::kEmptyString) {
+    hostname_ = new ::std::string;
+  }
+  hostname_->assign(value);
+}
+inline void UiAgentHostNameReply::set_hostname(const char* value, size_t size) {
+  set_has_hostname();
+  if (hostname_ == &::google::protobuf::internal::kEmptyString) {
+    hostname_ = new ::std::string;
+  }
+  hostname_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* UiAgentHostNameReply::mutable_hostname() {
+  set_has_hostname();
+  if (hostname_ == &::google::protobuf::internal::kEmptyString) {
+    hostname_ = new ::std::string;
+  }
+  return hostname_;
+}
+inline ::std::string* UiAgentHostNameReply::release_hostname() {
+  clear_has_hostname();
+  if (hostname_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = hostname_;
+    hostname_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+inline void UiAgentHostNameReply::set_allocated_hostname(::std::string* hostname) {
+  if (hostname_ != &::google::protobuf::internal::kEmptyString) {
+    delete hostname_;
+  }
+  if (hostname) {
+    set_has_hostname();
+    hostname_ = hostname;
+  } else {
+    clear_has_hostname();
+    hostname_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  }
 }
 
 // optional string err = 5;

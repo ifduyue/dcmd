@@ -547,7 +547,7 @@ void DcmdCenterH4Admin::AuthIllegalAgent(CwxMsgBlock*& msg, DcmdTss* tss) {
     return;
   }
   // valid agent
-  app_->GetAgentMgr()->AuthIllegalAgent(agent_valid.agent_ip())
+  app_->GetAgentMgr()->AuthIllegalAgent(agent_valid.agent_ip());
   agent_valid_reply.set_state(dcmd_api::DCMD_STATE_SUCCESS);
   DcmdCenterH4Admin::ReplyValidAgent(app_,
     tss,
