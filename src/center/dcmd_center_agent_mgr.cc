@@ -396,7 +396,7 @@ namespace dcmd {
     }
   }
   // 获取Agent主机名，返回0：不存在；1：认证的agent；2：未认证的agent
-  ing DcmdCenterAgentMgr::GetAgentHostName(string const& agent_ip, string & hostname) {
+  int DcmdCenterAgentMgr::GetAgentHostName(string const& agent_ip, string & hostname) {
     CwxMutexGuard<CwxMutexLock>  lock(&lock_);
     hostname.erase();
     // 先从认证的主机map获取
