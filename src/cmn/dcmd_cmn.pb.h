@@ -81,6 +81,10 @@ enum DcmdMsgType {
   MTYPE_UI_SUBTASK_PROCESS_R = 68,
   MTYPE_UI_EXEC_TASK = 69,
   MTYPE_UI_EXEC_TASK_R = 70,
+  MTYPE_UI_FETCH_AGENT_HOSTNAME = 71,
+  MTYPE_UI_FETCH_AGENT_HOSTNAME_R = 72,
+  MTYPE_UI_AUTH_INVALID_AGENT = 73,
+  MTYPE_UI_AUTH_INVALID_AGENT_R = 74,
   MTYPE_INVALID_MTYPE = 101,
   MTYPE_CENTER_INTERNAL_CONN = 103,
   MTYPE_CENTER_INTERNAL_CONN_R = 104
@@ -141,11 +145,12 @@ enum CmdType {
   CMD_IGNORE_SUBTASK = 13,
   CMD_FREEZE_TASK = 14,
   CMD_UNFREEZE_TASK = 15,
-  CMD_UPDATE_TASK = 16
+  CMD_UPDATE_TASK = 16,
+  CMD_DEL_NODE = 17
 };
 bool CmdType_IsValid(int value);
 const CmdType CmdType_MIN = CMD_UNKNOWN;
-const CmdType CmdType_MAX = CMD_UPDATE_TASK;
+const CmdType CmdType_MAX = CMD_DEL_NODE;
 const int CmdType_ARRAYSIZE = CmdType_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* CmdType_descriptor();
@@ -1063,6 +1068,18 @@ class AgentInfo : public ::google::protobuf::Message {
   inline ::std::string* release_reported_ip();
   inline void set_allocated_reported_ip(::std::string* reported_ip);
 
+  // optional string hostname = 6;
+  inline bool has_hostname() const;
+  inline void clear_hostname();
+  static const int kHostnameFieldNumber = 6;
+  inline const ::std::string& hostname() const;
+  inline void set_hostname(const ::std::string& value);
+  inline void set_hostname(const char* value);
+  inline void set_hostname(const char* value, size_t size);
+  inline ::std::string* mutable_hostname();
+  inline ::std::string* release_hostname();
+  inline void set_allocated_hostname(::std::string* hostname);
+
   // @@protoc_insertion_point(class_scope:dcmd_api.AgentInfo)
  private:
   inline void set_has_ip();
@@ -1075,6 +1092,8 @@ class AgentInfo : public ::google::protobuf::Message {
   inline void clear_has_connected_ip();
   inline void set_has_reported_ip();
   inline void clear_has_reported_ip();
+  inline void set_has_hostname();
+  inline void clear_has_hostname();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -1082,10 +1101,11 @@ class AgentInfo : public ::google::protobuf::Message {
   ::std::string* version_;
   ::std::string* connected_ip_;
   ::std::string* reported_ip_;
+  ::std::string* hostname_;
   int state_;
 
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(5 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(6 + 31) / 32];
 
   friend void  protobuf_AddDesc_dcmd_5fcmn_2eproto();
   friend void protobuf_AssignDesc_dcmd_5fcmn_2eproto();
@@ -2921,6 +2941,76 @@ inline void AgentInfo::set_allocated_reported_ip(::std::string* reported_ip) {
   } else {
     clear_has_reported_ip();
     reported_ip_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  }
+}
+
+// optional string hostname = 6;
+inline bool AgentInfo::has_hostname() const {
+  return (_has_bits_[0] & 0x00000020u) != 0;
+}
+inline void AgentInfo::set_has_hostname() {
+  _has_bits_[0] |= 0x00000020u;
+}
+inline void AgentInfo::clear_has_hostname() {
+  _has_bits_[0] &= ~0x00000020u;
+}
+inline void AgentInfo::clear_hostname() {
+  if (hostname_ != &::google::protobuf::internal::kEmptyString) {
+    hostname_->clear();
+  }
+  clear_has_hostname();
+}
+inline const ::std::string& AgentInfo::hostname() const {
+  return *hostname_;
+}
+inline void AgentInfo::set_hostname(const ::std::string& value) {
+  set_has_hostname();
+  if (hostname_ == &::google::protobuf::internal::kEmptyString) {
+    hostname_ = new ::std::string;
+  }
+  hostname_->assign(value);
+}
+inline void AgentInfo::set_hostname(const char* value) {
+  set_has_hostname();
+  if (hostname_ == &::google::protobuf::internal::kEmptyString) {
+    hostname_ = new ::std::string;
+  }
+  hostname_->assign(value);
+}
+inline void AgentInfo::set_hostname(const char* value, size_t size) {
+  set_has_hostname();
+  if (hostname_ == &::google::protobuf::internal::kEmptyString) {
+    hostname_ = new ::std::string;
+  }
+  hostname_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* AgentInfo::mutable_hostname() {
+  set_has_hostname();
+  if (hostname_ == &::google::protobuf::internal::kEmptyString) {
+    hostname_ = new ::std::string;
+  }
+  return hostname_;
+}
+inline ::std::string* AgentInfo::release_hostname() {
+  clear_has_hostname();
+  if (hostname_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = hostname_;
+    hostname_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+inline void AgentInfo::set_allocated_hostname(::std::string* hostname) {
+  if (hostname_ != &::google::protobuf::internal::kEmptyString) {
+    delete hostname_;
+  }
+  if (hostname) {
+    set_has_hostname();
+    hostname_ = hostname;
+  } else {
+    clear_has_hostname();
+    hostname_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   }
 }
 

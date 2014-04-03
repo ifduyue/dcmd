@@ -10,6 +10,7 @@
 #include <sys/ioctl.h>
 #include <arpa/inet.h>
 #include <pwd.h>
+#include <unistd.h>
 
 namespace dcmd {
 // 获取主机的所有网卡的IP列表。0：成功；-1：失败
@@ -146,6 +147,15 @@ int DcmdAgentApp::initRunEnv(){
       return -1;
     }
   }
+  { // 获取主机的名字 
+    char host_name[256];
+    if (0 != gethostname(host_name, 255)) {
+      CWX_ERROR(("Failed to get hostname, errno=%d", errno));
+      return -1;
+    }
+    CWX_INFO(("Host name:%s", host_name));
+    host_name_ = host_name;
+  }
   { // 连接控制中心
     list<CwxHostInfo>::const_iterator iter = config_.conf().centers_.begin();
     uint32_t host_id = 1;
@@ -236,6 +246,7 @@ int DcmdAgentApp::onConnCreated(CwxAppHandler4Msg& conn, bool& , bool& ) {
   CwxMsgBlock* msg = NULL;
   dcmd_api::AgentReport report;
   report.set_version(kDcmdAgentVersion);
+  report.set_hostname(host_name_);
   list<string>::iterator ip_iter = agent_ips_.begin();
   while(ip_iter != agent_ips_.end()) {
     *report.add_agent_ips()=*ip_iter;

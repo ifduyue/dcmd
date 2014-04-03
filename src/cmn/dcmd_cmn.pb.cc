@@ -156,12 +156,13 @@ void protobuf_AssignDesc_dcmd_5fcmn_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(TaskInfo));
   AgentInfo_descriptor_ = file->message_type(5);
-  static const int AgentInfo_offsets_[5] = {
+  static const int AgentInfo_offsets_[6] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentInfo, ip_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentInfo, state_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentInfo, version_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentInfo, connected_ip_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentInfo, reported_ip_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AgentInfo, hostname_),
   };
   AgentInfo_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -270,69 +271,74 @@ void protobuf_AddDesc_dcmd_5fcmn_2eproto() {
     "\n\016failed_subtask\030\n \001(\005\022\025\n\rdoing_subtask\030"
     "\013 \001(\005\022\024\n\014undo_subtask\030\014 \001(\005\022\034\n\024ignore_do"
     "ing_subtask\030\r \001(\005\022\035\n\025ignore_failed_subta"
-    "sk\030\016 \001(\005\"x\n\tAgentInfo\022\n\n\002ip\030\001 \002(\t\022#\n\005sta"
-    "te\030\002 \002(\0162\024.dcmd_api.AgentState\022\017\n\007versio"
-    "n\030\003 \001(\t\022\024\n\014connected_ip\030\004 \001(\t\022\023\n\013reporte"
-    "d_ip\030\005 \001(\t\"o\n\020AgentOprCmdReply\022\"\n\005state\030"
-    "\001 \002(\0162\023.dcmd_api.DcmdState\022\016\n\006result\030\002 \002"
-    "(\t\022\013\n\003err\030\003 \002(\t\022\n\n\002ip\030\004 \001(\t\022\016\n\006status\030\005 "
-    "\001(\005*\217\n\n\013DcmdMsgType\022\026\n\022MTYPE_AGENT_REPOR"
-    "T\020\001\022\030\n\024MTYPE_AGENT_REPORT_R\020\002\022\030\n\024MTYPE_A"
-    "GENT_HEATBEAT\020\003\022\036\n\032MTYPE_CENTER_MASTER_N"
-    "OTICE\020\005\022 \n\034MTYPE_CENTER_MASTER_NOTICE_R\020"
-    "\006\022\034\n\030MTYPE_CENTER_SUBTASK_CMD\020\007\022\036\n\032MTYPE"
-    "_CENTER_SUBTASK_CMD_R\020\010\022\037\n\033MTYPE_AGENT_S"
-    "UBTASK_PROCESS\020\t\022\"\n\036MTYPE_AGENT_SUBTASK_"
-    "CMD_RESULT\020\013\022$\n MTYPE_AGENT_SUBTASK_CMD_"
-    "RESULT_R\020\014\022\030\n\024MTYPE_CENTER_OPR_CMD\020\r\022\032\n\026"
-    "MTYPE_CENTER_OPR_CMD_R\020\016\022%\n!MTYPE_CENTER"
-    "_AGENT_SUBTASK_OUTPUT\020\017\022\'\n#MTYPE_CENTER_"
-    "AGENT_SUBTASK_OUTPUT_R\020\020\022#\n\037MTYPE_CENTER"
-    "_AGENT_RUNNING_TASK\020\021\022%\n!MTYPE_CENTER_AG"
-    "ENT_RUNNING_TASK_R\020\022\022\"\n\036MTYPE_CENTER_AGE"
-    "NT_RUNNING_OPR\020\023\022$\n MTYPE_CENTER_AGENT_R"
-    "UNNING_OPR_R\020\024\022!\n\035MTYPE_UI_AGENT_SUBTASK"
-    "_OUTPUT\0203\022#\n\037MTYPE_UI_AGENT_SUBTASK_OUTP"
-    "UT_R\0204\022\"\n\036MTYPE_UI_AGENT_RUNNING_SUBTASK"
-    "\0205\022$\n MTYPE_UI_AGENT_RUNNING_SUBTASK_R\0206"
-    "\022\036\n\032MTYPE_UI_AGENT_RUNNING_OPR\0207\022 \n\034MTYP"
-    "E_UI_AGENT_RUNNING_OPR_R\0208\022\025\n\021MTYPE_UI_E"
-    "XEC_OPR\0209\022\027\n\023MTYPE_UI_EXEC_OPR_R\020:\022\027\n\023MT"
-    "YPE_UI_AGENT_INFO\020;\022\031\n\025MTYPE_UI_AGENT_IN"
-    "FO_R\020<\022\032\n\026MTYPE_UI_INVALID_AGENT\020=\022\034\n\030MT"
-    "YPE_UI_INVALID_AGENT_R\020>\022\032\n\026MTYPE_UI_TAS"
-    "K_CMD_INFO\020\?\022\034\n\030MTYPE_UI_TASK_CMD_INFO_R"
-    "\020@\022\031\n\025MTYPE_UI_OPR_CMD_INFO\020A\022\033\n\027MTYPE_U"
-    "I_OPR_CMD_INFO_R\020B\022\034\n\030MTYPE_UI_SUBTASK_P"
-    "ROCESS\020C\022\036\n\032MTYPE_UI_SUBTASK_PROCESS_R\020D"
-    "\022\026\n\022MTYPE_UI_EXEC_TASK\020E\022\030\n\024MTYPE_UI_EXE"
-    "C_TASK_R\020F\022\027\n\023MTYPE_INVALID_MTYPE\020e\022\036\n\032M"
-    "TYPE_CENTER_INTERNAL_CONN\020g\022 \n\034MTYPE_CEN"
-    "TER_INTERNAL_CONN_R\020h*\276\001\n\tDcmdState\022\026\n\022D"
-    "CMD_STATE_SUCCESS\020\000\022\030\n\024DCMD_STATE_NO_MAS"
-    "TER\020\001\022\033\n\027DCMD_STATE_WRONG_MASTER\020\002\022\026\n\022DC"
-    "MD_STATE_NO_TASK\020\003\022\031\n\025DCMD_STATE_NO_SUBT"
-    "ASK\020\004\022\030\n\024DCMD_STATE_HOST_LOST\020\005\022\025\n\021DCMD_"
-    "STATE_FAILED\020\006*\363\002\n\007CmdType\022\017\n\013CMD_UNKNOW"
-    "N\020\000\022\022\n\016CMD_START_TASK\020\001\022\022\n\016CMD_PAUSE_TAS"
-    "K\020\002\022\023\n\017CMD_RESUME_TASK\020\003\022\022\n\016CMD_RETRY_TA"
-    "SK\020\004\022\023\n\017CMD_FINISH_TASK\020\005\022\020\n\014CMD_ADD_NOD"
-    "E\020\006\022\026\n\022CMD_CANCEL_SUBTASK\020\007\022\032\n\026CMD_CANCE"
-    "L_SVR_SUBTASK\020\010\022\022\n\016CMD_DO_SUBTASK\020\t\022\021\n\rC"
-    "MD_REDO_TASK\020\n\022\025\n\021CMD_REDO_SVR_POOL\020\013\022\024\n"
-    "\020CMD_REDO_SUBTASK\020\014\022\026\n\022CMD_IGNORE_SUBTAS"
-    "K\020\r\022\023\n\017CMD_FREEZE_TASK\020\016\022\025\n\021CMD_UNFREEZE"
-    "_TASK\020\017\022\023\n\017CMD_UPDATE_TASK\020\020*c\n\nAgentSta"
-    "te\022\026\n\022AGENT_UN_CONNECTED\020\000\022\021\n\rAGENT_UN_A"
-    "UTH\020\001\022\025\n\021AGENT_UN_REPORTED\020\002\022\023\n\017AGENT_CO"
-    "NNECTED\020\003*m\n\tTaskState\022\r\n\tTASK_INIT\020\000\022\016\n"
-    "\nTASK_DOING\020\001\022\017\n\013TASK_FAILED\020\002\022\021\n\rTASK_F"
-    "INISHED\020\003\022\035\n\031TASK_FINISHED_WITH_FAILED\020\004"
-    "*]\n\014SubTaskState\022\020\n\014SUBTASK_INIT\020\000\022\021\n\rSU"
-    "BTASK_DOING\020\001\022\024\n\020SUBTASK_FINISHED\020\002\022\022\n\016S"
-    "UBTASK_FAILED\020\003*J\n\014CommandState\022\021\n\rCOMMA"
-    "ND_DOING\020\000\022\023\n\017COMMAND_SUCCESS\020\001\022\022\n\016COMMA"
-    "ND_FAILED\020\002B\021\n\017com.cwinux.dcmd", 3150);
+    "sk\030\016 \001(\005\"\212\001\n\tAgentInfo\022\n\n\002ip\030\001 \002(\t\022#\n\005st"
+    "ate\030\002 \002(\0162\024.dcmd_api.AgentState\022\017\n\007versi"
+    "on\030\003 \001(\t\022\024\n\014connected_ip\030\004 \001(\t\022\023\n\013report"
+    "ed_ip\030\005 \001(\t\022\020\n\010hostname\030\006 \001(\t\"o\n\020AgentOp"
+    "rCmdReply\022\"\n\005state\030\001 \002(\0162\023.dcmd_api.Dcmd"
+    "State\022\016\n\006result\030\002 \002(\t\022\013\n\003err\030\003 \002(\t\022\n\n\002ip"
+    "\030\004 \001(\t\022\016\n\006status\030\005 \001(\005*\233\013\n\013DcmdMsgType\022\026"
+    "\n\022MTYPE_AGENT_REPORT\020\001\022\030\n\024MTYPE_AGENT_RE"
+    "PORT_R\020\002\022\030\n\024MTYPE_AGENT_HEATBEAT\020\003\022\036\n\032MT"
+    "YPE_CENTER_MASTER_NOTICE\020\005\022 \n\034MTYPE_CENT"
+    "ER_MASTER_NOTICE_R\020\006\022\034\n\030MTYPE_CENTER_SUB"
+    "TASK_CMD\020\007\022\036\n\032MTYPE_CENTER_SUBTASK_CMD_R"
+    "\020\010\022\037\n\033MTYPE_AGENT_SUBTASK_PROCESS\020\t\022\"\n\036M"
+    "TYPE_AGENT_SUBTASK_CMD_RESULT\020\013\022$\n MTYPE"
+    "_AGENT_SUBTASK_CMD_RESULT_R\020\014\022\030\n\024MTYPE_C"
+    "ENTER_OPR_CMD\020\r\022\032\n\026MTYPE_CENTER_OPR_CMD_"
+    "R\020\016\022%\n!MTYPE_CENTER_AGENT_SUBTASK_OUTPUT"
+    "\020\017\022\'\n#MTYPE_CENTER_AGENT_SUBTASK_OUTPUT_"
+    "R\020\020\022#\n\037MTYPE_CENTER_AGENT_RUNNING_TASK\020\021"
+    "\022%\n!MTYPE_CENTER_AGENT_RUNNING_TASK_R\020\022\022"
+    "\"\n\036MTYPE_CENTER_AGENT_RUNNING_OPR\020\023\022$\n M"
+    "TYPE_CENTER_AGENT_RUNNING_OPR_R\020\024\022!\n\035MTY"
+    "PE_UI_AGENT_SUBTASK_OUTPUT\0203\022#\n\037MTYPE_UI"
+    "_AGENT_SUBTASK_OUTPUT_R\0204\022\"\n\036MTYPE_UI_AG"
+    "ENT_RUNNING_SUBTASK\0205\022$\n MTYPE_UI_AGENT_"
+    "RUNNING_SUBTASK_R\0206\022\036\n\032MTYPE_UI_AGENT_RU"
+    "NNING_OPR\0207\022 \n\034MTYPE_UI_AGENT_RUNNING_OP"
+    "R_R\0208\022\025\n\021MTYPE_UI_EXEC_OPR\0209\022\027\n\023MTYPE_UI"
+    "_EXEC_OPR_R\020:\022\027\n\023MTYPE_UI_AGENT_INFO\020;\022\031"
+    "\n\025MTYPE_UI_AGENT_INFO_R\020<\022\032\n\026MTYPE_UI_IN"
+    "VALID_AGENT\020=\022\034\n\030MTYPE_UI_INVALID_AGENT_"
+    "R\020>\022\032\n\026MTYPE_UI_TASK_CMD_INFO\020\?\022\034\n\030MTYPE"
+    "_UI_TASK_CMD_INFO_R\020@\022\031\n\025MTYPE_UI_OPR_CM"
+    "D_INFO\020A\022\033\n\027MTYPE_UI_OPR_CMD_INFO_R\020B\022\034\n"
+    "\030MTYPE_UI_SUBTASK_PROCESS\020C\022\036\n\032MTYPE_UI_"
+    "SUBTASK_PROCESS_R\020D\022\026\n\022MTYPE_UI_EXEC_TAS"
+    "K\020E\022\030\n\024MTYPE_UI_EXEC_TASK_R\020F\022!\n\035MTYPE_U"
+    "I_FETCH_AGENT_HOSTNAME\020G\022#\n\037MTYPE_UI_FET"
+    "CH_AGENT_HOSTNAME_R\020H\022\037\n\033MTYPE_UI_AUTH_I"
+    "NVALID_AGENT\020I\022!\n\035MTYPE_UI_AUTH_INVALID_"
+    "AGENT_R\020J\022\027\n\023MTYPE_INVALID_MTYPE\020e\022\036\n\032MT"
+    "YPE_CENTER_INTERNAL_CONN\020g\022 \n\034MTYPE_CENT"
+    "ER_INTERNAL_CONN_R\020h*\276\001\n\tDcmdState\022\026\n\022DC"
+    "MD_STATE_SUCCESS\020\000\022\030\n\024DCMD_STATE_NO_MAST"
+    "ER\020\001\022\033\n\027DCMD_STATE_WRONG_MASTER\020\002\022\026\n\022DCM"
+    "D_STATE_NO_TASK\020\003\022\031\n\025DCMD_STATE_NO_SUBTA"
+    "SK\020\004\022\030\n\024DCMD_STATE_HOST_LOST\020\005\022\025\n\021DCMD_S"
+    "TATE_FAILED\020\006*\205\003\n\007CmdType\022\017\n\013CMD_UNKNOWN"
+    "\020\000\022\022\n\016CMD_START_TASK\020\001\022\022\n\016CMD_PAUSE_TASK"
+    "\020\002\022\023\n\017CMD_RESUME_TASK\020\003\022\022\n\016CMD_RETRY_TAS"
+    "K\020\004\022\023\n\017CMD_FINISH_TASK\020\005\022\020\n\014CMD_ADD_NODE"
+    "\020\006\022\026\n\022CMD_CANCEL_SUBTASK\020\007\022\032\n\026CMD_CANCEL"
+    "_SVR_SUBTASK\020\010\022\022\n\016CMD_DO_SUBTASK\020\t\022\021\n\rCM"
+    "D_REDO_TASK\020\n\022\025\n\021CMD_REDO_SVR_POOL\020\013\022\024\n\020"
+    "CMD_REDO_SUBTASK\020\014\022\026\n\022CMD_IGNORE_SUBTASK"
+    "\020\r\022\023\n\017CMD_FREEZE_TASK\020\016\022\025\n\021CMD_UNFREEZE_"
+    "TASK\020\017\022\023\n\017CMD_UPDATE_TASK\020\020\022\020\n\014CMD_DEL_N"
+    "ODE\020\021*c\n\nAgentState\022\026\n\022AGENT_UN_CONNECTE"
+    "D\020\000\022\021\n\rAGENT_UN_AUTH\020\001\022\025\n\021AGENT_UN_REPOR"
+    "TED\020\002\022\023\n\017AGENT_CONNECTED\020\003*m\n\tTaskState\022"
+    "\r\n\tTASK_INIT\020\000\022\016\n\nTASK_DOING\020\001\022\017\n\013TASK_F"
+    "AILED\020\002\022\021\n\rTASK_FINISHED\020\003\022\035\n\031TASK_FINIS"
+    "HED_WITH_FAILED\020\004*]\n\014SubTaskState\022\020\n\014SUB"
+    "TASK_INIT\020\000\022\021\n\rSUBTASK_DOING\020\001\022\024\n\020SUBTAS"
+    "K_FINISHED\020\002\022\022\n\016SUBTASK_FAILED\020\003*J\n\014Comm"
+    "andState\022\021\n\rCOMMAND_DOING\020\000\022\023\n\017COMMAND_S"
+    "UCCESS\020\001\022\022\n\016COMMAND_FAILED\020\002B\021\n\017com.cwin"
+    "ux.dcmd", 3327);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "dcmd_cmn.proto", &protobuf_RegisterTypes);
   KeyValue::default_instance_ = new KeyValue();
@@ -402,6 +408,10 @@ bool DcmdMsgType_IsValid(int value) {
     case 68:
     case 69:
     case 70:
+    case 71:
+    case 72:
+    case 73:
+    case 74:
     case 101:
     case 103:
     case 104:
@@ -453,6 +463,7 @@ bool CmdType_IsValid(int value) {
     case 14:
     case 15:
     case 16:
+    case 17:
       return true;
     default:
       return false;
@@ -2735,6 +2746,7 @@ const int AgentInfo::kStateFieldNumber;
 const int AgentInfo::kVersionFieldNumber;
 const int AgentInfo::kConnectedIpFieldNumber;
 const int AgentInfo::kReportedIpFieldNumber;
+const int AgentInfo::kHostnameFieldNumber;
 #endif  // !_MSC_VER
 
 AgentInfo::AgentInfo()
@@ -2758,6 +2770,7 @@ void AgentInfo::SharedCtor() {
   version_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   connected_ip_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   reported_ip_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  hostname_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -2777,6 +2790,9 @@ void AgentInfo::SharedDtor() {
   }
   if (reported_ip_ != &::google::protobuf::internal::kEmptyString) {
     delete reported_ip_;
+  }
+  if (hostname_ != &::google::protobuf::internal::kEmptyString) {
+    delete hostname_;
   }
   if (this != default_instance_) {
   }
@@ -2824,6 +2840,11 @@ void AgentInfo::Clear() {
     if (has_reported_ip()) {
       if (reported_ip_ != &::google::protobuf::internal::kEmptyString) {
         reported_ip_->clear();
+      }
+    }
+    if (has_hostname()) {
+      if (hostname_ != &::google::protobuf::internal::kEmptyString) {
+        hostname_->clear();
       }
     }
   }
@@ -2921,6 +2942,23 @@ bool AgentInfo::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
+        if (input->ExpectTag(50)) goto parse_hostname;
+        break;
+      }
+
+      // optional string hostname = 6;
+      case 6: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_hostname:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_hostname()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+            this->hostname().data(), this->hostname().length(),
+            ::google::protobuf::internal::WireFormat::PARSE);
+        } else {
+          goto handle_uninterpreted;
+        }
         if (input->ExpectAtEnd()) return true;
         break;
       }
@@ -2985,6 +3023,15 @@ void AgentInfo::SerializeWithCachedSizes(
       5, this->reported_ip(), output);
   }
 
+  // optional string hostname = 6;
+  if (has_hostname()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->hostname().data(), this->hostname().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    ::google::protobuf::internal::WireFormatLite::WriteString(
+      6, this->hostname(), output);
+  }
+
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -3039,6 +3086,16 @@ void AgentInfo::SerializeWithCachedSizes(
         5, this->reported_ip(), target);
   }
 
+  // optional string hostname = 6;
+  if (has_hostname()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->hostname().data(), this->hostname().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        6, this->hostname(), target);
+  }
+
   if (!unknown_fields().empty()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
@@ -3084,6 +3141,13 @@ int AgentInfo::ByteSize() const {
           this->reported_ip());
     }
 
+    // optional string hostname = 6;
+    if (has_hostname()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->hostname());
+    }
+
   }
   if (!unknown_fields().empty()) {
     total_size +=
@@ -3126,6 +3190,9 @@ void AgentInfo::MergeFrom(const AgentInfo& from) {
     if (from.has_reported_ip()) {
       set_reported_ip(from.reported_ip());
     }
+    if (from.has_hostname()) {
+      set_hostname(from.hostname());
+    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
@@ -3155,6 +3222,7 @@ void AgentInfo::Swap(AgentInfo* other) {
     std::swap(version_, other->version_);
     std::swap(connected_ip_, other->connected_ip_);
     std::swap(reported_ip_, other->reported_ip_);
+    std::swap(hostname_, other->hostname_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);

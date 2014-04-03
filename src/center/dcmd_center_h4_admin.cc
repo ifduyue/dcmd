@@ -32,6 +32,10 @@ int DcmdCenterH4Admin::onRecvMsg(CwxMsgBlock*& msg, CwxTss* pThrEnv) {
     QueryTaskCmdScriptContent(msg, pTss);
   }else if (dcmd_api::MTYPE_UI_SUBTASK_PROCESS == msg->event().getMsgHeader().getMsgType()){
     QuerySubTaskProcess(msg, pTss);
+  }else if (dcmd_api::MTYPE_UI_FETCH_AGENT_HOSTNAME == msg->event().getMsgHeader().getMsgType()){
+    QueryAgentHostname(msg, pTss);
+  }else if (dcmd_api::MTYPE_UI_AUTH_INVALID_AGENT == msg->event().getMsgHeader().getMsgType()){
+    AuthIllegalAgent(msg, pTss);
   }else{
     CWX_ERROR(("Receive invalid msg type from admin port, msg_type=%d", msg->event().getMsgHeader().getMsgType()));
     app_->noticeCloseConn(msg->event().getConnId());
@@ -473,6 +477,85 @@ void DcmdCenterH4Admin::QuerySubTaskProcess(CwxMsgBlock*& msg, DcmdTss* tss) {
     &task_process_reply);
 }
 
+// 获取agent的主机名
+void DcmdCenterH4Admin::QueryAgentHostname(CwxMsgBlock*& msg, DcmdTss* tss) {
+  dcmd_api::UiAgentHostName  hostname_query;
+  dcmd_api::UiAgentHostNameReply  hostname_query_reply;
+  tss->proto_str_.assign(msg->rd_ptr(), msg->length());
+  if (!hostname_query.ParseFromString(tss->proto_str_)) {
+    CWX_ERROR(("Failed to parse agent-host-query msg from conn_id:%u, close it.",
+      msg->event().getConnId()));
+    app_->noticeCloseConn(msg->event().getConnId());
+    return;
+  }
+  hostname_query_reply.set_client_msg_id(hostname_query.client_msg_id());
+  // 检查用户名与密码
+  if ((app_->config().common().ui_user_name_ != hostname_query.user()) ||
+    (app_->config().common().ui_user_passwd_ != hostname_query.passwd()))
+  {
+    hostname_query_reply.set_err("User or password is wrong.");
+    hostname_query_reply.set_state(dcmd_api::DCMD_STATE_FAILED);
+    hostname_query_reply.set_is_exist(false);
+    hostname_query_reply.set_hostname("");
+    DcmdCenterH4Admin::ReplyQueryAgentHostname(app_,
+      tss,
+      msg->event().getConnId(),
+      msg->event().getMsgHeader().getTaskId(),
+      &hostname_query_reply);
+    return;
+  }
+  // 获取agent的hostname
+  string hostname;
+  hostname_query_reply.set_state(dcmd_api::DCMD_STATE_SUCCESS);
+  if (0 == app_->GetAgentMgr()->GetAgentHostName(hostname_query.agent_ip(), hostname)){
+    hostname_query_reply.set_is_exist(false);
+    hostname_query_reply.set_hostname("");
+  } else {
+    hostname_query_reply.set_is_exist(true);
+    hostname_query_reply.set_hostname(hostname);
+  }
+  DcmdCenterH4Admin::ReplyQueryAgentHostname(app_,
+    tss,
+    msg->event().getConnId(),
+    msg->event().getMsgHeader().getTaskId(),
+    &hostname_query_reply);
+
+}
+// 任务illegal的agent
+void DcmdCenterH4Admin::AuthIllegalAgent(CwxMsgBlock*& msg, DcmdTss* tss) {
+  dcmd_api::UiAgentValid  agent_valid;
+  dcmd_api::UiAgentValidReply  agent_valid_reply;
+  tss->proto_str_.assign(msg->rd_ptr(), msg->length());
+  if (!agent_valid.ParseFromString(tss->proto_str_)) {
+    CWX_ERROR(("Failed to parse agent-valid msg from conn_id:%u, close it.",
+      msg->event().getConnId()));
+    app_->noticeCloseConn(msg->event().getConnId());
+    return;
+  }
+  agent_valid_reply.set_client_msg_id(agent_valid.client_msg_id());
+  // 检查用户名与密码
+  if ((app_->config().common().ui_user_name_ != agent_valid.user()) ||
+    (app_->config().common().ui_user_passwd_ != agent_valid.passwd()))
+  {
+    agent_valid_reply.set_err("User or password is wrong.");
+    agent_valid_reply.set_state(dcmd_api::DCMD_STATE_FAILED);
+    DcmdCenterH4Admin::ReplyValidAgent(app_,
+      tss,
+      msg->event().getConnId(),
+      msg->event().getMsgHeader().getTaskId(),
+      &agent_valid_reply);
+    return;
+  }
+  // valid agent
+  app_->GetAgentMgr()->AuthIllegalAgent(agent_valid.agent_ip())
+  agent_valid_reply.set_state(dcmd_api::DCMD_STATE_SUCCESS);
+  DcmdCenterH4Admin::ReplyValidAgent(app_,
+    tss,
+    msg->event().getConnId(),
+    msg->event().getMsgHeader().getTaskId(),
+    &agent_valid_reply);
+}
+
 void DcmdCenterH4Admin::ReplyExecOprCmd(DcmdCenterApp* app,
   DcmdTss* tss,
   uint32_t conn_id,
@@ -668,6 +751,49 @@ void DcmdCenterH4Admin::ReplyAgentSubTaskProcess(DcmdCenterApp* app,
     tss->proto_str_.length());
   if (!msg) {
     CWX_ERROR(("Failure to pack task process msg for no memory"));
+    exit(1);
+  }
+  ReplyAdmin(app, conn_id, msg);
+}
+void DcmdCenterH4Admin::ReplyQueryAgentHostname(DcmdCenterApp* app,
+  DcmdTss* tss,
+  uint32_t conn_id,
+  uint32_t msg_task_id,
+  dcmd_api::UiAgentHostNameReply* result)
+{
+  if (!result->SerializeToString(&tss->proto_str_)) {
+    CWX_ERROR(("Failure to pack query-agent-hostname msg."));
+    app->noticeCloseConn(conn_id);
+    return;
+  }
+  CwxMsgHead head(0, 0, dcmd_api::MTYPE_UI_FETCH_AGENT_HOSTNAME_R, msg_task_id,
+    tss->proto_str_.length());
+  CwxMsgBlock* msg = CwxMsgBlockAlloc::pack(head, tss->proto_str_.c_str(),
+    tss->proto_str_.length());
+  if (!msg) {
+    CWX_ERROR(("Failure to pack query-agent-hostname msg for no memory"));
+    exit(1);
+  }
+  ReplyAdmin(app, conn_id, msg);
+
+}
+void DcmdCenterH4Admin::ReplyValidAgent(DcmdCenterApp* app,
+  DcmdTss* tss,
+  uint32_t conn_id,
+  uint32_t msg_task_id,
+  dcmd_api::UiAgentValidReply* result)
+{
+  if (!result->SerializeToString(&tss->proto_str_)) {
+    CWX_ERROR(("Failure to pack valid-illegal-agent msg."));
+    app->noticeCloseConn(conn_id);
+    return;
+  }
+  CwxMsgHead head(0, 0, dcmd_api::MTYPE_UI_AUTH_INVALID_AGENT_R, msg_task_id,
+    tss->proto_str_.length());
+  CwxMsgBlock* msg = CwxMsgBlockAlloc::pack(head, tss->proto_str_.c_str(),
+    tss->proto_str_.length());
+  if (!msg) {
+    CWX_ERROR(("Failure to pack valid-illegal-agent msg for no memory"));
     exit(1);
   }
   ReplyAdmin(app, conn_id, msg);

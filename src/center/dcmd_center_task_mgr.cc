@@ -1181,7 +1181,7 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdAddTaskNode(DcmdTss* tss, uint32_t
   }
   // 插入add node的命令
   if (!InsertCommand(tss, true, uid, task->task_id_,
-    0, "", 0, task->service_.c_str(), "", dcmd_api::CMD_ADD_NODE,
+    0, svr_pool, 0, task->service_.c_str(), ip, dcmd_api::CMD_ADD_NODE,
     dcmd_api::COMMAND_SUCCESS, ""))
   {
     CWX_ERROR((tss->err_msg_.c_str()));
@@ -1191,6 +1191,81 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdAddTaskNode(DcmdTss* tss, uint32_t
   if (!LoadNewSubtask(tss)) {
     mysql_->disconnect();
     return dcmd_api::DCMD_STATE_FAILED;
+  }
+  return dcmd_api::DCMD_STATE_SUCCESS;
+}
+
+dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdDelTaskNode(DcmdTss* tss, uint32_t task_id,
+  uint64_t subtask_id, uint32_t uid)
+{
+  DcmdCenterTask* task =  GetTask(task_id);
+  string subtask_str;
+  CwxCommon::toString(subtask_id, tss->m_szBuf2K, 10);
+  subtask_str = tss->m_szBuf2K;
+  // 加载任务
+  if (!task) {
+    if (!LoadNewTask(tss, false)) {
+      mysql_->disconnect();
+      return dcmd_api::DCMD_STATE_FAILED;
+    }
+    task = GetTask(task_id);
+  }
+  if (!task) {
+    tss->err_msg_ = "No task.";
+    return dcmd_api::DCMD_STATE_NO_TASK;
+  }
+  if (task->is_freezed_) {
+    tss->err_msg_ = "Task is freezed.";
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
+  // 获取subtask
+  map<uint64_t, DcmdCenterSubtask*>::iterator iter = all_subtasks_.find(subtask_id);
+  if (iter == all_subtasks_.end()) {
+    CwxCommon::snprintf(tss->m_szBuf2K, "subtask[%s] doesn't exist.", subtask_str.c_str());
+    tss->err_msg_ = tss->m_szBuf2K;
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
+  DcmdCenterSubtask* subtask;
+  if (subtask->task_ != task) {
+    CwxCommon::snprintf(tss->m_szBuf2K, "subtask[%s]'s task-id is %u, isnt %u",
+      subtask_str.c_str(), subtask->task_->task_id_, task_id);
+    tss->err_msg_ = tss->m_szBuf2K;
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
+  // 从数据库中删除subtask
+  CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
+    "delete from dcmd_task_node where subtask_id = %u", subtask_str.c_str());
+  if (!ExecSql(tss, false)) {
+    CWX_ERROR((tss->err_msg_.c_str()));
+    mysql_->disconnect();
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
+  if (subtask->exec_cmd_) {
+    if (!UpdateCmdState(tss, false, subtask->exec_cmd_->cmd_id_, dcmd_api::COMMAND_FAILED, "subtask is removed.")) {
+      CWX_ERROR((tss->err_msg_.c_str()));
+      mysql_->disconnect();
+      return dcmd_api::DCMD_STATE_FAILED;
+    }
+  }
+  // 插入add node的命令
+  if (!InsertCommand(tss, true, uid, task->task_id_, subtask_id,
+    subtask->svr_pool_name_.c_str(), subtask->svr_pool_->svr_pool_id_,
+    subtask->service_.c_str(), subtask->ip_.c_str(), dcmd_api::CMD_DEL_NODE,
+    dcmd_api::COMMAND_SUCCESS, ""))
+  {
+    CWX_ERROR((tss->err_msg_.c_str()));
+    mysql_->disconnect();
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
+  // 从内存中删除ip
+  {
+    // 加此锁是为了防止与admin线程冲突
+    CwxMutexGuard<CwxMutexLock> lock(&lock_);
+    all_subtasks_.erase(iter);
+    if (subtask->exec_cmd_) {
+      RemoveCmd(subtask->exec_cmd_);
+    }
+    delete subtask;
   }
   return dcmd_api::DCMD_STATE_SUCCESS;
 }

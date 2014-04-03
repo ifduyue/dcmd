@@ -74,6 +74,18 @@ class DcmdCenterH4Admin: public CwxCmdOp {
     uint32_t conn_id,
     uint32_t msg_task_id,
     dcmd_api::UiAgentTaskProcessReply* result);
+  // 回复agent的hostname查询
+  static void ReplyQueryAgentHostname(DcmdCenterApp* app,
+    DcmdTss* tss,
+    uint32_t conn_id,
+    uint32_t msg_task_id,
+    dcmd_api::UiAgentHostNameReply* result);
+  // 回复鉴权illegal的agent
+  static void ReplyValidAgent(DcmdCenterApp* app,
+    DcmdTss* tss,
+    uint32_t conn_id,
+    uint32_t msg_task_id,
+    dcmd_api::UiAgentValidReply* result);
   // 回复命令的执行结果
   static void ReplyUiTaskCmd(DcmdCenterApp* app,
     DcmdTss* tss,
@@ -100,6 +112,10 @@ class DcmdCenterH4Admin: public CwxCmdOp {
   void QueryTaskCmdScriptContent(CwxMsgBlock*& msg, DcmdTss* tss);
   // 任务进度查询
   void QuerySubTaskProcess(CwxMsgBlock*& msg, DcmdTss* tss);
+  // 获取agent的主机名
+  void QueryAgentHostname(CwxMsgBlock*& msg, DcmdTss* tss);
+  // 任务illegal的agent
+  void AuthIllegalAgent(CwxMsgBlock*& msg, DcmdTss* tss);
   // 回复管理系统
   static void ReplyAdmin(DcmdCenterApp* app, uint32_t conn_id, CwxMsgBlock* msg);
   // 获取下一个消息的Task Id

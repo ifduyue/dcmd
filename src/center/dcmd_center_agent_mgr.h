@@ -37,6 +37,7 @@ namespace dcmd {
       conn_ip_ = item.conn_ip_;
       report_agent_ips_ = item.report_agent_ips_;
       version_ = item.version_;
+      hostname_ = item.hostname_;
       return *this;
     }
     DcmdAgentConnect(DcmdAgentConnect const& item){
@@ -48,6 +49,7 @@ namespace dcmd {
       conn_ip_ = item.conn_ip_;
       report_agent_ips_ = item.report_agent_ips_;
       version_ = item.version_;
+      hostname_ = item.hostname_;
     }
   public:
     // 连接建立的时间
@@ -66,6 +68,8 @@ namespace dcmd {
     string              report_agent_ips_;
     // agent的版本
     string              version_;
+    // 主机名
+    string              hostname_;
   };
 
   // 非法的agent连接对象
@@ -75,22 +79,25 @@ namespace dcmd {
       conn_time_ = time(NULL);
     }
     ///构造函数
-    DcmdIllegalAgentConnect(string const& conn_ip, string const& report_ips){
+    DcmdIllegalAgentConnect(string const& conn_ip, string const& report_ips, string const& hostname){
       conn_time_ = time(NULL);
       conn_ip_ = conn_ip;
       report_agent_ips_ = report_ips;
+      hostname_ = hostname;
     }
     DcmdIllegalAgentConnect& operator=(DcmdIllegalAgentConnect const& item){
       if (this == &item) return *this;
       conn_time_ = item.conn_time_;
       conn_ip_ = item.conn_ip_;
       report_agent_ips_ = item.report_agent_ips_;
+      hostname_ = item.hostname_;
       return *this;
     }
     DcmdIllegalAgentConnect(DcmdIllegalAgentConnect const& item){
       conn_time_ = item.conn_time_;
       conn_ip_ = item.conn_ip_;
       report_agent_ips_ = item.report_agent_ips_;
+      hostname_ = item.hostname_;
     }
   public:
     // 连接时间戳。
@@ -99,6 +106,8 @@ namespace dcmd {
     string              conn_ip_;
     // 报告的agnet ip地址
     string              report_agent_ips_;
+    // 主机名
+    string              hostname_;
   };
 
   // agent管理对象
@@ -119,9 +128,9 @@ namespace dcmd {
       }
       if (ip_table_) delete ip_table_;
       {
-        map<string, DcmdIllegalAgentConnect*>::iterator iter = illegal_agent_map_.begin();
-        while (iter != illegal_agent_map_.end()) {
-          delete iter->second;
+        list<DcmdIllegalAgentConnect*>::iterator iter = illegal_agent_list_.begin();
+        while (iter != illegal_agent_list_.end()) {
+          delete *iter;
           ++iter;
         }
       }
@@ -138,8 +147,10 @@ namespace dcmd {
       string const& agent_ip, // agent报告的agent ip
       string const& version, // agent的版本信息
       string const & report_ips, // 报告的agent的所有ip
+      string const & hostname, // 报告的主机名
       string& old_conn_ip, // 若agent ip存在，则返回存在agent ip对应的连接ip
-      uint32_t& old_conn_id ///<若agent ip存在，则返回存在agent ip对应的连接id
+      uint32_t& old_conn_id, // 若agent ip存在，则返回存在agent ip对应的连接id
+      string& old_hostname, // 若agent ip存在，则返回存在agent的主机名
       );
     // 对取消对某个ip的auth动作
     void UnAuth(string const& agent_ip);
@@ -177,12 +188,17 @@ namespace dcmd {
       string& agent_ip);
     // 添加新的无效连接；false表示连接存在
     bool AddInvalidConn(string const& conn_ip, // 连接ip
-      string const&  report_ips // 报告的ip
+      string const&  report_ips, // 报告的ip
+      string const& hostname // 主机名
       );
     // 指定连接ip是否为无效的连接ip地址
     bool IsInvalidConnIp(string const& conn_ip);
     // 获取非法的agent列表
     void GetInvalidAgent(dcmd_api::UiInvalidAgentInfoReply& result);
+    // 获取Agent主机名，返回0：不存在；1：认证的agent；2：未认证的agent
+    int GetAgentHostName(string const& agent_ip, string & hostname);
+    // 认证illegal的主机，返回true：成功；false：主机不存在
+    bool AuthIllegalAgent(string const& conn_ip);
 
   private:
     // Load node数据

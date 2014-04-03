@@ -54,6 +54,10 @@ class UiAgentTaskProcess;
 class UiAgentTaskProcessReply;
 class UiTaskCmd;
 class UiTaskCmdReply;
+class UiAgentHostName;
+class UiAgentHostNameReply;
+class UiAgentValid;
+class UiAgentValidReply;
 
 // ===================================================================
 
@@ -2746,6 +2750,494 @@ class UiTaskCmdReply : public ::google::protobuf::Message {
 
   void InitAsDefaultInstance();
   static UiTaskCmdReply* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class UiAgentHostName : public ::google::protobuf::Message {
+ public:
+  UiAgentHostName();
+  virtual ~UiAgentHostName();
+
+  UiAgentHostName(const UiAgentHostName& from);
+
+  inline UiAgentHostName& operator=(const UiAgentHostName& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const UiAgentHostName& default_instance();
+
+  void Swap(UiAgentHostName* other);
+
+  // implements Message ----------------------------------------------
+
+  UiAgentHostName* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const UiAgentHostName& from);
+  void MergeFrom(const UiAgentHostName& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required int32 client_msg_id = 1;
+  inline bool has_client_msg_id() const;
+  inline void clear_client_msg_id();
+  static const int kClientMsgIdFieldNumber = 1;
+  inline ::google::protobuf::int32 client_msg_id() const;
+  inline void set_client_msg_id(::google::protobuf::int32 value);
+
+  // required string agent_ip = 2;
+  inline bool has_agent_ip() const;
+  inline void clear_agent_ip();
+  static const int kAgentIpFieldNumber = 2;
+  inline const ::std::string& agent_ip() const;
+  inline void set_agent_ip(const ::std::string& value);
+  inline void set_agent_ip(const char* value);
+  inline void set_agent_ip(const char* value, size_t size);
+  inline ::std::string* mutable_agent_ip();
+  inline ::std::string* release_agent_ip();
+  inline void set_allocated_agent_ip(::std::string* agent_ip);
+
+  // required string user = 3;
+  inline bool has_user() const;
+  inline void clear_user();
+  static const int kUserFieldNumber = 3;
+  inline const ::std::string& user() const;
+  inline void set_user(const ::std::string& value);
+  inline void set_user(const char* value);
+  inline void set_user(const char* value, size_t size);
+  inline ::std::string* mutable_user();
+  inline ::std::string* release_user();
+  inline void set_allocated_user(::std::string* user);
+
+  // required string passwd = 4;
+  inline bool has_passwd() const;
+  inline void clear_passwd();
+  static const int kPasswdFieldNumber = 4;
+  inline const ::std::string& passwd() const;
+  inline void set_passwd(const ::std::string& value);
+  inline void set_passwd(const char* value);
+  inline void set_passwd(const char* value, size_t size);
+  inline ::std::string* mutable_passwd();
+  inline ::std::string* release_passwd();
+  inline void set_allocated_passwd(::std::string* passwd);
+
+  // @@protoc_insertion_point(class_scope:dcmd_api.UiAgentHostName)
+ private:
+  inline void set_has_client_msg_id();
+  inline void clear_has_client_msg_id();
+  inline void set_has_agent_ip();
+  inline void clear_has_agent_ip();
+  inline void set_has_user();
+  inline void clear_has_user();
+  inline void set_has_passwd();
+  inline void clear_has_passwd();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::std::string* agent_ip_;
+  ::std::string* user_;
+  ::std::string* passwd_;
+  ::google::protobuf::int32 client_msg_id_;
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(4 + 31) / 32];
+
+  friend void  protobuf_AddDesc_dcmd_5fui_2eproto();
+  friend void protobuf_AssignDesc_dcmd_5fui_2eproto();
+  friend void protobuf_ShutdownFile_dcmd_5fui_2eproto();
+
+  void InitAsDefaultInstance();
+  static UiAgentHostName* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class UiAgentHostNameReply : public ::google::protobuf::Message {
+ public:
+  UiAgentHostNameReply();
+  virtual ~UiAgentHostNameReply();
+
+  UiAgentHostNameReply(const UiAgentHostNameReply& from);
+
+  inline UiAgentHostNameReply& operator=(const UiAgentHostNameReply& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const UiAgentHostNameReply& default_instance();
+
+  void Swap(UiAgentHostNameReply* other);
+
+  // implements Message ----------------------------------------------
+
+  UiAgentHostNameReply* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const UiAgentHostNameReply& from);
+  void MergeFrom(const UiAgentHostNameReply& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required int32 client_msg_id = 1;
+  inline bool has_client_msg_id() const;
+  inline void clear_client_msg_id();
+  static const int kClientMsgIdFieldNumber = 1;
+  inline ::google::protobuf::int32 client_msg_id() const;
+  inline void set_client_msg_id(::google::protobuf::int32 value);
+
+  // required .dcmd_api.DcmdState state = 2;
+  inline bool has_state() const;
+  inline void clear_state();
+  static const int kStateFieldNumber = 2;
+  inline ::dcmd_api::DcmdState state() const;
+  inline void set_state(::dcmd_api::DcmdState value);
+
+  // required bool is_exist = 3;
+  inline bool has_is_exist() const;
+  inline void clear_is_exist();
+  static const int kIsExistFieldNumber = 3;
+  inline bool is_exist() const;
+  inline void set_is_exist(bool value);
+
+  // required .dcmd_api.AgentState hostname = 4;
+  inline bool has_hostname() const;
+  inline void clear_hostname();
+  static const int kHostnameFieldNumber = 4;
+  inline ::dcmd_api::AgentState hostname() const;
+  inline void set_hostname(::dcmd_api::AgentState value);
+
+  // optional string err = 5;
+  inline bool has_err() const;
+  inline void clear_err();
+  static const int kErrFieldNumber = 5;
+  inline const ::std::string& err() const;
+  inline void set_err(const ::std::string& value);
+  inline void set_err(const char* value);
+  inline void set_err(const char* value, size_t size);
+  inline ::std::string* mutable_err();
+  inline ::std::string* release_err();
+  inline void set_allocated_err(::std::string* err);
+
+  // @@protoc_insertion_point(class_scope:dcmd_api.UiAgentHostNameReply)
+ private:
+  inline void set_has_client_msg_id();
+  inline void clear_has_client_msg_id();
+  inline void set_has_state();
+  inline void clear_has_state();
+  inline void set_has_is_exist();
+  inline void clear_has_is_exist();
+  inline void set_has_hostname();
+  inline void clear_has_hostname();
+  inline void set_has_err();
+  inline void clear_has_err();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::int32 client_msg_id_;
+  int state_;
+  bool is_exist_;
+  int hostname_;
+  ::std::string* err_;
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(5 + 31) / 32];
+
+  friend void  protobuf_AddDesc_dcmd_5fui_2eproto();
+  friend void protobuf_AssignDesc_dcmd_5fui_2eproto();
+  friend void protobuf_ShutdownFile_dcmd_5fui_2eproto();
+
+  void InitAsDefaultInstance();
+  static UiAgentHostNameReply* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class UiAgentValid : public ::google::protobuf::Message {
+ public:
+  UiAgentValid();
+  virtual ~UiAgentValid();
+
+  UiAgentValid(const UiAgentValid& from);
+
+  inline UiAgentValid& operator=(const UiAgentValid& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const UiAgentValid& default_instance();
+
+  void Swap(UiAgentValid* other);
+
+  // implements Message ----------------------------------------------
+
+  UiAgentValid* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const UiAgentValid& from);
+  void MergeFrom(const UiAgentValid& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required int32 client_msg_id = 1;
+  inline bool has_client_msg_id() const;
+  inline void clear_client_msg_id();
+  static const int kClientMsgIdFieldNumber = 1;
+  inline ::google::protobuf::int32 client_msg_id() const;
+  inline void set_client_msg_id(::google::protobuf::int32 value);
+
+  // required string agent_ip = 2;
+  inline bool has_agent_ip() const;
+  inline void clear_agent_ip();
+  static const int kAgentIpFieldNumber = 2;
+  inline const ::std::string& agent_ip() const;
+  inline void set_agent_ip(const ::std::string& value);
+  inline void set_agent_ip(const char* value);
+  inline void set_agent_ip(const char* value, size_t size);
+  inline ::std::string* mutable_agent_ip();
+  inline ::std::string* release_agent_ip();
+  inline void set_allocated_agent_ip(::std::string* agent_ip);
+
+  // required string user = 3;
+  inline bool has_user() const;
+  inline void clear_user();
+  static const int kUserFieldNumber = 3;
+  inline const ::std::string& user() const;
+  inline void set_user(const ::std::string& value);
+  inline void set_user(const char* value);
+  inline void set_user(const char* value, size_t size);
+  inline ::std::string* mutable_user();
+  inline ::std::string* release_user();
+  inline void set_allocated_user(::std::string* user);
+
+  // required string passwd = 4;
+  inline bool has_passwd() const;
+  inline void clear_passwd();
+  static const int kPasswdFieldNumber = 4;
+  inline const ::std::string& passwd() const;
+  inline void set_passwd(const ::std::string& value);
+  inline void set_passwd(const char* value);
+  inline void set_passwd(const char* value, size_t size);
+  inline ::std::string* mutable_passwd();
+  inline ::std::string* release_passwd();
+  inline void set_allocated_passwd(::std::string* passwd);
+
+  // @@protoc_insertion_point(class_scope:dcmd_api.UiAgentValid)
+ private:
+  inline void set_has_client_msg_id();
+  inline void clear_has_client_msg_id();
+  inline void set_has_agent_ip();
+  inline void clear_has_agent_ip();
+  inline void set_has_user();
+  inline void clear_has_user();
+  inline void set_has_passwd();
+  inline void clear_has_passwd();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::std::string* agent_ip_;
+  ::std::string* user_;
+  ::std::string* passwd_;
+  ::google::protobuf::int32 client_msg_id_;
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(4 + 31) / 32];
+
+  friend void  protobuf_AddDesc_dcmd_5fui_2eproto();
+  friend void protobuf_AssignDesc_dcmd_5fui_2eproto();
+  friend void protobuf_ShutdownFile_dcmd_5fui_2eproto();
+
+  void InitAsDefaultInstance();
+  static UiAgentValid* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class UiAgentValidReply : public ::google::protobuf::Message {
+ public:
+  UiAgentValidReply();
+  virtual ~UiAgentValidReply();
+
+  UiAgentValidReply(const UiAgentValidReply& from);
+
+  inline UiAgentValidReply& operator=(const UiAgentValidReply& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const UiAgentValidReply& default_instance();
+
+  void Swap(UiAgentValidReply* other);
+
+  // implements Message ----------------------------------------------
+
+  UiAgentValidReply* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const UiAgentValidReply& from);
+  void MergeFrom(const UiAgentValidReply& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required int32 client_msg_id = 1;
+  inline bool has_client_msg_id() const;
+  inline void clear_client_msg_id();
+  static const int kClientMsgIdFieldNumber = 1;
+  inline ::google::protobuf::int32 client_msg_id() const;
+  inline void set_client_msg_id(::google::protobuf::int32 value);
+
+  // required .dcmd_api.DcmdState state = 2;
+  inline bool has_state() const;
+  inline void clear_state();
+  static const int kStateFieldNumber = 2;
+  inline ::dcmd_api::DcmdState state() const;
+  inline void set_state(::dcmd_api::DcmdState value);
+
+  // optional string err = 3;
+  inline bool has_err() const;
+  inline void clear_err();
+  static const int kErrFieldNumber = 3;
+  inline const ::std::string& err() const;
+  inline void set_err(const ::std::string& value);
+  inline void set_err(const char* value);
+  inline void set_err(const char* value, size_t size);
+  inline ::std::string* mutable_err();
+  inline ::std::string* release_err();
+  inline void set_allocated_err(::std::string* err);
+
+  // @@protoc_insertion_point(class_scope:dcmd_api.UiAgentValidReply)
+ private:
+  inline void set_has_client_msg_id();
+  inline void clear_has_client_msg_id();
+  inline void set_has_state();
+  inline void clear_has_state();
+  inline void set_has_err();
+  inline void clear_has_err();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::int32 client_msg_id_;
+  int state_;
+  ::std::string* err_;
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(3 + 31) / 32];
+
+  friend void  protobuf_AddDesc_dcmd_5fui_2eproto();
+  friend void protobuf_AssignDesc_dcmd_5fui_2eproto();
+  friend void protobuf_ShutdownFile_dcmd_5fui_2eproto();
+
+  void InitAsDefaultInstance();
+  static UiAgentValidReply* default_instance_;
 };
 // ===================================================================
 
@@ -7354,6 +7846,761 @@ inline ::std::string* UiTaskCmdReply::release_err() {
   }
 }
 inline void UiTaskCmdReply::set_allocated_err(::std::string* err) {
+  if (err_ != &::google::protobuf::internal::kEmptyString) {
+    delete err_;
+  }
+  if (err) {
+    set_has_err();
+    err_ = err;
+  } else {
+    clear_has_err();
+    err_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  }
+}
+
+// -------------------------------------------------------------------
+
+// UiAgentHostName
+
+// required int32 client_msg_id = 1;
+inline bool UiAgentHostName::has_client_msg_id() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void UiAgentHostName::set_has_client_msg_id() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void UiAgentHostName::clear_has_client_msg_id() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void UiAgentHostName::clear_client_msg_id() {
+  client_msg_id_ = 0;
+  clear_has_client_msg_id();
+}
+inline ::google::protobuf::int32 UiAgentHostName::client_msg_id() const {
+  return client_msg_id_;
+}
+inline void UiAgentHostName::set_client_msg_id(::google::protobuf::int32 value) {
+  set_has_client_msg_id();
+  client_msg_id_ = value;
+}
+
+// required string agent_ip = 2;
+inline bool UiAgentHostName::has_agent_ip() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void UiAgentHostName::set_has_agent_ip() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void UiAgentHostName::clear_has_agent_ip() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void UiAgentHostName::clear_agent_ip() {
+  if (agent_ip_ != &::google::protobuf::internal::kEmptyString) {
+    agent_ip_->clear();
+  }
+  clear_has_agent_ip();
+}
+inline const ::std::string& UiAgentHostName::agent_ip() const {
+  return *agent_ip_;
+}
+inline void UiAgentHostName::set_agent_ip(const ::std::string& value) {
+  set_has_agent_ip();
+  if (agent_ip_ == &::google::protobuf::internal::kEmptyString) {
+    agent_ip_ = new ::std::string;
+  }
+  agent_ip_->assign(value);
+}
+inline void UiAgentHostName::set_agent_ip(const char* value) {
+  set_has_agent_ip();
+  if (agent_ip_ == &::google::protobuf::internal::kEmptyString) {
+    agent_ip_ = new ::std::string;
+  }
+  agent_ip_->assign(value);
+}
+inline void UiAgentHostName::set_agent_ip(const char* value, size_t size) {
+  set_has_agent_ip();
+  if (agent_ip_ == &::google::protobuf::internal::kEmptyString) {
+    agent_ip_ = new ::std::string;
+  }
+  agent_ip_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* UiAgentHostName::mutable_agent_ip() {
+  set_has_agent_ip();
+  if (agent_ip_ == &::google::protobuf::internal::kEmptyString) {
+    agent_ip_ = new ::std::string;
+  }
+  return agent_ip_;
+}
+inline ::std::string* UiAgentHostName::release_agent_ip() {
+  clear_has_agent_ip();
+  if (agent_ip_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = agent_ip_;
+    agent_ip_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+inline void UiAgentHostName::set_allocated_agent_ip(::std::string* agent_ip) {
+  if (agent_ip_ != &::google::protobuf::internal::kEmptyString) {
+    delete agent_ip_;
+  }
+  if (agent_ip) {
+    set_has_agent_ip();
+    agent_ip_ = agent_ip;
+  } else {
+    clear_has_agent_ip();
+    agent_ip_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  }
+}
+
+// required string user = 3;
+inline bool UiAgentHostName::has_user() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void UiAgentHostName::set_has_user() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void UiAgentHostName::clear_has_user() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void UiAgentHostName::clear_user() {
+  if (user_ != &::google::protobuf::internal::kEmptyString) {
+    user_->clear();
+  }
+  clear_has_user();
+}
+inline const ::std::string& UiAgentHostName::user() const {
+  return *user_;
+}
+inline void UiAgentHostName::set_user(const ::std::string& value) {
+  set_has_user();
+  if (user_ == &::google::protobuf::internal::kEmptyString) {
+    user_ = new ::std::string;
+  }
+  user_->assign(value);
+}
+inline void UiAgentHostName::set_user(const char* value) {
+  set_has_user();
+  if (user_ == &::google::protobuf::internal::kEmptyString) {
+    user_ = new ::std::string;
+  }
+  user_->assign(value);
+}
+inline void UiAgentHostName::set_user(const char* value, size_t size) {
+  set_has_user();
+  if (user_ == &::google::protobuf::internal::kEmptyString) {
+    user_ = new ::std::string;
+  }
+  user_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* UiAgentHostName::mutable_user() {
+  set_has_user();
+  if (user_ == &::google::protobuf::internal::kEmptyString) {
+    user_ = new ::std::string;
+  }
+  return user_;
+}
+inline ::std::string* UiAgentHostName::release_user() {
+  clear_has_user();
+  if (user_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = user_;
+    user_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+inline void UiAgentHostName::set_allocated_user(::std::string* user) {
+  if (user_ != &::google::protobuf::internal::kEmptyString) {
+    delete user_;
+  }
+  if (user) {
+    set_has_user();
+    user_ = user;
+  } else {
+    clear_has_user();
+    user_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  }
+}
+
+// required string passwd = 4;
+inline bool UiAgentHostName::has_passwd() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void UiAgentHostName::set_has_passwd() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void UiAgentHostName::clear_has_passwd() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void UiAgentHostName::clear_passwd() {
+  if (passwd_ != &::google::protobuf::internal::kEmptyString) {
+    passwd_->clear();
+  }
+  clear_has_passwd();
+}
+inline const ::std::string& UiAgentHostName::passwd() const {
+  return *passwd_;
+}
+inline void UiAgentHostName::set_passwd(const ::std::string& value) {
+  set_has_passwd();
+  if (passwd_ == &::google::protobuf::internal::kEmptyString) {
+    passwd_ = new ::std::string;
+  }
+  passwd_->assign(value);
+}
+inline void UiAgentHostName::set_passwd(const char* value) {
+  set_has_passwd();
+  if (passwd_ == &::google::protobuf::internal::kEmptyString) {
+    passwd_ = new ::std::string;
+  }
+  passwd_->assign(value);
+}
+inline void UiAgentHostName::set_passwd(const char* value, size_t size) {
+  set_has_passwd();
+  if (passwd_ == &::google::protobuf::internal::kEmptyString) {
+    passwd_ = new ::std::string;
+  }
+  passwd_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* UiAgentHostName::mutable_passwd() {
+  set_has_passwd();
+  if (passwd_ == &::google::protobuf::internal::kEmptyString) {
+    passwd_ = new ::std::string;
+  }
+  return passwd_;
+}
+inline ::std::string* UiAgentHostName::release_passwd() {
+  clear_has_passwd();
+  if (passwd_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = passwd_;
+    passwd_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+inline void UiAgentHostName::set_allocated_passwd(::std::string* passwd) {
+  if (passwd_ != &::google::protobuf::internal::kEmptyString) {
+    delete passwd_;
+  }
+  if (passwd) {
+    set_has_passwd();
+    passwd_ = passwd;
+  } else {
+    clear_has_passwd();
+    passwd_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  }
+}
+
+// -------------------------------------------------------------------
+
+// UiAgentHostNameReply
+
+// required int32 client_msg_id = 1;
+inline bool UiAgentHostNameReply::has_client_msg_id() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void UiAgentHostNameReply::set_has_client_msg_id() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void UiAgentHostNameReply::clear_has_client_msg_id() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void UiAgentHostNameReply::clear_client_msg_id() {
+  client_msg_id_ = 0;
+  clear_has_client_msg_id();
+}
+inline ::google::protobuf::int32 UiAgentHostNameReply::client_msg_id() const {
+  return client_msg_id_;
+}
+inline void UiAgentHostNameReply::set_client_msg_id(::google::protobuf::int32 value) {
+  set_has_client_msg_id();
+  client_msg_id_ = value;
+}
+
+// required .dcmd_api.DcmdState state = 2;
+inline bool UiAgentHostNameReply::has_state() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void UiAgentHostNameReply::set_has_state() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void UiAgentHostNameReply::clear_has_state() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void UiAgentHostNameReply::clear_state() {
+  state_ = 0;
+  clear_has_state();
+}
+inline ::dcmd_api::DcmdState UiAgentHostNameReply::state() const {
+  return static_cast< ::dcmd_api::DcmdState >(state_);
+}
+inline void UiAgentHostNameReply::set_state(::dcmd_api::DcmdState value) {
+  assert(::dcmd_api::DcmdState_IsValid(value));
+  set_has_state();
+  state_ = value;
+}
+
+// required bool is_exist = 3;
+inline bool UiAgentHostNameReply::has_is_exist() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void UiAgentHostNameReply::set_has_is_exist() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void UiAgentHostNameReply::clear_has_is_exist() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void UiAgentHostNameReply::clear_is_exist() {
+  is_exist_ = false;
+  clear_has_is_exist();
+}
+inline bool UiAgentHostNameReply::is_exist() const {
+  return is_exist_;
+}
+inline void UiAgentHostNameReply::set_is_exist(bool value) {
+  set_has_is_exist();
+  is_exist_ = value;
+}
+
+// required .dcmd_api.AgentState hostname = 4;
+inline bool UiAgentHostNameReply::has_hostname() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void UiAgentHostNameReply::set_has_hostname() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void UiAgentHostNameReply::clear_has_hostname() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void UiAgentHostNameReply::clear_hostname() {
+  hostname_ = 0;
+  clear_has_hostname();
+}
+inline ::dcmd_api::AgentState UiAgentHostNameReply::hostname() const {
+  return static_cast< ::dcmd_api::AgentState >(hostname_);
+}
+inline void UiAgentHostNameReply::set_hostname(::dcmd_api::AgentState value) {
+  assert(::dcmd_api::AgentState_IsValid(value));
+  set_has_hostname();
+  hostname_ = value;
+}
+
+// optional string err = 5;
+inline bool UiAgentHostNameReply::has_err() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void UiAgentHostNameReply::set_has_err() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void UiAgentHostNameReply::clear_has_err() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void UiAgentHostNameReply::clear_err() {
+  if (err_ != &::google::protobuf::internal::kEmptyString) {
+    err_->clear();
+  }
+  clear_has_err();
+}
+inline const ::std::string& UiAgentHostNameReply::err() const {
+  return *err_;
+}
+inline void UiAgentHostNameReply::set_err(const ::std::string& value) {
+  set_has_err();
+  if (err_ == &::google::protobuf::internal::kEmptyString) {
+    err_ = new ::std::string;
+  }
+  err_->assign(value);
+}
+inline void UiAgentHostNameReply::set_err(const char* value) {
+  set_has_err();
+  if (err_ == &::google::protobuf::internal::kEmptyString) {
+    err_ = new ::std::string;
+  }
+  err_->assign(value);
+}
+inline void UiAgentHostNameReply::set_err(const char* value, size_t size) {
+  set_has_err();
+  if (err_ == &::google::protobuf::internal::kEmptyString) {
+    err_ = new ::std::string;
+  }
+  err_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* UiAgentHostNameReply::mutable_err() {
+  set_has_err();
+  if (err_ == &::google::protobuf::internal::kEmptyString) {
+    err_ = new ::std::string;
+  }
+  return err_;
+}
+inline ::std::string* UiAgentHostNameReply::release_err() {
+  clear_has_err();
+  if (err_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = err_;
+    err_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+inline void UiAgentHostNameReply::set_allocated_err(::std::string* err) {
+  if (err_ != &::google::protobuf::internal::kEmptyString) {
+    delete err_;
+  }
+  if (err) {
+    set_has_err();
+    err_ = err;
+  } else {
+    clear_has_err();
+    err_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  }
+}
+
+// -------------------------------------------------------------------
+
+// UiAgentValid
+
+// required int32 client_msg_id = 1;
+inline bool UiAgentValid::has_client_msg_id() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void UiAgentValid::set_has_client_msg_id() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void UiAgentValid::clear_has_client_msg_id() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void UiAgentValid::clear_client_msg_id() {
+  client_msg_id_ = 0;
+  clear_has_client_msg_id();
+}
+inline ::google::protobuf::int32 UiAgentValid::client_msg_id() const {
+  return client_msg_id_;
+}
+inline void UiAgentValid::set_client_msg_id(::google::protobuf::int32 value) {
+  set_has_client_msg_id();
+  client_msg_id_ = value;
+}
+
+// required string agent_ip = 2;
+inline bool UiAgentValid::has_agent_ip() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void UiAgentValid::set_has_agent_ip() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void UiAgentValid::clear_has_agent_ip() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void UiAgentValid::clear_agent_ip() {
+  if (agent_ip_ != &::google::protobuf::internal::kEmptyString) {
+    agent_ip_->clear();
+  }
+  clear_has_agent_ip();
+}
+inline const ::std::string& UiAgentValid::agent_ip() const {
+  return *agent_ip_;
+}
+inline void UiAgentValid::set_agent_ip(const ::std::string& value) {
+  set_has_agent_ip();
+  if (agent_ip_ == &::google::protobuf::internal::kEmptyString) {
+    agent_ip_ = new ::std::string;
+  }
+  agent_ip_->assign(value);
+}
+inline void UiAgentValid::set_agent_ip(const char* value) {
+  set_has_agent_ip();
+  if (agent_ip_ == &::google::protobuf::internal::kEmptyString) {
+    agent_ip_ = new ::std::string;
+  }
+  agent_ip_->assign(value);
+}
+inline void UiAgentValid::set_agent_ip(const char* value, size_t size) {
+  set_has_agent_ip();
+  if (agent_ip_ == &::google::protobuf::internal::kEmptyString) {
+    agent_ip_ = new ::std::string;
+  }
+  agent_ip_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* UiAgentValid::mutable_agent_ip() {
+  set_has_agent_ip();
+  if (agent_ip_ == &::google::protobuf::internal::kEmptyString) {
+    agent_ip_ = new ::std::string;
+  }
+  return agent_ip_;
+}
+inline ::std::string* UiAgentValid::release_agent_ip() {
+  clear_has_agent_ip();
+  if (agent_ip_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = agent_ip_;
+    agent_ip_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+inline void UiAgentValid::set_allocated_agent_ip(::std::string* agent_ip) {
+  if (agent_ip_ != &::google::protobuf::internal::kEmptyString) {
+    delete agent_ip_;
+  }
+  if (agent_ip) {
+    set_has_agent_ip();
+    agent_ip_ = agent_ip;
+  } else {
+    clear_has_agent_ip();
+    agent_ip_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  }
+}
+
+// required string user = 3;
+inline bool UiAgentValid::has_user() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void UiAgentValid::set_has_user() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void UiAgentValid::clear_has_user() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void UiAgentValid::clear_user() {
+  if (user_ != &::google::protobuf::internal::kEmptyString) {
+    user_->clear();
+  }
+  clear_has_user();
+}
+inline const ::std::string& UiAgentValid::user() const {
+  return *user_;
+}
+inline void UiAgentValid::set_user(const ::std::string& value) {
+  set_has_user();
+  if (user_ == &::google::protobuf::internal::kEmptyString) {
+    user_ = new ::std::string;
+  }
+  user_->assign(value);
+}
+inline void UiAgentValid::set_user(const char* value) {
+  set_has_user();
+  if (user_ == &::google::protobuf::internal::kEmptyString) {
+    user_ = new ::std::string;
+  }
+  user_->assign(value);
+}
+inline void UiAgentValid::set_user(const char* value, size_t size) {
+  set_has_user();
+  if (user_ == &::google::protobuf::internal::kEmptyString) {
+    user_ = new ::std::string;
+  }
+  user_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* UiAgentValid::mutable_user() {
+  set_has_user();
+  if (user_ == &::google::protobuf::internal::kEmptyString) {
+    user_ = new ::std::string;
+  }
+  return user_;
+}
+inline ::std::string* UiAgentValid::release_user() {
+  clear_has_user();
+  if (user_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = user_;
+    user_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+inline void UiAgentValid::set_allocated_user(::std::string* user) {
+  if (user_ != &::google::protobuf::internal::kEmptyString) {
+    delete user_;
+  }
+  if (user) {
+    set_has_user();
+    user_ = user;
+  } else {
+    clear_has_user();
+    user_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  }
+}
+
+// required string passwd = 4;
+inline bool UiAgentValid::has_passwd() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void UiAgentValid::set_has_passwd() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void UiAgentValid::clear_has_passwd() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void UiAgentValid::clear_passwd() {
+  if (passwd_ != &::google::protobuf::internal::kEmptyString) {
+    passwd_->clear();
+  }
+  clear_has_passwd();
+}
+inline const ::std::string& UiAgentValid::passwd() const {
+  return *passwd_;
+}
+inline void UiAgentValid::set_passwd(const ::std::string& value) {
+  set_has_passwd();
+  if (passwd_ == &::google::protobuf::internal::kEmptyString) {
+    passwd_ = new ::std::string;
+  }
+  passwd_->assign(value);
+}
+inline void UiAgentValid::set_passwd(const char* value) {
+  set_has_passwd();
+  if (passwd_ == &::google::protobuf::internal::kEmptyString) {
+    passwd_ = new ::std::string;
+  }
+  passwd_->assign(value);
+}
+inline void UiAgentValid::set_passwd(const char* value, size_t size) {
+  set_has_passwd();
+  if (passwd_ == &::google::protobuf::internal::kEmptyString) {
+    passwd_ = new ::std::string;
+  }
+  passwd_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* UiAgentValid::mutable_passwd() {
+  set_has_passwd();
+  if (passwd_ == &::google::protobuf::internal::kEmptyString) {
+    passwd_ = new ::std::string;
+  }
+  return passwd_;
+}
+inline ::std::string* UiAgentValid::release_passwd() {
+  clear_has_passwd();
+  if (passwd_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = passwd_;
+    passwd_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+inline void UiAgentValid::set_allocated_passwd(::std::string* passwd) {
+  if (passwd_ != &::google::protobuf::internal::kEmptyString) {
+    delete passwd_;
+  }
+  if (passwd) {
+    set_has_passwd();
+    passwd_ = passwd;
+  } else {
+    clear_has_passwd();
+    passwd_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  }
+}
+
+// -------------------------------------------------------------------
+
+// UiAgentValidReply
+
+// required int32 client_msg_id = 1;
+inline bool UiAgentValidReply::has_client_msg_id() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void UiAgentValidReply::set_has_client_msg_id() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void UiAgentValidReply::clear_has_client_msg_id() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void UiAgentValidReply::clear_client_msg_id() {
+  client_msg_id_ = 0;
+  clear_has_client_msg_id();
+}
+inline ::google::protobuf::int32 UiAgentValidReply::client_msg_id() const {
+  return client_msg_id_;
+}
+inline void UiAgentValidReply::set_client_msg_id(::google::protobuf::int32 value) {
+  set_has_client_msg_id();
+  client_msg_id_ = value;
+}
+
+// required .dcmd_api.DcmdState state = 2;
+inline bool UiAgentValidReply::has_state() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void UiAgentValidReply::set_has_state() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void UiAgentValidReply::clear_has_state() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void UiAgentValidReply::clear_state() {
+  state_ = 0;
+  clear_has_state();
+}
+inline ::dcmd_api::DcmdState UiAgentValidReply::state() const {
+  return static_cast< ::dcmd_api::DcmdState >(state_);
+}
+inline void UiAgentValidReply::set_state(::dcmd_api::DcmdState value) {
+  assert(::dcmd_api::DcmdState_IsValid(value));
+  set_has_state();
+  state_ = value;
+}
+
+// optional string err = 3;
+inline bool UiAgentValidReply::has_err() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void UiAgentValidReply::set_has_err() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void UiAgentValidReply::clear_has_err() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void UiAgentValidReply::clear_err() {
+  if (err_ != &::google::protobuf::internal::kEmptyString) {
+    err_->clear();
+  }
+  clear_has_err();
+}
+inline const ::std::string& UiAgentValidReply::err() const {
+  return *err_;
+}
+inline void UiAgentValidReply::set_err(const ::std::string& value) {
+  set_has_err();
+  if (err_ == &::google::protobuf::internal::kEmptyString) {
+    err_ = new ::std::string;
+  }
+  err_->assign(value);
+}
+inline void UiAgentValidReply::set_err(const char* value) {
+  set_has_err();
+  if (err_ == &::google::protobuf::internal::kEmptyString) {
+    err_ = new ::std::string;
+  }
+  err_->assign(value);
+}
+inline void UiAgentValidReply::set_err(const char* value, size_t size) {
+  set_has_err();
+  if (err_ == &::google::protobuf::internal::kEmptyString) {
+    err_ = new ::std::string;
+  }
+  err_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* UiAgentValidReply::mutable_err() {
+  set_has_err();
+  if (err_ == &::google::protobuf::internal::kEmptyString) {
+    err_ = new ::std::string;
+  }
+  return err_;
+}
+inline ::std::string* UiAgentValidReply::release_err() {
+  clear_has_err();
+  if (err_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = err_;
+    err_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+inline void UiAgentValidReply::set_allocated_err(::std::string* err) {
   if (err_ != &::google::protobuf::internal::kEmptyString) {
     delete err_;
   }

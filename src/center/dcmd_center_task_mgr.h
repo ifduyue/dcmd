@@ -73,6 +73,9 @@ class DcmdCenterTaskMgr{
   // 添加新任务节点
   dcmd_api::DcmdState TaskCmdAddTaskNode(DcmdTss* tss, uint32_t task_id,
     char const* svr_pool, char const* ip, uint32_t uid);
+  // 删除任务的已有节点
+  dcmd_api::DcmdState TaskCmdDelTaskNode(DcmdTss* tss, uint32_t task_id,
+    uint64_t subtask_id, uint32_t uid);
   // cancel具体subtask的执行
   dcmd_api::DcmdState TaskCmdCancelSubtask(DcmdTss* tss, uint64_t subtask_id,
     uint32_t uid);

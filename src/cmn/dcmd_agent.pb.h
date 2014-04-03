@@ -135,18 +135,33 @@ class AgentReport : public ::google::protobuf::Message {
   inline const ::google::protobuf::RepeatedPtrField< ::std::string>& agent_ips() const;
   inline ::google::protobuf::RepeatedPtrField< ::std::string>* mutable_agent_ips();
 
+  // optional string hostname = 3;
+  inline bool has_hostname() const;
+  inline void clear_hostname();
+  static const int kHostnameFieldNumber = 3;
+  inline const ::std::string& hostname() const;
+  inline void set_hostname(const ::std::string& value);
+  inline void set_hostname(const char* value);
+  inline void set_hostname(const char* value, size_t size);
+  inline ::std::string* mutable_hostname();
+  inline ::std::string* release_hostname();
+  inline void set_allocated_hostname(::std::string* hostname);
+
   // @@protoc_insertion_point(class_scope:dcmd_api.AgentReport)
  private:
   inline void set_has_version();
   inline void clear_has_version();
+  inline void set_has_hostname();
+  inline void clear_has_hostname();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
   ::std::string* version_;
   ::google::protobuf::RepeatedPtrField< ::std::string> agent_ips_;
+  ::std::string* hostname_;
 
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(3 + 31) / 32];
 
   friend void  protobuf_AddDesc_dcmd_5fagent_2eproto();
   friend void protobuf_AssignDesc_dcmd_5fagent_2eproto();
@@ -2161,6 +2176,76 @@ AgentReport::agent_ips() const {
 inline ::google::protobuf::RepeatedPtrField< ::std::string>*
 AgentReport::mutable_agent_ips() {
   return &agent_ips_;
+}
+
+// optional string hostname = 3;
+inline bool AgentReport::has_hostname() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void AgentReport::set_has_hostname() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void AgentReport::clear_has_hostname() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void AgentReport::clear_hostname() {
+  if (hostname_ != &::google::protobuf::internal::kEmptyString) {
+    hostname_->clear();
+  }
+  clear_has_hostname();
+}
+inline const ::std::string& AgentReport::hostname() const {
+  return *hostname_;
+}
+inline void AgentReport::set_hostname(const ::std::string& value) {
+  set_has_hostname();
+  if (hostname_ == &::google::protobuf::internal::kEmptyString) {
+    hostname_ = new ::std::string;
+  }
+  hostname_->assign(value);
+}
+inline void AgentReport::set_hostname(const char* value) {
+  set_has_hostname();
+  if (hostname_ == &::google::protobuf::internal::kEmptyString) {
+    hostname_ = new ::std::string;
+  }
+  hostname_->assign(value);
+}
+inline void AgentReport::set_hostname(const char* value, size_t size) {
+  set_has_hostname();
+  if (hostname_ == &::google::protobuf::internal::kEmptyString) {
+    hostname_ = new ::std::string;
+  }
+  hostname_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* AgentReport::mutable_hostname() {
+  set_has_hostname();
+  if (hostname_ == &::google::protobuf::internal::kEmptyString) {
+    hostname_ = new ::std::string;
+  }
+  return hostname_;
+}
+inline ::std::string* AgentReport::release_hostname() {
+  clear_has_hostname();
+  if (hostname_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = hostname_;
+    hostname_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+inline void AgentReport::set_allocated_hostname(::std::string* hostname) {
+  if (hostname_ != &::google::protobuf::internal::kEmptyString) {
+    delete hostname_;
+  }
+  if (hostname) {
+    set_has_hostname();
+    hostname_ = hostname;
+  } else {
+    clear_has_hostname();
+    hostname_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  }
 }
 
 // -------------------------------------------------------------------

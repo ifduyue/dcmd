@@ -14,15 +14,14 @@ namespace dcmd {
     map<uint32_t, DcmdAgentConnect*>::iterator conn_iter = conn_agents_.find(conn_id);
     if (conn_iter == conn_agents_.end()) return false;
     ///如果已经auth，则删除认证的信息
-    if (conn_iter->second->agent_ip_.length())
-      ip_agents_.erase(conn_iter->second->agent_ip_);
+    if (conn_iter->second->agent_ip_.length())  ip_agents_.erase(conn_iter->second->agent_ip_);
     delete conn_iter->second;
     conn_agents_.erase(conn_iter);
     return true;
   }
   int DcmdCenterAgentMgr::Auth(uint32_t conn_id,  string const& agent_ip,
-    string const& version, string const & report_ips,
-    string& old_conn_ip, uint32_t& old_conn_id)
+    string const& version, string const & report_ips, string const& hostname,
+    string& old_conn_ip, uint32_t& old_conn_id, string& old_hostname)
   {
     CWX_ASSERT(agent_ip.length());
     CwxMutexGuard<CwxMutexLock>  lock(&lock_);
@@ -33,11 +32,13 @@ namespace dcmd {
     if (ip_iter != ip_agents_.end()){
       old_conn_ip = ip_iter->second->conn_ip_;
       old_conn_id = ip_iter->second->conn_id_;
+      old_hostname = ip_iter->second->hostname_;
       return 1;
     }
     conn_iter->second->agent_ip_ = agent_ip;
     conn_iter->second->version_ = version;
     conn_iter->second->report_agent_ips_ = report_ips;
+    conn_iter->second->hostname_ = hostname;
     ip_agents_[agent_ip] = conn_iter->second;
     return 0; 
   }
@@ -220,6 +221,7 @@ namespace dcmd {
           agent_info->set_state(dcmd_api::AGENT_UN_CONNECTED);
           agent_info->set_connected_ip("");
           agent_info->set_reported_ip("");
+          agent_info->set_hostname("");
           if (fetch_version) agent_info->set_version("");
         }else{
           conn = agent_iter->second;
@@ -232,6 +234,7 @@ namespace dcmd {
           }
           agent_info->set_connected_ip(conn->conn_ip_);
           agent_info->set_reported_ip(conn->report_agent_ips_);
+          agent_info->set_hostname(conn->hostname_);
           if (fetch_version) agent_info->set_version(conn->version_);
         }
         ++ip_iter;
@@ -251,6 +254,7 @@ namespace dcmd {
         }
         agent_info->set_connected_ip(conn->conn_ip_);
         agent_info->set_reported_ip(conn->report_agent_ips_);
+        agent_info->set_hostname(conn->hostname_);
         if (fetch_version) agent_info->set_version(conn->version_);
         ++iter;
       }
@@ -337,11 +341,11 @@ namespace dcmd {
   }
 
   bool DcmdCenterAgentMgr::AddInvalidConn(string const& conn_ip,
-    string const& report_ips) 
+    string const& report_ips, string const& hostname) 
   {
     CwxMutexGuard<CwxMutexLock>  lock(&lock_);
     if (illegal_agent_map_.find(conn_ip) != illegal_agent_map_.end()) return false;
-    DcmdIllegalAgentConnect* agent = new DcmdIllegalAgentConnect(conn_ip, report_ips);
+    DcmdIllegalAgentConnect* agent = new DcmdIllegalAgentConnect(conn_ip, report_ips, hostname);
     illegal_agent_map_[conn_ip] = agent;
     illegal_agent_list_.push_back(agent);
     return true;
@@ -364,6 +368,7 @@ namespace dcmd {
         agent_info->set_state(dcmd_api::AGENT_UN_CONNECTED);
         agent_info->set_connected_ip((*iter)->conn_ip_);
         agent_info->set_reported_ip((*iter)->report_agent_ips_);
+        agent_info->set_hostname((*iter)->hostname_);
         ++ iter;
       }
     }
@@ -390,5 +395,50 @@ namespace dcmd {
       ip_table_last_load_time_ = time(NULL);
     }
   }
+  // 获取Agent主机名，返回0：不存在；1：认证的agent；2：未认证的agent
+  bool DcmdCenterAgentMgr::GetAgentHostName(string const& agent_ip, string & hostname) {
+    CwxMutexGuard<CwxMutexLock>  lock(&lock_);
+    hostname.erase();
+    // 先从认证的主机map获取
+    {
+      map<string, DcmdAgentConnect*>::iterator iter =  ip_agents_.find(agent_ip);
+      if (iter != ip_agents_.end()) {
+        hostname = iter->second->hostname_;
+        return 1;
+      }
+    }
+    // 再从未认证的主机获取
+    {
+      map<string, DcmdIllegalAgentConnect*>::iterator iter = illegal_agent_map_.find(agent_ip);
+      if (iter != illegal_agent_map_.end()) {
+        hostname = iter->second->hostname_;
+        return 1;
+      }
+    }
+    return 0;
+  }
+  // 认证illegal的主机
+  bool DcmdCenterAgentMgr::AuthIllegalAgent(string const& conn_ip) {
+    // 基于连接ip的map。
+    CwxMutexGuard<CwxMutexLock>  lock(&lock_);
+    map<string, DcmdIllegalAgentConnect*>::iterator iter = illegal_agent_map_.find(conn_ip);
+    if (iter != illegal_agent_map_.end()) {
+      DcmdIllegalAgentConnect* illegalConn = iter->second;
+      list<DcmdIllegalAgentConnect*>::iterator list_iter =illegal_agent_list_.begin();
+      while(list_iter != illegal_agent_list_.end()) {
+        if (illegalConn == *list_iter) {
+          illegal_agent_list_.erase(list_iter);
+          break;
+        }
+        list_iter++;
+      }
+      illegal_agent_map_.erase(iter);
+      delete illegalConn;
+      return true;
+    }
+    return false;
+  }
+
+
 }  // dcmd
 

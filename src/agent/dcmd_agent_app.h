@@ -234,6 +234,8 @@ class DcmdAgentApp : public CwxAppFramework{
   uint64_t                                   next_opr_cmd_id_;
   // agent服务器的ip列表，不包括127.0
   list<string>                               agent_ips_;
+  // 主机的名字
+  string                                     host_name_;
   // protobuf parse/serialize的字符串
   string                                     proto_str_;
   // 数据buf

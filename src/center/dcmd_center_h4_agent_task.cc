@@ -246,18 +246,21 @@ void  DcmdCenterH4AgentTask::AgentReport(CwxMsgBlock*& msg, DcmdTss* tss){
       CWX_ERROR(("report agent ip:%s isn't registered , close it.", agent_ips.c_str()));
       err_msg = "report agent ip isn't registered";
       ///添加到无效的agent连接中
-      app_->GetAgentMgr()->AddInvalidConn(conn_ip, agent_ips);
+      app_->GetAgentMgr()->AddInvalidConn(conn_ip, agent_ips, report.hostname());
       break;
     }
     //鉴权
     string old_conn_ip;
     uint32_t old_conn_id=0;
+    string old_host_name;
     int ret = app_->GetAgentMgr()->Auth(msg->event().getConnId(),
       agent_ip,
       report.version(),
       agent_ips,
+      report.hostname(),
       old_conn_ip,
-      old_conn_id);
+      old_conn_id,
+      old_host_name);
     if (2 == ret){///连接已经关闭
       CWX_ERROR(("Agent[%s] is closed.", agent_ip.c_str()));
       return;
@@ -272,9 +275,13 @@ void  DcmdCenterH4AgentTask::AgentReport(CwxMsgBlock*& msg, DcmdTss* tss){
           agent_ip,
           report.version(),
           agent_ips,
+          report.hostname(),
           old_conn_ip,
-          old_conn_id);
-        CWX_INFO(("Connection for agent[%s] is duplicate, close the old", agent_ip.c_str()));
+          old_conn_id,
+          old_host_name);
+        CWX_INFO(("Connection for agent[%s:%s] is duplicate, close the old",
+          old_host_name.length()?old_host_name.c_str():"",
+          agent_ip.c_str()));
         CWX_ASSERT(1 != ret); ///可能为2，连接不存在
       }else if(conn_ip == agent_ip){///当前的连接就是正确的
         app_->GetAgentMgr()->UnAuth(agent_ip);
@@ -285,15 +292,19 @@ void  DcmdCenterH4AgentTask::AgentReport(CwxMsgBlock*& msg, DcmdTss* tss){
           agent_ip,
           report.version(),
           agent_ips,
+          report.hostname(),
           old_conn_ip,
-          old_conn_id);
-        CWX_INFO(("Old conn[%s] for agent[%s] is invalid, close the old", old_conn_ip.c_str(), agent_ip.c_str()));
+          old_conn_id,
+          old_host_name);
+        CWX_INFO(("Old conn[%s] for agent[%s:%s] is invalid, close the old",
+          old_conn_ip.c_str(), old_host_name.length()?old_host_name.c_str():"",
+          agent_ip.c_str()));
         CWX_ASSERT(1 != ret); ///可能为2，连接不存在
         if (2 == ret) return; ///连接不存在
       } else {
         CWX_INFO(("conn[%s] for agent[%s] is invalid, close it", conn_ip.c_str(), agent_ip.c_str()));
         err_msg = "Failure to auth";
-        app_->GetAgentMgr()->AddInvalidConn(conn_ip,agent_ips);
+        app_->GetAgentMgr()->AddInvalidConn(conn_ip,agent_ips, report.hostname());
         break;
       }
     }
