@@ -855,18 +855,21 @@ bool DcmdCenterTaskMgr::FinishTaskCmd(DcmdTss* tss, dcmd_api::AgentTaskResult co
   if (iter == waiting_cmds_.end()) return true;// 可能认为已经完成或者是ctrl命令
   uint32_t state = result.success()?dcmd_api::SUBTASK_FINISHED:dcmd_api::SUBTASK_FAILED;
   bool is_skip = false;
-  if (!UpdateSubtaskInfo(tss,
-    iter->second->subtask_id_,
-    false,
-    &state,
-    &is_skip,
-    false,
-    true,
-    result.success()?"":result.err().c_str(),
-    result.process().c_str()))
-  {
-    mysql_->disconnect();
-    return false;
+  if (iter->second->subtask_->exec_cmd_ == iter->second) {
+    // 若二者不相等，则表示命令重做了，不修改subtask的状态
+   if (!UpdateSubtaskInfo(tss,
+      iter->second->subtask_id_,
+      false,
+      &state,
+      &is_skip,
+      false,
+      true,
+      result.success()?"":result.err().c_str(),
+      result.process().c_str()))
+    {
+      mysql_->disconnect();
+      return false;
+    }
   }
   if (!UpdateCmdState(tss,
     false,
@@ -879,8 +882,11 @@ bool DcmdCenterTaskMgr::FinishTaskCmd(DcmdTss* tss, dcmd_api::AgentTaskResult co
   }
   agent_ip = iter->second->subtask_->ip_;
   task = iter->second->subtask_->task_;
-  task->ChangeSubtaskState(iter->second->subtask_, state,
-    iter->second->subtask_->is_ignored_);
+  if (iter->second->subtask_->exec_cmd_ == iter->second) {
+    // 若二者不相等，则表示命令重做了，不修改subtask的状态
+    task->ChangeSubtaskState(iter->second->subtask_, state,
+      iter->second->subtask_->is_ignored_);
+  }
   // 更新task的信息
   if (!CalcTaskStatsInfo(tss, true, task)) {
     mysql_->disconnect();
@@ -1265,8 +1271,15 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdDelTaskNode(DcmdTss* tss, uint32_t
     if (subtask->exec_cmd_) {
       RemoveCmd(subtask->exec_cmd_);
     }
-    delete subtask;
   }
+  subtask->task_->RemoveSubtask(subtask);
+  // 更新task的信息
+  if (!CalcTaskStatsInfo(tss, true, subtask->task_)) {
+    mysql_->disconnect();
+    delete subtask;
+    return false;
+  }
+  delete subtask;
   return dcmd_api::DCMD_STATE_SUCCESS;
 }
 

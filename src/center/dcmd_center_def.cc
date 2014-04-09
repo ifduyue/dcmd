@@ -30,6 +30,38 @@ bool DcmdCenterSvrPool::AddSubtask(DcmdCenterSubtask* subtask) {
   }
   return true;
 }
+// 从池子中删除subtask
+bool DcmdCenterSvrPool::RemoveSubtask(DcmdCenterSubtask* subtask) {
+  if (all_subtasks_.find(subtask->subtask_id_) != all_subtasks_.end())
+    return false;
+  all_subtasks_.erase(subtask->subtask_id_);
+  switch(subtask->state_) {
+  case dcmd_api::SUBTASK_DOING:
+    if (subtask->is_ignored_) {
+      ignored_doing_subtasks_.erase(subtask->subtask_id_);
+    } else {
+      doing_subtasks_.erase(subtask->subtask_id_);
+    }
+    break;
+  case dcmd_api::SUBTASK_FINISHED:
+    finished_subtasks_.erase(subtask->subtask_id_);
+    break;
+  case dcmd_api::SUBTASK_FAILED:
+    if (subtask->is_ignored_) {
+      ignored_failed_subtasks_.erase(subtask->subtask_id_);
+    } else {
+      failed_subtasks_.erase(subtask->subtask_id_);
+    }
+    break;
+  case dcmd_api::SUBTASK_INIT:
+    undo_subtasks_.erase(subtask->subtask_id_);
+    break;
+  default:
+    CWX_ASSERT(0);
+  }
+  return true;
+}
+
 bool DcmdCenterSvrPool::ChangeSubtaskState(uint64_t subtask_id,
   uint8_t state, bool is_ignored)
 {
@@ -132,6 +164,13 @@ bool DcmdCenterTask::AddSubtask(DcmdCenterSubtask* subtask) {
   CWX_ASSERT(subtask->svr_pool_);
   CWX_ASSERT(subtask->task_ == this);
   return subtask->svr_pool_->AddSubtask(subtask);
+}
+
+// 从池子中删除subtask
+bool DcmdCenterTask::RemoveSubtask(DcmdCenterSubtask* subtask) {
+  CWX_ASSERT(subtask->svr_pool_);
+  CWX_ASSERT(subtask->task_ == this);
+  return subtask->svr_pool_->RemoveSubtask(subtask);
 }
 
 bool DcmdCenterTask::ChangeSubtaskState(DcmdCenterSubtask const* subtask,

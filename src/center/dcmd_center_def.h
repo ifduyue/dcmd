@@ -126,6 +126,8 @@ namespace dcmd {
   public:
     // 往池子中添加subtask；true：成功；false表示存在
     bool AddSubtask(DcmdCenterSubtask* subtask);
+    // 从池子中删除subtask
+    bool RemoveSubtask(DcmdCenterSubtask* subtask);
     // 改变Subtask的状态；true：成功；false表示不存在
     bool ChangeSubtaskState(uint64_t subtask_id,
       uint8_t state,
@@ -258,6 +260,8 @@ namespace dcmd {
     uint32_t GetSvrPoolId(string const& pool_name);
     // 添加新subtask，true 成功；false：失败。失败或者subtask存在，或者pool不存在
     bool AddSubtask(DcmdCenterSubtask* subtask);
+    // 从池子中删除subtask
+    bool RemoveSubtask(DcmdCenterSubtask* subtask);
     // 改变任务的状态，true 成功；false：失败。失败或者subtask不存在，或者pool不存在
     bool ChangeSubtaskState(DcmdCenterSubtask const* subtask,
       uint8_t state,
