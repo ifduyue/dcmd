@@ -81,6 +81,11 @@ bool DcmdCenterTaskMgr::ReceiveCmd(DcmdTss* tss, dcmd_api::UiTaskCmd const& cmd,
     case dcmd_api::CMD_ADD_NODE:
       state = TaskCmdAddTaskNode(tss, strtoul(cmd.task_id().c_str(), NULL, 10),
         cmd.ip().c_str(), cmd.svr_pool().c_str(), cmd.uid());
+      break;
+    case dcmd_api::CMD_DEL_NODE:
+      state = TaskCmdDelTaskNode(tss, strtoul(cmd.task_id().c_str(), NULL, 10),
+        strtoull(cmd.subtask_id().c_str(), NULL, 10), cmd.uid());
+      break;
     case dcmd_api::CMD_CANCEL_SUBTASK:
       state = TaskCmdCancelSubtask(tss, strtoull(cmd.subtask_id().c_str(), NULL, 10),
         cmd.uid());
@@ -1177,7 +1182,7 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdAddTaskNode(DcmdTss* tss, uint32_t
   CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
     "insert into dcmd_task_node(task_id, task_cmd, svr_pool, svr_name, ip,"\
     "state, ignored, start_time, finish_time, process, err_msg, utime, ctime, opr_uid) "\
-    "values(%s, %u, '%s', '%s', '%s', '%s', %u, 0, now(), now(), '', '', now(), now(), %u)",
+    "values(%u, '%s', '%s', '%s', '%s', %u, 0, now(), now(), '', '', now(), now(), %u)",
     task_id, str_task_cmd.c_str(), str_svr_pool.c_str(), str_service.c_str(), str_ip.c_str(),
     dcmd_api::SUBTASK_INIT, uid);
   if (!ExecSql(tss, false)) {
@@ -1240,7 +1245,7 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdDelTaskNode(DcmdTss* tss, uint32_t
   }
   // 从数据库中删除subtask
   CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
-    "delete from dcmd_task_node where subtask_id = %u", subtask_str.c_str());
+    "delete from dcmd_task_node where subtask_id = %s", subtask_str.c_str());
   if (!ExecSql(tss, false)) {
     CWX_ERROR((tss->err_msg_.c_str()));
     mysql_->disconnect();
@@ -1277,7 +1282,7 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdDelTaskNode(DcmdTss* tss, uint32_t
   if (!CalcTaskStatsInfo(tss, true, subtask->task_)) {
     mysql_->disconnect();
     delete subtask;
-    return false;
+    return dcmd_api::DCMD_STATE_SUCCESS;
   }
   delete subtask;
   return dcmd_api::DCMD_STATE_SUCCESS;
