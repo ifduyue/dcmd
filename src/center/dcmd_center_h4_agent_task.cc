@@ -246,7 +246,7 @@ void  DcmdCenterH4AgentTask::AgentReport(CwxMsgBlock*& msg, DcmdTss* tss){
       CWX_ERROR(("report agent ip:%s isn't registered , close it.", agent_ips.c_str()));
       err_msg = "report agent ip isn't registered";
       ///添加到无效的agent连接中
-      app_->GetAgentMgr()->AddInvalidConn(conn_ip, agent_ips, report.hostname());
+      app_->GetAgentMgr()->AddInvalidConn(conn_ip, agent_ips, report.hostname(), report.version());
       break;
     }
     //鉴权
@@ -304,7 +304,7 @@ void  DcmdCenterH4AgentTask::AgentReport(CwxMsgBlock*& msg, DcmdTss* tss){
       } else {
         CWX_INFO(("conn[%s] for agent[%s] is invalid, close it", conn_ip.c_str(), agent_ip.c_str()));
         err_msg = "Failure to auth";
-        app_->GetAgentMgr()->AddInvalidConn(conn_ip,agent_ips, report.hostname());
+        app_->GetAgentMgr()->AddInvalidConn(conn_ip,agent_ips, report.hostname(), report.version());
         break;
       }
     }

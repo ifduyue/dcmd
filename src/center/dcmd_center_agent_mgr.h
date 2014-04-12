@@ -79,11 +79,12 @@ namespace dcmd {
       conn_time_ = time(NULL);
     }
     ///构造函数
-    DcmdIllegalAgentConnect(string const& conn_ip, string const& report_ips, string const& hostname){
+    DcmdIllegalAgentConnect(string const& conn_ip, string const& report_ips, string const& hostname, string const& version){
       conn_time_ = time(NULL);
       conn_ip_ = conn_ip;
       report_agent_ips_ = report_ips;
       hostname_ = hostname;
+      version_ = version;
     }
     DcmdIllegalAgentConnect& operator=(DcmdIllegalAgentConnect const& item){
       if (this == &item) return *this;
@@ -91,6 +92,7 @@ namespace dcmd {
       conn_ip_ = item.conn_ip_;
       report_agent_ips_ = item.report_agent_ips_;
       hostname_ = item.hostname_;
+      version_ = item.version_;
       return *this;
     }
     DcmdIllegalAgentConnect(DcmdIllegalAgentConnect const& item){
@@ -98,6 +100,7 @@ namespace dcmd {
       conn_ip_ = item.conn_ip_;
       report_agent_ips_ = item.report_agent_ips_;
       hostname_ = item.hostname_;
+      version_ = item.version_;
     }
   public:
     // 连接时间戳。
@@ -108,6 +111,8 @@ namespace dcmd {
     string              report_agent_ips_;
     // 主机名
     string              hostname_;
+    // 版本
+    string              version_;
   };
 
   // agent管理对象
@@ -189,7 +194,8 @@ namespace dcmd {
     // 添加新的无效连接；false表示连接存在
     bool AddInvalidConn(string const& conn_ip, // 连接ip
       string const&  report_ips, // 报告的ip
-      string const& hostname // 主机名
+      string const& hostname, // 主机名
+      string const& version // 版本
       );
     // 指定连接ip是否为无效的连接ip地址
     bool IsInvalidConnIp(string const& conn_ip);

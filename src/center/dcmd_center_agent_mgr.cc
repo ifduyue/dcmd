@@ -341,11 +341,11 @@ namespace dcmd {
   }
 
   bool DcmdCenterAgentMgr::AddInvalidConn(string const& conn_ip,
-    string const& report_ips, string const& hostname) 
+    string const& report_ips, string const& hostname, string const& version) 
   {
     CwxMutexGuard<CwxMutexLock>  lock(&lock_);
     if (illegal_agent_map_.find(conn_ip) != illegal_agent_map_.end()) return false;
-    DcmdIllegalAgentConnect* agent = new DcmdIllegalAgentConnect(conn_ip, report_ips, hostname);
+    DcmdIllegalAgentConnect* agent = new DcmdIllegalAgentConnect(conn_ip, report_ips, hostname, version);
     illegal_agent_map_[conn_ip] = agent;
     illegal_agent_list_.push_back(agent);
     return true;
@@ -369,6 +369,7 @@ namespace dcmd {
         agent_info->set_connected_ip((*iter)->conn_ip_);
         agent_info->set_reported_ip((*iter)->report_agent_ips_);
         agent_info->set_hostname((*iter)->hostname_);
+        agent_info->set_version((*iter)->version_);
         ++ iter;
       }
     }
