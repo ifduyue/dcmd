@@ -159,6 +159,7 @@ int main(int argc ,char** argv) {
       printf("\tversion:%s\n", reply.agentinfo(i).version().c_str());
       printf("\tconnected_ip:%s\n", reply.agentinfo(i).connected_ip().c_str());
       printf("\treported_ip:%s\n", reply.agentinfo(i).reported_ip().c_str());
+      printf("\thost_name:%s\n", reply.agentinfo(i).hostname().c_str());
     }
   }
   return 0;
