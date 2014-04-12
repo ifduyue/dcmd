@@ -33,7 +33,7 @@ dcmd_center_SOURCES =dcmd_center_agent_mgr.cc\
 		../cmn/dcmd_tss.cc
 dcmd_center_LDADD=
 dcmd_center_LDFLAGS=
-LIBS=-lcwxapp -lcwxnet -lcwxcmn -lprotobuf -lmysqlclient -lexpat -lpthread -ldl -lrt 
+LIBS=-lcwxapp -lcwxnet -lcwxcmn -lprotobuf -lmysqlclient -lexpat -lz -lpthread -ldl -lrt 
 INCLUDES=-I@cwinux_dir@/app -I@cwinux_dir@/cmn -I@cwinux_dir@/net -I@protobuf_dir@ -I@mysql_dir@ -I@expat_dir@ -I. -I../cmn
 
 ## Clean up template repositories, etc.

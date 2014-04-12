@@ -99,7 +99,7 @@ dcmd_subtask_output_SOURCES = dcmd_subtask_output.cc\
 dcmd_subtask_output_LDADD=
 dcmd_subtask_output_LDFLAGS=
 
-LIBS=-lcwxnet -lcwxcmn -lprotobuf -lpthread -ldl -lrt 
+LIBS=-lcwxnet -lcwxcmn -lprotobuf -lpthread -lz -ldl -lrt 
 INCLUDES=-I@cwinux_dir@/cmn -I@cwinux_dir@/net -I@protobuf_dir@ -I. -I../cmn
 
 ## Clean up template repositories, etc.
