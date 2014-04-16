@@ -828,12 +828,14 @@ bool DcmdCenterTaskMgr::Schedule(DcmdTss* tss,
       while (1){
         if (subtask_iter == iter->second->undo_subtasks_.end()) break;
         if (!iter->second->EnableSchedule(task->max_current_num_, task->max_current_rate_)){
-          CWX_DEBUG(("Don't schedule pool[%s] of task[%s] for reach the max concurrency, doing-num[fail:%u, doing:%u], max:%u",
+          CWX_DEBUG(("Don't schedule pool[%s] of task[%s] for reach the max concurrency, doing-num[fail:%u, doing:%u], rate:%u,cont:%u,max-cont:%u",
             iter->second->svr_pool_.c_str(),
             task->task_name_.c_str(),
             iter->second->failed_host_num(),
             iter->second->doing_host_num(),
-            task->max_current_num_));
+            task->max_current_rate_,
+            task->max_current_num_,
+            iter->second->MaxContNum(task->max_current_num_, task->max_current_rate_)));
           break;
         }
         CWX_DEBUG(("Execute new subtask for task node, task:%s, agent:%s",

@@ -719,9 +719,11 @@ bool DcmdAgentApp::CheckOprCmd(AgentOprCmd* opr_cmd, bool is_cancel){
   int status = 0;
   string out_file;
   string script_file;
+  string run_shell_script_file;
   string err_msg;
   GetOprRunScriptFile(opr_cmd->cmd_.name(), opr_cmd->agent_opr_id_, script_file);
   GetOprOuputFile(opr_cmd->cmd_.name(), opr_cmd->agent_opr_id_, out_file);
+  GetOprRunScriptShellFile(opr_cmd->cmd_.name(), opr_cmd->agent_opr_id_, run_shell_script_file);
   if (is_cancel) {
     if(opr_cmd->processor_) { // 进程在运行
       if (0 == opr_cmd->processor_->TryWait(err_msg)) {
@@ -730,6 +732,7 @@ bool DcmdAgentApp::CheckOprCmd(AgentOprCmd* opr_cmd, bool is_cancel){
     }
     CwxFile::rmFile(script_file.c_str());
     CwxFile::rmFile(out_file.c_str());
+    CwxFile::rmFile(run_shell_script_file.c_str());
     return true;
   }
   bool is_success = false;
@@ -811,6 +814,7 @@ bool DcmdAgentApp::CheckOprCmd(AgentOprCmd* opr_cmd, bool is_cancel){
     err_msg.c_str());
   CwxFile::rmFile(script_file.c_str());
   CwxFile::rmFile(out_file.c_str());
+  CwxFile::rmFile(run_shell_script_file.c_str());
   return true;
 }
 
