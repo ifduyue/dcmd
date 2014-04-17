@@ -142,7 +142,7 @@ namespace dcmd {
       uint32_t doing_rate // 做的最大比率
       ) const;
     // 获取最大的并发数量
-    inline uint32_t MaxContNum(uint32_t cont_num, uint32_t doing_rate) {
+    inline uint32_t MaxContNum(uint32_t , uint32_t doing_rate) const {
       uint32_t max_doing_num = 0;
       if (doing_rate<100) { // 按比例计算
         max_doing_num = (all_subtasks_.size() * doing_rate  + 99)/100;
