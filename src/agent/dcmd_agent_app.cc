@@ -1126,7 +1126,7 @@ bool DcmdAgentApp::PrepareSubtaskRunEnv(AgentTaskCmd* cmd, string& err_msg) {
       break;
     }
     //重定向信息
-    if (fprintf(fd, "exec  1>%s 2>%s\n", output_file.c_str(), output_file.c_str()) < 0){
+    if (fprintf(fd, "exec  1>>%s 2>>%s\n", output_file.c_str(), output_file.c_str()) < 0){
       CwxCommon::snprintf(err_2k_, 2047, "Failure to write subtask's shell file:%s, errno=%d",
         script_sh_file.c_str(), errno);
       err_msg = err_2k_;
@@ -1426,7 +1426,7 @@ bool DcmdAgentApp::PrepareOprRunEnv(AgentOprCmd* opr_cmd, string& err_msg) {
     }
     if (i < arg_num) break;
     //重定向信息
-    if (fprintf(fd, "exec  1>%s 2>%s\n", out_file.c_str(), out_file.c_str()) < 0){
+    if (fprintf(fd, "exec  1>>%s 2>>%s\n", out_file.c_str(), out_file.c_str()) < 0){
       CwxCommon::snprintf(err_2k_, 2047, "Failure to write script shell file:%s, errno=%d",
         script_sh_file.c_str(), errno);
       err_msg = err_2k_;

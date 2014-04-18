@@ -166,10 +166,8 @@ namespace dcmd {
       uint32_t doing_rate // 做的最大比率
       ) const
     {
-      if (failed_host_num() >= cont_num) return true;
-      // doing_num加1的原因是计算若增加一台是否超过规定
-      if (failed_host_num() * 100 > all_subtasks_.size() * doing_rate)
-        return true;
+      uint32_t max_doing_num = MaxContNum(cont_num, doing_rate);
+      if (failed_host_num() >= max_doing_num) return true;
       return false;
     }
     // 获取池子node的数量
