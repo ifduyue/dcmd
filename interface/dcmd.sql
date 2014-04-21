@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50132
 File Encoding         : 65001
 
-Date: 2014-02-19 14:37:22
+Date: 2014-04-21 14:57:51
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -33,7 +33,7 @@ CREATE TABLE `dcmd_app` (
   `opr_uid` int(10) unsigned NOT NULL,
   PRIMARY KEY (`app_id`),
   UNIQUE KEY `app` (`app`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for dcmd_center
@@ -54,9 +54,9 @@ CREATE TABLE `dcmd_command` (
   `cmd_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `task_id` int(10) unsigned NOT NULL,
   `subtask_id` bigint(20) NOT NULL,
-  `svr_pool` varchar(64) NOT NULL,
+  `svr_pool` varchar(128) DEFAULT NULL,
   `svr_pool_id` int(10) unsigned NOT NULL,
-  `svr_name` varchar(64) NOT NULL,
+  `svr_name` varchar(128) DEFAULT NULL,
   `ip` varchar(16) NOT NULL,
   `cmd_type` int(11) NOT NULL,
   `state` int(11) NOT NULL,
@@ -66,7 +66,7 @@ CREATE TABLE `dcmd_command` (
   `opr_uid` int(10) unsigned NOT NULL,
   PRIMARY KEY (`cmd_id`),
   KEY `idx_command_svr` (`svr_name`,`ip`)
-) ENGINE=InnoDB AUTO_INCREMENT=275 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=340 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for dcmd_command_history
@@ -76,9 +76,9 @@ CREATE TABLE `dcmd_command_history` (
   `cmd_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `task_id` int(10) unsigned NOT NULL,
   `subtask_id` bigint(20) NOT NULL,
-  `svr_pool` varchar(64) NOT NULL,
+  `svr_pool` varchar(128) DEFAULT NULL,
   `svr_pool_id` int(10) unsigned NOT NULL,
-  `svr_name` varchar(64) NOT NULL,
+  `svr_name` varchar(128) DEFAULT NULL,
   `ip` varchar(16) NOT NULL,
   `cmd_type` int(11) NOT NULL,
   `state` int(11) NOT NULL,
@@ -88,7 +88,7 @@ CREATE TABLE `dcmd_command_history` (
   `opr_uid` int(10) unsigned NOT NULL,
   PRIMARY KEY (`cmd_id`),
   KEY `idx_command_svr` (`svr_name`,`ip`)
-) ENGINE=InnoDB AUTO_INCREMENT=235 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=340 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for dcmd_group
@@ -103,7 +103,7 @@ CREATE TABLE `dcmd_group` (
   `opr_uid` int(10) unsigned NOT NULL,
   PRIMARY KEY (`gid`),
   UNIQUE KEY `group_name` (`group_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=108 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=112 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for dcmd_group_opr_cmd
@@ -118,7 +118,7 @@ CREATE TABLE `dcmd_group_opr_cmd` (
   `opr_uid` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `gid` (`gid`,`opr_cmd_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for dcmd_group_service
@@ -133,7 +133,7 @@ CREATE TABLE `dcmd_group_service` (
   `opr_uid` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `gid` (`gid`,`svr_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for dcmd_node
@@ -151,7 +151,7 @@ CREATE TABLE `dcmd_node` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `ip` (`ip`),
   KEY `idx_node_host` (`nodename`)
-) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for dcmd_node_group
@@ -166,7 +166,7 @@ CREATE TABLE `dcmd_node_group` (
   `opr_uid` int(10) unsigned NOT NULL,
   PRIMARY KEY (`nid`),
   UNIQUE KEY `node_group` (`node_group`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for dcmd_opr_cmd
@@ -187,7 +187,7 @@ CREATE TABLE `dcmd_opr_cmd` (
   PRIMARY KEY (`opr_cmd_id`),
   UNIQUE KEY `opr_cmd` (`opr_cmd`),
   UNIQUE KEY `ui_name` (`ui_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for dcmd_opr_cmd_arg
@@ -204,7 +204,7 @@ CREATE TABLE `dcmd_opr_cmd_arg` (
   `opr_uid` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `opr_cmd_id` (`opr_cmd_id`,`arg_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for dcmd_opr_cmd_exec
@@ -226,7 +226,7 @@ CREATE TABLE `dcmd_opr_cmd_exec` (
   `ctime` datetime NOT NULL,
   `opr_uid` int(10) unsigned NOT NULL,
   PRIMARY KEY (`exec_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for dcmd_opr_cmd_exec_history
@@ -250,7 +250,7 @@ CREATE TABLE `dcmd_opr_cmd_exec_history` (
   `opr_uid` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_exec_id` (`exec_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=128 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=458 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for dcmd_opr_log
@@ -274,19 +274,19 @@ DROP TABLE IF EXISTS `dcmd_service`;
 CREATE TABLE `dcmd_service` (
   `svr_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `svr_name` varchar(128) NOT NULL,
-  `svr_path` varchar(256) NOT NULL,
   `app_id` int(10) unsigned NOT NULL,
   `gid` int(10) unsigned NOT NULL,
   `owner` varchar(256) NOT NULL,
   `owner_email` varchar(512) NOT NULL,
   `owner_tel` varchar(512) NOT NULL,
+  `svr_path` varchar(256) NOT NULL,
   `comment` varchar(512) NOT NULL,
   `utime` datetime NOT NULL,
   `ctime` datetime NOT NULL,
   `opr_uid` int(10) unsigned NOT NULL,
   PRIMARY KEY (`svr_id`),
   UNIQUE KEY `svr_name` (`svr_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for dcmd_service_pool
@@ -308,7 +308,7 @@ CREATE TABLE `dcmd_service_pool` (
   PRIMARY KEY (`svr_pool_id`),
   UNIQUE KEY `svr_pool` (`svr_pool`),
   KEY `idx_app_pool_service` (`svr_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for dcmd_service_pool_node
@@ -325,8 +325,8 @@ CREATE TABLE `dcmd_service_pool_node` (
   `ctime` datetime NOT NULL,
   `opr_uid` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `svr_pool_id` (`svr_pool_id`,`ip`),
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+  UNIQUE KEY `svr_pool_id` (`svr_pool_id`,`ip`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for dcmd_service_task_cmd
@@ -341,7 +341,25 @@ CREATE TABLE `dcmd_service_task_cmd` (
   `opr_uid` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `svr_id` (`svr_id`,`task_cmd_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for dcmd_softpkg
+-- ----------------------------
+DROP TABLE IF EXISTS `dcmd_softpkg`;
+CREATE TABLE `dcmd_softpkg` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `app_id` int(11) unsigned NOT NULL,
+  `svr_id` int(11) unsigned NOT NULL,
+  `svr_version` varchar(64) NOT NULL,
+  `repo_file` varchar(256) NOT NULL,
+  `upload_file` varchar(256) NOT NULL,
+  `utime` datetime NOT NULL,
+  `ctime` datetime NOT NULL,
+  `opr_uid` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `repo_file` (`repo_file`)
+) ENGINE=MyISAM AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for dcmd_task
@@ -349,15 +367,14 @@ CREATE TABLE `dcmd_service_task_cmd` (
 DROP TABLE IF EXISTS `dcmd_task`;
 CREATE TABLE `dcmd_task` (
   `task_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `task_name` varchar(128) NOT NULL,
+  `task_name` varchar(255) DEFAULT NULL,
   `task_cmd` varchar(64) NOT NULL,
   `depend_task_id` int(10) unsigned NOT NULL,
-  `depend_task_name` varchar(128) NOT NULL,
+  `depend_task_name` varchar(255) DEFAULT NULL,
   `svr_id` int(10) unsigned NOT NULL,
   `svr_name` varchar(128) NOT NULL,
   `gid` int(10) unsigned NOT NULL,
   `group_name` varchar(64) NOT NULL,
-  `svr_path` varchar(256) NOT NULL,
   `tag` varchar(128) NOT NULL,
   `update_env` int(10) NOT NULL,
   `update_tag` int(10) NOT NULL,
@@ -372,6 +389,7 @@ CREATE TABLE `dcmd_task` (
   `auto` int(11) NOT NULL,
   `process` int(10) NOT NULL,
   `task_arg` text,
+  `svr_path` varchar(256) NOT NULL,
   `comment` varchar(512) NOT NULL,
   `utime` datetime NOT NULL,
   `ctime` datetime NOT NULL,
@@ -379,7 +397,7 @@ CREATE TABLE `dcmd_task` (
   PRIMARY KEY (`task_id`),
   UNIQUE KEY `idx_task_name` (`task_name`),
   KEY `idx_dcmd_svr_task_name` (`svr_name`,`task_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=76 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for dcmd_task_cmd
@@ -413,7 +431,7 @@ CREATE TABLE `dcmd_task_cmd_arg` (
   `opr_uid` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `task_cmd` (`task_cmd_id`,`arg_name`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for dcmd_task_history
@@ -421,15 +439,14 @@ CREATE TABLE `dcmd_task_cmd_arg` (
 DROP TABLE IF EXISTS `dcmd_task_history`;
 CREATE TABLE `dcmd_task_history` (
   `task_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `task_name` varchar(128) NOT NULL,
+  `task_name` varchar(255) DEFAULT NULL,
   `task_cmd` varchar(64) NOT NULL,
   `depend_task_id` int(10) unsigned NOT NULL,
-  `depend_task_name` varchar(128) NOT NULL,
+  `depend_task_name` varchar(255) DEFAULT NULL,
   `svr_id` int(10) unsigned NOT NULL,
   `svr_name` varchar(128) NOT NULL,
   `gid` int(10) unsigned NOT NULL,
   `group_name` varchar(64) NOT NULL,
-  `svr_path` varchar(256) NOT NULL,
   `tag` varchar(128) NOT NULL,
   `update_env` int(10) NOT NULL,
   `update_tag` int(10) NOT NULL,
@@ -444,6 +461,7 @@ CREATE TABLE `dcmd_task_history` (
   `auto` int(11) NOT NULL,
   `process` int(10) NOT NULL,
   `task_arg` text,
+  `svr_path` varchar(256) NOT NULL,
   `comment` varchar(512) NOT NULL,
   `utime` datetime NOT NULL,
   `ctime` datetime NOT NULL,
@@ -451,7 +469,7 @@ CREATE TABLE `dcmd_task_history` (
   PRIMARY KEY (`task_id`),
   UNIQUE KEY `idx_task_finish_name` (`task_name`),
   KEY `idx_task_svr_task_finish_name` (`svr_name`,`task_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=76 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for dcmd_task_node
@@ -461,8 +479,8 @@ CREATE TABLE `dcmd_task_node` (
   `subtask_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `task_id` int(10) unsigned NOT NULL,
   `task_cmd` varchar(64) NOT NULL,
-  `svr_pool` varchar(64) NOT NULL,
-  `svr_name` varchar(64) NOT NULL,
+  `svr_pool` varchar(128) DEFAULT NULL,
+  `svr_name` varchar(128) DEFAULT NULL,
   `ip` varchar(16) NOT NULL,
   `state` int(11) NOT NULL,
   `ignored` int(11) NOT NULL,
@@ -474,9 +492,8 @@ CREATE TABLE `dcmd_task_node` (
   `ctime` datetime NOT NULL,
   `opr_uid` int(10) unsigned NOT NULL,
   PRIMARY KEY (`subtask_id`),
-  UNIQUE KEY `task_id` (`task_id`,`ip`),
-  KEY `idx_task_node` (`ip`)
-) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8;
+  UNIQUE KEY `task_id` (`task_id`,`ip`,`svr_pool`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for dcmd_task_node_history
@@ -486,8 +503,8 @@ CREATE TABLE `dcmd_task_node_history` (
   `subtask_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `task_id` int(10) unsigned NOT NULL,
   `task_cmd` varchar(64) NOT NULL,
-  `svr_pool` varchar(64) NOT NULL,
-  `svr_name` varchar(64) NOT NULL,
+  `svr_pool` varchar(128) DEFAULT NULL,
+  `svr_name` varchar(128) DEFAULT NULL,
   `ip` varchar(16) NOT NULL,
   `state` int(11) NOT NULL,
   `ignored` int(11) NOT NULL,
@@ -499,9 +516,8 @@ CREATE TABLE `dcmd_task_node_history` (
   `ctime` datetime NOT NULL,
   `opr_uid` int(10) unsigned NOT NULL,
   PRIMARY KEY (`subtask_id`),
-  UNIQUE KEY `task_id` (`task_id`,`ip`),
-  KEY `idx_task_node` (`ip`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
+  UNIQUE KEY `task_id` (`task_id`,`ip`,`svr_pool`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for dcmd_task_service_pool
@@ -511,7 +527,7 @@ CREATE TABLE `dcmd_task_service_pool` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `task_id` int(10) unsigned NOT NULL,
   `task_cmd` varchar(64) NOT NULL,
-  `svr_pool` varchar(64) NOT NULL,
+  `svr_pool` varchar(128) DEFAULT NULL,
   `svr_pool_id` int(10) unsigned NOT NULL,
   `env_ver` varchar(64) NOT NULL,
   `repo` varchar(512) NOT NULL,
@@ -527,7 +543,7 @@ CREATE TABLE `dcmd_task_service_pool` (
   `opr_uid` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_task_id_svr_pool_id` (`task_id`,`svr_pool_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=92 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=124 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for dcmd_task_service_pool_history
@@ -537,7 +553,7 @@ CREATE TABLE `dcmd_task_service_pool_history` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `task_id` int(10) unsigned NOT NULL,
   `task_cmd` varchar(64) NOT NULL,
-  `svr_pool` varchar(64) NOT NULL,
+  `svr_pool` varchar(128) DEFAULT NULL,
   `svr_pool_id` int(10) unsigned NOT NULL,
   `env_ver` varchar(64) NOT NULL,
   `repo` varchar(512) NOT NULL,
@@ -553,7 +569,7 @@ CREATE TABLE `dcmd_task_service_pool_history` (
   `opr_uid` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `task_id` (`task_id`,`svr_pool`)
-) ENGINE=InnoDB AUTO_INCREMENT=82 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=124 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for dcmd_task_template
@@ -561,7 +577,7 @@ CREATE TABLE `dcmd_task_service_pool_history` (
 DROP TABLE IF EXISTS `dcmd_task_template`;
 CREATE TABLE `dcmd_task_template` (
   `task_tmpt_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `task_tmpt_name` varchar(128) NOT NULL,
+  `task_tmpt_name` varchar(255) DEFAULT NULL,
   `task_cmd_id` int(10) NOT NULL,
   `task_cmd` varchar(64) NOT NULL,
   `svr_id` int(10) unsigned NOT NULL,
@@ -582,7 +598,7 @@ CREATE TABLE `dcmd_task_template` (
   `opr_uid` int(10) unsigned NOT NULL,
   PRIMARY KEY (`task_tmpt_id`),
   UNIQUE KEY `task_tmpt_name` (`task_tmpt_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for dcmd_task_template_service_pool
@@ -597,7 +613,7 @@ CREATE TABLE `dcmd_task_template_service_pool` (
   `opr_uid` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `task_tmpt_id` (`task_tmpt_id`,`svr_pool_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for dcmd_user
@@ -618,12 +634,7 @@ CREATE TABLE `dcmd_user` (
   `opr_uid` int(10) unsigned NOT NULL,
   PRIMARY KEY (`uid`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of dcmd_user
--- ----------------------------
-INSERT INTO `dcmd_user` VALUES ('1', 'admin', '7f0e2bda548768347223d279fb940c48', '1', '', '', '', '0', '', '2014-02-20 15:55:05', '2014-02-20 15:55:02', '1');
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for dcmd_user_group
@@ -645,19 +656,8 @@ CREATE TABLE `dcmd_user_group` (
 
 
 -- ----------------------------
--- Table structure for dcmd_softpkg
+-- Records of dcmd_user
 -- ----------------------------
-DROP TABLE IF EXISTS `dcmd_softpkg`;
-CREATE TABLE `dcmd_softpkg` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `app_id` int(11) unsigned NOT NULL,
-  `svr_id` int(11) unsigned NOT NULL,
-  `version` varchar(64) NOT NULL,
-  `repo_file` varchar(256) NOT NULL,
-  `upload_file` varchar(256) NOT NULL,
-  `utime` datetime NOT NULL,
-  `ctime` datetime NOT NULL,
-  `opr_uid` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `idx_softpkg_repo_file` (`repo_file`),
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+INSERT INTO `dcmd_user` VALUES ('1', 'admin', '7f0e2bda548768347223d279fb940c48', '1', '', '', '', '0', '', '2014-02-20 15:55:05', '2014-02-20 15:55:02', '1');
+
+
