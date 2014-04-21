@@ -32,7 +32,7 @@ bool DcmdCenterSvrPool::AddSubtask(DcmdCenterSubtask* subtask) {
 }
 // 从池子中删除subtask
 bool DcmdCenterSvrPool::RemoveSubtask(DcmdCenterSubtask* subtask) {
-  if (all_subtasks_.find(subtask->subtask_id_) != all_subtasks_.end())
+  if (all_subtasks_.find(subtask->subtask_id_) == all_subtasks_.end())
     return false;
   all_subtasks_.erase(subtask->subtask_id_);
   switch(subtask->state_) {
