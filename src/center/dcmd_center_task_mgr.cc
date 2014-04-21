@@ -210,6 +210,7 @@ bool DcmdCenterTaskMgr::ReceiveAgentSubtaskResult(DcmdTss* tss,
   string agent_ip;
   // 通知命令执行完毕
   if (!FinishTaskCmd(tss, result, agent_ip, task)) return false;
+  app_->GetTaskMgr()->SetAgentTaskProcess(result.subtask_id(), result.process().c_str());
   //回复命令
   dcmd_api::AgentTaskResultReply  reply;
   reply.set_cmd(result.cmd());
