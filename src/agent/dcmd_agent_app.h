@@ -8,8 +8,8 @@
 #include "dcmd_process.h"
 
 namespace dcmd {
-const char* const kDcmdAgentVersion = "1.3.1";
-const char* const kDcmdAgentModifyDate = "2014-04-16 07:30:08";
+const char* const kDcmdAgentVersion = "1.3.2";
+const char* const kDcmdAgentModifyDate = "2014-04-22 19:46:08";
 // agent的app对象
 class DcmdAgentApp : public CwxAppFramework{
  public:
