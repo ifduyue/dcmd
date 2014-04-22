@@ -16,6 +16,11 @@ int DcmdTss::Init(){
 bool DcmdTss::ReadFile(char const* filename, string& file_content,
   string& err_msg)
 {
+  if (!CwxFile::isFile(filename)) {
+    CwxCommon::snprintf(m_szBuf2K, kDcmd2kBufLen, "File doesn't exist. file:%s", filename);
+    err_msg = m_szBuf2K;
+    return false;
+  }
   FILE* fd = fopen(filename, "rb");
   off_t file_size = CwxFile::getFileSize(filename);
   if (-1 == file_size){
