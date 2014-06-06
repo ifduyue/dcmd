@@ -930,6 +930,16 @@ dcmd_api::DcmdState DcmdCenterTaskMgr::TaskCmdStartTask(DcmdTss* tss, uint32_t t
     mysql_->disconnect();
     return dcmd_api::DCMD_STATE_FAILED;
   }
+  // 清空task_svr_pool的统计
+  CwxCommon::snprintf(tss->sql_, DcmdTss::kMaxSqlBufSize,
+    "update dcmd_task_service_pool set undo_node=0, doing_node=0,finish_node=0,"\
+    "fail_node=0, ignored_fail_node=0, ignored_doing_node=0 "\
+    "where task_id=%d", task->task_id_);
+  if (!ExecSql(tss, false)) {
+    mysql_->disconnect();
+    return dcmd_api::DCMD_STATE_FAILED;
+  }
+
   // 插入start的命令
   if (!InsertCommand(tss, false, uid, task->task_id_,
     0, "", 0, task->service_.c_str(), "", dcmd_api::CMD_START_TASK, 

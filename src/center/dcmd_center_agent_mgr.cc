@@ -183,7 +183,7 @@ namespace dcmd {
       CwxMutexGuard<CwxMutexLock>  lock(&lock_);
       map<string, DcmdAgentConnect*>::iterator iter = ip_agents_.begin();
       while(iter != ip_agents_.end()){
-        if (ip_agents_.find(iter->first) == ip_agents_.end())
+        if (ip_table_.find(iter->first) == ip_table_.end())
           conns.push_back(*iter->second);
         ++iter;
       }
